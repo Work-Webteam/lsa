@@ -23,12 +23,7 @@
                 <?= $milestone->donation ?>
             </td>
             <td>
-                <?= $this->Html->link('Edit', ['action' => 'edit', $milestone->id]) ?> |
-                <?= $this->Form->postLink(
-                    'Delete',
-                    ['action' => 'delete', $milestone->id],
-                    ['confirm' => 'Are you sure?'])
-                ?>
+                <?= $this->Html->link('Edit', ['action' => 'edit', $milestone->id]) ?>
             </td>
         </tr>
     <?php endforeach; ?>

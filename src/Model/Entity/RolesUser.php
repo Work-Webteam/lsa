@@ -4,7 +4,7 @@ namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
 
-class Milestones extends Entity
+class RolesUser extends Entity
 {
     protected $_accessible = [
         '*' => true,
