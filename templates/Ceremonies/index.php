@@ -1,29 +1,34 @@
-<!-- File: templates/Milestones/index.php -->
 
-<h1>Milestones</h1>
-<?= $this->Html->link('Add Milestone', ['action' => 'add']) ?>
+<h1>Ceremonies</h1>
+<?= $this->Html->link('Add Ceremony', ['action' => 'add']) ?>
 <table>
     <tr>
         <th>Id</th>
-        <th>Milestone</th>
-        <th>Donation Amount</th>
+        <th>Ceremony Night</th>
+        <th>Date</th>
+        <th colspan = 2>Operations</th>
     </tr>
 
     <!-- Here is where we iterate through our $articles query object, printing out article info -->
 
-    <?php foreach ($milestones as $milestone): ?>
+    <?php foreach ($ceremonies as $ceremony): ?>
         <tr>
             <td>
-                <?= $milestone->id ?>
+                <?= $ceremony->id ?>
             </td>
             <td>
-                <?= $this->Html->link($milestone->name, ['action' => 'view', $milestone->id]) ?>
+                <?= $this->Html->link($ceremony->night, ['action' => 'view', $ceremony->id]) ?>
             </td>
             <td>
-                <?= $milestone->donation ?>
+                <?= $ceremony->date // ->format(DATE_RFC850)?>
             </td>
             <td>
-                <?= $this->Html->link('Edit', ['action' => 'edit', $milestone->id]) ?>
+                <?= $this->Html->link('Edit', ['action' => 'edit', $ceremony->id]) ?> |
+                <?= $this->Form->postLink(
+                    'Delete',
+                    ['action' => 'delete', $ceremony->id],
+                    ['confirm' => 'Are you sure?'])
+                ?>
             </td>
         </tr>
     <?php endforeach; ?>

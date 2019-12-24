@@ -1,29 +1,32 @@
-<!-- File: templates/Milestones/index.php -->
-
-<h1>Milestones</h1>
-<?= $this->Html->link('Add Milestone', ['action' => 'add']) ?>
+<h1>PECSF Charities</h1>
+<?= $this->Html->link('Add PECSF Charity', ['action' => 'add']) ?>
 <table>
     <tr>
         <th>Id</th>
-        <th>Milestone</th>
-        <th>Donation Amount</th>
+        <th>Region</th>
+        <th>Charity</th>
+        <th colspan = 2>Operations</th>
     </tr>
 
     <!-- Here is where we iterate through our $articles query object, printing out article info -->
 
-    <?php foreach ($milestones as $milestone): ?>
+    <?php foreach ($charities as $charity): ?>
         <tr>
             <td>
-                <?= $milestone->id ?>
+                <?= $charity->id ?>
             </td>
             <td>
-                <?= $this->Html->link($milestone->name, ['action' => 'view', $milestone->id]) ?>
+                <?= $charity->pecsf_region_id ?>
             </td>
             <td>
-                <?= $milestone->donation ?>
+                <?= $this->Html->link($charity->name, ['action' => 'view', $charity->id]) ?>
             </td>
             <td>
-                <?= $this->Html->link('Edit', ['action' => 'edit', $milestone->id]) ?>
+                <?= $this->Html->link('Edit', ['action' => 'edit', $charity->id]) ?> |
+                <?= $this->Form->postLink(
+                    'Delete',
+                    ['action' => 'delete', $charity->id],
+                    ['confirm' => 'Are you sure?']) ?>
             </td>
         </tr>
     <?php endforeach; ?>

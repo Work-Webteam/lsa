@@ -7,6 +7,7 @@
         <th>Id</th>
         <th>Milestone</th>
         <th>Donation Amount</th>
+        <th colspan = 2>Operations</th>
     </tr>
 
     <!-- Here is where we iterate through our $articles query object, printing out article info -->

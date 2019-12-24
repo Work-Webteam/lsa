@@ -1,4 +1,3 @@
-<h1><?= h($milestone->name) ?></h1>
-<p><?= h($milestone->id) ?></p>
-<p><?= h($milestone->donation) ?></p>
-<p><?= $this->Html->link('Edit', ['action' => 'edit', $milestone->id]) ?></p>
+<h1><?= h($ministry->name) ?></h1>
+<p><?= h($ministry->id) ?></p>
+<p><?= $this->Html->link('Edit', ['action' => 'edit', $ministry->id]) ?></p>

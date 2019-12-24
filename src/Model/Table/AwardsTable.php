@@ -1,5 +1,5 @@
 <?php
-// src/Model/Table/AwardsTable.php
+
 namespace App\Model\Table;
 
 use Cake\ORM\Table;
@@ -9,6 +9,7 @@ class AwardsTable extends Table
 {
     public function initialize(array $config) : Void
     {
-
+        $this->addBehavior('Timestamp');
+        $this->hasOne('Milestones');
     }
 }

@@ -1,29 +1,29 @@
-<!-- File: templates/Milestones/index.php -->
-
-<h1>Milestones</h1>
-<?= $this->Html->link('Add Milestone', ['action' => 'add']) ?>
+<h1>Roles</h1>
+<?= $this->Html->link('Add Roles', ['action' => 'add']) ?>
 <table>
     <tr>
         <th>Id</th>
-        <th>Milestone</th>
-        <th>Donation Amount</th>
+        <th>Roles</th>
+        <th colspan = 2>Operations</th>
     </tr>
 
     <!-- Here is where we iterate through our $articles query object, printing out article info -->
 
-    <?php foreach ($milestones as $milestone): ?>
+    <?php foreach ($roles as $role): ?>
         <tr>
             <td>
-                <?= $milestone->id ?>
+                <?= $role->id ?>
             </td>
             <td>
-                <?= $this->Html->link($milestone->name, ['action' => 'view', $milestone->id]) ?>
+                <?= $this->Html->link($role->name, ['action' => 'view', $role->id]) ?>
             </td>
             <td>
-                <?= $milestone->donation ?>
-            </td>
-            <td>
-                <?= $this->Html->link('Edit', ['action' => 'edit', $milestone->id]) ?>
+                <?= $this->Html->link('Edit', ['action' => 'edit', $role->id]) ?> |
+                <?= $this->Form->postLink(
+                    'Delete',
+                    ['action' => 'delete', $role->id],
+                    ['confirm' => 'Are you sure?'])
+                ?>
             </td>
         </tr>
     <?php endforeach; ?>

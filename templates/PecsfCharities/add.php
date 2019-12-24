@@ -1,9 +1,12 @@
-
-<h1>Add Milestone</h1>
+<h1>Add Charities</h1>
 <?php
-echo $this->Form->create($milestone);
-// Hard code the user for now.
-echo $this->Form->control('milestone');
-echo $this->Form->button(__('Save Milestone'));
+echo $this->Form->create($charity);
+echo $this->Form->control('pecsf_region_id', ['options' => $regions]);
+echo $this->Form->control('name');
+echo $this->Form->button(__('Save PECSF Charity'));
+echo $this->Form->button('Cancel', array(
+    'type' => 'button',
+    'onclick' => 'location.href=\'/pecsfcharities\''
+));
 echo $this->Form->end();
 ?>

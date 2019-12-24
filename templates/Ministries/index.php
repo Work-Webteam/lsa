@@ -5,6 +5,7 @@
     <tr>
         <th>Id</th>
         <th>Ministry</th>
+        <th colspan = 2>Operations</th>
     </tr>
 
     <!-- Here is where we iterate through our $articles query object, printing out article info -->
