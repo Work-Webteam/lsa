@@ -20,15 +20,31 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <html>
 <head>
     <?= $this->Html->charset() ?>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>
-        <?= $cakeDescription ?>:
-        <?= $this->fetch('title') ?>
-    </title>
-    <?= $this->Html->meta('icon') ?>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta
+        content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
 
-    <link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.4.1/lux/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet">
+    <style>
+        .award-card {
+            width: 18rem;
+        }
+        .fade-enter-active,
+        .fade-leave-active {
+            transition: opacity 1.5s;
+        }
+        .fade-enter,
+        .fade-leave-to/* .fade-leave-active below version 2.1.8 */
+        {
+            opacity: 0;
+        }
+    </style>
+    <title>Long Service Awards</title>
 
     <?= $this->Html->css('milligram.min.css') ?>
     <?= $this->Html->css('cake.css') ?>
@@ -40,11 +56,19 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <body>
     <nav class="top-nav">
         <div class="top-nav-title">
-            <a href="/"><span>Cake</span>PHP</a>
+            <a href="/"><span>Long Service Awards</span></a>
         </div>
         <div class="top-nav-links">
-            <a target="_blank" href="https://book.cakephp.org/4/">Documentation</a>
-            <a target="_blank" href="https://api.cakephp.org/4/">API</a>
+            <a href="/registrations/register">Register</a>|
+            <a href="/registrations">Admin</a>
+            <a href="/ceremonies">Ceremonies</a>
+            <a href="/awards">Awards</a>
+            <a href="/milestones">Milestones</a>
+            <a href="/cities">Cities</a>
+            <a href="/ministries">Ministries</a>
+            <a href="/diet">Diet</a>|
+            <a href="/pecsfregions">Regions</a>
+            <a href="/pecsfcharities">Carities</a>
         </div>
     </nav>
     <main class="main">

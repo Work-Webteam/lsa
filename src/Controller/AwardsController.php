@@ -1,5 +1,4 @@
 <?php
-// src/Controller/AwardsController.php
 
 namespace App\Controller;
 
@@ -22,15 +21,24 @@ class AwardsController extends AppController
     {
         $award = $this->Awards->newEmptyEntity();
         if ($this->request->is('post')) {
+            $filename = "";
+            $file = $this->request->getData('upload');
+            if(!empty($file)){
+                $fileName = $file->getClientFilename();
+                $uploadPath = 'img/awards/';
+                $uploadFile = $uploadPath . $fileName;
+                $file->moveTo($uploadFile);
+            }
             $award = $this->Awards->patchEntity($award, $this->request->getData());
+            $award->image = $fileName;
             $award->active = true;
-            
             if ($this->Awards->save($award)) {
                 $this->Flash->success(__('Award has been saved.'));
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('Unable to add award.'));
+            $this->Flash->error(__('Unable to add award.' . $msg . ' - ' . $file->getClientFilename()));
         }
+
         // Get a list of milestones.
         $milestones = $this->Awards->Milestones->find('list');
         // Set tags to the view context
@@ -42,9 +50,9 @@ class AwardsController extends AppController
     public function edit($id)
     {
         $award = $this->Awards->findById($id)->firstOrFail();
+        $image = $award->image;
         if ($this->request->is(['post', 'put'])) {
             $this->Awards->patchEntity($award, $this->request->getData());
-
             if ($this->Awards->save($award)) {
                 $this->Flash->success(__('Award has been updated.'));
                 return $this->redirect(['action' => 'index']);

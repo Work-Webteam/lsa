@@ -17,6 +17,9 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Controller\Controller;
+use Cake\Database\Type;
+
+Type::build('datetime')->useLocaleParser();
 
 /**
  * Application Controller

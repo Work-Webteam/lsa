@@ -1,8 +1,10 @@
 <h1>Registrations</h1>
-<?= $this->Html->link('Add Registration', ['action' => 'add']) ?>
+<?php // $this->Html->link('Register', ['action' => 'register']) ?>
 <table>
     <tr>
         <th>Id</th>
+        <th>Created</th>
+        <th>Modified</th>
         <th>User Id</th>
         <th>Milestone Id</th>
         <th>Award Id</th>
@@ -15,6 +17,12 @@
         <tr>
             <td>
                 <?= $registration->id ?>
+            </td>
+            <td>
+                <?= $registration->created->format(DATE_RFC850) ?>
+            </td>
+            <td>
+                <?= $registration->modified->format(DATE_RFC850) ?>
             </td>
             <td>
                 <?= $this->Html->link($registration->user_id, ['action' => 'view', $registration->id]) ?>

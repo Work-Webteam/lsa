@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use Cake\I18n\FrozenDate;
+
 class CeremoniesController extends AppController
 {
     public function index()
@@ -22,7 +24,7 @@ class CeremoniesController extends AppController
         $ceremony = $this->Ceremonies->newEmptyEntity();
         if ($this->request->is('post')) {
             $ceremony = $this->Ceremonies->patchEntity($ceremony, $this->request->getData());
-            $ceremony->date = time();
+            $ceremony->date = $this->request->getData('ceremony_date') . " " . $this->request->getData('ceremony_time');
             if ($this->Ceremonies->save($ceremony)) {
                 $this->Flash->success(__('Your milestone has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -37,6 +39,7 @@ class CeremoniesController extends AppController
         $ceremony = $this->Ceremonies->findById($id)->firstOrFail();
         if ($this->request->is(['post', 'put'])) {
             $this->Ceremonies->patchEntity($ceremony, $this->request->getData());
+            $ceremony->date = $this->request->getData('ceremony_date') . " " . $this->request->getData('ceremony_time');
             if ($this->Ceremonies->save($ceremony)) {
                 $this->Flash->success(__('Milestone has been updated.'));
                 return $this->redirect(['action' => 'index']);
