@@ -1,5 +1,5 @@
 <h1>Diet</h1>
-<?= $this->Html->link('Add Diet', ['action' => 'add']) ?>
+<?= $this->Html->link('Add Diet', ['action' => 'add'], ['class' => 'btn btn-primary active']) ?>
 <table>
     <tr>
         <th>Id</th>

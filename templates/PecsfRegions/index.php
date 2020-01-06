@@ -1,5 +1,5 @@
 <h1>PECSF Regions</h1>
-<?= $this->Html->link('Add PECSF Region', ['action' => 'add']) ?>
+<?= $this->Html->link('Add PECSF Region', ['action' => 'add'], ['class' => 'btn btn-primary active']) ?>
 <table>
     <tr>
         <th>Id</th>
@@ -27,3 +27,29 @@
         </tr>
     <?php endforeach; ?>
 </table>
+
+<?php
+$paginator = $this->Paginator->setTemplates([
+    'number' => '<li class="page-item"><a href="{{url}}" class="page-link">{{text}}</a></li>',
+    'current' => '<li class="page-item active"><a href="{{url}}" class="page-link">{{text}}</a></li>',
+    'first' => '<li class="page-item"><a href="{{url}}" class="page-link">&laquo;</a></li>',
+    'last' => '<li class="page-item"><a href="{{url}}" class="page-link">&raquo;</a></li>',
+    'prevActive' => '<li class="page-item"><a href="{{url}}" class="page-link">&lt</a></li>',
+    'nextActive' => '<li class="page-item"><a href="{{url}}" class="page-link">&gt</a></li>'
+]);
+?>
+<nav>
+    <ul class="pagination">
+        <?php
+        echo $paginator->first();
+        if ($paginator->hasPrev()){
+            echo $paginator->prev();
+        }
+        echo $paginator->numbers();
+        if ($paginator->hasNext()){
+            echo $paginator->next();
+        }
+        echo $paginator->last();
+        ?>
+    </ul>
+</nav>

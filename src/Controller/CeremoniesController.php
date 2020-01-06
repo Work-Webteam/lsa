@@ -9,7 +9,10 @@ class CeremoniesController extends AppController
     public function index()
     {
         $this->loadComponent('Paginator');
-        $ceremonies = $this->Paginator->paginate($this->Ceremonies->find());
+        $ceremonies = $this->Paginator->paginate(
+            $this->Ceremonies->find('all')
+                ->where(['Ceremonies.date >' => strtotime('first day of January ' . date('Y'))])
+        );
         $this->set(compact('ceremonies'));
     }
 

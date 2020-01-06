@@ -86,17 +86,28 @@ class RegistrationsController extends AppController
         $awards = $this->Registrations->Awards->find('list');
         $this->set('awards', $awards);
 
-        $ministries = $this->Registrations->Ministries->find('list');
+        $ministries = $this->Registrations->Ministries->find('list', [
+            'order' => ['Ministries.name' => 'ASC']
+        ]);
         $this->set('ministries', $ministries);
 
         $diet = $this->Registrations->Diet->find('list');
         $this->set('diet', $diet);
 
-        $cities = $this->Registrations->Cities->find('list');
+        $cities = $this->Registrations->Cities->find('list', [
+            'order' => ['Cities.name' => 'ASC']
+        ]);
         $this->set('cities', $cities);
 
         $this->set('registration', $registration);
     }
+
+
+    public function getAwards() {
+//        $milestone = $this->Registration->
+    }
+
+
 
     public function edit($id)
     {

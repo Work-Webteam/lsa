@@ -30,20 +30,23 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.4.1/lux/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
     <style>
-        .award-card {
-            width: 18rem;
-        }
-        .fade-enter-active,
-        .fade-leave-active {
-            transition: opacity 1.5s;
-        }
-        .fade-enter,
-        .fade-leave-to/* .fade-leave-active below version 2.1.8 */
-        {
-            opacity: 0;
-        }
+    .award-card {
+    width: 18rem;
+    }
+    .fade-enter-active,
+    .fade-leave-active {
+    transition: opacity 1.5s;
+    }
+    .fade-enter,
+    .fade-leave-to/* .fade-leave-active below version 2.1.8 */
+    {
+    opacity: 0;
+    }
     </style>
+
     <title>Long Service Awards</title>
 
     <?= $this->Html->css('milligram.min.css') ?>
@@ -68,7 +71,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             <a href="/ministries">Ministries</a>
             <a href="/diet">Diet</a>|
             <a href="/pecsfregions">Regions</a>
-            <a href="/pecsfcharities">Carities</a>
+            <a href="/pecsfcharities">Charities</a>
         </div>
     </nav>
     <main class="main">

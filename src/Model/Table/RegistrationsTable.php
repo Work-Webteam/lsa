@@ -32,10 +32,10 @@ class RegistrationsTable extends Table
                 'rule' => 'email',
                 'message' => 'E-mail must be valid'
             ]);
-        $validator->add('retiring_this_year', 'not-blank', [
-            'rule' => 'notBlank',
-            'message' => 'Must select Yes or No'
-        ]);
+//        $validator->add('retiring_this_year', 'not-blank', [
+//            'rule' => 'notBlank',
+//            'message' => 'Must select Yes or No'
+//        ]);
 //        $validator->notEmpty('retiring_this_year', 'enter something eh');
         return $validator;
     }
