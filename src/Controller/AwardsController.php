@@ -15,6 +15,9 @@ class AwardsController extends AppController
     {
         $award = $this->Awards->findById($id)->firstOrFail();
         $this->set(compact('award'));
+
+        $options = unserialize($award->options);
+         $this->set(compact('options'));
     }
 
     public function add()
@@ -32,6 +35,7 @@ class AwardsController extends AppController
             $award = $this->Awards->patchEntity($award, $this->request->getData());
             $award->image = $fileName;
             $award->active = true;
+            $award->options = serialize(array());
             if ($this->Awards->save($award)) {
                 $this->Flash->success(__('Award has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -80,5 +84,126 @@ class AwardsController extends AppController
             return $this->redirect(['action' => 'index']);
         }
     }
+
+
+    public function addoption($id)
+    {
+        $award = $this->Awards->findById($id)->firstOrFail();
+        if ($this->request->is('post')) {
+            $name = $this->request->getData('name');
+            if (!empty($name)) {
+                $new = array(
+                    'name' => $name,
+                    'type' => 'choice',
+                    'values' => array()
+                );
+               $options = unserialize($award->options);
+               $options[] = $new;
+               $award->options = serialize($options);
+            }
+            if ($this->Awards->save($award)) {
+                $this->Flash->success(__('Option has been saved.'));
+                return $this->redirect(['action' => 'view/'.$award->id]);
+            }
+            $this->Flash->error(__('Unable to add option.'));
+        }
+
+        $this->set('award', $award);
+    }
+
+    public function editoption($id, $option_id)
+    {
+        $award = $this->Awards->findById($id)->firstOrFail();
+        $options = unserialize($award->options);
+
+        if ($this->request->is('post')) {
+            $options[$option_id]['name'] = $this->request->getData('name');
+            $award->options = serialize($options);
+
+            if ($this->Awards->save($award)) {
+                $this->Flash->success(__('Option has been saved.'));
+                return $this->redirect(['action' => 'view/'.$award->id]);
+            }
+            $this->Flash->error(__('Unable to add option.'));
+        }
+        $name = $options[$option_id]['name'];
+        $type = $options[$option_id]['type'];
+        $this->set('name', $name);
+        $this->set('type', $type);
+        $this->set('award', $award);
+    }
+
+    public function deleteoption($id, $option_id)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+
+        $award = $this->Awards->findById($id)->firstOrFail();
+        $options = unserialize($award->options);
+        $name = $options[$option_id]['name'];
+        unset($options[$option_id]);
+        $award->options = serialize($options);
+        if ($this->Awards->save($award)) {
+            $this->Flash->success(__('Award Option {0} has been deleted.', $name));
+            return $this->redirect(['action' => 'view/'.$award->id]);
+        }
+    }
+
+
+    public function addvalue($id, $option_id)
+    {
+        $award = $this->Awards->findById($id)->firstOrFail();
+        if ($this->request->is('post')) {
+            $name = $this->request->getData('name');
+            if (!empty($name)) {
+                $options = unserialize($award->options);
+                $options[$option_id]['values'][] = $name;
+                $award->options = serialize($options);
+            }
+            if ($this->Awards->save($award)) {
+                $this->Flash->success(__('Option has been saved.'));
+                return $this->redirect(['action' => 'view/'.$award->id]);
+            }
+            $this->Flash->error(__('Unable to add option.'));
+        }
+
+        $this->set('award', $award);
+    }
+
+
+    public function editvalue($id, $option_id, $value_id)
+    {
+        $award = $this->Awards->findById($id)->firstOrFail();
+        $options = unserialize($award->options);
+        if ($this->request->is('post')) {
+            $options[$option_id]['values'][$value_id] = $this->request->getData('name');
+            $award->options = serialize($options);
+
+            if ($this->Awards->save($award)) {
+                $this->Flash->success(__('Option has been saved.'));
+                return $this->redirect(['action' => 'view/'.$award->id]);
+            }
+            $this->Flash->error(__('Unable to add option.'));
+        }
+
+        $this->set('name', $options[$option_id]['values'][$value_id]);
+        $this->set('award', $award);
+    }
+
+    public function deletevalue($id, $option_id, $value_id)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+
+        $award = $this->Awards->findById($id)->firstOrFail();
+        $options = unserialize($award->options);
+        $name = $options[$option_id]['values'][$value_id];
+        unset($options[$option_id]['values'][$value_id]);
+        $award->options = serialize($options);
+
+        if ($this->Awards->save($award)) {
+            $this->Flash->success(__('Award Option Value {0} has been deleted.', $name));
+            return $this->redirect(['action' => 'view/'.$award->id]);
+        }
+    }
+
 
 }

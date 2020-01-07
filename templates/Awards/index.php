@@ -24,6 +24,7 @@
                 <?= $award->active ? 'active' : 'inactive' ?>
             </td>
             <td>
+                <?= $this->Html->link('View', ['action' => 'view', $award->id]) ?> |
                 <?= $this->Html->link('Edit', ['action' => 'edit', $award->id]) ?> |
                 <?= $this->Form->postLink(
                     'Delete',
