@@ -4,18 +4,12 @@
 echo $this->Form->create($registration);
 
 echo $this->Form->label("Retiring this year?");
-//echo $this->Form->radio('retiring_this_year', [['value' => 1, 'text' => 'Yes'], ['value' => 0, 'text' => 'No']]);
+//echo $this->Form->radio('retiring_this_year', [['value' => 1, 'text' => 'Yes'], ['value' => 0, 'text' => 'No']], ['onchange' => 'retiringChange(this.value);']);
 echo $this->Form->hidden('retiring_this_year', ['value' => 2]);
+echo $this->Form->button('Yes', ['type' => 'button', 'onclick' => 'buttonClick1(1)']);
+echo $this->Form->button('No', ['type' => 'button', 'onclick' => 'buttonClick1(0)']);
 echo $this->Form->hidden('award_instructions', ['value' => 'some text']);
 ?>
-
-    <div class="form-group">
-        <label for="isRetiringThisYear">Are you retiring in <?php echo date("Y") ?>?</label>
-        <div aria-label="retiring selection" class="btn-group" role="group">
-            <button class="btn btn-secondary" type="button" v-on:click="exposeRetirementDatePicker">Yes</button>
-            <button class="btn btn-secondary" type="button" v-on:click="setRetirementStatusKnown">No</button>
-        </div>
-    </div>
 
     <transition name="fade">
         <div class="form-group" id="retirementdate" v-if="isRetiringThisYear">
@@ -30,7 +24,7 @@ echo $this->Form->hidden('award_instructions', ['value' => 'some text']);
     <?php
 
 
-echo $this->Form->control('milestone_id', ['options' => $milestones]);
+echo $this->Form->control('milestone_id', ['type' => 'select', 'label' => 'Milestone', 'options' => $milestones, 'value' => -1]);
 
 
 echo $this->Form->control('award_id', ['options' => $awards]);
@@ -104,17 +98,20 @@ echo $this->Form->control('supervisor_email', ['type' => 'email']);
 <transition name="fade">
    <div class="confirmationDisplay" v-if="supervisorInput">
 
-      some stuff here
+       <p>some stuff here</p>
 
+       <?php
+       echo $this->Form->button(__('Register'));
+       echo $this->Form->button('Cancel', array(
+           'type' => 'button',
+           'onclick' => 'location.href=\'/registrations\''
+       ));
+       ?>
    </div>
 </transition>
     <div>
 <?php
-echo $this->Form->button(__('Register'));
-echo $this->Form->button('Cancel', array(
-    'type' => 'button',
-    'onclick' => 'location.href=\'/registrations\''
-));
+
 echo $this->Form->end();
 ?>
     </div>
@@ -136,6 +133,25 @@ echo $this->Form->end();
     $(function () {
         $('#datetimepicker1').datetimepicker({format: 'L'});
     });
+
+    function retiringChange(retiring) {
+        if (retiring == 1) {
+            app.exposeRetirementDatePicker();
+        }
+        else {
+            app.setRetirementStatusKnown();
+        }
+    };
+
+    function buttonClick1(retiring) {
+        $('input[name=retiring_this_year]').val(retiring);
+        if (retiring == 1) {
+            app.exposeRetirementDatePicker();
+        }
+        else {
+            app.setRetirementStatusKnown();
+        }
+    }
 
     Vue.config.devtools = true
 
@@ -177,14 +193,10 @@ echo $this->Form->end();
         },
         methods: {
             exposeRetirementDatePicker: function () {
-                console.log("here");
-                console.log($('retiring_this_year'));
-                $('#retiring_this_year').val(1);
                 this.isRetiringThisYear = true;
                 this.retirementStatusKnown = true;
             },
             setRetirementStatusKnown: function () {
-                $('#retiring_this_year').val(0);
                 this.isRetiringThisYear = false;
                 this.retirementStatusKnown = true;
             },

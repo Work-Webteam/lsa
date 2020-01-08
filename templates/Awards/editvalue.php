@@ -2,7 +2,7 @@
 <?php
 echo $this->Form->create();
 
-echo $this->Form->control('name', ['label' => 'Value', 'default' => $name]);
+echo $this->Form->control('name', ['label' => 'Choice', 'default' => $name]);
 echo $this->Form->button(__('Save Option Value'));
 echo $this->Form->button('Cancel', array(
     'type' => 'button',

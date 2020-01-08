@@ -6,7 +6,7 @@
         <th>Name</th>
         <th>Milestone</th>
         <th>Status</th>
-        <th colspan = 2>Operations</th>
+        <th colspan = "3">Operations</th>
     </tr>
 
     <?php foreach ($awards as $award): ?>
@@ -24,12 +24,16 @@
                 <?= $award->active ? 'active' : 'inactive' ?>
             </td>
             <td>
-                <?= $this->Html->link('View', ['action' => 'view', $award->id]) ?> |
-                <?= $this->Html->link('Edit', ['action' => 'edit', $award->id]) ?> |
+                <?= $this->Html->link('View', ['action' => 'view', $award->id], ['class' => 'btn btn-primary active', 'role' => 'button']) ?>
+            </td>
+            <td>
+                <?= $this->Html->link('Edit', ['action' => 'edit', $award->id], ['class' => 'btn btn-primary active', 'role' => 'button']) ?>
+            </td>
+            <td>
                 <?= $this->Form->postLink(
                     'Delete',
                     ['action' => 'delete', $award->id],
-                    ['confirm' => 'Are you sure?'])
+                    ['confirm' => 'Are you sure?','class' => 'btn btn-primary active', 'role' => 'button'])
                 ?>
             </td>
         </tr>

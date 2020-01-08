@@ -17,23 +17,25 @@ class AwardsController extends AppController
         $this->set(compact('award'));
 
         $options = unserialize($award->options);
-         $this->set(compact('options'));
+        $this->set(compact('options'));
+
+        $milestone = $this->Awards->Milestones->findById($award->milestone_id)->firstOrFail();
+        $this->set(compact('milestone'));
     }
 
     public function add()
     {
         $award = $this->Awards->newEmptyEntity();
         if ($this->request->is('post')) {
-            $filename = "";
             $file = $this->request->getData('upload');
-            if(!empty($file)){
+            $award = $this->Awards->patchEntity($award, $this->request->getData());
+            if($file->getSize() > 0){
                 $fileName = $file->getClientFilename();
                 $uploadPath = 'img/awards/';
                 $uploadFile = $uploadPath . $fileName;
                 $file->moveTo($uploadFile);
+                $award->image = $fileName;
             }
-            $award = $this->Awards->patchEntity($award, $this->request->getData());
-            $award->image = $fileName;
             $award->active = true;
             $award->options = serialize(array());
             if ($this->Awards->save($award)) {
@@ -54,9 +56,17 @@ class AwardsController extends AppController
     public function edit($id)
     {
         $award = $this->Awards->findById($id)->firstOrFail();
-        $image = $award->image;
         if ($this->request->is(['post', 'put'])) {
-            $this->Awards->patchEntity($award, $this->request->getData());
+            $file = $this->request->getData('upload');
+            $award = $this->Awards->patchEntity($award, $this->request->getData());
+            if($file->getSize() > 0)
+            {
+                $fileName = $file->getClientFilename();
+                $uploadPath = 'img/awards/';
+                $uploadFile = $uploadPath . $fileName;
+                $file->moveTo($uploadFile);
+                $award->image = $fileName;
+            }
             if ($this->Awards->save($award)) {
                 $this->Flash->success(__('Award has been updated.'));
                 return $this->redirect(['action' => 'index']);
@@ -91,10 +101,11 @@ class AwardsController extends AppController
         $award = $this->Awards->findById($id)->firstOrFail();
         if ($this->request->is('post')) {
             $name = $this->request->getData('name');
+            $type = $this->request->getData('type');
             if (!empty($name)) {
                 $new = array(
                     'name' => $name,
-                    'type' => 'choice',
+                    'type' => empty($type) ? 'choice' : $type,
                     'values' => array()
                 );
                $options = unserialize($award->options);

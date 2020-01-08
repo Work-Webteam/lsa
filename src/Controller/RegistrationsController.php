@@ -81,7 +81,9 @@ class RegistrationsController extends AppController
             $registration->supervisor_province = "BC";
         }
         $milestones = $this->Registrations->Milestones->find('list');
-        $this->set('milestones', $milestones);
+        $options[0] = "- none selected -";
+        $options = array_merge($options, $milestones->toArray());
+        $this->set('milestones', $options);
 
         $awards = $this->Registrations->Awards->find('list');
         $this->set('awards', $awards);

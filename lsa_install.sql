@@ -136,6 +136,7 @@ CREATE TABLE registrations (
 
     retroactive BOOLEAN,
 
+    member_bcgeu BOOLEAN,
     admin_notes TEXT,
 
     alternate_ministry_id INT,
@@ -5271,7 +5272,7 @@ INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`
 Size: 2.75 cm L x 2 cm W
 
 Note: These earrings are designed to coordinate with the 35 year sterling silver bracelet.', 2, 1, "a:0:{}");
-INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Bulova® watch','This watch features the BC Coat of Arms on the dial and your name and 35 Years is engraved on the back of the watch face. It comes in a choice of gold, silver or two-toned watch face with a plated strap, or a black or brown leather strap. ', 3, 1, 'a:4:{i:0;a:3:{s:4:"name";s:5:"Sizes";s:4:"type";s:6:"choice";s:6:"values";a:2:{i:0;s:53:"Small (women''s) = 29 mm watch face, 14 mm strap width";i:1;s:51:"Large (men''s) = 38 mm watch face, 20 mm strap width";}}i:1;a:3:{s:4:"name";s:6:"Colour";s:4:"type";s:6:"choice";s:6:"values";a:2:{i:0;s:10:"Gold Watch";i:1;s:12:"Silver Watch";}}i:2;a:3:{s:4:"name";s:5:"Strap";s:4:"type";s:6:"choice";s:6:"values";a:4:{i:0;s:6:"Silver";i:1;s:9:"Two Toned";i:2;s:5:"Black";i:3;s:5:"Brown";}}i:3;a:3:{s:4:"name";s:11:"Engravement";s:4:"type";s:6:"choice";s:6:"values";a:0:{}}}');
+INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Bulova® watch','This watch features the BC Coat of Arms on the dial and your name and 35 Years is engraved on the back of the watch face. It comes in a choice of gold, silver or two-toned watch face with a plated strap, or a black or brown leather strap. ', 3, 1, 'a:4:{i:0;a:3:{s:4:"name";s:5:"Sizes";s:4:"type";s:6:"choice";s:6:"values";a:2:{i:0;s:53:"Small (women''s) = 29 mm watch face, 14 mm strap width";i:1;s:51:"Large (men''s) = 38 mm watch face, 20 mm strap width";}}i:1;a:3:{s:4:"name";s:6:"Colour";s:4:"type";s:6:"choice";s:6:"values";a:2:{i:0;s:10:"Gold Watch";i:1;s:12:"Silver Watch";}}i:2;a:3:{s:4:"name";s:5:"Strap";s:4:"type";s:6:"choice";s:6:"values";a:4:{i:0;s:6:"Silver";i:1;s:9:"Two Toned";i:2;s:5:"Black";i:3;s:5:"Brown";}}i:3;a:3:{s:4:"name";s:11:"Engravement";s:4:"type";s:4:"text";s:6:"values";a:0:{}}}');
 INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Bushnell® Prime binoculars','The Bushnell® Prime 8x42 binocular is the perfect blend of magnification and field of view, allowing easy viewing of moving animals and birds. The EXO barrier and fully multi coated optics deliver bright images in any weather conditions. The Prime binoculars feature Bushnell’s newest and best protective lens coating that molecularly bonds to the glass, repelling water, oil, dust, debris and preventing scratches. With IPX7 waterproof construction, O-ring sealed optics stay dry inside, when immersed in three feet of water for up to 30 minutes. They come with a soft case.
 
 Note: Due to the nature of this award, engraving is not possible.
