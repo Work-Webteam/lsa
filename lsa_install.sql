@@ -5248,31 +5248,31 @@ INSERT INTO `pecsf_charities` (`pecsf_region_id`, `vendor_code`, `name`, `url`) 
 
 
 INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Cross® Pen','This Cross® Calais chrome and blue lacquer rollerball pen is lightweight with a bold profile. It comes in a box with 25 Years engraved on the lid of the pen.
-25 year certificate', 1, 1, "a:0:{}");
+25 year certificate', 1, 1, "[]");
 INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Bugatti® writing case and tablet holder','This recycled and synthetic leather case has 25 Years debossed on the front. The zippered closure keeps your tablet secure during transport, and adjustable brackets hold most tablet models, including three sizes of iPad (tablet is not included). The cover includes a pocket for a smartphone, USB and pen holders, card slots, an ID window and writing pad.
 
-Size: 10 3/4" H X 9" W', 1, 1, "a:0:{}");
-INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Passport and luggage tag set','This genuine black leather passport holder and luggage tag has 25 Years debossed on the front. It has a magnetic closure. ', 1, 1, "a:0:{}");
+Size: 10 3/4" H X 9" W', 1, 1, "[]");
+INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Passport and luggage tag set','This genuine black leather passport holder and luggage tag has 25 Years debossed on the front. It has a magnetic closure. ', 1, 1, "[]");
 INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Pearl earrings','These sterling silver, fresh water pearl earrings have an accent of gold. They are made in Vancouver, B.C. by Howling Dog Artisan Jewellery.
 
 Size: 2.5 cm L x 1 cm W
 
-Note: Due to the nature of this award, engraving is not possible.', 1, 1, "a:0:{}");
+Note: Due to the nature of this award, engraving is not possible.', 1, 1, "[]");
 INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Appalachian Sherpa blanket','This high-end plush blanket has 30 Years embroidered on the corner. It’s made of faux suede on one side and soft Sherpa fleece on the other.
 
-Size: 60" L x 50" W', 2, 1, "a:0:{}");
+Size: 60" L x 50" W', 2, 1, "[]");
 INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Howard Miller® Colonnade clock','This bold optical crystal, carriage-style clock has In recognition of thirty years of service engraved on front plate. It features a black glass center panel and a white dial with black Roman numerals and hour markers surrounded by a polished silver-tone bezel.
 
-Size: 6.75" H (17 cm) x 6.25" W (16 cm)', 2, 1, "a:0:{}");
+Size: 6.75" H (17 cm) x 6.25" W (16 cm)', 2, 1, "[]");
 INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Epiphany III framed art print','This stunning photograph by B.C. artist Marvin Pelkey is printed on fine art paper and comes matted in a black frame. The frame has In recognition of thirty years of service engraved on a plaque.
 
-Size: 16” H x 16” W', 2, 1, "a:0:{}");
+Size: 16” H x 16” W', 2, 1, "[]");
 INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Sterling silver earrings','These sterling silver drop earrings are individually handcrafted by B.C. artists Nancy Dawson and Vincent Henson of Silver Eagles Design Studio in Alert Bay. They come in a box with In recognition of thirty years of service engraved on the top.
 
 Size: 2.75 cm L x 2 cm W
 
-Note: These earrings are designed to coordinate with the 35 year sterling silver bracelet.', 2, 1, "a:0:{}");
-INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Bulova® watch','This watch features the BC Coat of Arms on the dial and your name and 35 Years is engraved on the back of the watch face. It comes in a choice of gold, silver or two-toned watch face with a plated strap, or a black or brown leather strap. ', 3, 1, 'a:4:{i:0;a:3:{s:4:"name";s:5:"Sizes";s:4:"type";s:6:"choice";s:6:"values";a:2:{i:0;s:53:"Small (women''s) = 29 mm watch face, 14 mm strap width";i:1;s:51:"Large (men''s) = 38 mm watch face, 20 mm strap width";}}i:1;a:3:{s:4:"name";s:6:"Colour";s:4:"type";s:6:"choice";s:6:"values";a:2:{i:0;s:10:"Gold Watch";i:1;s:12:"Silver Watch";}}i:2;a:3:{s:4:"name";s:5:"Strap";s:4:"type";s:6:"choice";s:6:"values";a:4:{i:0;s:6:"Silver";i:1;s:9:"Two Toned";i:2;s:5:"Black";i:3;s:5:"Brown";}}i:3;a:3:{s:4:"name";s:11:"Engravement";s:4:"type";s:4:"text";s:6:"values";a:0:{}}}');
+Note: These earrings are designed to coordinate with the 35 year sterling silver bracelet.', 2, 1, "[]");
+INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Bulova® watch','This watch features the BC Coat of Arms on the dial and your name and 35 Years is engraved on the back of the watch face. It comes in a choice of gold, silver or two-toned watch face with a plated strap, or a black or brown leather strap. ', 3, 1, '[{"name":"Size","type":"choice","values":["Small (women''s) = 29 mm watch face, 14 mm strap width","Large (men''s) = 38 mm watch face, 20 mm strap width"]},{"name":"Watch Colour","type":"choice","values":["Gold","Silver"]},{"name":"Strap Colour","type":"choice","values":{"1":"Matching","2":"Black","3":"Brown"}},{"name":"Engravement","type":"text","values":[]}]');
 INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Bushnell® Prime binoculars','The Bushnell® Prime 8x42 binocular is the perfect blend of magnification and field of view, allowing easy viewing of moving animals and birds. The EXO barrier and fully multi coated optics deliver bright images in any weather conditions. The Prime binoculars feature Bushnell’s newest and best protective lens coating that molecularly bonds to the glass, repelling water, oil, dust, debris and preventing scratches. With IPX7 waterproof construction, O-ring sealed optics stay dry inside, when immersed in three feet of water for up to 30 minutes. They come with a soft case.
 
 Note: Due to the nature of this award, engraving is not possible.
@@ -5283,41 +5283,41 @@ Field of View 350/117 (ft.@1000 yrds/m@1000m)
 
 Close Focus = 10F/3M
 
-Weight = 23.3 oz (660 gm)', 3, 1, "a:0:{}");
+Weight = 23.3 oz (660 gm)', 3, 1, "[]");
 INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Blue Flower Bouquet glass vase','Each of these unique glass vases are hand-blown by B.C. artist Robert Held in Parksville.
 
 Size:11.5" H
 
-Note: Due to the nature of this gift, engraving is not possible.', 3, 1, "a:0:{}");
-INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Sterling silver bracelet','This sterling silver bracelet has a 14 kt yellow gold insert. It is handcrafted by B.C. artists Nancy Dawson and Vincent Henson of Silver Eagles Design Studio in Alert Bay. It comes in a box with In recognition of thirty five years of serviceengraved on the top.', 3, 1, "a:0:{}");
+Note: Due to the nature of this gift, engraving is not possible.', 3, 1, "[]");
+INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Sterling silver bracelet','This sterling silver bracelet has a 14 kt yellow gold insert. It is handcrafted by B.C. artists Nancy Dawson and Vincent Henson of Silver Eagles Design Studio in Alert Bay. It comes in a box with In recognition of thirty five years of serviceengraved on the top.', 3, 1, "[{"name":"Size","type":"choice","values":["Size A: fits 6 1\/2 to 7 1\/2 inch wrists","Size B: fits 7 1\/2 to 8 1\/2 inch wrists"]}]");
 INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Ergo® Napoleon Beauty mantle clock','This clock features a wood frame in solids and veneers in a warm oak finish with burl accents. It has In recognition of forty years of service engraved on front plate. A brass finish bezel surrounds the dial. It has rich chimes which you can adjust to your preference (quarterly Westminster, quarterly Ava Maria, hourly Westminster or hourly/half hour strike).
 
-Size: 20" H x 10" W', 4, 1, "a:0:{}");
-INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Genuine diamond pendant and chain','This necklace features a 10 kt white gold, four claw pendant and 18 inch box chain. The round brilliant cut diamonds are .20-carat total weight. It comes in a box with In recognition of forty years of service engraved on the top.', 4, 1, "a:0:{}");
-INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Genuine diamond stud earrings','These earrings are 14 kt white gold stud earrings featuring round brilliant cut diamonds that are .25 carat total weight. They come in a box with In recognition of forty years of service engraved on the top.', 4, 1, "a:0:{}");
+Size: 20" H x 10" W', 4, 1, "[]");
+INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Genuine diamond pendant and chain','This necklace features a 10 kt white gold, four claw pendant and 18 inch box chain. The round brilliant cut diamonds are .20-carat total weight. It comes in a box with In recognition of forty years of service engraved on the top.', 4, 1, "[]");
+INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Genuine diamond stud earrings','These earrings are 14 kt white gold stud earrings featuring round brilliant cut diamonds that are .25 carat total weight. They come in a box with In recognition of forty years of service engraved on the top.', 4, 1, "[]");
 INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Blue Flower Bouquet glass bowl','Each of these unique glass bowls are hand-blown by B.C. artist Robert Held in Parksville.
 
 Size: 7" H
 
-Note: Due to the nature of this award, engraving is not possible.', 4, 1, "a:0:{}");
+Note: Due to the nature of this award, engraving is not possible.', 4, 1, "[]");
 INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Forest Cove framed art print','This colourful landscape print was originally painted by artist Michaela Davidson, from Lake Cowichan, B.C. The artwork is presented in a matted green frame with In recognition of forty years of service engraved on a plaque.
 
-Size: 16" H x 14" W ', 4, 1, "a:0:{}");
+Size: 16" H x 14" W ', 4, 1, "[]");
 
 INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Howard Miller® "Park" Clock','Walnut wood finish, chiming wall clock with elegant roman numerals and gold tone accent hands. Quartz battery movement. Comes with an engraved plate “In recognition of forty-five years of service.”
-Size: 19 ½” H x 10” W ', 5, 1, "a:0:{}");
+Size: 19 ½” H x 10” W ', 5, 1, "[]");
 INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Thule® Subterra Luggage','This durable luggage from Thule® is made from water-resistant materials. The tough, oversized wheels and V-Tubing telescoping handles make for smooth and easy transport. It has a divided main compartment to separate clothes and has top, side and bottom grab handles. Complies with carry-on requirements for most airlines.
-Size:  21.7”L x 13.8”W x 7.9” H ', 5, 1, "a:0:{}");
+Size:  21.7”L x 13.8”W x 7.9” H ', 5, 1, "[]");
 INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Carson® Telescope','Refractor telescope with a 70mm short tube wide angle scope. Comes with an adjustable tabletop tripod and carrying case. D3 Silver Medallion.
-Specs: focal length of 350mm, 45 degree diagonal, power range of 14x 116.6x.', 5, 1, "a:0:{}");
+Specs: focal length of 350mm, 45 degree diagonal, power range of 14x 116.6x.', 5, 1, "[]");
 INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('White Diamond Stud Earrings','These brilliant round cut diamonds are set in 14 kt. white gold with four white gold claws and butterfly backs. Comes with an engraved plate on the presentation box, “In recognition of forty-five years of service.”
-Weight: pair of diamonds is .30 ct. t.w.', 5, 1, "a:0:{}");
+Weight: pair of diamonds is .30 ct. t.w.', 5, 1, "[]");
 
 INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Sterling Silver Gemstone Set','Stunning sterling silver pendant necklace and earrings with blue topaz, peridot, and amethyst stones. Comes with an engraved plate on the presentation box, “In recognition of fifty years of service.”
-Length: 18”', 6, 1, "a:0:{}");
+Length: 18”', 6, 1, "[]");
 INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Crystal Pitcher and Glass Set','Chesley, lead free crystal, 50 oz. water pitcher. Comes with four matching high ball glasses, 13 oz.
-Weight: 9 lbs.', 6, 1, "a:0:{}");
+Weight: 9 lbs.', 6, 1, "[]");
 INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Citizen® Axiom Eco-Drive Watch (mens)','Black dial with black leather strap. Has date feature and is splash resistant. Comes in stainless steel case.
-Size of face: 40 mm diameter', 6, 1, "a:0:{}");
+Size of face: 40 mm diameter', 6, 1, "[]");
 INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Bulova® "Yarmouth" Clock','Bulova wall clock with thermometer and hygrometer. Comes in a beautiful walnut finish and has an engraved plate, “In recognition of fifty years of service.”
-Size: 17 ¼ "H x 10 ¾” W x 3“ D', 6, 1, "a:0:{}");
+Size: 17 ¼ "H x 10 ¾” W x 3“ D', 6, 1, "[]");

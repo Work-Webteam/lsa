@@ -16,7 +16,7 @@ class AwardsController extends AppController
         $award = $this->Awards->findById($id)->firstOrFail();
         $this->set(compact('award'));
 
-        $options = unserialize($award->options);
+        $options = json_decode($award->options, true);
         $this->set(compact('options'));
 
         $milestone = $this->Awards->Milestones->findById($award->milestone_id)->firstOrFail();
@@ -37,7 +37,7 @@ class AwardsController extends AppController
                 $award->image = $fileName;
             }
             $award->active = true;
-            $award->options = serialize(array());
+            $award->options = json_encode(array());
             if ($this->Awards->save($award)) {
                 $this->Flash->success(__('Award has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -108,9 +108,9 @@ class AwardsController extends AppController
                     'type' => empty($type) ? 'choice' : $type,
                     'values' => array()
                 );
-               $options = unserialize($award->options);
+               $options = json_decode($award->options, true);
                $options[] = $new;
-               $award->options = serialize($options);
+               $award->options = json_encode($options);
             }
             if ($this->Awards->save($award)) {
                 $this->Flash->success(__('Option has been saved.'));
@@ -125,11 +125,11 @@ class AwardsController extends AppController
     public function editoption($id, $option_id)
     {
         $award = $this->Awards->findById($id)->firstOrFail();
-        $options = unserialize($award->options);
+        $options = json_decode($award->options, true);
 
         if ($this->request->is('post')) {
             $options[$option_id]['name'] = $this->request->getData('name');
-            $award->options = serialize($options);
+            $award->options = json_encode($options);
 
             if ($this->Awards->save($award)) {
                 $this->Flash->success(__('Option has been saved.'));
@@ -149,10 +149,10 @@ class AwardsController extends AppController
         $this->request->allowMethod(['post', 'delete']);
 
         $award = $this->Awards->findById($id)->firstOrFail();
-        $options = unserialize($award->options);
+        $options = json_decode($award->options, true);
         $name = $options[$option_id]['name'];
         unset($options[$option_id]);
-        $award->options = serialize($options);
+        $award->options = json_encode($options);
         if ($this->Awards->save($award)) {
             $this->Flash->success(__('Award Option {0} has been deleted.', $name));
             return $this->redirect(['action' => 'view/'.$award->id]);
@@ -166,9 +166,9 @@ class AwardsController extends AppController
         if ($this->request->is('post')) {
             $name = $this->request->getData('name');
             if (!empty($name)) {
-                $options = unserialize($award->options);
+                $options = json_decode($award->options, true);
                 $options[$option_id]['values'][] = $name;
-                $award->options = serialize($options);
+                $award->options = json_encode($options);
             }
             if ($this->Awards->save($award)) {
                 $this->Flash->success(__('Option has been saved.'));
@@ -184,10 +184,10 @@ class AwardsController extends AppController
     public function editvalue($id, $option_id, $value_id)
     {
         $award = $this->Awards->findById($id)->firstOrFail();
-        $options = unserialize($award->options);
+        $options = json_decode($award->options, true);
         if ($this->request->is('post')) {
             $options[$option_id]['values'][$value_id] = $this->request->getData('name');
-            $award->options = serialize($options);
+            $award->options = json_encode($options);
 
             if ($this->Awards->save($award)) {
                 $this->Flash->success(__('Option has been saved.'));
@@ -205,10 +205,10 @@ class AwardsController extends AppController
         $this->request->allowMethod(['post', 'delete']);
 
         $award = $this->Awards->findById($id)->firstOrFail();
-        $options = unserialize($award->options);
+        $options = json_decode($award->options, true);
         $name = $options[$option_id]['values'][$value_id];
         unset($options[$option_id]['values'][$value_id]);
-        $award->options = serialize($options);
+        $award->options = json_encode($options);
 
         if ($this->Awards->save($award)) {
             $this->Flash->success(__('Award Option Value {0} has been deleted.', $name));

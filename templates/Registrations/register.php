@@ -4,11 +4,10 @@
 echo $this->Form->create($registration);
 
 echo $this->Form->label("Retiring this year?");
-//echo $this->Form->radio('retiring_this_year', [['value' => 1, 'text' => 'Yes'], ['value' => 0, 'text' => 'No']], ['onchange' => 'retiringChange(this.value);']);
-echo $this->Form->hidden('retiring_this_year', ['value' => 2]);
-echo $this->Form->button('Yes', ['type' => 'button', 'onclick' => 'buttonClick1(1)']);
-echo $this->Form->button('No', ['type' => 'button', 'onclick' => 'buttonClick1(0)']);
-echo $this->Form->hidden('award_instructions', ['value' => 'some text']);
+echo $this->Form->hidden('retiring_this_year', ['value' => 0]);
+echo $this->Form->button('Yes', ['type' => 'button', 'onclick' => 'buttonRetirementClick(1)']);
+echo $this->Form->button('No', ['type' => 'button', 'onclick' => 'buttonRetirementClick(0)']);
+
 ?>
 
     <transition name="fade">
@@ -24,27 +23,35 @@ echo $this->Form->hidden('award_instructions', ['value' => 'some text']);
     <?php
 
 
-echo $this->Form->control('milestone_id', ['type' => 'select', 'label' => 'Milestone', 'options' => $milestones, 'value' => -1]);
-
-
-echo $this->Form->control('award_id', ['options' => $awards]);
-
+    echo $this->Form->control('milestone_id', ['type' => 'select', 'label' => 'Milestone', 'options' => $milestones, 'value' => -1, 'onChange' => 'milestoneSelected(this.value)']);
 ?>
         </div>
     </transition>
 
-<a class="btn btn-primary" href="#" v-on:click="showIdentifyingInfoInputs">Selected Award</a>
+    <transition name="fade">
+        <div class="form-group" v-if="milestoneKnown">
+
+<?php
+
+echo $this->Form->control('award_id', ['options' => $awards]);
+
+?>
+            <a class="btn btn-primary" href="#" v-on:click="showIdentifyingInfoInputs">Selected Award</a>
+        </div>
+    </transition>
+
+
 
 <transition name="fade">
     <fieldset id="identifyingInfo" v-show="awardSelected">
 <?php
 
-echo $this->Form->control('employee_id', ['label' => 'Employee ID', 'type' => 'text']);
-echo $this->Form->control('first_name');
-echo $this->Form->control('last_name');
+echo $this->Form->control('employee_id', ['label' => 'Employee ID', 'type' => 'text', 'v-model' => 'employeeID']);
+echo $this->Form->control('first_name', ['v-model' => 'firstName']);
+echo $this->Form->control('last_name', ['v-model' => 'lastName']);
 
-echo $this->Form->control('ministry_id', ['options' => $ministries]);
-echo $this->Form->control('department');
+echo $this->Form->control('ministry_id', ['options' => $ministries, 'v-model' => 'ministry']);
+echo $this->Form->control('department', ['v-model' => 'branch']);
 
 ?>
         <a class="btn btn-primary" href="#officeAddressAnchor" v-on:click="showOfficeAddressInput">ID Info Input</a>
@@ -56,10 +63,10 @@ echo $this->Form->control('department');
    <fieldset id="officeAddress" v-show="identifyingInfoInput">
 <?php
 
-echo $this->Form->control('office_address');
-echo $this->Form->control('office_city_id', ['options' => $cities]);
+echo $this->Form->control('office_address', ['v-model' => 'officeStreetAddress']);
+echo $this->Form->control('office_city_id', ['options' => $cities, 'v-model' => 'officeCity']);
 echo $this->Form->control('office_province', ['disabled' => true]);
-echo $this->Form->control('office_postal_code');
+echo $this->Form->control('office_postal_code', ['v-model' => 'officePostalCode']);
 ?>
        <a class="btn btn-primary" href="#homeAddressAnchor" v-on:click="showHomeAddressInput">Office Address Input</a><a id="officeAddressAnchor"></a>
    </fieldset>
@@ -69,11 +76,11 @@ echo $this->Form->control('office_postal_code');
    <fieldset id="homeAddress" v-show="officeAddressInput">
 
 <?php
-echo $this->Form->control('home_address');
-echo $this->Form->control('home_city_id', ['options' => $cities]);
+echo $this->Form->control('home_address', ['v-model' => 'homeStreetAddress']);
+echo $this->Form->control('home_city_id', ['options' => $cities, 'v-model' => 'homeCity']);
 echo $this->Form->control('home_province', ['disabled' => true]);
-echo $this->Form->control('home_postal_code');
-echo $this->Form->control('home_phone');
+echo $this->Form->control('home_postal_code', ['v-model' => 'homePostalCode']);
+echo $this->Form->control('home_phone', ['v-model' => 'homePhone']);
 ?>
        <a class="btn btn-primary" href="#supervisorAnchor" v-on:click="showSupervisorInput">Home Address Input</a><a id="homeAddressAnchor"></a>
    </fieldset>
@@ -83,13 +90,15 @@ echo $this->Form->control('home_phone');
    <fieldset id="supervisor" v-if="homeAddressInput">
 
 <?php
-echo $this->Form->control('supervisor_first_name');
-echo $this->Form->control('supervisor_last_name');
-echo $this->Form->control('supervisor_address');
-echo $this->Form->control('supervisor_city_id', ['options' => $cities]);
+
+echo $this->Form->control('supervisor_first_name', ['v-model' => 'supervisorFirstName']);
+echo $this->Form->control('supervisor_last_name', ['v-model' => 'supervisorLastName']);
+echo $this->Form->control('supervisor_address', ['v-model' => 'supervisorStreetAddress']);
+echo $this->Form->control('supervisor_city_id', ['options' => $cities, 'v-model' => 'supervisorCity']);
 echo $this->Form->control('supervisor_province', ['disabled' => true]);
-echo $this->Form->control('supervisor_postal_code');
-echo $this->Form->control('supervisor_email', ['type' => 'email']);
+echo $this->Form->control('supervisor_postal_code', ['v-model' => 'supervisorPostalCode']);
+echo $this->Form->control('supervisor_email', ['type' => 'email', 'v-model' => 'supervisorEmail']);
+
 ?>
        <a class="btn btn-primary" href="#confirmInfo" v-on:click="showConfirmation">Supervisor Input</a>
    </fieldset>
@@ -98,8 +107,67 @@ echo $this->Form->control('supervisor_email', ['type' => 'email']);
 <transition name="fade">
    <div class="confirmationDisplay" v-if="supervisorInput">
 
-       <p>some stuff here</p>
+       <h3 class="display-4">Please Confirm Your Information</h3>
 
+       <h4>{{firstName}}
+           {{lastName}}</h4>
+
+       <p>Employee ID:
+           {{employeeID}}</p>
+       <div class="row">
+           <div class="col-sm-6">
+               <h5>Office Address</h5>
+               <div class="address">
+                   <p>{{officeMailPrefix}}</p>
+                   <p>{{officeSuite}}
+                       {{officeStreetAddress}}</p>
+                   <p>{{officeCity}}, BC</p>
+                   <p>{{officePostalCode}}</p>
+               </div>
+           </div>
+           <div class="col-sm-6">
+               <h5>Home Address</h5>
+               <div class="address">
+                   <p>{{homeSuite}}
+                       {{homeStreetAddress}}</p>
+                   <p>{{homeCity}}, BC</p>
+                   <p>{{homePostalCode}}</p>
+               </div>
+           </div>
+       </div>
+       <div class="row">
+           <div class="col-sm-6">
+               <div class="award">
+                   <div class="card award-card">
+                       <img alt="..." class="card-img-top" src="http://placekitten.com/400/400">
+                       <div class="card-body">
+                           <h5 class="card-title">Award Name</h5>
+                           <p class="card-text">Here's some quick body text to describe the award.</p>
+                           <p class="card-text">Award Option The First, X Option</p>
+                       </div>
+                   </div>
+               </div>
+           </div>
+           <div class="col-sm-6">
+               <p class="divisionMinistryDisplay">You work in
+                   {{branch}}
+                   at
+                   {{ministry}}</p>
+               <p class="retirementDisplay">You are retiring on
+                   {{retirementDate}}</p>
+
+               <h5>Your Supervisor</h5>
+               <p>{{supervisorFirstName}}
+                   {{supervisorLastName}}</p>
+               <div class="address">
+                   <p>{{supervisorMailPrefix}}</p>
+                   <p>{{supervisorSuite}}
+                       {{supervisorStreetAddress}}</p>
+                   <p>{{supervisorCity}}, BC</p>
+                   <p>{{supervisorPostalCode}}</p>
+               </div>
+               <a class="btn btn-primary" href="#register" id="confirmInfo" v-on:click="showDeclaration">Confirm</a>
+           </div>
        <?php
        echo $this->Form->button(__('Register'));
        echo $this->Form->button('Cancel', array(
@@ -143,7 +211,7 @@ echo $this->Form->end();
         }
     };
 
-    function buttonClick1(retiring) {
+    function buttonRetirementClick(retiring) {
         $('input[name=retiring_this_year]').val(retiring);
         if (retiring == 1) {
             app.exposeRetirementDatePicker();
@@ -152,6 +220,11 @@ echo $this->Form->end();
             app.setRetirementStatusKnown();
         }
     }
+
+    function milestoneSelected(milestone) {
+        app.exposeAwardSelector(milestone);
+    }
+
 
     Vue.config.devtools = true
 
@@ -162,6 +235,8 @@ echo $this->Form->end();
             retirementStatusKnown: false,
             retirementDate: '',
             yearsOfService: 0,
+            milestoneKnown: false,
+            milestone: 0,
 
             employeeID: '',
             firstName: '',
@@ -177,6 +252,7 @@ echo $this->Form->end();
             homeStreetAddress: '',
             homeCity: '',
             homePostalCode: '',
+            homePhone: '',
             supervisorFirstName: '',
             supervisorLastName: '',
             supervisorMailPrefix: '',
@@ -184,6 +260,7 @@ echo $this->Form->end();
             supervisorStreetAddress: '',
             supervisorCity: '',
             supervisorPostalCode: '',
+
             awardSelected: false,
             identifyingInfoInput: false,
             officeAddressInput: false,
@@ -199,6 +276,12 @@ echo $this->Form->end();
             setRetirementStatusKnown: function () {
                 this.isRetiringThisYear = false;
                 this.retirementStatusKnown = true;
+            },
+            exposeAwardSelector: function(milestone) {
+                console.log("exposeAwardSelector");
+                console.log(milestone);
+                this.milestoneKnown = true;
+                this.milestone = milestone;
             },
             showIdentifyingInfoInputs: function () {
                 // $('#Registrationsaward_instructions').value = "stuff";
