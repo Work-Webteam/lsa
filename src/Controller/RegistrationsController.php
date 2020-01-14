@@ -67,7 +67,9 @@ class RegistrationsController extends AppController
             $registration->home_province = "BC";
             $registration->supervisor_province = "BC";
             $registration->retirement_date = $this->request->getData('date');
-
+//            if (!$registration->retiring_this_year) {
+//                $registration->retirement_date = "";
+//            }
             if ($this->Registrations->save($registration)) {
                 $this->Flash->success(__('Registration has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -81,12 +83,13 @@ class RegistrationsController extends AppController
             $registration->supervisor_province = "BC";
         }
         $milestones = $this->Registrations->Milestones->find('list');
-        $options[0] = "- none selected -";
-        $options = array_merge($options, $milestones->toArray());
-        $this->set('milestones', $options);
+        $this->set('milestones', $milestones);
 
         $awards = $this->Registrations->Awards->find('list');
         $this->set('awards', $awards);
+
+        $awardInfo = $this->Registrations->Awards->find('all');
+        $this->set('awardinfo', $awardInfo);
 
         $ministries = $this->Registrations->Ministries->find('list', [
             'order' => ['Ministries.name' => 'ASC']
@@ -153,5 +156,64 @@ class RegistrationsController extends AppController
             return $this->redirect(['action' => 'index']);
         }
     }
+
+
+
+    public function test()
+    {
+        $registration = $this->Registrations->newEmptyEntity();
+        if ($this->request->is('post')) {
+            $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
+
+            // Hardcoding the user_id is temporary, and will be removed later
+            // when we build authentication out.
+            $registration->user_id = 1;
+            $registration->created = time();
+            $registration->modified = time();
+            $registration->office_province = "BC";
+            $registration->home_province = "BC";
+            $registration->supervisor_province = "BC";
+            $registration->retirement_date = $this->request->getData('date');
+//            if (!$registration->retiring_this_year) {
+//                $registration->retirement_date = "";
+//            }
+//            if ($this->Registrations->save($registration)) {
+//                $this->Flash->success(__('Registration has been saved.'));
+//                return $this->redirect(['action' => 'index']);
+//            }
+            $this->Flash->error(__('Did not add registration.'));
+        }
+
+        if ($this->request->is('get')) {
+            $registration->office_province = "BC";
+            $registration->home_province = "BC";
+            $registration->supervisor_province = "BC";
+        }
+        $milestones = $this->Registrations->Milestones->find('list');
+        $this->set('milestones', $milestones);
+
+        $awards = $this->Registrations->Awards->find('list');
+        $this->set('awards', $awards);
+
+        $ministries = $this->Registrations->Ministries->find('list', [
+            'order' => ['Ministries.name' => 'ASC']
+        ]);
+        $this->set('ministries', $ministries);
+
+        $diet = $this->Registrations->Diet->find('list');
+        $this->set('diet', $diet);
+
+        $cities = $this->Registrations->Cities->find('list', [
+            'order' => ['Cities.name' => 'ASC']
+        ]);
+        $this->set('cities', $cities);
+
+        $this->set('registration', $registration);
+    }
+
+
+
+
 }
+
 
