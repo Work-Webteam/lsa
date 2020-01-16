@@ -32,8 +32,8 @@ echo $this->Form->create($registration);
 
 <?php
 
-echo $this->Form->control('award_id', ['type' => 'select', 'options' => $awards, 'empty' => '- select award -', 'onChange' => 'awardSelected(this.value)']);
-echo $this->Form->control('alternate_email', ['v-model' => 'altEmail']);
+// echo $this->Form->control('award_id', ['type' => 'select', 'options' => $awards, 'empty' => '- select award -', 'onChange' => 'awardSelected(this.value)']);
+echo $this->Form->control('work_phone', ['v-model' => 'officePhone']);
 
 ?>
             <a class="btn btn-primary" href="#identifyingInfo" v-on:click="showConfirmation">Selected Award</a>
@@ -174,6 +174,7 @@ echo $this->Form->end();
             officeStreetAddress: '',
             officeCity: '',
             officePostalCode: '',
+            officePhone: '',
             homeSuite: '',
             homeStreetAddress: '',
             homeCity: '',

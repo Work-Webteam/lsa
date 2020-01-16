@@ -5131,13 +5131,13 @@ Size: 6.75" H (17 cm) x 6.25" W (16 cm)', 2, 1, "[]");
 INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Epiphany III framed art print','This stunning photograph by B.C. artist Marvin Pelkey is printed on fine art paper and comes matted in a black frame. The frame has In recognition of thirty years of service engraved on a plaque.
 
 Size: 16” H x 16” W', 2, 1, "[]");
-INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Sterling silver earrings','These sterling silver drop earrings are individually handcrafted by B.C. artists Nancy Dawson and Vincent Henson of Silver Eagles Design Studio in Alert Bay. They come in a box with In recognition of thirty years of service engraved on the top.
+INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`, `image`) VALUES ('Sterling silver earrings','These sterling silver drop earrings are individually handcrafted by B.C. artists Nancy Dawson and Vincent Henson of Silver Eagles Design Studio in Alert Bay. They come in a box with In recognition of thirty years of service engraved on the top.
 
 Size: 2.75 cm L x 2 cm W
 
-Note: These earrings are designed to coordinate with the 35 year sterling silver bracelet.', 2, 1, "[]");
-INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Bulova® watch','This watch features the BC Coat of Arms on the dial and your name and 35 Years is engraved on the back of the watch face. It comes in a choice of gold, silver or two-toned watch face with a plated strap, or a black or brown leather strap. ', 3, 1, '[{"name":"Size","type":"choice","values":["Small (women''s) = 29 mm watch face, 14 mm strap width","Large (men''s) = 38 mm watch face, 20 mm strap width"]},{"name":"Watch Colour","type":"choice","values":["Gold","Silver"]},{"name":"Strap Colour","type":"choice","values":{"1":"Matching","2":"Black","3":"Brown"}},{"name":"Engravement","type":"text","values":[]}]');
-INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Bushnell® Prime binoculars','The Bushnell® Prime 8x42 binocular is the perfect blend of magnification and field of view, allowing easy viewing of moving animals and birds. The EXO barrier and fully multi coated optics deliver bright images in any weather conditions. The Prime binoculars feature Bushnell’s newest and best protective lens coating that molecularly bonds to the glass, repelling water, oil, dust, debris and preventing scratches. With IPX7 waterproof construction, O-ring sealed optics stay dry inside, when immersed in three feet of water for up to 30 minutes. They come with a soft case.
+Note: These earrings are designed to coordinate with the 35 year sterling silver bracelet.', 2, 1, "[]", '');
+INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`, `image`) VALUES ('Bulova® watch','This watch features the BC Coat of Arms on the dial and your name and 35 Years is engraved on the back of the watch face. It comes in a choice of gold, silver or two-toned watch face with a plated strap, or a black or brown leather strap. ', 3, 1, '[{"name":"Size","type":"choice","values":["Small (women''s) = 29 mm watch face, 14 mm strap width","Large (men''s) = 38 mm watch face, 20 mm strap width"]},{"name":"Watch Colour","type":"choice","values":["Gold","Silver"]},{"name":"Strap Colour","type":"choice","values":{"1":"Matching","2":"Black","3":"Brown"}},{"name":"Engravement","type":"text","values":[]}]', 'Watches-group-thumb.png');
+INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`, `image`) VALUES ('Bushnell® Prime binoculars','The Bushnell® Prime 8x42 binocular is the perfect blend of magnification and field of view, allowing easy viewing of moving animals and birds. The EXO barrier and fully multi coated optics deliver bright images in any weather conditions. The Prime binoculars feature Bushnell’s newest and best protective lens coating that molecularly bonds to the glass, repelling water, oil, dust, debris and preventing scratches. With IPX7 waterproof construction, O-ring sealed optics stay dry inside, when immersed in three feet of water for up to 30 minutes. They come with a soft case.
 
 Note: Due to the nature of this award, engraving is not possible.
 
@@ -5147,13 +5147,13 @@ Field of View 350/117 (ft.@1000 yrds/m@1000m)
 
 Close Focus = 10F/3M
 
-Weight = 23.3 oz (660 gm)', 3, 1, "[]");
-INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Blue Flower Bouquet glass vase','Each of these unique glass vases are hand-blown by B.C. artist Robert Held in Parksville.
+Weight = 23.3 oz (660 gm)', 3, 1, "[]", '35yearbinoculars-sm.png');
+INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`, `image`) VALUES ('Blue Flower Bouquet glass vase','Each of these unique glass vases are hand-blown by B.C. artist Robert Held in Parksville.
 
 Size:11.5" H
 
-Note: Due to the nature of this gift, engraving is not possible.', 3, 1, "[]");
-INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Sterling silver bracelet','This sterling silver bracelet has a 14 kt yellow gold insert. It is handcrafted by B.C. artists Nancy Dawson and Vincent Henson of Silver Eagles Design Studio in Alert Bay. It comes in a box with In recognition of thirty five years of service engraved on the top.', 3, 1, '[{"name":"Size","type":"choice","values":["Size A: fits 6 1/2 to 7 1/2 inch wrists","Size B: fits 7 1/2 to 8 1/2 inch wrists"]}]');
+Note: Due to the nature of this gift, engraving is not possible.', 3, 1, "[]", 'vase-thumb.jpg');
+INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`, `image`) VALUES ('Sterling silver bracelet','This sterling silver bracelet has a 14 kt yellow gold insert. It is handcrafted by B.C. artists Nancy Dawson and Vincent Henson of Silver Eagles Design Studio in Alert Bay. It comes in a box with In recognition of thirty five years of service engraved on the top.', 3, 1, '[{"name":"Size","type":"choice","values":["Size A: fits 6 1/2 to 7 1/2 inch wrists","Size B: fits 7 1/2 to 8 1/2 inch wrists"]}]', 'bracelet-1-thumb.jpg');
 INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`) VALUES ('Ergo® Napoleon Beauty mantle clock','This clock features a wood frame in solids and veneers in a warm oak finish with burl accents. It has In recognition of forty years of service engraved on front plate. A brass finish bezel surrounds the dial. It has rich chimes which you can adjust to your preference (quarterly Westminster, quarterly Ava Maria, hourly Westminster or hourly/half hour strike).
 
 Size: 20" H x 10" W', 4, 1, "[]");

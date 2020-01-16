@@ -1,5 +1,8 @@
 <div class="container" id="app">
 <h1>Register for Long Service Award</h1>
+
+
+
 <?php
 
 
@@ -239,7 +242,19 @@ echo $this->Form->button('No', ['type' => 'button',  'onclick' => 'app.buttonRet
 
 echo $this->Form->end();
 ?>
+
     </div>
+
+
+    <modal v-if="showOptions" @close="showOptions = false">
+        <!--
+          you can use custom content here to overwrite
+          default content
+        -->
+        <h3 slot="header">Award Options</h3>
+    </modal>
+
+
 </div>
 
 <!-- Optional JavaScript -->
@@ -280,6 +295,7 @@ echo $this->Form->end();
             app.awardDescription = "Hey let's just give some money to PECSF!";
             app.awardImage = '25_pecsf.jpg';
         }
+        app.selectAwardOptions(award);
     }
 
 
@@ -342,9 +358,44 @@ echo $this->Form->end();
             officeAddressInput: false,
             homeAddressInput: false,
             supervisorInput: false,
-            informationConfirmed: false
+            informationConfirmed: false,
+            showOptions: true
         },
         methods: {
+
+            getAward: function (select_id) {
+              award = 0;
+              for (var i = 0; i < awards.length; i++) {
+                if (awards[i].id == select_id) {
+                  award = awards[i];
+                }
+              }
+              return award;
+            },
+
+            selectAwardOptions: function (select_id) {
+              console.log('Select award options for award: ' + select_id);
+              award = this.getAward(select_id);
+console.log(award);
+              console.log(award.options);
+              console.log("=====");
+              options = JSON.parse(award.options);
+              console.log(options);
+              console.log("size: " + options.length);
+              options.forEach((element, index, array) => {
+                console.log("name: " + element.name);
+                console.log("type: " + element.type);
+                if (element.type == "choice") {
+                  console.log(element.values);
+                }
+              });
+              //
+              // for (var i = 0; i < award.length; i++) {
+              //   console.log(award[i]);
+              // }
+              this.showOptions = true;
+            },
+
 
             milestoneSelected: function (milestone) {
                 this.exposeAwardSelector(milestone);

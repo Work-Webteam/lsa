@@ -107,8 +107,10 @@ class RegistrationsTable extends Table
             'rule' => 'notBlank',
             'message' => 'Please enter office phone number.'
         ]);
-
-
+        $validator->add('work_phone', 'phone_format', [
+            'rule' => 'phone',
+            'message' => 'Invalid phone format.'
+        ]);
 
         $validator->requirePresence('home_city_id');
         $validator->add('home_city_id', 'not-blank', [
