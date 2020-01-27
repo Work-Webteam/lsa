@@ -2,12 +2,21 @@
 
 namespace App\Controller;
 
+use Cake\Core\Configure;
+use Cake\Error\Debugger;
+
 class RegistrationsController extends AppController
 {
     public function index()
     {
         $this->loadComponent('Paginator');
-        $registrations = $this->Paginator->paginate($this->Registrations->find());
+        $registrations = $this->Paginator->paginate($this->Registrations->find(), [
+            'contain' => [
+                'Milestones',
+                'Ministries',
+                'Awards'
+            ],
+        ]);
         $this->set(compact('registrations'));
     }
 
@@ -63,6 +72,7 @@ class RegistrationsController extends AppController
             $registration->user_id = 1;
             $registration->created = time();
             $registration->modified = time();
+            $registration->award_year = date("Y");
             $registration->office_province = "BC";
             $registration->home_province = "BC";
             $registration->supervisor_province = "BC";
@@ -72,7 +82,7 @@ class RegistrationsController extends AppController
 //            }
             if ($this->Registrations->save($registration)) {
                 $this->Flash->success(__('Registration has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'completed', $registration->id]);
             }
             $this->Flash->error(__('Unable to add registration.'));
         }
@@ -84,6 +94,9 @@ class RegistrationsController extends AppController
         }
         $milestones = $this->Registrations->Milestones->find('list');
         $this->set('milestones', $milestones);
+
+        $milestoneInfo = $this->Registrations->Milestones->find('all');
+        $this->set('milestoneinfo', $milestoneInfo);
 
         $awards = $this->Registrations->Awards->find('list');
         $this->set('awards', $awards);
@@ -104,15 +117,29 @@ class RegistrationsController extends AppController
         ]);
         $this->set('cities', $cities);
 
+
+        $regions = $this->Registrations->PecsfRegions->find('list', [
+            'order' => ['PecsfRegions.name' => 'ASC']
+        ]);
+        $this->set('regions', $regions);
+
+        $charities = $this->Registrations->PecsfCharities->find('all', [
+            'order' => ['PecsfCharities.name' => 'ASC']
+        ]);
+        $this->set('charities', $charities);
+
         $this->set('registration', $registration);
     }
 
 
-    public function getAwards() {
-//        $milestone = $this->Registration->
+    public function completed ($id = null) {
+        $registration = $this->Registrations->findById($id)->firstOrFail();
+        $this->set(compact('registration'));
+
+        $this->set('lsa_name' , Configure::read('LSA.lsa_contact_name'));
+        $this->set('lsa_email' , Configure::read('LSA.lsa_contact_email'));
+        $this->set('lsa_phone' , Configure::read('LSA.lsa_contact_phone'));
     }
-
-
 
     public function edit($id)
     {
@@ -211,7 +238,9 @@ class RegistrationsController extends AppController
         $this->set('registration', $registration);
     }
 
-
+    public function figureItOut ($id) {
+        return "what: " + id;
+    }
 
 
 }

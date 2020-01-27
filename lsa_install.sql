@@ -203,7 +203,6 @@ CREATE TABLE registrations (
     survey_participation BOOLEAN,
 
     FOREIGN KEY milestone_key (milestone_id) REFERENCES milestones(id),
-	FOREIGN KEY award_key (award_id) REFERENCES awards(id),
     FOREIGN KEY ministry_key (ministry_id) REFERENCES ministries(id),
     FOREIGN KEY alternate_ministry_key (alternate_ministry_id) REFERENCES ministries(id),
     FOREIGN KEY ceremony_key (ceremony_id) REFERENCES ceremonies(id),
@@ -2422,8 +2421,8 @@ INSERT INTO `pecsf_regions` (`name`) VALUES ('Squamish-Lillooet');
 INSERT INTO `pecsf_regions` (`name`) VALUES ('Stikine');
 INSERT INTO `pecsf_regions` (`name`) VALUES ('Sunshine Coast');
 INSERT INTO `pecsf_regions` (`name`) VALUES ('Thompson-Nicola');
-INSERT INTO `pecsf_regions` (`name`) VALUES ('Greater Vancouver');
-INSERT INTO `pecsf_regions` (`name`) VALUES ('Greater Victoria');
+INSERT INTO `pecsf_regions` (`name`) VALUES ('Vancouver');
+INSERT INTO `pecsf_regions` (`name`) VALUES ('Victoria');
 
 INSERT INTO `pecsf_charities` (`pecsf_region_id`, `vendor_code`, `name`, `url`) VALUES (1,"FS0316","Alberni Valley Hospice Society Ty Watson House","www.albernihospice.ca");
 INSERT INTO `pecsf_charities` (`pecsf_region_id`, `vendor_code`, `name`, `url`) VALUES (1,"FS0211","Bread of Life Society","");
@@ -5136,7 +5135,7 @@ INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`
 Size: 2.75 cm L x 2 cm W
 
 Note: These earrings are designed to coordinate with the 35 year sterling silver bracelet.', 2, 1, "[]", '');
-INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`, `image`) VALUES ('Bulova® watch','This watch features the BC Coat of Arms on the dial and your name and 35 Years is engraved on the back of the watch face. It comes in a choice of gold, silver or two-toned watch face with a plated strap, or a black or brown leather strap. ', 3, 1, '[{"name":"Size","type":"choice","values":["Small (women''s) = 29 mm watch face, 14 mm strap width","Large (men''s) = 38 mm watch face, 20 mm strap width"]},{"name":"Watch Colour","type":"choice","values":["Gold","Silver"]},{"name":"Strap Colour","type":"choice","values":{"1":"Matching","2":"Black","3":"Brown"}},{"name":"Engravement","type":"text","values":[]}]', 'Watches-group-thumb.png');
+INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`, `image`) VALUES ('Bulova® watch','This watch features the BC Coat of Arms on the dial and your name and 35 Years is engraved on the back of the watch face. It comes in a choice of gold, silver or two-toned watch face with a plated strap, or a black or brown leather strap. ', 3, 1, '[{"name":"Size","type":"choice","values":["Small (women''s) = 29 mm watch face, 14 mm strap width","Large (men''s) = 38 mm watch face, 20 mm strap width"]},{"name":"Watch Colour","type":"choice","values":["Gold","Silver"]},{"name":"Strap Colour","type":"choice","values":["Matching","Black","Brown"]},{"name":"Engravement","type":"text","values":[]}]', 'Watches-group-thumb.png');
 INSERT INTO `awards` (`name`, `description`, `milestone_id`, `active`, `options`, `image`) VALUES ('Bushnell® Prime binoculars','The Bushnell® Prime 8x42 binocular is the perfect blend of magnification and field of view, allowing easy viewing of moving animals and birds. The EXO barrier and fully multi coated optics deliver bright images in any weather conditions. The Prime binoculars feature Bushnell’s newest and best protective lens coating that molecularly bonds to the glass, repelling water, oil, dust, debris and preventing scratches. With IPX7 waterproof construction, O-ring sealed optics stay dry inside, when immersed in three feet of water for up to 30 minutes. They come with a soft case.
 
 Note: Due to the nature of this award, engraving is not possible.

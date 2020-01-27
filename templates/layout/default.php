@@ -32,25 +32,11 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-    <style>
-    .award-card {
-    width: 18rem;
-    }
-    .fade-enter-active,
-    .fade-leave-active {
-    transition: opacity 1.5s;
-    }
-    .fade-enter,
-    .fade-leave-to/* .fade-leave-active below version 2.1.8 */
-    {
-    opacity: 0;
-    }
-    </style>
-
     <title>Long Service Awards</title>
 
     <?= $this->Html->css('milligram.min.css') ?>
     <?= $this->Html->css('cake.css') ?>
+    <?= $this->Html->css('lsa.css') ?>
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
@@ -59,10 +45,9 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <body>
     <nav class="top-nav">
         <div class="top-nav-title">
-            <a href="/"><span>Long Service Awards</span></a>
+            <a href="/"><span><img src="/img/lsa_logo.png" class="lsa-logo"></span></a>
         </div>
         <div class="top-nav-links">
-            <a href="/registrations/register">Register</a>|
             <a href="/registrations">Admin</a>
             <a href="/ceremonies">Ceremonies</a>
             <a href="/awards">Awards</a>

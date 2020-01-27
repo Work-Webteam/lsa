@@ -1,8 +1,6 @@
 <div class="container" id="app">
 <h1>Register for Long Service Award</h1>
 
-
-
 <?php
 
 
@@ -14,10 +12,15 @@ echo $this->Form->create($registration);
         <div class="form-group">
     <?php
 
-
+    echo $this->Form->hidden('award_options', ['value' => '']);
     echo $this->Form->control('milestone_id', ['type' => 'select', 'label' => 'Milestone', 'options' => $milestones, 'empty' => '- select milestone -', 'onChange' => 'app.milestoneSelected(this.value)']);
     echo $this->Form->hidden('award_id', ['value' => 0]);
-?>
+
+
+//                <a class="btn btn-primary" data-target="#award-1" data-toggle="modal" href="#">Select This One</a>
+
+    ?>
+
         </div>
     </transition>
 
@@ -37,6 +40,7 @@ echo $this->Form->create($registration);
             </span>
 
             <a class="btn btn-primary" href="#identifyingInfo" v-on:click="showIdentifyingInfoInputs">Selected Award</a>
+
         </div>
     </transition>
 
@@ -178,7 +182,6 @@ echo $this->Form->button('No', ['type' => 'button',  'onclick' => 'app.buttonRet
                        <img alt="..." class="card-img-top" v-bind:src="'/img/awards/' + awardImage">
                        <div class="card-body">
                            <h5 class="card-title">{{awardName}}</h5>
-                           <p class="card-text">{{awardDescription}}</p>
                            <p class="card-text">
                                <ul id="award-options">
                                 <li v-for="option in awardOptions">
@@ -211,6 +214,7 @@ echo $this->Form->button('No', ['type' => 'button',  'onclick' => 'app.buttonRet
            </div>
            <a class="btn btn-primary" href="#register" id="confirmInfo" v-on:click="showDeclaration">Confirm</a>
 
+       </div>
    </div>
 </transition>
 
@@ -245,16 +249,65 @@ echo $this->Form->end();
 
     </div>
 
+    <div aria-hidden="true" aria-labelledby="Award The First" class="modal fade" id="award-1" role="dialog" tabindex="-1">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="awardName" class="modal-title">Award The First</h5>
+                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <fieldset id="formAwardOptions">
+                    </fieldset>
+                 </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-dismiss="modal" type="button">Cancel</button>
+                    <button class="btn btn-primary" type="button" v-on:click="processOptions">Select</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <modal v-if="showOptions" @close="showOptions = false">
-        <!--
-          you can use custom content here to overwrite
-          default content
-        -->
-        <h3 slot="header">Award Options</h3>
-    </modal>
+    <div aria-hidden="true" aria-labelledby="Award The First" class="modal fade" id="donation-1" role="dialog" tabindex="-1">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="donationName" class="modal-title">Charitable Donation</h5>
+                </div>
+                <div class="modal-body">
+                    <fieldset id="formDonationOptions">
+<?php
+                        echo $this->Form->control('selectedRegion', ['options' => $regions, 'empty' => '- select region -', 'onChange' => 'app.regionSelected()']);
+?>
 
+                        <div v-if="inputDonationType">
+                            <label>Donate to</label>
+                            <?php echo $this->Form->radio('selectDonationType', ['PECSF Region Charity Fund', 'One Individual Charity', 'Two Individual Charities'], ['onChange' => 'app.donationTypeSelected()']); ?>
+                        </div>
+                        <div v-if="inputCharity1">
+                            <select id="selectedCharity1">
+                                <option value>- select charity -</option>
+                                <option v-for='data in availableCharities' :value='data.id'>{{ data.name }}</option>
+                            </select>
+                        </div>
+                        <div v-if="inputCharity2">
+                            <select id="selectedCharity2">
+                                <option value>- select charity -</option>
+                                <option v-for='data in availableCharities' :value='data.id'>{{ data.name }}</option>
+                            </select>
+                        </div>
 
+                    </fieldset>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-dismiss="modal" type="button">Cancel</button>
+                    <button class="btn btn-primary" type="button" v-on:click="processOptions">Select</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Optional JavaScript -->
@@ -272,32 +325,35 @@ echo $this->Form->end();
 <script type="text/javascript">
 
     var awards=<?php echo json_encode($awardinfo); ?>;
-
+    var milestones=<?php echo json_encode($milestoneinfo); ?>;
+    var regions=<?php echo json_encode($regions); ?>;
+    var allCharities=<?php echo json_encode($charities); ?>;
 
     $(function () {
         $('#datetimepicker1').datetimepicker({format: 'L'});
     });
 
-    function selectAward(award) {
-        // store award id in hidden field so it gets saved on submit
-        $('input[name=award_id]').val(award);
 
-        for (var i = 0; i < awards.length; i++) {
-            if (awards[i].id == award) {
-                app.awardName = awards[i].name;
-                app.awardDescription = awards[i].description;
-                app.awardImage = awards[i].image;
-            }
-        }
+    function selectAward(award_id) {
+        // store award id in hidden field so it gets saved on submit
+        $('input[name=award_id]').val(award_id);
+
+        award = app.getAward(award_id);
+
         // check if it is a donation
         if (award == 0) {
             app.awardName = "Charitiable Donation";
-            app.awardDescription = "Hey let's just give some money to PECSF!";
+            app.awardDescription = "Donate $### to PECSF.";
             app.awardImage = '25_pecsf.jpg';
+            app.selectCharityOptions();
         }
-        app.selectAwardOptions(award);
+        else {
+            app.awardName = award.name;
+            app.awardDescription = award.description;
+            app.awardImage = award.image;
+            app.selectAwardOptions(award_id);
+        }
     }
-
 
 
     Vue.config.devtools = true;
@@ -346,11 +402,18 @@ echo $this->Form->end();
             supervisorEmail: '',
 
             availableAwards: '[display available awards]',
+            availableAwardOptions: '[display available options]',
 
+            selectedAward: -1,
             awardName: '',
             awardDescription: '',
             awardOptions: ['option 1', 'option 2'],
             awardImage: 'Watches-group-thumb.png',
+
+            availableCharities: [],
+            donationRegion: '',
+            donationCharity1: '',
+            donationCharity2: '',
 
             selectAward: false,
             awardSelected: false,
@@ -359,7 +422,12 @@ echo $this->Form->end();
             homeAddressInput: false,
             supervisorInput: false,
             informationConfirmed: false,
-            showOptions: true
+            showOptions: true,
+
+            inputDonationType: false,
+            inputCharity1: false,
+            inputCharity2: false,
+            testShow: false
         },
         methods: {
 
@@ -373,29 +441,149 @@ echo $this->Form->end();
               return award;
             },
 
-            selectAwardOptions: function (select_id) {
-              console.log('Select award options for award: ' + select_id);
-              award = this.getAward(select_id);
-console.log(award);
-              console.log(award.options);
-              console.log("=====");
-              options = JSON.parse(award.options);
-              console.log(options);
-              console.log("size: " + options.length);
-              options.forEach((element, index, array) => {
-                console.log("name: " + element.name);
-                console.log("type: " + element.type);
-                if (element.type == "choice") {
-                  console.log(element.values);
+            getCharity: function (select_id) {
+                charity = 0;
+                for (var i = 0; i < allCharities.length; i++) {
+                    if (allCharities[i].id == select_id) {
+                        charity = allCharities[i];
+                    }
                 }
-              });
-              //
-              // for (var i = 0; i < award.length; i++) {
-              //   console.log(award[i]);
-              // }
-              this.showOptions = true;
+                return charity;
             },
 
+            selectCharityOptions: function (select_id) {
+                $("#donation-1").modal('show');
+                this.selectedAward = 0;
+            },
+
+            regionSelected: function () {
+                this.donationRegion = $('#selectedregion :selected').text();
+
+                this.availableCharities = [];
+                for (var i = 0; i < allCharities.length; i++) {
+                    if (allCharities[i].pecsf_region_id == $('#selectedregion').val()) {
+                        this.availableCharities.push(allCharities[i]);
+                    }
+                }
+                console.log(this.availableCharities);
+                this.inputDonationType = true;
+            },
+
+            donationTypeSelected: function() {
+                if ($("input:radio[name ='selectDonationType']:checked").val() == 0) {
+                    this.inputCharity1 = false;
+                    this.inputCharity2 = false;
+                }
+                else if ($("input:radio[name ='selectDonationType']:checked").val() == 1) {
+                    this.inputCharity1 = true;
+                    this.inputCharity2 = false;
+                }
+                else if ($("input:radio[name ='selectDonationType']:checked").val() == 2) {
+                    this.inputCharity1 = true;
+                    this.inputCharity2 = true;
+                }
+            },
+
+            selectAwardOptions: function (select_id) {
+              award = this.getAward(select_id);
+              options = JSON.parse(award.options);
+              if (options.length > 0) {
+                  if (this.selectedAward != award.id) {
+                      jQuery('#formAwardOptions').empty();
+                      console.log('Select award options for award: ' + select_id);
+                      availableOptions = "";
+                      options.forEach((element, index, array) => {
+                          availableOptions += "<p>" + element.name + "</p>";
+                          if (element.type == "choice") {
+                              input = '<label for="award-option-' + index + '">' + element.name + '</label>';
+                              input += '<select id="award-option-' + index + '" requires="required">';
+                              input += '<option value>- select option -</option>';
+
+                              for (var i = 0; i < element.values.length; i++) {
+                                  optionValue = element.values[i];
+                                  input += '<option value="' + i + '">' + element.values[i] + '</option>';
+                              }
+
+                              input += '</select>';
+                              jQuery('#formAwardOptions').append(input);
+                          }
+                          if (element.type == "text") {
+                              input = '<label for="award-option-' + index + '">' + element.name + '</label>';
+                              input += '<input type="text" id="award-option-' + index + '">';
+                              jQuery('#formAwardOptions').append(input);
+                          }
+                      });
+                  }
+                  $("#awardName").html(award.name);
+                  $("#award-1").modal('show');
+              }
+              this.selectedAward = award.id;
+            },
+
+            processOptions: function () {
+                if (this.selectedAward == 0) {
+                    this.processDonationOptions();
+                }
+                else {
+                    this.processAwardOptions();
+                }
+            },
+
+            processDonationOptions: function() {
+                console.log("processDonationOptions");
+                 for (var i = 0; i < milestones.length; i++) {
+                    if (milestones[i].id == $('#milestone-id').val()) {
+                        milestone = milestones[i];
+                    }
+                }
+                console.log(milestone);
+
+                this.awardOptions = [];
+
+                if ($("input:radio[name ='selectDonationType']:checked").val() == 0) {
+                    amount = milestone.donation;
+                    this.awardOptions.push(this.currencyFormat(amount) + " Donation - PECSF Region Charity Fund");
+                }
+                else if ($("input:radio[name ='selectDonationType']:checked").val() == 1) {
+                    amount = milestone.donation;
+                    charity = this.getCharity($('#selectedCharity1').val());
+                    this.awardOptions.push(this.currencyFormat(amount) + " Donation - " + charity.name);
+                }
+                else if ($("input:radio[name ='selectDonationType']:checked").val() == 2) {
+                    amount = milestone.donation / 2;
+                    charity = this.getCharity($('#selectedCharity1').val());
+                    this.awardOptions.push(this.currencyFormat(amount) + " Donation - " + charity.name);
+                    charity = this.getCharity($('#selectedCharity2').val());
+                    this.awardOptions.push(this.currencyFormat(amount) + " Donation - " + charity.name);
+                }
+                console.log(this.awardOptions);
+                $('input[name=award_options]').val(JSON.stringify(this.awardOptions));
+                console.log(JSON.stringify(this.awardOptions));
+                $("#donation-1").modal('hide');
+            },
+
+
+            processAwardOptions: function () {
+                award = this.getAward(this.selectedAward);
+                options = JSON.parse(award.options);
+                console.log(options);
+
+                this.awardOptions = [];
+                for (i = 0; i < options.length; i++) {
+                    if (options[i].type == "choice") {
+                        var sel = document.getElementById("award-option-"+i);
+                        this.awardOptions.push(options[i].name + ": " + sel.options[sel.selectedIndex].text);
+                    }
+                    if (options[i].type == "text") {
+                        var field = document.getElementById("award-option-"+i);
+                        this.awardOptions.push(options[i].name + ": " +field.value);
+                    }
+                }
+                console.log(this.awardOptions);
+                $('input[name=award_options]').val(JSON.stringify(this.awardOptions));
+                console.log(JSON.stringify(this.awardOptions));
+                $("#award-1").modal('hide');
+            },
 
             milestoneSelected: function (milestone) {
                 this.exposeAwardSelector(milestone);
@@ -414,7 +602,7 @@ console.log(award);
 
                 awardDisplay += '<div class="lsa-award-name">Charitible Donation</div>';
                 awardDisplay += '<div class="lsa-award-description">Instead of choosing an award from the catalogue, you can opt to make a charitable donation via the Provincial Employees Community Services Fund. A framed certificate of service, signed by the Premier of British Columbia, will be presented to you noting your charitable contribution. </div>';
-                awardDisplay += '<a class="btn btn-primary" onclick="selectAward(0)">Select Donation</a>'
+                awardDisplay += '<a class="btn btn-primary" href="#" onclick="selectAward(0)">Select Donation</a>'
                 awardDisplay += '</div>';
 
                 for (var i = 0; i < awards.length; i++) {
@@ -431,7 +619,7 @@ console.log(award);
 
                         awardDisplay += '<div class="lsa-award-name">' + awards[i].name + '</div>';
                         awardDisplay += '<div class="lsa-award-description">' + awards[i].description + '</div>';
-                        awardDisplay += '<a class="btn btn-primary" onclick="selectAward(' + awards[i].id + ')">Select Award</a>'
+                        awardDisplay += '<button class="btn btn-primary" type="button" onclick="selectAward(' + awards[i].id + ')">SelectAward</button>';
                         awardDisplay += '</div>';
                     }
                 }
@@ -518,8 +706,11 @@ console.log(award);
 
             showDeclaration: function () {
                 this.informationConfirmed = true;
-            }
+            },
 
+            currencyFormat: function (num) {
+                return '$' + parseFloat(num).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+            },
 
         }
     })

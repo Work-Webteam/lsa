@@ -1,5 +1,6 @@
 <div class="container" id="app">
 <h1>Form Test</h1>
+
 <?php
 
 
@@ -19,24 +20,21 @@ echo $this->Form->create($registration);
 
     <transition name="fade">
         <div class="form-group" v-if="milestoneKnown">
-            <?php
-            echo $this->Form->label("Registered last year but didn't attend ceremony?");
-            echo $this->Form->button('Yes', ['type' => 'button', 'onclick' => 'buttonMissedCeremony(1)']);
-            echo $this->Form->button('No', ['type' => 'button',  'onclick' => 'buttonMissedCeremony(0)']);
-            ?>
-        </div>
-    </transition>
-
-    <transition name="fade">
-        <div class="form-group" v-if="selectAward">
 
 <?php
 
 // echo $this->Form->control('award_id', ['type' => 'select', 'options' => $awards, 'empty' => '- select award -', 'onChange' => 'awardSelected(this.value)']);
 echo $this->Form->control('work_phone', ['v-model' => 'officePhone']);
 
+//             <a class="btn btn-primary" data-target="#award-1" data-toggle="modal" href="#">Select This One</a>
 ?>
             <a class="btn btn-primary" href="#identifyingInfo" v-on:click="showConfirmation">Selected Award</a>
+
+<br><br>
+
+            <a class="btn btn-primary" href="#" onclick="showOptions()">Select This One</a>
+
+
         </div>
     </transition>
 
@@ -71,7 +69,29 @@ echo $this->Form->control('work_phone', ['v-model' => 'officePhone']);
 echo $this->Form->end();
 ?>
     </div>
+
+        <div aria-hidden="true" aria-labelledby="Award The First" class="modal fade" id="award-1" role="dialog" tabindex="-1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Award The First</h5>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Modal Form Elements Will Go Here to allow people to pick options relevant to the award.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-dismiss="modal" type="button">Cancel</button>
+                        <button class="btn btn-primary" type="button">Select</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 </div>
+
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -93,6 +113,11 @@ echo $this->Form->end();
     $(function () {
         $('#datetimepicker1').datetimepicker({format: 'L'});
     });
+
+    function showOptions() {
+        console.log("showOptions");
+        $("#award-1").modal('show');
+    }
 
     function buttonRetirementClick(retiring) {
         $('input[name=retiring_this_year]').val(retiring);

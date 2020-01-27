@@ -11,11 +11,19 @@ class RegistrationsTable extends Table
 {
     public function initialize(array $config) : Void
     {
-        $this->hasOne('Milestones');
-        $this->hasOne('Awards');
+        $this->hasOne('Milestones')
+            ->setForeignKey('id')
+            ->setBindingKey('milestone_id');
+        $this->hasOne('Awards')
+            ->setForeignKey('id')
+            ->setBindingKey('award_id');
         $this->hasOne('Diet');
-        $this->hasOne('Ministries');
+        $this->hasOne('Ministries')
+            ->setForeignKey('id')
+            ->setBindingKey('ministry_id');
         $this->hasOne('Cities');
+        $this->hasOne('PecsfRegions');
+        $this->hasOne('PecsfCharities');
     }
 
     public function validationDefault(Validator $validator) : Validator
@@ -107,10 +115,10 @@ class RegistrationsTable extends Table
             'rule' => 'notBlank',
             'message' => 'Please enter office phone number.'
         ]);
-        $validator->add('work_phone', 'phone_format', [
-            'rule' => 'phone',
-            'message' => 'Invalid phone format.'
-        ]);
+//        $validator->add('work_phone', 'phone_format', [
+//            'rule' => 'phone',
+//            'message' => 'Invalid phone format.'
+//        ]);
 
         $validator->requirePresence('home_city_id');
         $validator->add('home_city_id', 'not-blank', [
