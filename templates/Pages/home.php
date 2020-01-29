@@ -93,7 +93,7 @@ $cakeDescription = 'Long Service Awards';
     }
 
     function admin() {
-        location.href = "/admin";
+        location.href = "/registrations";
     }
 </script>
 

@@ -22,21 +22,21 @@ class RegistrationsTable extends Table
             ->setForeignKey('id')
             ->setBindingKey('ministry_id');
         $this->hasOne('Cities');
+        $this->hasOne('OfficeCity', ['className' => 'Cities'])
+            ->setForeignKey('id')
+            ->setBindingKey('office_city_id');
+        $this->hasOne('HomeCity', ['className' => 'Cities'])
+            ->setForeignKey('id')
+            ->setBindingKey('home_city_id');
+        $this->hasOne('SupervisorCity', ['className' => 'Cities'])
+            ->setForeignKey('id')
+            ->setBindingKey('supervisor_city_id');
         $this->hasOne('PecsfRegions');
         $this->hasOne('PecsfCharities');
     }
 
     public function validationDefault(Validator $validator) : Validator
     {
-//        // add the provider to the validator
-//        $validator->setProvider('en', 'Localized\Validation\EnValidation');
-//        $validator->add('home_phone', 'myCustomRuleNameForPhone', [
-//            'rule' => 'phone',
-//            'provider' => 'en'
-//        ]);
-//        $validator->add('home_phone', 'phone');
-
-
         $validator->requirePresence('preferred_email');
         $validator->add('preferred_email', 'validFormat', [
             'rule' => 'email',
@@ -88,7 +88,7 @@ class RegistrationsTable extends Table
         $validator->requirePresence('department');
         $validator->add('department', 'not-blank', [
             'rule' => 'notBlank',
-            'message' => 'Please enter department.'
+            'message' => 'Please enter branch.'
         ]);
 
 
@@ -115,10 +115,6 @@ class RegistrationsTable extends Table
             'rule' => 'notBlank',
             'message' => 'Please enter office phone number.'
         ]);
-//        $validator->add('work_phone', 'phone_format', [
-//            'rule' => 'phone',
-//            'message' => 'Invalid phone format.'
-//        ]);
 
         $validator->requirePresence('home_city_id');
         $validator->add('home_city_id', 'not-blank', [

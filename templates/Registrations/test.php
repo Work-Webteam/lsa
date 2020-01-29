@@ -24,15 +24,17 @@ echo $this->Form->create($registration);
 <?php
 
 // echo $this->Form->control('award_id', ['type' => 'select', 'options' => $awards, 'empty' => '- select award -', 'onChange' => 'awardSelected(this.value)']);
+
 echo $this->Form->control('work_phone', ['v-model' => 'officePhone']);
+echo $this->Form->control('alternate_email', ['v-model' => 'altEmail']);
 
 //             <a class="btn btn-primary" data-target="#award-1" data-toggle="modal" href="#">Select This One</a>
 ?>
-            <a class="btn btn-primary" href="#identifyingInfo" v-on:click="showConfirmation">Selected Award</a>
+<!--            <a class="btn btn-primary" href="#identifyingInfo" v-on:click="showConfirmation">Selected Award</a>-->
 
 <br><br>
 
-            <a class="btn btn-primary" href="#" onclick="showOptions()">Select This One</a>
+<!--            <a class="btn btn-primary" href="#" onclick="showOptions()">Select This One</a>-->
 
 
         </div>
@@ -42,7 +44,7 @@ echo $this->Form->control('work_phone', ['v-model' => 'officePhone']);
 
 
 <transition name="fade">
-   <div class="confirmationDisplay" v-if="supervisorInput">
+   <div class="confirmationDisplay" v-if="milestoneKnown">
 
        <h3 class="display-4">Please Confirm Your Information</h3>
 
@@ -63,34 +65,20 @@ echo $this->Form->control('work_phone', ['v-model' => 'officePhone']);
        </div>
    </div>
 </transition>
+
+    <p v-if="errors.length">
+        <b>Please correct the following error(s):</b>
+    <ul>
+        <li v-for="error in errors">{{ error }}</li>
+    </ul>
+    </p>
+
     <div>
 <?php
 
 echo $this->Form->end();
 ?>
-    </div>
 
-        <div aria-hidden="true" aria-labelledby="Award The First" class="modal fade" id="award-1" role="dialog" tabindex="-1">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Award The First</h5>
-                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Modal Form Elements Will Go Here to allow people to pick options relevant to the award.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary" data-dismiss="modal" type="button">Cancel</button>
-                        <button class="btn btn-primary" type="button">Select</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-</div>
 
 
 <!-- Optional JavaScript -->
@@ -180,6 +168,8 @@ echo $this->Form->end();
     var app = new Vue({
         el: "#app",
         data: {
+            errors: [],
+
             isRetiringThisYear: false,
             retirementStatusKnown: false,
             retirementDate: '',
@@ -265,6 +255,19 @@ echo $this->Form->end();
 
             showDeclaration: function () {
                 this.informationConfirmed = true;
+            }
+
+            checkForm: function (e) {
+
+                this.errors = [];
+
+                if (!this.altEmail) {
+                    this.errors.push('Alternate email required');
+                }
+                if (!this.officePhone) {
+                    this.errors.push('Office phone number required');
+                }
+                e.preventDefault();
             }
 
 

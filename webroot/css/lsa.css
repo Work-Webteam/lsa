@@ -6,3 +6,28 @@
 #lsa-contact-info {
     padding-top: 35px;
 }
+
+
+.lsa-award {
+    padding: 10px;
+}
+
+.lsa-errors-container {
+    padding: 20px;
+    color: red;
+}
+
+
+#donation-type {
+    border: 0.1rem solid #d1d1d1;
+    border-radius: .4rem;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+#pop-up-errors {
+    padding: 15px;
+}
+
+
+

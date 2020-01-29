@@ -10,13 +10,18 @@ class RegistrationsController extends AppController
     public function index()
     {
         $this->loadComponent('Paginator');
-        $registrations = $this->Paginator->paginate($this->Registrations->find(), [
+        $registrations = $this->Registrations->find('all', [
+            'conditions' => ['Registrations.created >=' => date('Y')],
             'contain' => [
                 'Milestones',
                 'Ministries',
-                'Awards'
+                'Awards',
+                'OfficeCity',
+                'HomeCity',
+                'SupervisorCity'
             ],
         ]);
+
         $this->set(compact('registrations'));
     }
 
@@ -85,6 +90,7 @@ class RegistrationsController extends AppController
                 return $this->redirect(['action' => 'completed', $registration->id]);
             }
             $this->Flash->error(__('Unable to add registration.'));
+            debug($entity->errors());
         }
 
         if ($this->request->is('get')) {
@@ -208,7 +214,7 @@ class RegistrationsController extends AppController
 //                $this->Flash->success(__('Registration has been saved.'));
 //                return $this->redirect(['action' => 'index']);
 //            }
-            $this->Flash->error(__('Did not add registration.'));
+            $this->Flash->error(__('Test completed?'));
         }
 
         if ($this->request->is('get')) {
@@ -238,9 +244,6 @@ class RegistrationsController extends AppController
         $this->set('registration', $registration);
     }
 
-    public function figureItOut ($id) {
-        return "what: " + id;
-    }
 
 
 }
