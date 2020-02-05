@@ -8,22 +8,27 @@
     <transition name="fade">
         <div class="form-group">
             <?php
-
                 echo $this->Form->hidden('award_options', ['value' => '']);
                 echo $this->Form->control('milestone_id', ['type' => 'select', 'label' => 'Milestone', 'options' => $milestones, 'empty' => '- select milestone -', 'onChange' => 'app.milestoneSelected(this.value)']);
                 echo $this->Form->hidden('award_id', ['value' => 0]);
-
+                echo $this->Form->hidden('pecsf_donation', ['value' => 0]);
+                echo $this->Form->hidden('pecsf_region_id', ['value' => 0]);
+                echo $this->Form->hidden('pecsf_charity1_id', ['value' => 0]);
+                echo $this->Form->hidden('pecsf_amount1', ['value' => 0]);
+                echo $this->Form->hidden('pecsf_second_charity', ['value' => 0]);
+                echo $this->Form->hidden('pecsf_charity2_id', ['value' => '0']);
+                echo $this->Form->hidden('pecsf_amount2', ['value' => 0]);
             ?>
-
         </div>
     </transition>
 
     <transition name="fade">
         <div class="form-group" v-if="milestoneKnown">
             <?php
-            echo $this->Form->label("Registered last year but didn't attend ceremony?");
-            echo $this->Form->button('Yes', ['type' => 'button', 'onclick' => 'app.buttonMissedCeremony(1)']);
-            echo $this->Form->button('No', ['type' => 'button',  'onclick' => 'app.buttonMissedCeremony(0)']);
+                echo $this->Form->label("Registered last year but didn't attend ceremony?");
+                echo $this->Form->button('Yes', ['type' => 'button', 'onclick' => 'app.buttonMissedCeremony(1)']);
+                echo "&nbsp;";
+                echo $this->Form->button('No', ['type' => 'button',  'onclick' => 'app.buttonMissedCeremony(0)']);
             ?>
         </div>
     </transition>
@@ -32,21 +37,41 @@
         <div class="form-group" v-if="selectAward">
             <span v-html="availableAwards" class="lsa-awards-container">
             </span>
+
+            <div id="lsa-award-card">
+                <img alt="..." v-bind:src="'/img/awards/' + currentAwardImage" class="lsa-award-image">
+                <div class="card-body">
+                    <h5 class="card-title">{{ currentAwardName }}</h5>
+                    <p class="card-text">{{ currentAwardDescription }}</p>
+                </div>
+            </div>
+            <div>
+                <?php
+                    echo $this->Form->button('<', ['type' => 'button', 'onclick' => 'app.showPreviousAward()']);
+                    echo "&nbsp;";
+                    echo $this->Form->button('Select Award', ['type' => 'button', 'onclick' => 'app.selectCurrentAward()']);
+                    echo "&nbsp;";
+                    echo $this->Form->button('>', ['type' => 'button',  'onclick' => 'app.showNextAward()']);
+                ?>
+<!--                <button onClick="app.showPreviousAward"> < </button><button>Select</button><button v-on:click="showNextAward"> > </button>-->
+            </div>
         </div>
+
     </transition>
 
-    <transition name="fade">
-        <div class="form-group" v-if="awardSelected">
-            <a id="selected-award" class="btn btn-primary" href="#identifyingInfo" v-on:click="showIdentifyingInfoInputs">Selected Award</a>
-        </div>
-    </transition>
+<!--    <transition name="fade">-->
+<!--        <div class="form-group" v-if="awardSelected">-->
+<!--            <a id="selected-award" class="btn btn-primary" href="#identifyingInfo" v-on:click="showIdentifyingInfoInputs">Selected Award</a>-->
+<!--        </div>-->
+<!--    </transition>-->
 
 
     <transition name="fade">
+        <div id="employeeAnchor">
         <fieldset id="identifyingInfo" v-show="awardConfirmed">
             <?php
 
-            echo $this->Form->control('employee_id', ['label' => 'Employee ID', 'type' => 'text', 'v-model' => 'employeeID']);
+            echo $this->Form->control('employee_id', ['label' => 'Employee ID', 'type' => 'text', 'v-model' => 'employeeID', 'onChange' => 'app.populateTestData()']);
             echo $this->Form->control('first_name', ['v-model' => 'firstName']);
             echo $this->Form->control('last_name', ['v-model' => 'lastName']);
 
@@ -59,6 +84,7 @@
             echo $this->Form->label("Retiring this year?");
             echo $this->Form->hidden('retiring_this_year', ['value' => 0]);
             echo $this->Form->button('Yes', ['type' => 'button', 'onclick' => 'app.buttonRetirementClick(1)']);
+            echo "&nbsp;";
             echo $this->Form->button('No', ['type' => 'button',  'onclick' => 'app.buttonRetirementClick(0)']);
 
             ?>
@@ -73,6 +99,7 @@
 
 
         </fieldset>
+        </div>
     </transition>
 
     <transition name="fade">
@@ -81,13 +108,15 @@
                 <span v-html="errorsEmployee" class="lsa-errors-container">
                 </span>
             </div>
-            <a id="id-info-input" class="btn btn-primary" href="#officeAddressAnchor" v-on:click="showOfficeAddressInput">ID Info Input</a>
+            <?php
+                echo $this->Form->button('ID Info Input', ['type' => 'button',  'onclick' => 'app.showOfficeAddressInput()']);
+            ?>
         </div>
     </transition>
 
 
     <transition name="fade">
-
+        <div id="officeAnchor">
         <fieldset id="officeAddress" v-show="identifyingInfoInput">
             <?php
 
@@ -106,56 +135,66 @@
                 <span v-html="errorsOffice" class="lsa-errors-container">
                 </span>
             </div>
-            <a id="office-address-input" class="btn btn-primary" href="#homeAddressAnchor" v-on:click="showHomeAddressInput">Office Address Input</a><a id="officeAddressAnchor"></a>
+            <?php
+            echo $this->Form->button('Office Address Input', ['type' => 'button',  'onclick' => 'app.showHomeAddressInput()']);
+            ?>
         </fieldset>
+        </div>
     </transition>
 
+
     <transition name="fade">
+        <div id="homeAnchor">
         <fieldset id="homeAddress" v-show="officeAddressInput">
 
             <?php
-
-            echo $this->Form->control('home_suite', ['label' => 'Suite', 'v-model' => 'homeSuite']);
-            echo $this->Form->control('home_address', ['v-model' => 'homeStreetAddress']);
-            echo $this->Form->control('home_city_id', ['options' => $cities, 'empty' => '- select city -', 'onChange' => 'app.homeCitySelected()']);
-            echo $this->Form->control('home_province', ['disabled' => true]);
-            echo $this->Form->control('home_postal_code', ['v-model' => 'homePostalCode']);
-            echo $this->Form->control('home_phone', ['v-model' => 'homePhone']);
-
+                echo $this->Form->control('home_suite', ['label' => 'Suite', 'v-model' => 'homeSuite']);
+                echo $this->Form->control('home_address', ['v-model' => 'homeStreetAddress']);
+                echo $this->Form->control('home_city_id', ['options' => $cities, 'empty' => '- select city -', 'onChange' => 'app.homeCitySelected()']);
+                echo $this->Form->control('home_province', ['disabled' => true]);
+                echo $this->Form->control('home_postal_code', ['v-model' => 'homePostalCode']);
+                echo $this->Form->control('home_phone', ['v-model' => 'homePhone']);
             ?>
             <div>
                 <span v-html="errorsHome" class="lsa-errors-container">
                 </span>
             </div>
-            <a id="home-address=input" class="btn btn-primary" href="#supervisor" v-on:click="showSupervisorInput">Home Address Input</a><a id="homeAddressAnchor"></a>
+            <?php
+                echo $this->Form->button('Home Address Input', ['type' => 'button',  'onclick' => 'app.showSupervisorInput()']);
+            ?>
         </fieldset>
+        </div>
     </transition>
 
+
     <transition name="fade">
+        <div id="supervisorAnchor">
         <fieldset id="supervisor" v-if="homeAddressInput">
-
             <?php
-
-            echo $this->Form->control('supervisor_first_name', ['v-model' => 'supervisorFirstName']);
-            echo $this->Form->control('supervisor_last_name', ['v-model' => 'supervisorLastName']);
-            echo $this->Form->control('supervisor_careof', ['label' => 'Floor / Room / Care Of', 'v-model' => 'supervisorMailPrefix']);
-            echo $this->Form->control('supervisor_suite', ['label' => 'Suite', 'v-model' => 'supervisorSuite']);
-            echo $this->Form->control('supervisor_address', ['v-model' => 'supervisorStreetAddress']);
-            echo $this->Form->control('supervisor_city_id', ['options' => $cities, 'empty' => '- select city -', 'onChange' => 'app.supervisorCitySelected()']);
-            echo $this->Form->control('supervisor_province', ['disabled' => true]);
-            echo $this->Form->control('supervisor_postal_code', ['v-model' => 'supervisorPostalCode']);
-            echo $this->Form->control('supervisor_email', ['type' => 'email', 'v-model' => 'supervisorEmail']);
-
+                echo $this->Form->control('supervisor_first_name', ['v-model' => 'supervisorFirstName']);
+                echo $this->Form->control('supervisor_last_name', ['v-model' => 'supervisorLastName']);
+                echo $this->Form->control('supervisor_careof', ['label' => 'Floor / Room / Care Of', 'v-model' => 'supervisorMailPrefix']);
+                echo $this->Form->control('supervisor_suite', ['label' => 'Suite', 'v-model' => 'supervisorSuite']);
+                echo $this->Form->control('supervisor_address', ['v-model' => 'supervisorStreetAddress']);
+                echo $this->Form->control('supervisor_city_id', ['options' => $cities, 'empty' => '- select city -', 'onChange' => 'app.supervisorCitySelected()']);
+                echo $this->Form->control('supervisor_province', ['disabled' => true]);
+                echo $this->Form->control('supervisor_postal_code', ['v-model' => 'supervisorPostalCode']);
+                echo $this->Form->control('supervisor_email', ['type' => 'email', 'v-model' => 'supervisorEmail']);
             ?>
             <div>
                 <span v-html="errorsSupervisor" class="lsa-errors-container">
                 </span>
             </div>
-            <a id="supervisor-input" class="btn btn-primary" href="#confirmInfo" v-on:click="showConfirmation">Supervisor Input</a>
+
+            <?php
+                echo $this->Form->button('Supervisor Input', ['type' => 'button',  'onclick' => 'app.showConfirmation()']);
+            ?>
         </fieldset>
+        </div>
     </transition>
 
     <transition name="fade">
+        <div id="confirmationAnchor">
         <div class="confirmationDisplay" v-if="supervisorInput">
 
             <h3 class="display-4">Please Confirm Your Information</h3>
@@ -224,13 +263,17 @@
                         <p>{{supervisorPostalCode}}</p>
                     </div>
                 </div>
-                <a class="btn btn-primary" href="#register" id="confirmInfo" v-on:click="showDeclaration">Confirm</a>
-
+<!--                <a class="btn btn-primary" href="#register" id="confirmInfo" v-on:click="showDeclaration">Confirm</a>-->
+                <?php
+                    echo $this->Form->button('Confirm', ['type' => 'button',  'onclick' => 'app.showDeclaration()']);
+                ?>
             </div>
+        </div>
         </div>
     </transition>
 
     <transition name="fade">
+        <div id="declarationAnchor">
         <div class="confirmationDisplay" v-if="informationConfirmed">
             <div class="row" id="declaration" v-if="informationConfirmed">
                 <div class="col-sm-10">
@@ -247,10 +290,11 @@
                 echo $this->Form->button(__('Register'));
                 echo $this->Form->button('Cancel', array(
                     'type' => 'button',
-                    'onclick' => 'location.href=\'/registrations\''
+                    'onclick' => 'location.href=\'/\''
                 ));
                 ?>
             </div>
+        </div>
         </div>
     </transition>
     <div>
@@ -424,8 +468,14 @@
             supervisorPostalCode: '',
             supervisorEmail: '',
 
-            availableAwards: '[display available awards]',
+            availableAwards: '',
             availableAwardOptions: '[display available options]',
+
+            currentAwardName: 'PECSF Donation',
+            currentAwardImage: '25_pecsf.jpg',
+            currentAwardDescription: 'description',
+            currentAwardIndex: 0,
+            currentAwards: [],
 
             selectedAward: -1,
             awardName: '',
@@ -462,6 +512,44 @@
 
         methods: {
 
+            populateTestData: function () {
+
+                if (this.employeeID == '99999') {
+                    this.firstName = "Homer";
+                    this.lastName = "Simpson";
+                    sel = document.getElementById("ministry-id");
+                    sel.selectedIndex = 16;
+                    this.ministry = sel.options[sel.selectedIndex].text;
+                    this.ministryBranch = "Branch 13";
+                    this.govtEmail = "hsimpson@gov.bc.ca";
+                    this.isRetiringThisYear = false;
+
+                    this.officeStreetAddress = "123 Office Street";
+                    var sel = document.getElementById("office-city-id");
+                    sel.selectedIndex = 1997;
+                    this.officeCity = sel.options[sel.selectedIndex].text;
+                    this.officePostalCode = "V8V 4R6";
+                    this.officePhone = "(250) 555-5476";
+
+                    this.homeStreetAddress = "565 Home Street";
+                    var sel = document.getElementById("home-city-id");
+                    sel.selectedIndex = 1997;
+                    this.homeCity = sel.options[sel.selectedIndex].text;
+                    this.homePostalCode = "V8V 4R6";
+                    this.homePhone = "(250) 555-0772";
+
+                    this.supervisorFirstName = "Franklin";
+                    this.supervisorLastName = "Hughes";
+                    this.supervisorStreetAddress = "123 Office Street";
+                    this.supervisorPostalCode = "V8V 4R6";
+                    this.supervisorEmail = "fhughes@gov.bc.ca";
+                    var sel = document.getElementById("supervisor-city-id");
+                    console.log(sel);
+//                    sel.selectedIndex = 1997;
+//                    this.supervisorCity = sel.options[sel.selectedIndex].text;
+                }
+            },
+
             getAward: function (select_id) {
                 award = 0;
                 for (var i = 0; i < awards.length; i++) {
@@ -482,7 +570,7 @@
                 return charity;
             },
 
-            selectCharityOptions: function (select_id) {
+            selectCharityOptions: function () {
                 $("#donation-1").modal('show');
                 this.selectedAward = 0;
             },
@@ -516,6 +604,7 @@
 
             selectAwardOptions: function (select_id) {
                 award = this.getAward(select_id);
+
                 options = JSON.parse(award.options);
                 if (options.length > 0) {
                     if (this.selectedAward != award.id) {
@@ -569,11 +658,14 @@
 
                 errors = [];
 
+                $('input[name=pecsf_donation]').val(1);
+
                 this.awardOptions = [];
                 $('#donation-type').css("border-color", clrDefault);
                 if ($("input:radio[name ='selectDonationType']:checked").val() == 0) {
                     amount = milestone.donation;
                     this.awardOptions.push(this.currencyFormat(amount) + " Donation - PECSF Region Charity Fund");
+                    $('input[name=pecsf_amount1]').val(amount);
                 }
                 else if ($("input:radio[name ='selectDonationType']:checked").val() == 1) {
                     if ($('#selectedCharity1').val() == 0) {
@@ -585,6 +677,9 @@
                         charity = this.getCharity($('#selectedCharity1').val());
                         this.awardOptions.push(this.currencyFormat(amount) + " Donation - (" + charity.vendor_code + ") " + charity.name);
                         $('#selectedCharity1').css("border-color", clrDefault);
+
+                        $('input[name=pecsf_charity1_id]').val(charity.id);
+                        $('input[name=pecsf_amount1]').val(amount);
                     }
 
                 }
@@ -599,6 +694,8 @@
                         charity = this.getCharity($('#selectedCharity1').val());
                         this.awardOptions.push(this.currencyFormat(amount) + " Donation - (" + charity.vendor_code + ") "  + charity.name);
                         $('#selectedCharity1').css("border-color", clrDefault);
+                        $('input[name=pecsf_charity1_id]').val(charity.id);
+                        $('input[name=pecsf_amount1]').val(amount);
                     }
 
                     if ($('#selectedCharity2').val() == 0) {
@@ -609,6 +706,9 @@
                         charity = this.getCharity($('#selectedCharity2').val());
                         this.awardOptions.push(this.currencyFormat(amount) + " Donation - (" + charity.vendor_code + ") "  + charity.name);
                         $('#selectedCharity2').css("border-color", clrDefault);
+                        $('input[name=pecsf_second_charity]').val(1);
+                        $('input[name=pecsf_charity2_id]').val(charity.id);
+                        $('input[name=pecsf_amount2]').val(amount);
                     }
                 }
                 else {
@@ -624,6 +724,7 @@
                 }
                 else {
                     $('#selectedregion').css("border-color", clrDefault);
+                    $('input[name=pecsf_region_id]').val(document.getElementById("selectedregion").selectedIndex);
                 }
 
                 if (errors.length == 0) {
@@ -674,6 +775,15 @@
                     $('input[name=award_options]').val(JSON.stringify(this.awardOptions));
                     $("#award-1").modal('hide');
                     this.errorsOptions = '';
+
+                    // Reset PECSF Donation values in case user previous selected PECSF donation option
+                    $('input[name=pecsf_region_id]').val(0);
+                    $('input[name=pecsf_donation]').val(0);
+                    $('input[name=pecsf_charity1_id]').val(0);
+                    $('input[name=pecsf_amount1]').val(0);
+                    $('input[name=pecsf_second_charity]').val(0);
+                    $('input[name=pecsf_charity2_id]').val(0);
+                    $('input[name=pecsf_amount2]').val(0);
                 }
                 else {
                     this.errorsOptions = '<ul>';
@@ -690,42 +800,85 @@
                 var sel = document.getElementById("milestone-id");
                 this.milestone = sel.options[sel.selectedIndex].text;
 
-                var awardDisplay = "";
+                this.currentAwards = [];
+                var donation = {
+                    id: 0,
+                    name: "PECSF Donation",
+                    description: "Instead of choosing an award from the catalogue, you can opt to make a charitable donation via the Provincial Employees Community Services Fund. A framed certificate of service, signed by the Premier of British Columbia, will be presented to you noting your charitable contribution.",
+                    image: "25_pecsf.jpg"
+                };
 
-                awardDisplay += '<div id="lsa-award-0" class="lsa-award">';
-                awardDisplay += '<div class="lsa-award-image">';
-                awardDisplay += '<img alt="..." src="/img/awards/25_pecsf.jpg">';
-                awardDisplay += '</div>';
-
-                awardDisplay += '<div class="lsa-award-name">Charitible Donation</div>';
-                awardDisplay += '<div class="lsa-award-description">Instead of choosing an award from the catalogue, you can opt to make a charitable donation via the Provincial Employees Community Services Fund. A framed certificate of service, signed by the Premier of British Columbia, will be presented to you noting your charitable contribution. </div>';
-                awardDisplay += '<a class="btn btn-primary" href="#" onclick="selectAward(0)">Select Donation</a>'
-                awardDisplay += '</div>';
+                this.currentAwards.push(donation);
 
                 for (var i = 0; i < awards.length; i++) {
                     if (awards[i].milestone_id == milestone) {
-                        awardDisplay += '<div id="lsa-award-' + awards[i].id + '" class="lsa-award">';
-                        awardDisplay += '<div class="lsa-award-image">';
-                        if (awards[i].image) {
-                            awardDisplay += '<img alt="..." src="/img/awards/' + awards[i].image + '">';
-                        }
-                        else {
-                            awardDisplay += '<img alt="..." src="http://placeimg.com/250/250/arch">';
-                        }
-                        awardDisplay += '</div>';
-
-                        awardDisplay += '<div class="lsa-award-name">' + awards[i].name + '</div>';
-                        awardDisplay += '<div class="lsa-award-description">' + awards[i].description + '</div>';
-                        awardDisplay += '<button class="btn btn-primary" type="button" onclick="selectAward(' + awards[i].id + ')">Select Award</button>';
-                        awardDisplay += '</div>';
+                        this.currentAwards.push(awards[i]);
                     }
                 }
 
-                this.availableAwards = awardDisplay;
+                this.currentAwardIndex = 0;
+                this.updateAwardDisplay(this.currentAwardIndex);
 
-
+                // this.availableAwards = awardDisplay;
             },
 
+            showPreviousAward: function() {
+                this.currentAwardIndex--;
+                if (this.currentAwardIndex < 0) {
+                    this.currentAwardIndex = this.currentAwards.length - 1;
+                }
+                this.updateAwardDisplay(this.currentAwardIndex);
+            },
+
+            showNextAward: function() {
+                this.currentAwardIndex++;
+                if (this.currentAwardIndex >= this.currentAwards.length) {
+                    this.currentAwardIndex = 0;
+                }
+                this.updateAwardDisplay(this.currentAwardIndex);
+            },
+
+            updateAwardDisplay: function(awardIndex) {
+                this.currentAwardName = this.currentAwards[awardIndex].name;
+                this.currentAwardImage = this.currentAwards[awardIndex].image;
+                this.currentAwardDescription = this.currentAwards[awardIndex].description;
+                if (this.selectedAward == this.currentAwards[awardIndex].id) {
+                    $('#lsa-award-card').css('background-color', 'lightblue');
+                }
+                else {
+                    $('#lsa-award-card').css('background-color', 'transparent');
+                }
+            },
+
+
+            selectCurrentAward: function() {
+
+                award = this.currentAwards[this.currentAwardIndex];
+
+                // store award id in hidden field so it gets saved on submit
+                $('input[name=award_id]').val(award.id);
+
+                // $('#lsa-award-'+ app.selectedAward).css('background-color', 'transparent');
+                $('#lsa-award-card').css('background-color', 'lightblue');
+                app.awardName = award.name;
+                app.awardDescription = award.description;
+                app.awardImage = award.image;
+
+                // check if it is a donation
+                if (award.id == 0) {
+                    app.selectCharityOptions();
+                }
+                else {
+                    app.selectAwardOptions(award.id);
+                }
+
+                this.selectedAward = award.id;
+
+                app.awardConfirmed = true;
+                $('html, body').animate({
+                    scrollTop: $("#employeeAnchor").offset().top
+                }, 1000);
+            },
 
             officeCitySelected: function () {
                 var sel = document.getElementById("office-city-id");
@@ -786,6 +939,9 @@
                 else {
                     this.setRetirementStatusKnown();
                 }
+                $('html, body').animate({
+                    scrollTop: $("#employeeAnchor").offset().top
+                }, 1000);
             },
 
             exposeRetirementDatePicker: function () {
@@ -810,12 +966,15 @@
 
                 errors = this.checkIdentifyingInfo();
                 if (errors.length == 0) {
-                    $('#id-info-input').attr("href", "#officeAddressAnchor");
+                    $('html, body').animate({
+                        scrollTop: $("#officeAnchor").offset().top
+                    }, 1000);
+
                     this.identifyingInfoInput = true;
                     this.errorsEmployee = '';
                 }
                 else {
-                    $('#id-info-input').attr("href", "#identifyingInfo");
+
                     this.errorsEmployee = '<ul>';
                     for (var i = 0; i < errors.length; i++) {
                         this.errorsEmployee += '<li>' + errors[i] + '</li>';
@@ -828,12 +987,13 @@
 
                 errors = this.checkOfficeAddressInput();
                 if (errors.length == 0) {
-                    $('#office-address-input').attr("href", "#homeAddressAnchor");
+                    $('html, body').animate({
+                        scrollTop: $("#homeAnchor").offset().top
+                    }, 1000);
                     this.officeAddressInput = true;
                     this.errorsOffice = '';
                 }
                 else {
-                    $('#office-address-input').attr("href", "#officeAddressAnchor");
                     this.errorsOffice = '<ul>';
                     for (var i = 0; i < errors.length; i++) {
                         this.errorsOffice += '<li>' + errors[i] + '</li>';
@@ -845,12 +1005,13 @@
             showSupervisorInput: function () {
                 errors = this.checkHomeAddressInput();
                 if (errors.length == 0) {
-                    $('#home-address-input').attr("href", "#supervisor");
+                    $('html, body').animate({
+                        scrollTop: $("#supervisorAnchor").offset().top
+                    }, 1000);
                     this.homeAddressInput = true;
                     this.errorsHome = '';
                 }
                 else {
-                    $('#home-address-input').attr("href", "#homeAddressAnchor");
                     this.errorsHome = '<ul>';
                     for (var i = 0; i < errors.length; i++) {
                         this.errorsHome += '<li>' + errors[i] + '</li>';
@@ -862,12 +1023,13 @@
             showConfirmation: function () {
                 errors = this.checkSupervisorInput();
                 if (errors.length == 0) {
-                    $('#home-address-input').attr("href", "#confirmationInfo");
+                    $('html, body').animate({
+                        scrollTop: $("#confirmationAnchor").offset().top
+                    }, 1000);
                     this.supervisorInput = true;
                     this.errorsSupervisor = '';
                 }
                 else {
-                    $('#home-address-input').attr("href", "#supervisor");
                     this.errorsSupervisor = '<ul>';
                     for (var i = 0; i < errors.length; i++) {
                         this.errorsSupervisor += '<li>' + errors[i] + '</li>';
@@ -878,6 +1040,9 @@
 
             showDeclaration: function () {
                 this.informationConfirmed = true;
+                $('html, body').animate({
+                    scrollTop: $("#declarationAnchor").offset().top
+                }, 1000);
             },
 
             currencyFormat: function (num) {
@@ -981,7 +1146,7 @@
                 else {
                     if (!isPostalCode(this.officePostalCode)) {
                         $('#office-postal-code').css("border-color", clrError);
-                        error.push ('Office Postal Code invalid format');
+                        error.push ('Office Postal Code invalid format (A1A 1A1)');
                     }
                     else {
                         $('#office-postal-code').css("border-color", clrDefault);
@@ -995,7 +1160,7 @@
                 else {
                    if (!isPhone(this.officePhone)) {
                        $('#work-phone').css("border-color", clrError);
-                       error.push ('Office Phone number invalid format. (###) ###-####');
+                       error.push ('Office Phone number invalid format (###) ###-####');
                    }
                    else {
                        $('#work-phone').css("border-color", clrDefault);
@@ -1032,7 +1197,7 @@
                 else {
                     if (!isPostalCode(this.homePostalCode)) {
                         $('#home-postal-code').css("border-color", clrError);
-                        error.push('Home Postal Code invalid format');
+                        error.push('Home Postal Code invalid format (A1A 1A1)');
                     }
                     else {
                         $('#home-postal-code').css("border-color", clrDefault);
@@ -1046,7 +1211,7 @@
                 else {
                     if (!isPhone(this.homePhone)) {
                         $('#home-phone').css("border-color", clrError);
-                        error.push('Home Phone number invalid format. (###) ###-####');
+                        error.push('Home Phone number invalid format (###) ###-####');
                     }
                     else {
                         $('#home-phone').css("border-color", clrDefault);
@@ -1100,7 +1265,7 @@
                 else {
                     if (!isPostalCode(this.supervisorPostalCode)) {
                         $('#supervisor-postal-code').css("border-color", clrError);
-                        error.push('Supervisor Postal Code invalid format');
+                        error.push('Supervisor Postal Code invalid format (A1A 1A1)');
                     }
                     else {
                         $('#supervisor-postal-code').css("border-color", clrDefault);
@@ -1126,6 +1291,8 @@
 
         }
     });
+
+
 
     function isEmail (email) {
         var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;

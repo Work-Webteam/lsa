@@ -27,8 +27,26 @@ class RegistrationsController extends AppController
 
     public function view($id = null)
     {
-        $registration = $this->Registrations->findById($id)->firstOrFail();
-        $this->set(compact('registration'));
+        $registration = $this->Registrations->find('all', [
+            'conditions' => array(
+                'Registrations.id' => $id
+            ),
+            'contain' => [
+                'Milestones',
+                'Ministries',
+                'Awards',
+                'OfficeCity',
+                'HomeCity',
+                'SupervisorCity'
+            ],
+        ])->first();
+        if ($registration) {
+            $this->set(compact('registration'));
+        }
+        else {
+            $this->Flash->error(__('Registration not found.'));
+            $this->redirect(['action' => 'index']);
+        }
     }
 
     public function add()
@@ -82,9 +100,7 @@ class RegistrationsController extends AppController
             $registration->home_province = "BC";
             $registration->supervisor_province = "BC";
             $registration->retirement_date = $this->request->getData('date');
-//            if (!$registration->retiring_this_year) {
-//                $registration->retirement_date = "";
-//            }
+            $registration->retroactive = false;
             if ($this->Registrations->save($registration)) {
                 $this->Flash->success(__('Registration has been saved.'));
                 return $this->redirect(['action' => 'completed', $registration->id]);
@@ -98,6 +114,7 @@ class RegistrationsController extends AppController
             $registration->home_province = "BC";
             $registration->supervisor_province = "BC";
         }
+
         $milestones = $this->Registrations->Milestones->find('list');
         $this->set('milestones', $milestones);
 
@@ -149,9 +166,29 @@ class RegistrationsController extends AppController
 
     public function edit($id)
     {
-        $registration = $this->Registrations->findById($id)->firstOrFail();
+//        $registration = $this->Registrations->findById($id)->firstOrFail();
+
+        $registration = $this->Registrations->find('all', [
+            'conditions' => array(
+                'Registrations.id' => $id
+            ),
+            'contain' => [
+                'Milestones',
+                'Ministries',
+                'Awards',
+                'OfficeCity',
+                'HomeCity',
+                'SupervisorCity'
+            ],
+        ])->first();
+        if (!$registration) {
+            $this->Flash->error(__('Registration not found.'));
+            $this->redirect(['action' => 'index']);
+        }
+
+
         if ($this->request->is(['post', 'put'])) {
-            $this->Registrations->patchEntity($registration, $this->request->getData());
+            $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
 
             $registration->modified = time();
 
@@ -159,7 +196,10 @@ class RegistrationsController extends AppController
                 $this->Flash->success(__('Registration has been updated.'));
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('Unable to update registration.'));
+            $this->Flash->error(__('Unable to add registration.'));
+//            debug($this->Registrations->)
+//            debug($this->Registrations->errors());
+
         }
 
         // Get a list of milestones.
@@ -174,6 +214,26 @@ class RegistrationsController extends AppController
         $diet = $this->Registrations->Diet->find('list');
         // Set milestones to the view context
         $this->set('diet', $diet);
+
+        $cities = $this->Registrations->Cities->find('list', [
+            'order' => ['Cities.name' => 'ASC']
+        ]);
+        $this->set('cities', $cities);
+
+        $ministries = $this->Registrations->Ministries->find('list', [
+            'order' => ['Ministries.name' => 'ASC']
+        ]);
+        $this->set('ministries', $ministries);
+
+        $regions = $this->Registrations->PecsfRegions->find('list', [
+            'order' => ['PecsfRegions.name' => 'ASC']
+        ]);
+        $this->set('regions', $regions);
+
+        $charities = $this->Registrations->PecsfCharities->find('all', [
+            'order' => ['PecsfCharities.name' => 'ASC']
+        ]);
+        $this->set('charities', $charities);
 
         $this->set('registration', $registration);
     }

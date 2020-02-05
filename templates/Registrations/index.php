@@ -1,5 +1,6 @@
 
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
 
 <h1>Registrations</h1>
 
@@ -11,8 +12,18 @@
 <script>
     var registrations=<?php echo json_encode($registrations); ?>;
 
+    console.log(registrations);
+
+    $.fn.dataTable.ext.buttons.alert = {
+        className: 'buttons-alert',
+
+        action: function ( e, dt, node, config ) {
+            alert( this.text() );
+        }
+    };
+
     $(document).ready(function() {
-console.log(registrations);
+// console.log(registrations);
 
         $('#example').DataTable( {
             data: registrations,
@@ -25,19 +36,33 @@ console.log(registrations);
                 { data: "milestone.name", title: "Year of Service" },
                 { data: "award.name", title: "Award", defaultContent: "PECSF Donation" },
                 { data: "office_city.name", title: "Office City", visible: true },
-                { data: "home_city.name", title: "Home City", visible: true },
-                { data: "supervisor_city.name", title: "Supervisor City", visible: true },
+                { data: "retroactive", title: "Retroactive", visible: true },
+                { data: "home_city.name", title: "Home City", visible: false },
+                { data: "supervisor_city.name", title: "Supervisor City", visible: false },
+                { data: "preferred_email", title: "Work Email", visible: false },
+                { data: "alternate_email", title: "Personal Email", visible: false },
+                { data: "supervisor_email", title: "Supervisor Email", visible: false },
                 { data: "id", render: function( data, type, row, meta) {
-                    return '<a href="/registrations/view/' + data + '">view</a>';
+                        return '<a href="/registrations/view/' + data + '">view</a> | <a href="/registrations/edit/' + data + '">edit</a>';
                     }
                 }
             ],
+            stateSave: true,
             pageLength: 25,
             lengthChange: false,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    text: 'My button',
+                    action: function ( e, dt, node, config ) {
+                        alert( 'Button activated' );
+                    }
+                }
+            ],
 
 
             initComplete: function () {
-                this.api().columns([2,3,5,6,7]).every( function () {
+                this.api().columns([2,3,5,6,7,8]).every( function () {
                     var column = this;
                     var select = $('<select><option value=""></option></select><br>')
                         .prependTo( $(column.header()) )

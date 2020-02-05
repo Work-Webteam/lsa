@@ -8,9 +8,16 @@
 }
 
 
-.lsa-award {
+#lsa-award-card {
     padding: 10px;
+    margin-bottom: 15px;
 }
+
+.lsa-award-image {
+    width: 300px;
+    height: 300px;
+}
+
 
 .lsa-errors-container {
     padding: 20px;
@@ -28,6 +35,3 @@
 #pop-up-errors {
     padding: 15px;
 }
-
-
-

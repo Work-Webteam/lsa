@@ -74,10 +74,10 @@ $cakeDescription = 'Long Service Awards';
 
                 <div class="row">
                     <div class="column">
-                        <button onclick="register()">Register</button>
+                        <button type="button" class="btn btn-primary" onclick="register()">Register</button>
                     </div>
                     <div class="column">
-                        <button onclick="admin()">Admin</button>
+                        <button type="button" class="btn btn-primary" onclick="admin()">Admin</button>
                     </div>
                 </div>
 
