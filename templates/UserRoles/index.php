@@ -14,7 +14,7 @@
                 <?= $userrole->id ?>
             </td>
             <td>
-                <?= $userrole->user_id ?>
+                <?= $userrole->idir ?>
             </td>
             <td>
                 <?= $userrole->role_id ?>

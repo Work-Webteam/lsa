@@ -5,6 +5,7 @@
 <table>
     <tr>
         <th>Id</th>
+        <th>Award Year</th>
         <th>Ceremony Night</th>
         <th>Date</th>
         <th colspan = 2>Operations</th>
@@ -16,6 +17,9 @@
         <tr>
             <td>
                 <?= $ceremony->id ?>
+            </td>
+            <td>
+                <?= $ceremony->award_year ?>
             </td>
             <td>
                 <?= $this->Html->link($ceremony->night, ['action' => 'view', $ceremony->id]) ?>

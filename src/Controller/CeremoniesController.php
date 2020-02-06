@@ -9,7 +9,10 @@ class CeremoniesController extends AppController
     public function index()
     {
         $this->loadComponent('Paginator');
-        $ceremonies = $this->Paginator->paginate($this->Ceremonies->find());
+        $ceremonies = $this->Paginator->paginate($this->Ceremonies->find('all', [
+            'conditions' => ['Ceremonies.award_year =' => date('Y')],
+        ]));
+
         $this->set(compact('ceremonies'));
     }
 
@@ -24,6 +27,7 @@ class CeremoniesController extends AppController
         $ceremony = $this->Ceremonies->newEmptyEntity();
         if ($this->request->is('post')) {
             $ceremony = $this->Ceremonies->patchEntity($ceremony, $this->request->getData());
+            $ceremony->award_year = date("Y");
             $ceremony->date = $this->request->getData('ceremony_date') . " " . $this->request->getData('ceremony_time');
             if ($this->Ceremonies->save($ceremony)) {
                 $this->Flash->success(__('Your milestone has been saved.'));
@@ -31,6 +35,7 @@ class CeremoniesController extends AppController
             }
             $this->Flash->error(__('Unable to add your ceremony.'));
         }
+        $ceremony->award_year = date("Y");
         $this->set('ceremony', $ceremony);
     }
 

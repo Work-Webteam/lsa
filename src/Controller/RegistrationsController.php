@@ -49,40 +49,40 @@ class RegistrationsController extends AppController
         }
     }
 
-    public function add()
-    {
-        $registration = $this->Registrations->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
-
-            // Hardcoding the user_id is temporary, and will be removed later
-            // when we build authentication out.
-            $registration->user_id = 1;
-            $registration->created = time();
-            $registration->modified = time();
-
-            if ($this->Registrations->save($registration)) {
-                $this->Flash->success(__('Registration has been saved.'));
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('Unable to add registration.'));
-        }
-
-        // Get a list of milestones.
-        $milestones = $this->Registrations->Milestones->find('list');
-        // Set milestones to the view context
-        $this->set('milestones', $milestones);
-        // Get a list of awards.
-        $awards = $this->Registrations->Awards->find('list');
-        // Set milestones to the view context
-        $this->set('awards', $awards);
-        // Get a list of awards.
-        $diet = $this->Registrations->Diet->find('list');
-        // Set milestones to the view context
-        $this->set('diet', $diet);
-
-        $this->set('registration', $registration);
-    }
+//    public function add()
+//    {
+//        $registration = $this->Registrations->newEmptyEntity();
+//        if ($this->request->is('post')) {
+//            $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
+//
+//            // Hardcoding the user_id is temporary, and will be removed later
+//            // when we build authentication out.
+//            $registration->user_id = 1;
+//            $registration->created = time();
+//            $registration->modified = time();
+//
+//            if ($this->Registrations->save($registration)) {
+//                $this->Flash->success(__('Registration has been saved.'));
+//                return $this->redirect(['action' => 'index']);
+//            }
+//            $this->Flash->error(__('Unable to add registration.'));
+//        }
+//
+//        // Get a list of milestones.
+//        $milestones = $this->Registrations->Milestones->find('list');
+//        // Set milestones to the view context
+//        $this->set('milestones', $milestones);
+//        // Get a list of awards.
+//        $awards = $this->Registrations->Awards->find('list');
+//        // Set milestones to the view context
+//        $this->set('awards', $awards);
+//        // Get a list of awards.
+//        $diet = $this->Registrations->Diet->find('list');
+//        // Set milestones to the view context
+//        $this->set('diet', $diet);
+//
+//        $this->set('registration', $registration);
+//    }
 
     public function register()
     {
@@ -178,7 +178,8 @@ class RegistrationsController extends AppController
                 'Awards',
                 'OfficeCity',
                 'HomeCity',
-                'SupervisorCity'
+                'SupervisorCity',
+                'Ceremonies'
             ],
         ])->first();
         if (!$registration) {
@@ -186,12 +187,12 @@ class RegistrationsController extends AppController
             $this->redirect(['action' => 'index']);
         }
 
-
         if ($this->request->is(['post', 'put'])) {
             $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
 
             $registration->modified = time();
-
+            $registration->invite_sent = $this->request->getData('invite_sent');
+            $registration->photo_sent = $this->request->getData('photo_sent');
             if ($this->Registrations->save($registration)) {
                 $this->Flash->success(__('Registration has been updated.'));
                 return $this->redirect(['action' => 'index']);
@@ -234,6 +235,16 @@ class RegistrationsController extends AppController
             'order' => ['PecsfCharities.name' => 'ASC']
         ]);
         $this->set('charities', $charities);
+
+        $records = $this->Registrations->Ceremonies->find('all', [
+            'conditions' => ['Ceremonies.award_year >=' => date('Y')],
+            'order' => ['Ceremonies.night' => 'ASC']
+        ]);
+        $ceremonies = array();
+        foreach ($records as $record) {
+            $ceremonies[$record->id] = "Night " . $record->night . " - " . date("M d, Y", strtotime($record->date));
+        }
+        $this->set('ceremonies', $ceremonies);
 
         $this->set('registration', $registration);
     }

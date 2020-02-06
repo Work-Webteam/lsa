@@ -90,7 +90,7 @@
     <?= h("Ministry of " . $registration->ministry->name) ?>
 </div>
 <div>
-    <?= h($registration->department) ?>
+    <?= h($registration->branch) ?>
 </div>
 
 <h4>Award</h4>

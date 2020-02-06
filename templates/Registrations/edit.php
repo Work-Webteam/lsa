@@ -1,5 +1,5 @@
 <div class="container" id="app">
-<h1>Edit Registration</h1>
+<h1><?= $registration->first_name . " " . $registration->last_name ?></h1>
 <?php
     echo $this->Form->create($registration, ['horizontal' => true]);
 ?>
@@ -12,9 +12,8 @@
                     echo $this->Form->control('employee_id', ['type' => 'text', 'label' => 'Employee ID']);
                     echo $this->Form->control('first_name');
                     echo $this->Form->control('last_name');
-//                    echo $this->Form->control('ministry_id', ['label' => 'Ministry']);
                     echo $this->Form->control('ministry_id', ['options' => $ministries, 'empty' => '- select ministry -']);
-                    echo $this->Form->control('department', ['label' => 'Branch']);
+                    echo $this->Form->control('branch', ['label' => 'Branch']);
                     echo $this->Form->control('preferred_email', ['label' => 'Government Email']);
                 ?>
             </tab>
@@ -68,22 +67,22 @@
             <tab name="Ceremony">
                 <h3>Ceremony</h3>
                     <?php
-                    echo $this->Form->control('ceremony_id', ['label' => 'Ceremony Night']);
-                    echo $this->Form->control('ceremony_date');
+                    echo $this->Form->control('ceremony_id', ['label' => 'Ceremony Night', 'options' => $ceremonies, 'empty' => '- select ceremony -']);
+//                    echo $this->Form->control('ceremony_date', ['disabled' => true]);
                     echo $this->Form->control('attending');
                     echo $this->Form->control('guest');
                     echo $this->Form->control('recipient_speaker');
                     echo $this->Form->control('reserved_seating');
                     echo $this->Form->control('executive_recipient');
                     echo $this->Form->control('presentation_number', ['label' => 'Award Presentation #']);
-                    echo $this->Form->control('accessibility_requirements_recipient');
-                    echo $this->Form->control('accessibility_requirements_guest');
+                    echo $this->Form->control('accessibility_requirements_recipient', ['label' => 'Recipient Accessibility Requirements', 'type' => 'checkbox']);
+                    echo $this->Form->control('accessibility_requirements_guest', ['label' => 'Guest Accessibility Requirements', 'type' => 'checkbox']);
                     echo $this->Form->control('accessibility_recipient_notes');
                     echo $this->Form->control('accessibility_guest_notes');
                     echo $this->Form->control('accessibility_admin_notes');
-                    echo $this->Form->control('recipient_diet_id');
+                    echo $this->Form->control('recipient_diet_id', ['options' => $diet, 'empty' => '- select diet -']);
                     echo $this->Form->control('recipient_diet_other');
-                    echo $this->Form->control('guest_diet_id');
+                    echo $this->Form->control('guest_diet_id', ['options' => $diet, 'empty' => '- select diet -']);
                     echo $this->Form->control('guest_diet_other');
                     ?>
             </tab>
@@ -105,12 +104,12 @@
                 <h3>Admin</h3>
                 <?php
                     echo $this->Form->control('survey_participation');
-                    echo $this->Form->control('created');
-                    echo $this->Form->control('invite_sent');
+                    echo $this->Form->control('created', ['disabled' => true]);
+                    echo $this->Form->control('invite_sent', ['type' => 'date']);
                     echo $this->Form->control('id');
                     echo $this->Form->control('photo_order');
                     echo $this->Form->control('photo_frame_range');
-                    echo $this->Form->control('photo_sent');
+                    echo $this->Form->control('photo_sent', ['type' => 'date']);
                     echo $this->Form->control('admin_notes');
                 ?>
             </tab>

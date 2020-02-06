@@ -76,7 +76,7 @@
             echo $this->Form->control('last_name', ['v-model' => 'lastName']);
 
             echo $this->Form->control('ministry_id', ['options' => $ministries, 'empty' => '- select ministry -', 'onChange' => 'app.ministrySelected()']);
-            echo $this->Form->control('department', ['label' => 'Branch', 'v-model' => 'ministryBranch']);
+            echo $this->Form->control('branch', ['label' => 'Branch', 'v-model' => 'ministryBranch']);
 
             echo $this->Form->control('preferred_email', ['label' => 'Government Email', 'v-model' => 'govtEmail']);
             echo $this->Form->control('alternate_email', ['v-model' => 'altEmail']);

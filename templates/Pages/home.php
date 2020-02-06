@@ -77,7 +77,12 @@ $cakeDescription = 'Long Service Awards';
                         <button type="button" class="btn btn-primary" onclick="register()">Register</button>
                     </div>
                     <div class="column">
-                        <button type="button" class="btn btn-primary" onclick="admin()">Admin</button>
+                        <?php
+                            $session = $this->getRequest()->getSession();
+                            if ($session->read('user.role') <> 0) {
+                                echo '<button type="button" class="btn btn-primary" onclick="admin()">Admin</button>';
+                            }
+                        ?>
                     </div>
                 </div>
 

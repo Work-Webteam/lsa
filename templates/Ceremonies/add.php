@@ -5,6 +5,7 @@ echo $this->Form->create($ceremony);
 //    ['dateWidget' => '{{day}}{{month}}{{year}}']
 //);
 
+echo $this->Form->control('award_year', ['disabled' => true]);
 echo $this->Form->control('night');
 echo $this->Form->control('ceremony_date', ['type' => 'date', 'value' => date('Y-m-d')]);
 echo $this->Form->control('ceremony_time', ['type' => 'time']);

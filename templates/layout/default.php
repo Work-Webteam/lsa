@@ -48,15 +48,26 @@
             <a href="/"><span><img src="/img/lsa_logo.png" class="lsa-logo"></span></a>
         </div>
         <div class="top-nav-links">
-            <a href="/registrations">Admin</a>
-            <a href="/ceremonies">Ceremonies</a>
-            <a href="/awards">Awards</a>
-            <a href="/milestones">Milestones</a>
-            <a href="/cities">Cities</a>
-            <a href="/ministries">Ministries</a>
-            <a href="/diet">Diet</a>|
-            <a href="/pecsfregions">Regions</a>
-            <a href="/pecsfcharities">Charities</a>
+            <?php
+                $session = $this->getRequest()->getSession();
+                if ($session->read('user.role') <> 0) {
+                    echo '<a href="/registrations">Admin</a>';
+                }
+                if (in_array($session->read('user.role'), array(1,2))) {
+                    echo '<a href="/ceremonies">Ceremonies</a>';
+                    echo '<a href="/awards">Awards</a>';
+                    echo '<a href="/milestones">Milestones</a>';
+                    echo '<a href="/cities">Cities</a>';
+                    echo '<a href="/ministries">Ministries</a>';
+                    echo '<a href="/diet">Diet</a>';
+                }
+                if ($session->read('user.role') == 1) {
+                    echo ' | <a href="/pecsfregions">Regions</a>';
+                    echo ' <a href="/pecsfcharities">Charities</a>';
+                }
+            ?>
+
+
         </div>
     </nav>
     <main class="main">

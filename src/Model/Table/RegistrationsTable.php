@@ -33,6 +33,9 @@ class RegistrationsTable extends Table
             ->setBindingKey('supervisor_city_id');
         $this->hasOne('PecsfRegions');
         $this->hasOne('PecsfCharities');
+        $this->hasOne('Ceremonies')
+            ->setForeignKey('id')
+            ->setBindingKey('ceremony_id');
     }
 
     public function validationDefault(Validator $validator) : Validator
@@ -85,8 +88,8 @@ class RegistrationsTable extends Table
             'message' => 'Please select a ministry.'
         ]);
 
-        $validator->requirePresence('department');
-        $validator->add('department', 'not-blank', [
+        $validator->requirePresence('branch');
+        $validator->add('branch', 'not-blank', [
             'rule' => 'notBlank',
             'message' => 'Please enter branch.'
         ]);

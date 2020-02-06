@@ -31,7 +31,7 @@
                 { data: "first_name", title: "First Name" },
                 { data: "last_name", title: "Last Name" },
                 { data: "ministry.name", title: "Ministry" },
-                { data: "department", title: "Branch" },
+                { data: "branch", title: "Branch" },
                 { data: "award_year", title: "Award Year"},
                 { data: "milestone.name", title: "Year of Service" },
                 { data: "award.name", title: "Award", defaultContent: "PECSF Donation" },

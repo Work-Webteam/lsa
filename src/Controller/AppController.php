@@ -47,6 +47,18 @@ class AppController extends Controller
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
 
+        $_SERVER['HTTP_SM_USER'] = 'rkuyvenh';
+        $_SERVER['HTTP_SMGOV_USEREMAIL'] = 'Raymond.Kuyvenhoven@gov.bc.ca';
+        $_SERVER['HTTP_SMGOV_USERDISPLAYNAME'] = 'Kuyvenhoven, Raymond PSA:EX';
+        $_SERVER['HTTP_SMGOV_USERGUID'] = '60DCD2AF73FB44AE9345F11B71CD3495';
+
+//        $user_role = $this->Userroles->find('all', [
+//            'conditions' => ['Userrole.idir =' => 'rkuyvenhoven'],
+//        ]);
+
+        $session = $this->getRequest()->getSession();
+        $session->write('user.idir', $_SERVER['HTTP_SM_USER']);
+        $session->write('user.role', 1);
         /*
          * Enable the following component for recommended CakePHP security settings.
          * see https://book.cakephp.org/4/en/controllers/components/security.html
