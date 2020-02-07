@@ -6,6 +6,10 @@ class AwardsController extends AppController
 {
     public function index()
     {
+        if (!$this->checkAuthorization(array(1,2))) {
+            $this->Flash->error(__('You are not authorized to administer Awards.'));
+            $this->redirect('/');
+        }
         $this->loadComponent('Paginator');
         $awards = $this->Paginator->paginate($this->Awards->find());
         $this->set(compact('awards'));
@@ -13,6 +17,10 @@ class AwardsController extends AppController
 
     public function view($id = null)
     {
+        if (!$this->checkAuthorization(array(1,2))) {
+            $this->Flash->error(__('You are not authorized to administer Awards.'));
+            $this->redirect('/');
+        }
         $award = $this->Awards->findById($id)->firstOrFail();
         $this->set(compact('award'));
 
@@ -25,6 +33,10 @@ class AwardsController extends AppController
 
     public function add()
     {
+        if (!$this->checkAuthorization(array(1,2))) {
+            $this->Flash->error(__('You are not authorized to administer Awards.'));
+            $this->redirect('/');
+        }
         $award = $this->Awards->newEmptyEntity();
         if ($this->request->is('post')) {
             $file = $this->request->getData('upload');
@@ -55,6 +67,10 @@ class AwardsController extends AppController
 
     public function edit($id)
     {
+        if (!$this->checkAuthorization(array(1,2))) {
+            $this->Flash->error(__('You are not authorized to administer Awards.'));
+            $this->redirect('/');
+        }
         $award = $this->Awards->findById($id)->firstOrFail();
         if ($this->request->is(['post', 'put'])) {
             $file = $this->request->getData('upload');
@@ -86,6 +102,10 @@ class AwardsController extends AppController
 
     public function delete($id)
     {
+        if (!$this->checkAuthorization(array(1,2))) {
+            $this->Flash->error(__('You are not authorized to administer Awards.'));
+            $this->redirect('/');
+        }
         $this->request->allowMethod(['post', 'delete']);
 
         $award = $this->Awards->findById($id)->firstOrFail();
@@ -98,6 +118,10 @@ class AwardsController extends AppController
 
     public function addoption($id)
     {
+        if (!$this->checkAuthorization(array(1,2))) {
+            $this->Flash->error(__('You are not authorized to administer Awards.'));
+            $this->redirect('/');
+        }
         $award = $this->Awards->findById($id)->firstOrFail();
         if ($this->request->is('post')) {
             $name = $this->request->getData('name');
@@ -124,6 +148,10 @@ class AwardsController extends AppController
 
     public function editoption($id, $option_id)
     {
+        if (!$this->checkAuthorization(array(1,2))) {
+            $this->Flash->error(__('You are not authorized to administer Awards.'));
+            $this->redirect('/');
+        }
         $award = $this->Awards->findById($id)->firstOrFail();
         $options = json_decode($award->options, true);
 
@@ -146,6 +174,10 @@ class AwardsController extends AppController
 
     public function deleteoption($id, $option_id)
     {
+        if (!$this->checkAuthorization(array(1,2))) {
+            $this->Flash->error(__('You are not authorized to administer Awards.'));
+            $this->redirect('/');
+        }
         $this->request->allowMethod(['post', 'delete']);
 
         $award = $this->Awards->findById($id)->firstOrFail();
@@ -162,6 +194,10 @@ class AwardsController extends AppController
 
     public function addvalue($id, $option_id)
     {
+        if (!$this->checkAuthorization(array(1,2))) {
+            $this->Flash->error(__('You are not authorized to administer Awards.'));
+            $this->redirect('/');
+        }
         $award = $this->Awards->findById($id)->firstOrFail();
         if ($this->request->is('post')) {
             $name = $this->request->getData('name');
@@ -183,6 +219,10 @@ class AwardsController extends AppController
 
     public function editvalue($id, $option_id, $value_id)
     {
+        if (!$this->checkAuthorization(array(1,2))) {
+            $this->Flash->error(__('You are not authorized to administer Awards.'));
+            $this->redirect('/');
+        }
         $award = $this->Awards->findById($id)->firstOrFail();
         $options = json_decode($award->options, true);
         if ($this->request->is('post')) {
@@ -202,6 +242,10 @@ class AwardsController extends AppController
 
     public function deletevalue($id, $option_id, $value_id)
     {
+        if (!$this->checkAuthorization(array(1,2))) {
+            $this->Flash->error(__('You are not authorized to administer Awards.'));
+            $this->redirect('/');
+        }
         $this->request->allowMethod(['post', 'delete']);
 
         $award = $this->Awards->findById($id)->firstOrFail();

@@ -9,9 +9,17 @@ class RegistrationsController extends AppController
 {
     public function index()
     {
+        if (!$this->checkAuthorization(array(1,2,3,4,5,6))) {
+            $this->Flash->error(__('You are not authorized to administer Registrations.'));
+            $this->redirect('/');
+        }
         $this->loadComponent('Paginator');
+
+
+        $conditions = array();
+        $conditions['Registrations.created >='] = date('Y');
         $registrations = $this->Registrations->find('all', [
-            'conditions' => ['Registrations.created >=' => date('Y')],
+            'conditions' => $conditions,
             'contain' => [
                 'Milestones',
                 'Ministries',
@@ -92,7 +100,12 @@ class RegistrationsController extends AppController
 
             // Hardcoding the user_id is temporary, and will be removed later
             // when we build authentication out.
-            $registration->user_id = 1;
+
+            $session = $this->getRequest()->getSession();
+//            $registration->user_id = 1;
+            $registration->user_idir = $session->read('user.idir');
+            $registration->user_guid = $session->read('user.guid');
+
             $registration->created = time();
             $registration->modified = time();
             $registration->award_year = date("Y");

@@ -6,6 +6,10 @@ class MilestonesController extends AppController
 {
     public function index()
     {
+        if (!$this->checkAuthorization(array(1,2))) {
+            $this->Flash->error(__('You are not authorized to administer Milestones.'));
+            $this->redirect('/');
+        }
         $this->loadComponent('Paginator');
         $milestones = $this->Paginator->paginate($this->Milestones->find());
         $this->set(compact('milestones'));
@@ -13,12 +17,20 @@ class MilestonesController extends AppController
 
     public function view($id = null)
     {
+        if (!$this->checkAuthorization(array(1,2))) {
+            $this->Flash->error(__('You are not authorized to administer Milestones.'));
+            $this->redirect('/');
+        }
         $milestone = $this->Milestones->findById($id)->firstOrFail();
         $this->set(compact('milestone'));
     }
 
     public function add()
     {
+        if (!$this->checkAuthorization(array(1,2))) {
+            $this->Flash->error(__('You are not authorized to administer Milestones.'));
+            $this->redirect('/');
+        }
         $milestone = $this->Milestones->newEmptyEntity();
         if ($this->request->is('post')) {
             $milestone = $this->Milestones->patchEntity($milestone, $this->request->getData());
@@ -34,6 +46,10 @@ class MilestonesController extends AppController
 
     public function edit($id)
     {
+        if (!$this->checkAuthorization(array(1,2))) {
+            $this->Flash->error(__('You are not authorized to administer Milestones.'));
+            $this->redirect('/');
+        }
         $milestone = $this->Milestones->findById($id)->firstOrFail();
         if ($this->request->is(['post', 'put'])) {
             $this->Milestones->patchEntity($milestone, $this->request->getData());
@@ -50,6 +66,10 @@ class MilestonesController extends AppController
 
     public function delete($id)
     {
+        if (!$this->checkAuthorization(array(1,2))) {
+            $this->Flash->error(__('You are not authorized to administer Milestones.'));
+            $this->redirect('/');
+        }
         $this->request->allowMethod(['post', 'delete']);
 
         $milestone = $this->Milestones->findById($id)->firstOrFail();

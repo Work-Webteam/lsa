@@ -9,6 +9,12 @@ class UserRolesTable extends Table
 {
     public function initialize(array $config) : Void
     {
-        $this->hasOne('Roles');
+        $this->hasOne('Roles')
+            ->setForeignKey('id')
+            ->setBindingKey('role_id');
+        $this->hasOne('Ministries')
+            ->setForeignKey('id')
+            ->setBindingKey('ministry_id');
+
     }
 }

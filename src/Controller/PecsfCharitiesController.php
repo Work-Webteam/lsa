@@ -6,6 +6,10 @@ class PecsfCharitiesController extends AppController
 {
     public function index()
     {
+        if (!$this->checkAuthorization(array(1))) {
+            $this->Flash->error(__('You are not authorized to administer PECSF Charities.'));
+            $this->redirect('/');
+        }
         $this->loadComponent('Paginator');
         $charities = $this->Paginator->paginate($this->Pecsfcharities->find());
         $this->set(compact('charities'));
@@ -13,12 +17,20 @@ class PecsfCharitiesController extends AppController
 
     public function view($id = null)
     {
+        if (!$this->checkAuthorization(array(1))) {
+            $this->Flash->error(__('You are not authorized to administer PECSF Charities.'));
+            $this->redirect('/');
+        }
         $charity = $this->Pecsfcharities->findById($id)->firstOrFail();
         $this->set(compact('charity'));
     }
 
     public function add()
     {
+        if (!$this->checkAuthorization(array(1))) {
+            $this->Flash->error(__('You are not authorized to administer PECSF Charities.'));
+            $this->redirect('/');
+        }
         $charity = $this->Pecsfcharities->newEmptyEntity();
         if ($this->request->is('post')) {
             $charity = $this->Pecsfcharities->patchEntity($charity, $this->request->getData());
@@ -40,6 +52,10 @@ class PecsfCharitiesController extends AppController
 
     public function edit($id)
     {
+        if (!$this->checkAuthorization(array(1))) {
+            $this->Flash->error(__('You are not authorized to administer PECSF Charities.'));
+            $this->redirect('/');
+        }
         $charity = $this->Pecsfcharities->findById($id)->firstOrFail();
         if ($this->request->is(['post', 'put'])) {
             $this->Pecsfcharities->patchEntity($charity, $this->request->getData());
@@ -61,6 +77,10 @@ class PecsfCharitiesController extends AppController
 
     public function delete($id)
     {
+        if (!$this->checkAuthorization(array(1))) {
+            $this->Flash->error(__('You are not authorized to administer PECSF Charities.'));
+            $this->redirect('/');
+        }
         $this->request->allowMethod(['post', 'delete']);
 
         $charity = $this->Pecsfcharities->findById($id)->firstOrFail();

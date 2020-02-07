@@ -7,6 +7,10 @@ class CitiesController extends AppController
 
     public function index()
     {
+        if (!$this->checkAuthorization(array(1,2))) {
+            $this->Flash->error(__('You are not authorized to administer Cities.'));
+            $this->redirect('/');
+        }
         $this->loadComponent('Paginator');
 
         $cities = $this->Paginator->paginate($this->Cities->find());
@@ -15,12 +19,20 @@ class CitiesController extends AppController
 
     public function view($id = null)
     {
+        if (!$this->checkAuthorization(array(1,2))) {
+            $this->Flash->error(__('You are not authorized to administer Cities.'));
+            $this->redirect('/');
+        }
         $city = $this->Cities->findById($id)->firstOrFail();
         $this->set(compact('city'));
     }
 
     public function add()
     {
+        if (!$this->checkAuthorization(array(1,2))) {
+            $this->Flash->error(__('You are not authorized to administer Cities.'));
+            $this->redirect('/');
+        }
         $city = $this->Cities->newEmptyEntity();
         if ($this->request->is('post')) {
             $milestone = $this->Cities->patchEntity($city, $this->request->getData());
@@ -36,6 +48,10 @@ class CitiesController extends AppController
 
     public function edit($id)
     {
+        if (!$this->checkAuthorization(array(1,2))) {
+            $this->Flash->error(__('You are not authorized to administer Cities.'));
+            $this->redirect('/');
+        }
         $city = $this->Cities->findById($id)->firstOrFail();
         if ($this->request->is(['post', 'put'])) {
             $this->Cities->patchEntity($city, $this->request->getData());
@@ -51,6 +67,10 @@ class CitiesController extends AppController
 
     public function delete($id)
     {
+        if (!$this->checkAuthorization(array(1,2))) {
+            $this->Flash->error(__('You are not authorized to administer Cities.'));
+            $this->redirect('/');
+        }
         $this->request->allowMethod(['post', 'delete']);
 
         $city = $this->Cities->findById($id)->firstOrFail();

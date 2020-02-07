@@ -17,7 +17,7 @@
                 <?= $userrole->idir ?>
             </td>
             <td>
-                <?= $userrole->role_id ?>
+                <?= $userrole->role->name ?>
             </td>
             <td>
                 <?= $this->Html->link('Edit', ['action' => 'edit', $userrole->id]) ?>

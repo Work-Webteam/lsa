@@ -6,6 +6,10 @@ class RolesController extends AppController
 {
     public function index()
     {
+        if (!$this->checkAuthorization(array(1))) {
+            $this->Flash->error(__('You are not authorized to administer Roles.'));
+            $this->redirect('/');
+        }
         $this->loadComponent('Paginator');
         $roles = $this->Paginator->paginate($this->Roles->find());
         $this->set(compact('roles'));
@@ -13,12 +17,20 @@ class RolesController extends AppController
 
     public function view($id = null)
     {
+        if (!$this->checkAuthorization(array(1))) {
+            $this->Flash->error(__('You are not authorized to administer Roles.'));
+            $this->redirect('/');
+        }
         $role = $this->Roles->findById($id)->firstOrFail();
         $this->set(compact('role'));
     }
 
     public function add()
     {
+        if (!$this->checkAuthorization(array(1))) {
+            $this->Flash->error(__('You are not authorized to administer Roles.'));
+            $this->redirect('/');
+        }
         $role = $this->Roles->newEmptyEntity();
         if ($this->request->is('post')) {
             $role = $this->Roles->patchEntity($role, $this->request->getData());
@@ -34,6 +46,10 @@ class RolesController extends AppController
 
     public function edit($id)
     {
+        if (!$this->checkAuthorization(array(1))) {
+            $this->Flash->error(__('You are not authorized to administer Roles.'));
+            $this->redirect('/');
+        }
         $role = $this->Roles->findById($id)->firstOrFail();
         if ($this->request->is(['post', 'put'])) {
             $this->Roles->patchEntity($role, $this->request->getData());
@@ -50,6 +66,10 @@ class RolesController extends AppController
 
     public function delete($id)
     {
+        if (!$this->checkAuthorization(array(1))) {
+            $this->Flash->error(__('You are not authorized to administer Roles.'));
+            $this->redirect('/');
+        }
         $this->request->allowMethod(['post', 'delete']);
 
         $role = $this->Roles->findById($id)->firstOrFail();

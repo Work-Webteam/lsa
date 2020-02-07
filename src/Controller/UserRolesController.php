@@ -4,21 +4,38 @@ namespace App\Controller;
 
 class UserRolesController extends AppController
 {
+
     public function index()
     {
+        if (!$this->checkAuthorization(array(1,2))) {
+            $this->Flash->error(__('You are not authorized to administer User Roles.'));
+            $this->redirect('/');
+        }
         $this->loadComponent('Paginator');
-        $userroles = $this->Paginator->paginate($this->Userroles->find());
+        $userroles = $this->Paginator->paginate($this->Userroles->find('all',
+            ['contain' => [
+                'Roles',
+                'Ministries',
+            ]]));
         $this->set(compact('userroles'));
     }
 
     public function view($id = null)
     {
+        if (!$this->checkAuthorization(array(1,2))) {
+            $this->Flash->error(__('You are not authorized to administer User Roles.'));
+            $this->redirect('/');
+        }
         $userrole = $this->Userroles->findById($id)->firstOrFail();
         $this->set(compact('userrole'));
     }
 
     public function add()
     {
+        if (!$this->checkAuthorization(array(1,2))) {
+            $this->Flash->error(__('You are not authorized to administer User Roles.'));
+            $this->redirect('/');
+        }
         $userrole = $this->Userroles->newEmptyEntity();
         if ($this->request->is('post')) {
             $userrole = $this->Userroles->patchEntity($userrole, $this->request->getData());
@@ -30,19 +47,30 @@ class UserRolesController extends AppController
             $this->Flash->error(__('Unable to add your role.'));
         }
 
-        // Get a list of roles.
         $roles = $this->Userroles->Roles->find('list');
-        // Set tags to the view context
         $this->set('roles', $roles);
+
+        $ministries = $this->Userroles->Ministries->find('list', [
+            'order' => ['Ministries.name' => 'ASC']
+        ]);
+        $this->set('ministries', $ministries);
 
         $this->set('userrole', $userrole);
     }
 
     public function edit($id)
     {
+        if (!$this->checkAuthorization(array(1,2))) {
+            $this->Flash->error(__('You are not authorized to administer User Roles.'));
+            $this->redirect('/');
+        }
         $userrole = $this->Userroles->findById($id)->firstOrFail();
         if ($this->request->is(['post', 'put'])) {
-            $this->Userroles->patchEntity($userrole, $this->request->getData());
+            $userrole = $this->Userroles->patchEntity($userrole, $this->request->getData());
+
+            if($userrole->role_id <> 5) {
+                $userrole->ministry_id = 0;
+            }
             if ($this->Userroles->save($userrole)) {
                 $this->Flash->success(__('Role has been updated.'));
                 return $this->redirect(['action' => 'index']);
@@ -50,10 +78,13 @@ class UserRolesController extends AppController
             $this->Flash->error(__('Unable to update role.'));
         }
 
-        // Get a list of roles.
         $roles = $this->Userroles->Roles->find('list');
-        // Set tags to the view context
         $this->set('roles', $roles);
+
+        $ministries = $this->Userroles->Ministries->find('list', [
+            'order' => ['Ministries.name' => 'ASC']
+        ]);
+        $this->set('ministries', $ministries);
 
         $this->set('userrole', $userrole);
     }
@@ -61,6 +92,10 @@ class UserRolesController extends AppController
 
     public function delete($id)
     {
+        if (!$this->checkAuthorization(array(1,2))) {
+            $this->Flash->error(__('You are not authorized to administer User Roles.'));
+            $this->redirect('/');
+        }
         $this->request->allowMethod(['post', 'delete']);
 
         $userrole = $this->Userroles->findById($id)->firstOrFail();

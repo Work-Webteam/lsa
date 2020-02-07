@@ -60,6 +60,7 @@
                     echo '<a href="/cities">Cities</a>';
                     echo '<a href="/ministries">Ministries</a>';
                     echo '<a href="/diet">Diet</a>';
+                    echo ' |  <a href="/userroles">Access</a>';
                 }
                 if ($session->read('user.role') == 1) {
                     echo ' | <a href="/pecsfregions">Regions</a>';

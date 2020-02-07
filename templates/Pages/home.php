@@ -50,7 +50,7 @@ $cakeDescription = 'Long Service Awards';
 <body>
     <header>
         <div class="container text-center">
-            <a href="https://cakephp.org/" target="_blank">
+            <a href="/" target="_blank">
                 <img alt="Long Service Awards" src="img/lsa_logo.png" width="150" />
             </a>
             <h1>
@@ -60,6 +60,7 @@ $cakeDescription = 'Long Service Awards';
     </header>
     <main class="main">
         <div class="container">
+            <?= $this->Flash->render() ?>
             <div class="content">
                 <div class="row">
                     <div class="column">

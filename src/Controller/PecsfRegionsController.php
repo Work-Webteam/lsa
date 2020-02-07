@@ -6,6 +6,10 @@ class PecsfRegionsController extends AppController
 {
     public function index()
     {
+        if (!$this->checkAuthorization(array(1))) {
+            $this->Flash->error(__('You are not authorized to administer PECSF Regions.'));
+            $this->redirect('/');
+        }
         $this->loadComponent('Paginator');
         $pecsfregions = $this->Paginator->paginate($this->Pecsfregions->find());
         $this->set(compact('pecsfregions'));
@@ -13,12 +17,20 @@ class PecsfRegionsController extends AppController
 
     public function view($id = null)
     {
+        if (!$this->checkAuthorization(array(1))) {
+            $this->Flash->error(__('You are not authorized to administer PECSF Regions.'));
+            $this->redirect('/');
+        }
         $region = $this->Pecsfregions->findById($id)->firstOrFail();
         $this->set(compact('region'));
     }
 
     public function add()
     {
+        if (!$this->checkAuthorization(array(1))) {
+            $this->Flash->error(__('You are not authorized to administer PECSF Regions.'));
+            $this->redirect('/');
+        }
         $region = $this->Pecsfregions->newEmptyEntity();
         if ($this->request->is('post')) {
             $region = $this->Pecsfregions->patchEntity($region, $this->request->getData());
@@ -34,6 +46,10 @@ class PecsfRegionsController extends AppController
 
     public function edit($id)
     {
+        if (!$this->checkAuthorization(array(1))) {
+            $this->Flash->error(__('You are not authorized to administer PECSF Regions.'));
+            $this->redirect('/');
+        }
         $region = $this->Pecsfregions->findById($id)->firstOrFail();
         if ($this->request->is(['post', 'put'])) {
             $this->Pecsfregions->patchEntity($region, $this->request->getData());
@@ -50,6 +66,10 @@ class PecsfRegionsController extends AppController
 
     public function delete($id)
     {
+        if (!$this->checkAuthorization(array(1))) {
+            $this->Flash->error(__('You are not authorized to administer PECSF Regions.'));
+            $this->redirect('/');
+        }
         $this->request->allowMethod(['post', 'delete']);
 
         $region = $this->Pecsfregions->findById($id)->firstOrFail();
