@@ -1,5 +1,5 @@
 <h1>Awards</h1>
-<?= $this->Html->link('Add Award', ['action' => 'add'], ['class' => 'btn btn-primary active']) ?>
+<?= $this->Html->link('Add Award', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 <table>
     <tr>
         <th>Id</th>
@@ -24,16 +24,16 @@
                 <?= $award->active ? 'active' : 'inactive' ?>
             </td>
             <td>
-                <?= $this->Html->link('View', ['action' => 'view', $award->id], ['class' => 'btn btn-primary active', 'role' => 'button']) ?>
+                <?= $this->Html->link('View', ['action' => 'view', $award->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>
             <td>
-                <?= $this->Html->link('Edit', ['action' => 'edit', $award->id], ['class' => 'btn btn-primary active', 'role' => 'button']) ?>
+                <?= $this->Html->link('Edit', ['action' => 'edit', $award->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>
             <td>
                 <?= $this->Form->postLink(
                     'Delete',
                     ['action' => 'delete', $award->id],
-                    ['confirm' => 'Are you sure?','class' => 'btn btn-primary active', 'role' => 'button'])
+                    ['confirm' => 'Are you sure?','class' => 'btn btn-primary', 'role' => 'button'])
                 ?>
             </td>
         </tr>

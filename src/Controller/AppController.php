@@ -47,38 +47,61 @@ class AppController extends Controller
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
 
-        $_SERVER['HTTP_SM_USER'] = 'rkuyvenh';
+
+
+        $_SERVER['HTTP_SM_USER'] = 'rjkuyvenh';
         $_SERVER['HTTP_SMGOV_USEREMAIL'] = 'Raymond.Kuyvenhoven@gov.bc.ca';
         $_SERVER['HTTP_SMGOV_USERDISPLAYNAME'] = 'Kuyvenhoven, Raymond PSA:EX';
-        $_SERVER['HTTP_SMGOV_USERGUID'] = '60DCD2AF73FB44AE9345F11B71CD3495';
+        $_SERVER['HTTP_SMGOV_USERGUID'] = '60DCD2AF73FB44AE9345F11B71CD3495';   // admin
+
+//        $_SERVER['HTTP_SMGOV_USERGUID'] = '9ECC7D7FD8EE840932B9D21721251737';   // lsa admin
+//        $_SERVER['HTTP_SMGOV_USERGUID'] = 'C68FF67FB334907A25DB8B07767CC1FC';   // protocol
+//        $_SERVER['HTTP_SMGOV_USERGUID'] = '8A5BD27856273A99C6D5AF1FCDDBCB99';   // award procurement
+//        $_SERVER['HTTP_SMGOV_USERGUID'] = '26B243BA60AE8F60B4BB3C81E1450423';   // ministry contact
+//        $_SERVER['HTTP_SMGOV_USERGUID'] = '5F4CF1B88565FCA2E8D17AD85B57CE0A';   // supervisor
+//        $_SERVER['HTTP_SMGOV_USERGUID'] = '3BC010F8C876571F3D29DB46012A326B';   // recipient
+
+//        $_SERVER['HTTP_SM_USER'] = 'jvernon';
+//        $_SERVER['HTTP_SMGOV_USERGUID'] = '9A268C3025C27C8C86F79592BC816B74';   // protocol
+
+//        $_SERVER['HTTP_SM_USER'] = 'rsharples';
+//        $_SERVER['HTTP_SMGOV_USERGUID'] = '7B9AC399055CC69EE1C50CAB45CB6BBA';   // recipient
+//
+        // check if user has administrative privileges
+        $this->loadModel('Userroles');
+        $users = $this->Userroles->find('all', [
+            'conditions' => ['Userroles.guid =' => $_SERVER['HTTP_SMGOV_USERGUID']],
+            'limit' => 1,
+        ]);
+        $user = $users->first();
+        if (!$user) {
+            // we check for record with matching IDIR and empty GUID. We need to check empty GUID in case there is an existing
+            // matching IDIR with a different GUID.
+            $users = $this->Userroles->find('all', [
+                'conditions' => [
+                    'Userroles.idir =' => $_SERVER['HTTP_SM_USER'],
+                    'Userroles.guid =' => '',
+                    ],
+                'limit' => 1,
+            ]);
+            $user = $users->first();
+            if ($user) {
+                $user->guid = $_SERVER['HTTP_SMGOV_USERGUID'];
+                $this->Userroles->save($user);
+            }
+        }
 
         $session = $this->getRequest()->getSession();
         $session->write('user.idir', $_SERVER['HTTP_SM_USER']);
         $session->write('user.guid', $_SERVER['HTTP_SMGOV_USERGUID']);
         $session->write('user.name', $_SERVER['HTTP_SMGOV_USERDISPLAYNAME']);
         $session->write('user.email', $_SERVER['HTTP_SMGOV_USEREMAIL']);
-        $session->write('user.role', 1);
-        $session->write('user.ministry', 2);
 
-
-        $this->loadModel('Userroles');
-        $user_role = $this->Userroles->find('all', ['condition' => ['userrole.id' => 2]])->first();
-debug($user_role);
-//        $user_role = $this->Userroles->find('all', [
-//            'conditions' => array(
-//                'Userrole.idir' => 'xxxxxxxxxx'
-//            )
-//        ])->first();
-
-        debug("we here");
-        if ($user_role) {
-            debug('we have a user role');
-//            debug($user_role->)
-            $session->write('user.role', 1);
-            $session->write('user.ministry', 2);
+        if ($user) {
+            $session->write('user.role', $user->role_id);
+            $session->write('user.ministry', $user->ministry_id);
         }
         else {
-            debug("we don't have a user role");
             $session->write('user.role', 0);
             $session->write('user.ministry', 0);
         }

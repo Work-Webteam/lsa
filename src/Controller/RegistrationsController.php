@@ -9,15 +9,26 @@ class RegistrationsController extends AppController
 {
     public function index()
     {
-        if (!$this->checkAuthorization(array(1,2,3,4,5,6))) {
+        if ($this->checkAuthorization(array(0))) {
             $this->Flash->error(__('You are not authorized to administer Registrations.'));
             $this->redirect('/');
         }
-        $this->loadComponent('Paginator');
-
 
         $conditions = array();
-        $conditions['Registrations.created >='] = date('Y');
+//        $conditions['Registrations.created >='] = date('Y');
+        $conditions['Registrations.award_year ='] = date('Y');
+
+        // if Ministry Contact only list registrations from their ministry
+        if ($this->checkAuthorization(5)) {
+            $session = $this->getRequest()->getSession();
+            $conditions['Registrations.ministry_id ='] = $session->read("user.ministry");
+        }
+
+        // if Supervisor role only list registrations they created
+        if ($this->checkAuthorization(6)) {
+            $session = $this->getRequest()->getSession();
+            $conditions['Registrations.user_guid ='] = $session->read("user.guid");
+        }
         $registrations = $this->Registrations->find('all', [
             'conditions' => $conditions,
             'contain' => [

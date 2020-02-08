@@ -5,10 +5,14 @@ echo $this->Form->control('award_year', ['disabled' => true]);
 echo $this->Form->control('night');
 echo $this->Form->control('ceremony_date', ['type' => 'date', 'value' => $ceremony->date]);
 echo $this->Form->control('ceremony_time', ['type' => 'time', 'value' => $ceremony->date]);
-echo $this->Form->button(__('Save Ceremony'));
+
+echo $this->Form->button(__('Save Ceremony'), array('class' => 'btn btn-primary'));
+echo '&nbsp;';
 echo $this->Form->button('Cancel', array(
     'type' => 'button',
-    'onclick' => 'location.href=\'/ceremonies\''
+    'onclick' => 'location.href=\'/ceremonies\'',
+    'class' => 'btn btn-secondary',
 ));
+
 echo $this->Form->end();
 ?>

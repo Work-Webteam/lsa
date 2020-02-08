@@ -17,7 +17,8 @@ echo $this->Form->button(__('Save User Role'));
 echo '&nbsp;';
 echo $this->Form->button('Cancel', array(
     'type' => 'button',
-    'onclick' => 'location.href=\'/userroles\''
+    'onclick' => 'location.href=\'/userroles\'',
+    'class' => 'btn btn-info active',
 ));
 echo $this->Form->end();
 ?>

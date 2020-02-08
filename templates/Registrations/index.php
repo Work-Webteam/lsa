@@ -47,19 +47,9 @@
                     }
                 }
             ],
-            stateSave: true,
-            pageLength: 25,
+            // stateSave: true,
+            pageLength: 15,
             lengthChange: false,
-            dom: 'Bfrtip',
-            buttons: [
-                {
-                    text: 'My button',
-                    action: function ( e, dt, node, config ) {
-                        alert( 'Button activated' );
-                    }
-                }
-            ],
-
 
             initComplete: function () {
                 this.api().columns([2,3,5,6,7,8]).every( function () {

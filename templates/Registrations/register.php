@@ -26,9 +26,9 @@
         <div class="form-group" v-if="milestoneKnown">
             <?php
                 echo $this->Form->label("Registered last year but didn't attend ceremony?");
-                echo $this->Form->button('Yes', ['type' => 'button', 'onclick' => 'app.buttonMissedCeremony(1)']);
+                echo $this->Form->button('Yes', ['type' => 'button', 'onclick' => 'app.buttonMissedCeremony(1)', 'class' => 'btn btn-primary']);
                 echo "&nbsp;";
-                echo $this->Form->button('No', ['type' => 'button',  'onclick' => 'app.buttonMissedCeremony(0)']);
+                echo $this->Form->button('No', ['type' => 'button',  'onclick' => 'app.buttonMissedCeremony(0)', 'class' => 'btn btn-primary']);
             ?>
         </div>
     </transition>
@@ -47,11 +47,11 @@
             </div>
             <div>
                 <?php
-                    echo $this->Form->button('<', ['type' => 'button', 'onclick' => 'app.showPreviousAward()']);
+                    echo $this->Form->button('<', ['type' => 'button', 'onclick' => 'app.showPreviousAward()', 'class' => 'btn btn-primary']);
                     echo "&nbsp;";
-                    echo $this->Form->button('Select Award', ['type' => 'button', 'onclick' => 'app.selectCurrentAward()']);
+                    echo $this->Form->button('Select Award', ['type' => 'button', 'onclick' => 'app.selectCurrentAward()', 'class' => 'btn btn-primary']);
                     echo "&nbsp;";
-                    echo $this->Form->button('>', ['type' => 'button',  'onclick' => 'app.showNextAward()']);
+                    echo $this->Form->button('>', ['type' => 'button',  'onclick' => 'app.showNextAward()', 'class' => 'btn btn-primary']);
                 ?>
 <!--                <button onClick="app.showPreviousAward"> < </button><button>Select</button><button v-on:click="showNextAward"> > </button>-->
             </div>
@@ -83,9 +83,9 @@
 
             echo $this->Form->label("Retiring this year?");
             echo $this->Form->hidden('retiring_this_year', ['value' => 0]);
-            echo $this->Form->button('Yes', ['type' => 'button', 'onclick' => 'app.buttonRetirementClick(1)']);
+            echo $this->Form->button('Yes', ['type' => 'button', 'onclick' => 'app.buttonRetirementClick(1)', 'class' => 'btn btn-primary']);
             echo "&nbsp;";
-            echo $this->Form->button('No', ['type' => 'button',  'onclick' => 'app.buttonRetirementClick(0)']);
+            echo $this->Form->button('No', ['type' => 'button',  'onclick' => 'app.buttonRetirementClick(0)', 'class' => 'btn btn-primary']);
 
             ?>
 
@@ -109,7 +109,7 @@
                 </span>
             </div>
             <?php
-                echo $this->Form->button('ID Info Input', ['type' => 'button',  'onclick' => 'app.showOfficeAddressInput()']);
+                echo $this->Form->button('ID Info Input', ['type' => 'button',  'onclick' => 'app.showOfficeAddressInput()', 'class' => 'btn btn-primary']);
             ?>
         </div>
     </transition>
@@ -136,7 +136,7 @@
                 </span>
             </div>
             <?php
-            echo $this->Form->button('Office Address Input', ['type' => 'button',  'onclick' => 'app.showHomeAddressInput()']);
+            echo $this->Form->button('Office Address Input', ['type' => 'button',  'onclick' => 'app.showHomeAddressInput()', 'class' => 'btn btn-primary']);
             ?>
         </fieldset>
         </div>
@@ -160,7 +160,7 @@
                 </span>
             </div>
             <?php
-                echo $this->Form->button('Home Address Input', ['type' => 'button',  'onclick' => 'app.showSupervisorInput()']);
+                echo $this->Form->button('Home Address Input', ['type' => 'button',  'onclick' => 'app.showSupervisorInput()', 'class' => 'btn btn-primary']);
             ?>
         </fieldset>
         </div>
@@ -187,7 +187,7 @@
             </div>
 
             <?php
-                echo $this->Form->button('Supervisor Input', ['type' => 'button',  'onclick' => 'app.showConfirmation()']);
+                echo $this->Form->button('Supervisor Input', ['type' => 'button',  'onclick' => 'app.showConfirmation()', 'class' => 'btn btn-primary']);
             ?>
         </fieldset>
         </div>
@@ -265,7 +265,7 @@
                 </div>
 <!--                <a class="btn btn-primary" href="#register" id="confirmInfo" v-on:click="showDeclaration">Confirm</a>-->
                 <?php
-                    echo $this->Form->button('Confirm', ['type' => 'button',  'onclick' => 'app.showDeclaration()']);
+                    echo $this->Form->button('Confirm', ['type' => 'button',  'onclick' => 'app.showDeclaration()', 'class' => 'btn btn-primary']);
                 ?>
             </div>
         </div>
@@ -287,10 +287,12 @@
             </div>
             <div id="register">
                 <?php
-                echo $this->Form->button(__('Register'));
+                echo $this->Form->button(__('Register'), array('class' => 'btn btn-primary'));
+                echo '&nbsp;';
                 echo $this->Form->button('Cancel', array(
                     'type' => 'button',
-                    'onclick' => 'location.href=\'/\''
+                    'onclick' => 'location.href=\'/\'',
+                    'class' => 'btn btn-primary'
                 ));
                 ?>
             </div>

@@ -1,7 +1,7 @@
 <!-- File: templates/Milestones/index.php -->
 
 <h1>Milestones</h1>
-<?= $this->Html->link('Add Milestone', ['action' => 'add'], ['class' => 'btn btn-primary active']) ?>
+<?= $this->Html->link('Add Milestone', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 <table>
     <tr>
         <th>Id</th>

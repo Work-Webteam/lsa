@@ -3,7 +3,7 @@
 <p><?= h($award->description) ?></p>
 <p><?= $this->Html->image('awards/'.$award->image) ?></p>
 <h2>Options</h2>
-<?= $this->Html->link('Add Option', ['action' => 'addoption/'.$award->id], ['class' => 'btn btn-primary active']) ?>
+<?= $this->Html->link('Add Option', ['action' => 'addoption/'.$award->id], ['class' => 'btn btn-primary']) ?>
 
 <table>
     <tr>
@@ -22,14 +22,14 @@
                 <?= $this->Html->link(
                     'Edit',
                     ['action' => 'editoption', $award->id, $key],
-                    ['class' => 'btn btn-primary active', 'role' => 'button'])
+                    ['class' => 'btn btn-primary', 'role' => 'button'])
                 ?>
             </td>
             <td valign="top">
                 <?= $this->Form->postLink(
                     'Delete',
                     ['action' => 'deleteoption', $award->id, $key],
-                    ['confirm' => 'Are you sure?', 'class' => 'btn btn-primary active', 'role' => 'button'])
+                    ['confirm' => 'Are you sure?', 'class' => 'btn btn-primary', 'role' => 'button'])
                 ?>
             </td>
             <td valign="top">
@@ -38,7 +38,7 @@
                         echo $this->Html->link(
                             'Add Choice',
                             ['action' => 'addvalue', $award->id, $key],
-                            ['class' => 'btn btn-primary active', 'role' => 'button']);
+                            ['class' => 'btn btn-primary', 'role' => 'button']);
                     }
                 ?>
             </td>
@@ -54,14 +54,14 @@
                                 <?= $this->Html->link(
                                     'Edit',
                                     ['action' => 'editvalue', $award->id, $key, $key2],
-                                    ['class' => 'btn btn-primary active', 'role' => 'button'])
+                                    ['class' => 'btn btn-primary', 'role' => 'button'])
                                 ?>
                             </td>
                             <td>
                                 <?= $this->Form->postLink(
                                     'Delete',
                                     ['action' => 'deletevalue', $award->id, $key, $key2],
-                                    ['confirm' => 'Are you sure?', 'class' => 'btn btn-primary active', 'role' => 'button'])
+                                    ['confirm' => 'Are you sure?', 'class' => 'btn btn-primary', 'role' => 'button'])
                                 ?>
                             </td>
                         </tr>

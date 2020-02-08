@@ -1,6 +1,6 @@
 
 <h1>Ministries</h1>
-<?= $this->Html->link('Add Ministry', ['action' => 'add'], ['class' => 'btn btn-primary active']) ?>
+<?= $this->Html->link('Add Ministry', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 <table>
     <tr>
         <th>Id</th>

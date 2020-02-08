@@ -22,5 +22,12 @@ return [
         'lsa_contact_phone' => '250-555-1111',
     ],
 
-
+    'Role' => [
+        'admin' => 1,
+        'lsa_admin' => 2,
+        'protocol' => 3,
+        'procurement' => 4,
+        'ministry_contact' => 5,
+        'supervisor' => 6
+    ]
 ];

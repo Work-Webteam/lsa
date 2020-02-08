@@ -1,7 +1,7 @@
 
 <h1>Ceremonies</h1>
 <p>NOTE: Only ceremony dates for the current year are displayed.</p>
-<?= $this->Html->link('Add Ceremony', ['action' => 'add'], ['class' => 'btn btn-primary active']) ?>
+<?= $this->Html->link('Add Ceremony', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 <table>
     <tr>
         <th>Id</th>
