@@ -273,25 +273,27 @@ class RegistrationsController extends AppController
         $this->set('registration', $registration);
 
 
-//        if ($this->checkAuthorization(array(5,6))) {
-//            $this->render('edit_limited');
-//        }
-
         if ($this->checkAuthorization(array(0,5,6))) {
-            $session = $this->getRequest()->getSession();
-            if (($this->checkAuthorization(array(0,6)) && $session.read('user.guid') <> $registration->user_guid) ||
-                (!$this->checkAuthorization(5, $registration->ministry_id))) {
-                $this->Flash->error(__('You are not authorized to edit this Registration.'));
-                $this->redirect('/registrations');
+            if ($this->checkAuthorization(0)) {
+                if (!$this->checkGUID($registration->user_guid)) {
+                    $this->Flash->error(__('You are not authorized to edit this Registration.'));
+                    $this->redirect('/');
+                }
+            }
+            else if ($this->checkAuthorization(6)) {
+                if (!$this->checkGUID($registration->user_guid)) {
+                    $this->Flash->error(__('You are not authorized to edit this Registration.'));
+                    $this->redirect('/registrations');
+                }
+            }
+            else if ($this->checkAuthorization(5)) {
+                if (!$this->checkAuthorization(5, $registration->ministry_id)) {
+                    $this->Flash->error(__('You are not authorized to edit this Registration.'));
+                    $this->redirect('/registrations');
+                }
             }
             $this->render('edit_limited');
         }
-
-
-//        if ($this->checkAuthorization(array(0))) {
-//            $this->Flash->error(__('You are not authorized to administer Registrations.'));
-//            $this->redirect('/');
-//        }
 
 
     }
@@ -309,58 +311,6 @@ class RegistrationsController extends AppController
     }
 
 
-
-    public function test()
-    {
-        $registration = $this->Registrations->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
-
-            // Hardcoding the user_id is temporary, and will be removed later
-            // when we build authentication out.
-            $registration->user_id = 1;
-            $registration->created = time();
-            $registration->modified = time();
-            $registration->office_province = "BC";
-            $registration->home_province = "BC";
-            $registration->supervisor_province = "BC";
-            $registration->retirement_date = $this->request->getData('date');
-//            if (!$registration->retiring_this_year) {
-//                $registration->retirement_date = "";
-//            }
-//            if ($this->Registrations->save($registration)) {
-//                $this->Flash->success(__('Registration has been saved.'));
-//                return $this->redirect(['action' => 'index']);
-//            }
-            $this->Flash->error(__('Test completed?'));
-        }
-
-        if ($this->request->is('get')) {
-            $registration->office_province = "BC";
-            $registration->home_province = "BC";
-            $registration->supervisor_province = "BC";
-        }
-        $milestones = $this->Registrations->Milestones->find('list');
-        $this->set('milestones', $milestones);
-
-        $awards = $this->Registrations->Awards->find('list');
-        $this->set('awards', $awards);
-
-        $ministries = $this->Registrations->Ministries->find('list', [
-            'order' => ['Ministries.name' => 'ASC']
-        ]);
-        $this->set('ministries', $ministries);
-
-        $diet = $this->Registrations->Diet->find('list');
-        $this->set('diet', $diet);
-
-        $cities = $this->Registrations->Cities->find('list', [
-            'order' => ['Cities.name' => 'ASC']
-        ]);
-        $this->set('cities', $cities);
-
-        $this->set('registration', $registration);
-    }
 
 
 
