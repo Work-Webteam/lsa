@@ -2,14 +2,12 @@
 <h1><?= $registration->first_name . " " . $registration->last_name ?></h1>
 
 
-    <ul class="nav nav-tabs" id="registrationForm">
+    <ul class="nav nav-pills" id="registrationForm">
         <li class="nav-item active"><a href="#recipient">Recipient</a></li>
         <li class="nav-item"><a href="#office">Office</a></li>
         <li class="nav-item"><a href="#home">Home</a></li>
         <li class="nav-item"><a href="#award">Award</a></li>
-        <li class="nav-item"><a href="#ceremony">Ceremony</a></li>
         <li class="nav-item"><a href="#supervisor">Supervisor</a></li>
-        <li class="nav-item"><a href="#admin">Admin</a></li>
     </ul>
 
 <?php
@@ -74,27 +72,6 @@
                     }
                 ?>
             </div>
-            <div class="tab-pane" id="ceremony">
-                    <?php
-                    echo $this->Form->control('ceremony_id', ['label' => 'Ceremony Night', 'options' => $ceremonies, 'empty' => '- select ceremony -']);
-//                    echo $this->Form->control('ceremony_date', ['disabled' => true]);
-                    echo $this->Form->control('attending');
-                    echo $this->Form->control('guest');
-                    echo $this->Form->control('recipient_speaker');
-                    echo $this->Form->control('reserved_seating');
-                    echo $this->Form->control('executive_recipient');
-                    echo $this->Form->control('presentation_number', ['label' => 'Award Presentation #']);
-                    echo $this->Form->control('accessibility_requirements_recipient', ['label' => 'Recipient Accessibility Requirements', 'type' => 'checkbox']);
-                    echo $this->Form->control('accessibility_requirements_guest', ['label' => 'Guest Accessibility Requirements', 'type' => 'checkbox']);
-                    echo $this->Form->control('accessibility_recipient_notes');
-                    echo $this->Form->control('accessibility_guest_notes');
-                    echo $this->Form->control('accessibility_admin_notes');
-                    echo $this->Form->control('recipient_diet_id', ['options' => $diet, 'empty' => '- select diet -']);
-                    echo $this->Form->control('recipient_diet_other');
-                    echo $this->Form->control('guest_diet_id', ['options' => $diet, 'empty' => '- select diet -']);
-                    echo $this->Form->control('guest_diet_other');
-                    ?>
-            </div>
             <div class="tab-pane" id="supervisor">
                 <?php
                     echo $this->Form->control('supervisor_first_name', ['label' => 'First Name']);
@@ -106,18 +83,6 @@
                     echo $this->Form->control('supervisor_province', ['label' => 'Province']);
                     echo $this->Form->control('supervisor_postal_code', ['label' => 'Postal Code']);
                     echo $this->Form->control('supervisor_email', ['label' => 'Email']);
-                ?>
-            </div>
-            <div class="tab-pane" id="admin">
-                <?php
-                    echo $this->Form->control('survey_participation');
-                    echo $this->Form->control('created', ['disabled' => true]);
-                    echo $this->Form->control('invite_sent', ['type' => 'date']);
-                    echo $this->Form->control('id');
-                    echo $this->Form->control('photo_order');
-                    echo $this->Form->control('photo_frame_range');
-                    echo $this->Form->control('photo_sent', ['type' => 'date']);
-                    echo $this->Form->control('admin_notes');
                 ?>
             </div>
         </tabs>

@@ -1,5 +1,5 @@
 <h1>Roles</h1>
-<?= $this->Html->link('Add Roles', ['action' => 'add']) ?>
+<?= $this->Html->link('Add Roles', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 <table>
     <tr>
         <th>Id</th>

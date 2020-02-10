@@ -1,5 +1,5 @@
 <h1>PECSF Regions</h1>
-<?= $this->Html->link('Add PECSF Region', ['action' => 'add'], ['class' => 'btn btn-primary active']) ?>
+<?= $this->Html->link('Add PECSF Region', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 <table>
     <tr>
         <th>Id</th>

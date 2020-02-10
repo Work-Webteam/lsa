@@ -3,7 +3,7 @@
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
 
 <h1>Registrations</h1>
-
+    <?= $this->Flash->render() ?>
     <table id="example" class="display" style="width:100%">
 
     </table>

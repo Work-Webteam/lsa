@@ -271,6 +271,29 @@ class RegistrationsController extends AppController
         $this->set('ceremonies', $ceremonies);
 
         $this->set('registration', $registration);
+
+
+//        if ($this->checkAuthorization(array(5,6))) {
+//            $this->render('edit_limited');
+//        }
+
+        if ($this->checkAuthorization(array(0,5,6))) {
+            $session = $this->getRequest()->getSession();
+            if (($this->checkAuthorization(array(0,6)) && $session.read('user.guid') <> $registration->user_guid) ||
+                (!$this->checkAuthorization(5, $registration->ministry_id))) {
+                $this->Flash->error(__('You are not authorized to edit this Registration.'));
+                $this->redirect('/registrations');
+            }
+            $this->render('edit_limited');
+        }
+
+
+//        if ($this->checkAuthorization(array(0))) {
+//            $this->Flash->error(__('You are not authorized to administer Registrations.'));
+//            $this->redirect('/');
+//        }
+
+
     }
 
 

@@ -1,12 +1,6 @@
 <h1>User Roles</h1>
-<?= $this->Html->link('Add User Role', ['action' => 'add'], ['class' => 'btn btn-info active']) ?>
+<?= $this->Html->link('Add User Role', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 
-<?= $this->Html->link('Add User Role', ['action' => 'add'], ['class' => 'btn btn-primary active']) ?>
-<?= $this->Html->link('Add User Role', ['action' => 'add'], ['class' => 'btn btn-secondary active']) ?>
-<?= $this->Html->link('Add User Role', ['action' => 'add'], ['class' => 'btn btn-success active']) ?>
-<?= $this->Html->link('Add User Role', ['action' => 'add'], ['class' => 'btn btn-info active']) ?>
-<?= $this->Html->link('Add User Role', ['action' => 'add'], ['class' => 'btn btn-warning active']) ?>
-<?= $this->Html->link('Add User Role', ['action' => 'add'], ['class' => 'btn btn-danger active']) ?>
 <table>
     <tr>
         <th>Id</th>

@@ -1,7 +1,7 @@
 <div class="container" id="app">
 <h1>Edit User Role</h1>
 <?php
-echo $this->Form->create($userrole, ['@submit' => 'checkForm']);
+echo $this->Form->create($userrole, ['@submit' => 'checkForm', 'horizontal' => true]);
 echo $this->Form->control('idir', ['type' => 'text', 'label' => 'IDIR']);
 echo $this->Form->control('role_id', ['empty' => '- select role -', 'onChange' => 'app.showMinistry(this.value)']);
 ?>
@@ -13,13 +13,18 @@ echo $this->Form->control('role_id', ['empty' => '- select role -', 'onChange' =
      </span>
 </div>
 <?php
-echo $this->Form->button(__('Save User Role'));
+
+echo $this->Form->button(__('Save User Role'
+    )
+    , array(
+        'class' => 'btn btn-primary'));
 echo '&nbsp;';
 echo $this->Form->button('Cancel', array(
     'type' => 'button',
     'onclick' => 'location.href=\'/userroles\'',
-    'class' => 'btn btn-info active',
+    'class' => 'btn btn-secondary',
 ));
+
 echo $this->Form->end();
 ?>
 </div>
@@ -79,3 +84,4 @@ echo $this->Form->end();
     });
 
 </script>
+

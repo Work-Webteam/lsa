@@ -57,7 +57,7 @@ class AppController extends Controller
 //        $_SERVER['HTTP_SMGOV_USERGUID'] = '9ECC7D7FD8EE840932B9D21721251737';   // lsa admin
 //        $_SERVER['HTTP_SMGOV_USERGUID'] = 'C68FF67FB334907A25DB8B07767CC1FC';   // protocol
 //        $_SERVER['HTTP_SMGOV_USERGUID'] = '8A5BD27856273A99C6D5AF1FCDDBCB99';   // award procurement
-//        $_SERVER['HTTP_SMGOV_USERGUID'] = '26B243BA60AE8F60B4BB3C81E1450423';   // ministry contact
+        $_SERVER['HTTP_SMGOV_USERGUID'] = '26B243BA60AE8F60B4BB3C81E1450423';   // ministry contact
 //        $_SERVER['HTTP_SMGOV_USERGUID'] = '5F4CF1B88565FCA2E8D17AD85B57CE0A';   // supervisor
 //        $_SERVER['HTTP_SMGOV_USERGUID'] = '3BC010F8C876571F3D29DB46012A326B';   // recipient
 
@@ -114,13 +114,20 @@ class AppController extends Controller
     }
 
 
-    public function checkAuthorization($roles = 1) {
+    public function checkAuthorization($roles = 1, $ministry = 0) {
         if (!is_array($roles)) {
             $roles = array($roles);
         }
         $session = $this->getRequest()->getSession();
         if (in_array($session->read('user.role'), $roles)) {
-            return true;
+            if ($ministry > 0) {
+                if ($session->read('user.ministry') == $ministry) {
+                    return true;
+                }
+            }
+            else {
+                return true;
+            }
         }
         return false;
     }
