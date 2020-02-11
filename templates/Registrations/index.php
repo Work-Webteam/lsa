@@ -13,7 +13,7 @@
 <script>
     var registrations=<?php echo json_encode($registrations); ?>;
 
-    console.log(registrations);
+    // console.log(registrations);
 
     $.fn.dataTable.ext.buttons.alert = {
         className: 'buttons-alert',
@@ -24,7 +24,6 @@
     };
 
     $(document).ready(function() {
-// console.log(registrations);
 
         $('#example').DataTable( {
             data: registrations,

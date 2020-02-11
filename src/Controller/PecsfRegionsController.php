@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use Cake\Core\Configure;
+
 class PecsfRegionsController extends AppController
 {
     public function index()
     {
-        if (!$this->checkAuthorization(array(1))) {
+        if (!$this->checkAuthorization(array(Configure::read('Role.admin')))) {
             $this->Flash->error(__('You are not authorized to administer PECSF Regions.'));
             $this->redirect('/');
         }
@@ -17,7 +19,7 @@ class PecsfRegionsController extends AppController
 
     public function view($id = null)
     {
-        if (!$this->checkAuthorization(array(1))) {
+        if (!$this->checkAuthorization(array(Configure::read('Role.admin')))) {
             $this->Flash->error(__('You are not authorized to administer PECSF Regions.'));
             $this->redirect('/');
         }
@@ -27,7 +29,7 @@ class PecsfRegionsController extends AppController
 
     public function add()
     {
-        if (!$this->checkAuthorization(array(1))) {
+        if (!$this->checkAuthorization(array(Configure::read('Role.admin')))) {
             $this->Flash->error(__('You are not authorized to administer PECSF Regions.'));
             $this->redirect('/');
         }
@@ -46,7 +48,7 @@ class PecsfRegionsController extends AppController
 
     public function edit($id)
     {
-        if (!$this->checkAuthorization(array(1))) {
+        if (!$this->checkAuthorization(array(Configure::read('Role.admin')))) {
             $this->Flash->error(__('You are not authorized to administer PECSF Regions.'));
             $this->redirect('/');
         }
@@ -66,7 +68,7 @@ class PecsfRegionsController extends AppController
 
     public function delete($id)
     {
-        if (!$this->checkAuthorization(array(1))) {
+        if (!$this->checkAuthorization(array(Configure::read('Role.admin')))) {
             $this->Flash->error(__('You are not authorized to administer PECSF Regions.'));
             $this->redirect('/');
         }

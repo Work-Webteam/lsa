@@ -59,7 +59,7 @@ class AppController extends Controller
 //        $_SERVER['HTTP_SMGOV_USERGUID'] = '8A5BD27856273A99C6D5AF1FCDDBCB99';   // award procurement
 //        $_SERVER['HTTP_SMGOV_USERGUID'] = '26B243BA60AE8F60B4BB3C81E1450423';   // ministry contact
 //        $_SERVER['HTTP_SMGOV_USERGUID'] = '5F4CF1B88565FCA2E8D17AD85B57CE0A';   // supervisor
-        $_SERVER['HTTP_SMGOV_USERGUID'] = '3BC010F8C876571F3D29DB46012A326B';   // recipient
+//        $_SERVER['HTTP_SMGOV_USERGUID'] = '3BC010F8C876571F3D29DB46012A326B';   // recipient
 
 //        $_SERVER['HTTP_SM_USER'] = 'jvernon';
 //        $_SERVER['HTTP_SMGOV_USERGUID'] = '9A268C3025C27C8C86F79592BC816B74';   // protocol
@@ -67,6 +67,7 @@ class AppController extends Controller
 //        $_SERVER['HTTP_SM_USER'] = 'rsharples';
 //        $_SERVER['HTTP_SMGOV_USERGUID'] = '7B9AC399055CC69EE1C50CAB45CB6BBA';   // recipient
 //
+
         // check if user has administrative privileges
         $this->loadModel('Userroles');
         $users = $this->Userroles->find('all', [

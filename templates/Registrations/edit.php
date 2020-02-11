@@ -4,11 +4,11 @@
 
     <ul class="nav nav-tabs" id="registrationForm">
         <li class="nav-item active"><a href="#recipient">Recipient</a></li>
+        <li class="nav-item"><a href="#award">Award</a></li>
         <li class="nav-item"><a href="#office">Office</a></li>
         <li class="nav-item"><a href="#home">Home</a></li>
-        <li class="nav-item"><a href="#award">Award</a></li>
-        <li class="nav-item"><a href="#ceremony">Ceremony</a></li>
         <li class="nav-item"><a href="#supervisor">Supervisor</a></li>
+        <li class="nav-item"><a href="#ceremony">Ceremony</a></li>
         <li class="nav-item"><a href="#admin">Admin</a></li>
     </ul>
 
@@ -30,6 +30,29 @@
                 ?>
             </div>
 
+        <div class="tab-pane" id="award">
+            <?php
+            echo $this->Form->control('award_year', ['label' => 'Award Year']);
+            echo $this->Form->control('award_id', ['options' => $awards]);
+            echo $this->Form->control('award_received', ['type' => 'checkbox']);
+            echo $this->Form->control('engraving_sent', ['type' => 'checkbox']);
+            echo $this->Form->control('certificate_name');
+            echo $this->Form->control('certificate_ordered');
+            echo $this->Form->control('award_instructions', ['label' => 'Award Instructions', 'type' => 'textarea']);
+
+            if ($registration->pecsf_donation) {
+                echo $this->Form->control('pecsf_donation');
+                echo $this->Form->control('pecsf_region_id', ['options' => $regions]);
+                echo $this->Form->control('pecsf_charity1_id', ['options' => $charities]);
+                echo $this->Form->control('pecsf_amount1');
+                echo $this->Form->control('pecsf_second_charity');
+                echo $this->Form->control('pecsf_charity2_id', ['options' => $charities]);
+                echo $this->Form->control('pecsf_amount2');
+                echo $this->Form->control('pecsf_cheque_date');
+            }
+            ?>
+        </div>
+
             <div class="tab-pane" id="office">
                 <?php
                     echo $this->Form->control('office_careof', ['label' => 'Floor/ Room / Care Of']);
@@ -50,28 +73,6 @@
                     echo $this->Form->control('home_province', ['label' => 'Province']);
                     echo $this->Form->control('home_postal_code', ['label' => 'Postal Code']);
                     echo $this->Form->control('home_phone', ['label' => 'Phone']);
-                ?>
-            </div>
-            <div class="tab-pane" id="award">
-                <?php
-                    echo $this->Form->control('award_year', ['label' => 'Award Year']);
-                    echo $this->Form->control('award_id', ['options' => $awards]);
-                    echo $this->Form->control('award_received', ['type' => 'checkbox']);
-                    echo $this->Form->control('engraving_sent', ['type' => 'checkbox']);
-                    echo $this->Form->control('certificate_name');
-                    echo $this->Form->control('certificate_ordered');
-                    echo $this->Form->control('award_instructions', ['label' => 'Award Instructions', 'type' => 'textarea']);
-
-                    if ($registration->pecsf_donation) {
-                        echo $this->Form->control('pecsf_donation');
-                        echo $this->Form->control('pecsf_region_id', ['options' => $regions]);
-                        echo $this->Form->control('pecsf_charity1_id', ['options' => $charities]);
-                        echo $this->Form->control('pecsf_amount1');
-                        echo $this->Form->control('pecsf_second_charity');
-                        echo $this->Form->control('pecsf_charity2_id', ['options' => $charities]);
-                        echo $this->Form->control('pecsf_amount2');
-                        echo $this->Form->control('pecsf_cheque_date');
-                    }
                 ?>
             </div>
             <div class="tab-pane" id="ceremony">

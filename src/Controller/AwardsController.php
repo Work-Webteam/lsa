@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use Cake\Core\Configure;
+
 class AwardsController extends AppController
 {
     public function index()
     {
-        if (!$this->checkAuthorization(array(1,2))) {
+        if (!$this->checkAuthorization(array(Configure::read('Role.admin'), Configure::read('Role.lsa_admin')))) {
             $this->Flash->error(__('You are not authorized to administer Awards.'));
             $this->redirect('/');
         }
@@ -17,7 +19,7 @@ class AwardsController extends AppController
 
     public function view($id = null)
     {
-        if (!$this->checkAuthorization(array(1,2))) {
+        if (!$this->checkAuthorization(array(Configure::read('Role.admin'), Configure::read('Role.lsa_admin')))) {
             $this->Flash->error(__('You are not authorized to administer Awards.'));
             $this->redirect('/');
         }
@@ -33,7 +35,7 @@ class AwardsController extends AppController
 
     public function add()
     {
-        if (!$this->checkAuthorization(array(1,2))) {
+        if (!$this->checkAuthorization(array(Configure::read('Role.admin'), Configure::read('Role.lsa_admin')))) {
             $this->Flash->error(__('You are not authorized to administer Awards.'));
             $this->redirect('/');
         }
@@ -67,7 +69,7 @@ class AwardsController extends AppController
 
     public function edit($id)
     {
-        if (!$this->checkAuthorization(array(1,2))) {
+        if (!$this->checkAuthorization(array(Configure::read('Role.admin'), Configure::read('Role.lsa_admin')))) {
             $this->Flash->error(__('You are not authorized to administer Awards.'));
             $this->redirect('/');
         }
@@ -102,7 +104,7 @@ class AwardsController extends AppController
 
     public function delete($id)
     {
-        if (!$this->checkAuthorization(array(1,2))) {
+        if (!$this->checkAuthorization(array(Configure::read('Role.admin'), Configure::read('Role.lsa_admin')))) {
             $this->Flash->error(__('You are not authorized to administer Awards.'));
             $this->redirect('/');
         }
@@ -118,7 +120,7 @@ class AwardsController extends AppController
 
     public function addoption($id)
     {
-        if (!$this->checkAuthorization(array(1,2))) {
+        if (!$this->checkAuthorization(array(Configure::read('Role.admin'), Configure::read('Role.lsa_admin')))) {
             $this->Flash->error(__('You are not authorized to administer Awards.'));
             $this->redirect('/');
         }
@@ -148,7 +150,7 @@ class AwardsController extends AppController
 
     public function editoption($id, $option_id)
     {
-        if (!$this->checkAuthorization(array(1,2))) {
+        if (!$this->checkAuthorization(array(Configure::read('Role.admin'), Configure::read('Role.lsa_admin')))) {
             $this->Flash->error(__('You are not authorized to administer Awards.'));
             $this->redirect('/');
         }
@@ -174,7 +176,7 @@ class AwardsController extends AppController
 
     public function deleteoption($id, $option_id)
     {
-        if (!$this->checkAuthorization(array(1,2))) {
+        if (!$this->checkAuthorization(array(Configure::read('Role.admin'), Configure::read('Role.lsa_admin')))) {
             $this->Flash->error(__('You are not authorized to administer Awards.'));
             $this->redirect('/');
         }
@@ -194,7 +196,7 @@ class AwardsController extends AppController
 
     public function addvalue($id, $option_id)
     {
-        if (!$this->checkAuthorization(array(1,2))) {
+        if (!$this->checkAuthorization(array(Configure::read('Role.admin'), Configure::read('Role.lsa_admin')))) {
             $this->Flash->error(__('You are not authorized to administer Awards.'));
             $this->redirect('/');
         }
@@ -219,7 +221,7 @@ class AwardsController extends AppController
 
     public function editvalue($id, $option_id, $value_id)
     {
-        if (!$this->checkAuthorization(array(1,2))) {
+        if (!$this->checkAuthorization(array(Configure::read('Role.admin'), Configure::read('Role.lsa_admin')))) {
             $this->Flash->error(__('You are not authorized to administer Awards.'));
             $this->redirect('/');
         }
@@ -242,7 +244,7 @@ class AwardsController extends AppController
 
     public function deletevalue($id, $option_id, $value_id)
     {
-        if (!$this->checkAuthorization(array(1,2))) {
+        if (!$this->checkAuthorization(array(Configure::read('Role.admin'), Configure::read('Role.lsa_admin')))) {
             $this->Flash->error(__('You are not authorized to administer Awards.'));
             $this->redirect('/');
         }

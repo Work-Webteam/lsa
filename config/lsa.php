@@ -23,6 +23,7 @@ return [
     ],
 
     'Role' => [
+        'authenticated' => 0,
         'admin' => 1,
         'lsa_admin' => 2,
         'protocol' => 3,

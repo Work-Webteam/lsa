@@ -4,9 +4,9 @@
 
     <ul class="nav nav-pills" id="registrationForm">
         <li class="nav-item active"><a href="#recipient">Recipient</a></li>
+        <li class="nav-item"><a href="#award">Award</a></li>
         <li class="nav-item"><a href="#office">Office</a></li>
         <li class="nav-item"><a href="#home">Home</a></li>
-        <li class="nav-item"><a href="#award">Award</a></li>
         <li class="nav-item"><a href="#supervisor">Supervisor</a></li>
     </ul>
 
@@ -27,7 +27,17 @@
                     echo $this->Form->control('preferred_email', ['label' => 'Government Email']);
                 ?>
             </div>
-
+        <div class="tab-pane" id="award">
+            <?php
+                echo $this->Form->control('award_year', ['label' => 'Award Year']);
+                echo $this->Form->control('award_id', ['options' => $awards]);
+                echo $this->Form->control('award_received', ['type' => 'checkbox']);
+                echo $this->Form->control('engraving_sent', ['type' => 'checkbox']);
+                echo $this->Form->control('certificate_name');
+                echo $this->Form->control('certificate_ordered');
+                echo $this->Form->control('award_instructions', ['label' => 'Award Instructions', 'type' => 'textarea']);
+            ?>
+        </div>
             <div class="tab-pane" id="office">
                 <?php
                     echo $this->Form->control('office_careof', ['label' => 'Floor/ Room / Care Of']);

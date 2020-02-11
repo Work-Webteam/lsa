@@ -9,7 +9,7 @@ class RegistrationsController extends AppController
 {
     public function index()
     {
-        if ($this->checkAuthorization(array(0))) {
+        if ($this->checkAuthorization(array(Configure::read('Role.authenticated')))) {
             $this->Flash->error(__('You are not authorized to administer Registrations.'));
             $this->redirect('/');
         }
@@ -19,13 +19,13 @@ class RegistrationsController extends AppController
         $conditions['Registrations.award_year ='] = date('Y');
 
         // if Ministry Contact only list registrations from their ministry
-        if ($this->checkAuthorization(5)) {
+        if ($this->checkAuthorization(Configure::read('Role.ministry_contact'))) {
             $session = $this->getRequest()->getSession();
             $conditions['Registrations.ministry_id ='] = $session->read("user.ministry");
         }
 
         // if Supervisor role only list registrations they created
-        if ($this->checkAuthorization(6)) {
+        if ($this->checkAuthorization(Configure::read('Role.supervisor'))) {
             $session = $this->getRequest()->getSession();
             $conditions['Registrations.user_guid ='] = $session->read("user.guid");
         }
@@ -46,6 +46,10 @@ class RegistrationsController extends AppController
 
     public function view($id = null)
     {
+        if (!$this->checkAuthorization(array(Configure::read('Role.admin'), Configure::read('Role.lsa_admin')))) {
+            $this->Flash->error(__('You are not authorized to view this page.'));
+            $this->redirect('/');
+        }
         $registration = $this->Registrations->find('all', [
             'conditions' => array(
                 'Registrations.id' => $id
@@ -68,40 +72,6 @@ class RegistrationsController extends AppController
         }
     }
 
-//    public function add()
-//    {
-//        $registration = $this->Registrations->newEmptyEntity();
-//        if ($this->request->is('post')) {
-//            $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
-//
-//            // Hardcoding the user_id is temporary, and will be removed later
-//            // when we build authentication out.
-//            $registration->user_id = 1;
-//            $registration->created = time();
-//            $registration->modified = time();
-//
-//            if ($this->Registrations->save($registration)) {
-//                $this->Flash->success(__('Registration has been saved.'));
-//                return $this->redirect(['action' => 'index']);
-//            }
-//            $this->Flash->error(__('Unable to add registration.'));
-//        }
-//
-//        // Get a list of milestones.
-//        $milestones = $this->Registrations->Milestones->find('list');
-//        // Set milestones to the view context
-//        $this->set('milestones', $milestones);
-//        // Get a list of awards.
-//        $awards = $this->Registrations->Awards->find('list');
-//        // Set milestones to the view context
-//        $this->set('awards', $awards);
-//        // Get a list of awards.
-//        $diet = $this->Registrations->Diet->find('list');
-//        // Set milestones to the view context
-//        $this->set('diet', $diet);
-//
-//        $this->set('registration', $registration);
-//    }
 
     public function register()
     {
@@ -190,8 +160,6 @@ class RegistrationsController extends AppController
 
     public function edit($id)
     {
-//        $registration = $this->Registrations->findById($id)->firstOrFail();
-
         $registration = $this->Registrations->find('all', [
             'conditions' => array(
                 'Registrations.id' => $id
@@ -216,14 +184,18 @@ class RegistrationsController extends AppController
 
             $registration->modified = time();
             $registration->invite_sent = $this->request->getData('invite_sent');
+            if (empty($registration->invite_sent)) {
+                $registration->invite_sent = NULL;
+            }
             $registration->photo_sent = $this->request->getData('photo_sent');
+            if (empty($registration->photo_sent)) {
+                $registration->photo_sent = NULL;
+            }
             if ($this->Registrations->save($registration)) {
                 $this->Flash->success(__('Registration has been updated.'));
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('Unable to add registration.'));
-//            debug($this->Registrations->)
-//            debug($this->Registrations->errors());
 
         }
 
@@ -273,21 +245,24 @@ class RegistrationsController extends AppController
         $this->set('registration', $registration);
 
 
-        if ($this->checkAuthorization(array(0,5,6))) {
-            if ($this->checkAuthorization(0)) {
+        if ($this->checkAuthorization(array(
+            Configure::read('Role.authenticated'),
+            Configure::read('Role.ministry_contact'),
+            Configure::read('Role.supervisor')))) {
+            if ($this->checkAuthorization(Configure::read('Role.authenticated'))) {
                 if (!$this->checkGUID($registration->user_guid)) {
                     $this->Flash->error(__('You are not authorized to edit this Registration.'));
                     $this->redirect('/');
                 }
             }
-            else if ($this->checkAuthorization(6)) {
+            else if ($this->checkAuthorization(Configure::read('Role.supervisor'))) {
                 if (!$this->checkGUID($registration->user_guid)) {
                     $this->Flash->error(__('You are not authorized to edit this Registration.'));
                     $this->redirect('/registrations');
                 }
             }
-            else if ($this->checkAuthorization(5)) {
-                if (!$this->checkAuthorization(5, $registration->ministry_id)) {
+            else if ($this->checkAuthorization(Configure::read('Role.ministry_contact'))) {
+                if (!$this->checkAuthorization(Configure::read('Role.ministry_contact'), $registration->ministry_id)) {
                     $this->Flash->error(__('You are not authorized to edit this Registration.'));
                     $this->redirect('/registrations');
                 }
@@ -301,6 +276,10 @@ class RegistrationsController extends AppController
 
     public function delete($id)
     {
+        if (!$this->checkAuthorization(array(Configure::read('Role.admin')))) {
+            $this->Flash->error(__('You are not authorized to delete Registrations.'));
+            $this->redirect('/');
+        }
         $this->request->allowMethod(['post', 'delete']);
 
         $registration = $this->Registrations->findBySlug($id)->firstOrFail();
