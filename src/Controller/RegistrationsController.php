@@ -83,7 +83,6 @@ class RegistrationsController extends AppController
             // when we build authentication out.
 
             $session = $this->getRequest()->getSession();
-//            $registration->user_id = 1;
             $registration->user_idir = $session->read('user.idir');
             $registration->user_guid = $session->read('user.guid');
 
@@ -199,17 +198,20 @@ class RegistrationsController extends AppController
 
         }
 
-        // Get a list of milestones.
+
         $milestones = $this->Registrations->Milestones->find('list');
-        // Set milestones to the view context
         $this->set('milestones', $milestones);
-        // Get a list of awards.
+
+        $milestoneInfo = $this->Registrations->Milestones->find('all');
+        $this->set('milestoneinfo', $milestoneInfo);
+
         $awards = $this->Registrations->Awards->find('list');
-        // Set milestones to the view context
         $this->set('awards', $awards);
-        // Get a list of awards.
+
+        $awardInfo = $this->Registrations->Awards->find('all');
+        $this->set('awardinfo', $awardInfo);
+
         $diet = $this->Registrations->Diet->find('list');
-        // Set milestones to the view context
         $this->set('diet', $diet);
 
         $cities = $this->Registrations->Cities->find('list', [
@@ -242,9 +244,17 @@ class RegistrationsController extends AppController
         }
         $this->set('ceremonies', $ceremonies);
 
+        $donation = [
+            'id' => Configure::read('Donation.id'),
+            'name' => Configure::read('Donation.name'),
+            'description' => Configure::read('Donation.description'),
+            'image' => Configure::read('Donation.image'),
+        ];
+        $this->set('donation', $donation);
+
         $this->set('registration', $registration);
 
-
+        $isadmin = true;
         if ($this->checkAuthorization(array(
             Configure::read('Role.authenticated'),
             Configure::read('Role.ministry_contact'),
@@ -267,8 +277,11 @@ class RegistrationsController extends AppController
                     $this->redirect('/registrations');
                 }
             }
-            $this->render('edit_limited');
+            $isadmin = false;
         }
+
+        //
+        $this->set('isadmin', $isadmin);
 
 
     }

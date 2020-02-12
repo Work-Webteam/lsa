@@ -546,9 +546,6 @@
                     this.supervisorPostalCode = "V8V 4R6";
                     this.supervisorEmail = "fhughes@gov.bc.ca";
                     var sel = document.getElementById("supervisor-city-id");
-                    console.log(sel);
-//                    sel.selectedIndex = 1997;
-//                    this.supervisorCity = sel.options[sel.selectedIndex].text;
                 }
             },
 

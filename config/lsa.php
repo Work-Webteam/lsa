@@ -30,5 +30,13 @@ return [
         'procurement' => 4,
         'ministry_contact' => 5,
         'supervisor' => 6
-    ]
+    ],
+
+    'Donation' => [
+        'id' => 0,
+        'name' => 'PECSF Donation',
+        'description' => "Instead of choosing an award from the catalogue, you can opt to make a charitable donation via the Provincial Employees Community Services Fund. A framed certificate of service, signed by the Premier of British Columbia, will be presented to you noting your charitable contribution.",
+        'image' => "25_pecsf.jpg",
+    ],
+
 ];
