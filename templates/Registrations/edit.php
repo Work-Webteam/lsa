@@ -1,40 +1,39 @@
 <div class="container" id="app">
-<h1><?= $registration->first_name . " " . $registration->last_name ?></h1>
+    <h1><?= $registration->first_name . " " . $registration->last_name ?></h1>
 
-<?php
+    <?php
     echo $this->Form->create($registration, ['@submit' => 'processForm', 'horizontal' => true]);
 
     echo $this->Form->hidden('award_options', ['value' => '']);
     echo $this->Form->hidden('pecsf_donation', ['v-model' => 'pecsfDonation']);
+    echo $this->Form->hidden('pecsf_donation_type', ['v-model' => 'pecsfDonationType']);
     echo $this->Form->hidden('pecsf_region_id', ['v-model' => 'pecsfRegion']);
-    echo $this->Form->hidden('pecsf_first_charity', ['v-model' => 'pecsfCharity1']);
     echo $this->Form->hidden('pecsf_charity1_id', ['v-model' => 'pecsfCharityId1']);
     echo $this->Form->hidden('pecsf_amount1', ['v-model' => 'pecsfAmount1']);
-    echo $this->Form->hidden('pecsf_second_charity', ['v-model' => 'pecsfCharityId2']);
     echo $this->Form->hidden('pecsf_charity2_id', ['v-model' => 'pecsfCharityId2']);
     echo $this->Form->hidden('pecsf_amount2', ['v-model' => 'pecsfAmount2']);
-?>
+    ?>
 
     <tabs>
 
-            <?php
-                echo '<tab name="Recipient" :selected="true">';
-                echo $this->Form->control('employee_id', ['type' => 'text', 'label' => 'Employee ID', 'onChange' => 'app.populateTestData()']);
-                echo $this->Form->control('first_name');
-                echo $this->Form->control('last_name');
-                echo $this->Form->control('ministry_id', ['options' => $ministries, 'empty' => '- select ministry -']);
-                echo $this->Form->control('branch', ['label' => 'Branch']);
-                echo $this->Form->control('preferred_email', ['label' => 'Government Email']);
-                echo '</tab>';
-            ?>
+        <?php
+        echo '<tab name="Recipient" :selected="true">';
+        echo $this->Form->control('employee_id', ['type' => 'text', 'label' => 'Employee ID', 'onChange' => 'app.populateTestData()']);
+        echo $this->Form->control('first_name');
+        echo $this->Form->control('last_name');
+        echo $this->Form->control('ministry_id', ['options' => $ministries, 'empty' => '- select ministry -']);
+        echo $this->Form->control('branch', ['label' => 'Branch']);
+        echo $this->Form->control('preferred_email', ['label' => 'Government Email']);
+        echo '</tab>';
+        ?>
 
-            <?php
-                echo '<tab name="Award">';
+        <?php
+        echo '<tab name="Award">';
 
-                echo $this->Form->control('milestone_id', ['options' => $milestones]);
-                echo $this->Form->hidden('award_id', ['value' => 0, 'v-model' => 'selectedAward']);
-//                echo $this->Form->control('award_id', ['options' => $awards]);
-            ?>
+        echo $this->Form->control('milestone_id', ['options' => $milestones, 'v-model' => 'selectedMilestone', 'onChange' => 'app.milestoneChanged(this.value)']);
+        echo $this->Form->hidden('award_id', ['value' => 0, 'v-model' => 'selectedAward']);
+        //                echo $this->Form->control('award_id', ['options' => $awards]);
+        ?>
 
         <div id="lsa-award-card">
             <img alt="..." v-bind:src="'/img/awards/' + currentAwardImage" class="lsa-award-image">
@@ -54,183 +53,186 @@
             <!--                <button onClick="app.showPreviousAward"> < </button><button>Select</button><button v-on:click="showNextAward"> > </button>-->
         </div>
 
-            <?php
+        <?php
 
-                if ($isadmin) {
-                    echo $this->Form->control('award_year', ['label' => 'Award Year']);
-                    echo $this->Form->control('award_received', ['type' => 'checkbox']);
-                    echo $this->Form->control('engraving_sent', ['type' => 'checkbox']);
-                    echo $this->Form->control('certificate_name');
-                    echo $this->Form->control('certificate_ordered');
-                    echo $this->Form->control('award_instructions', ['label' => 'Award Instructions', 'type' => 'textarea']);
+        if ($isadmin) {
+            echo $this->Form->control('award_year', ['label' => 'Award Year']);
+            echo $this->Form->control('award_received', ['type' => 'checkbox']);
+            echo $this->Form->control('engraving_sent', ['type' => 'checkbox']);
+            echo $this->Form->control('certificate_name');
+            echo $this->Form->control('certificate_ordered');
+            echo $this->Form->control('award_instructions', ['label' => 'Award Instructions', 'type' => 'textarea']);
 
-                    echo '<div v-if="pecsfDonation">';
-                        echo $this->Form->control('pecsf_cheque_date');
-                    echo '</div>';
-                }
-                echo '</tab>';
-            ?>
-
-
-            <?php
-                echo '<tab name="Office">';
-                echo $this->Form->control('office_careof', ['label' => 'Floor/ Room / Care Of']);
-                echo $this->Form->control('office_address', ['label' => 'Address']);
-                echo $this->Form->control('office_suite', ['label' => 'Suite']);
-                echo $this->Form->control('office_city_id', ['label' => 'City', 'options' => $cities, 'empty' => '- select city -']);
-                echo $this->Form->control('office_province', ['label' => 'Province']);
-                echo $this->Form->control('office_postal_code', ['label' => 'Postal Code']);
-                echo $this->Form->control('work_phone', ['label' => 'Phone']);
-                echo $this->Form->control('work_extension', ['label' => 'Phone Extension']);
-                echo '</tab>';
-            ?>
+            echo '<div v-if="pecsfDonation">';
+            echo $this->Form->control('pecsf_cheque_date');
+            echo '</div>';
+        }
+        echo '</tab>';
+        ?>
 
 
-            <?php
-            echo '<tab name="Home">';
-                echo $this->Form->control('home_address', ['label' => 'Address']);
-                echo $this->Form->control('home_suite', ['label' => 'Suite']);
-                echo $this->Form->control('home_city_id', ['label' => 'City', 'options' => $cities, 'empty' => '- select city -']);
-                echo $this->Form->control('home_province', ['label' => 'Province']);
-                echo $this->Form->control('home_postal_code', ['label' => 'Postal Code']);
-                echo $this->Form->control('home_phone', ['label' => 'Phone']);
-                echo '</tab>';
-            ?>
+        <?php
+        echo '<tab name="Office">';
+        echo $this->Form->control('office_careof', ['label' => 'Floor/ Room / Care Of']);
+        echo $this->Form->control('office_address', ['label' => 'Address']);
+        echo $this->Form->control('office_suite', ['label' => 'Suite']);
+        echo $this->Form->control('office_city_id', ['label' => 'City', 'options' => $cities, 'empty' => '- select city -']);
+        echo $this->Form->control('office_province', ['label' => 'Province']);
+        echo $this->Form->control('office_postal_code', ['label' => 'Postal Code']);
+        echo $this->Form->control('work_phone', ['label' => 'Phone']);
+        echo $this->Form->control('work_extension', ['label' => 'Phone Extension']);
+        echo '</tab>';
+        ?>
 
 
-            <?php
-            echo '<tab name="Supervisor">';
-            echo $this->Form->control('supervisor_first_name', ['label' => 'First Name']);
-            echo $this->Form->control('supervisor_last_name', ['label' => 'Last Name']);
-            echo $this->Form->control('supervisor_careof', ['label' => 'Floor / Room / Care Of']);
-            echo $this->Form->control('supervisor_address', ['label' => 'Address']);
-            echo $this->Form->control('supervisor_suite', ['label' => 'Suite']);
-            echo $this->Form->control('supervisor_city_id', ['label' => 'City', 'options' => $cities, 'empty' => '- select city -']);
-            echo $this->Form->control('supervisor_province', ['label' => 'Province']);
-            echo $this->Form->control('supervisor_postal_code', ['label' => 'Postal Code']);
-            echo $this->Form->control('supervisor_email', ['label' => 'Email']);
-            echo '</tab>';
-            ?>
+        <?php
+        echo '<tab name="Home">';
+        echo $this->Form->control('home_address', ['label' => 'Address']);
+        echo $this->Form->control('home_suite', ['label' => 'Suite']);
+        echo $this->Form->control('home_city_id', ['label' => 'City', 'options' => $cities, 'empty' => '- select city -']);
+        echo $this->Form->control('home_province', ['label' => 'Province']);
+        echo $this->Form->control('home_postal_code', ['label' => 'Postal Code']);
+        echo $this->Form->control('home_phone', ['label' => 'Phone']);
+        echo '</tab>';
+        ?>
 
 
-            <?php
-                if ($isadmin) {
-                    echo '<tab name="Ceremony">';
-                    echo $this->Form->control('ceremony_id', ['label' => 'Ceremony Night', 'options' => $ceremonies, 'empty' => '- select ceremony -']);
+        <?php
+        echo '<tab name="Supervisor">';
+        echo $this->Form->control('supervisor_first_name', ['label' => 'First Name']);
+        echo $this->Form->control('supervisor_last_name', ['label' => 'Last Name']);
+        echo $this->Form->control('supervisor_careof', ['label' => 'Floor / Room / Care Of']);
+        echo $this->Form->control('supervisor_address', ['label' => 'Address']);
+        echo $this->Form->control('supervisor_suite', ['label' => 'Suite']);
+        echo $this->Form->control('supervisor_city_id', ['label' => 'City', 'options' => $cities, 'empty' => '- select city -']);
+        echo $this->Form->control('supervisor_province', ['label' => 'Province']);
+        echo $this->Form->control('supervisor_postal_code', ['label' => 'Postal Code']);
+        echo $this->Form->control('supervisor_email', ['label' => 'Email']);
+        echo '</tab>';
+        ?>
+
+
+        <?php
+        if ($isadmin) {
+            echo '<tab name="Ceremony">';
+            echo $this->Form->control('ceremony_id', ['label' => 'Ceremony Night', 'options' => $ceremonies, 'empty' => '- select ceremony -']);
 //                    echo $this->Form->control('ceremony_date', ['disabled' => true]);
-                    echo $this->Form->control('attending');
-                    echo $this->Form->control('guest');
-                    echo $this->Form->control('recipient_speaker');
-                    echo $this->Form->control('reserved_seating');
-                    echo $this->Form->control('executive_recipient');
-                    echo $this->Form->control('presentation_number', ['label' => 'Award Presentation #']);
-                    echo $this->Form->control('accessibility_requirements_recipient', ['label' => 'Recipient Accessibility Requirements', 'type' => 'checkbox']);
-                    echo $this->Form->control('accessibility_requirements_guest', ['label' => 'Guest Accessibility Requirements', 'type' => 'checkbox']);
-                    echo $this->Form->control('accessibility_recipient_notes');
-                    echo $this->Form->control('accessibility_guest_notes');
-                    echo $this->Form->control('accessibility_admin_notes');
-                    echo $this->Form->control('recipient_diet_id', ['options' => $diet, 'empty' => '- select diet -']);
-                    echo $this->Form->control('recipient_diet_other');
-                    echo $this->Form->control('guest_diet_id', ['options' => $diet, 'empty' => '- select diet -']);
-                    echo $this->Form->control('guest_diet_other');
-                    echo '</tab>';
-                }
-            ?>
+            echo $this->Form->control('attending');
+            echo $this->Form->control('guest');
+            echo $this->Form->control('recipient_speaker');
+            echo $this->Form->control('reserved_seating');
+            echo $this->Form->control('executive_recipient');
+            echo $this->Form->control('presentation_number', ['label' => 'Award Presentation #']);
+            echo $this->Form->control('accessibility_requirements_recipient', ['label' => 'Recipient Accessibility Requirements', 'type' => 'checkbox']);
+            echo $this->Form->control('accessibility_requirements_guest', ['label' => 'Guest Accessibility Requirements', 'type' => 'checkbox']);
+            echo $this->Form->control('accessibility_recipient_notes');
+            echo $this->Form->control('accessibility_guest_notes');
+            echo $this->Form->control('accessibility_admin_notes');
+            echo $this->Form->control('recipient_diet_id', ['options' => $diet, 'empty' => '- select diet -']);
+            echo $this->Form->control('recipient_diet_other');
+            echo $this->Form->control('guest_diet_id', ['options' => $diet, 'empty' => '- select diet -']);
+            echo $this->Form->control('guest_diet_other');
+            echo '</tab>';
+        }
+        ?>
 
-            <?php
-                if ($isadmin) {
-                    echo '<tab name="Admin">';
-                    echo $this->Form->control('survey_participation');
-                    echo $this->Form->control('created', ['disabled' => true]);
-                    echo $this->Form->control('invite_sent', ['type' => 'date']);
-                    echo $this->Form->control('id');
-                    echo $this->Form->control('photo_order');
-                    echo $this->Form->control('photo_frame_range');
-                    echo $this->Form->control('photo_sent', ['type' => 'date']);
-                    echo $this->Form->control('admin_notes');
-                    echo '</tab>';
-                }
-            ?>
+        <?php
+        if ($isadmin) {
+            echo '<tab name="Admin">';
+            echo $this->Form->control('survey_participation');
+            echo $this->Form->control('created', ['disabled' => true]);
+            echo $this->Form->control('invite_sent', ['type' => 'date']);
+            echo $this->Form->control('id');
+            echo $this->Form->control('photo_order');
+            echo $this->Form->control('photo_frame_range');
+            echo $this->Form->control('photo_sent', ['type' => 'date']);
+            echo $this->Form->control('admin_notes');
+            echo '</tab>';
+        }
+        ?>
 
 
-        </tabs>
+    </tabs>
 
-<?php
-echo $this->Form->button(__('Save Registration'), [
-    'class' => 'btn btn-primary'
-]);
-echo '&nbsp;';
-echo $this->Form->button('Cancel', array(
-    'type' => 'button',
-    'onclick' => 'location.href=\'/registrations\'',
-    'class' => 'btn btn-secondary'
-));
-echo $this->Form->end();
-?>
-</div>
+    <?php
+    echo $this->Form->button(__('Save Registration'), [
+        'class' => 'btn btn-primary'
+    ]);
+    echo '&nbsp;';
+    echo $this->Form->button('Cancel', array(
+        'type' => 'button',
+        'onclick' => 'location.href=\'/registrations\'',
+        'class' => 'btn btn-secondary'
+    ));
+    echo $this->Form->end();
+    ?>
 
-<div aria-hidden="true" aria-labelledby="Awards" class="modal fade" id="award-1"  data-backdrop="static" data-keyboard="false"  role="dialog" tabindex="-1">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 id="awardName" class="modal-title">Award The First</h5>
-            </div>
-            <div class="modal-body">
-                <fieldset id="formAwardOptions">
-                </fieldset>
-            </div>
-            <div id="pop-up-errors">
+    <div aria-hidden="true" aria-labelledby="Awards" class="modal fade" id="award-1"  data-backdrop="static" data-keyboard="false"  role="dialog" tabindex="-1">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="awardName" class="modal-title">Award The First</h5>
+                </div>
+                <div class="modal-body">
+                    <fieldset id="formAwardOptions">
+                    </fieldset>
+                </div>
+                <div id="pop-up-errors">
                         <span v-html="errorsOptions" class="lsa-errors-container">
                         </span>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" type="button" v-on:click="processOptions">Select</button>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="button" v-on:click="processOptions">Select</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div aria-hidden="true" aria-labelledby="Donations" class="modal fade" id="donation-1"  data-backdrop="static" data-keyboard="false"  role="dialog" tabindex="-1">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 id="donationName" class="modal-title">Charitable Donation</h5>
-            </div>
-            <div class="modal-body">
-                <fieldset id="formDonationOptions">
-                    <?php
-                    echo $this->Form->control('selectedRegion', ['options' => $regions, 'empty' => '- select region -', 'onChange' => 'app.regionSelected()']);
-                    ?>
+    <div aria-hidden="true" aria-labelledby="Donations" class="modal fade" id="donation-1"  data-backdrop="static" data-keyboard="false"  role="dialog" tabindex="-1">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="donationName" class="modal-title">Charitable Donation</h5>
+                </div>
+                <div class="modal-body">
+                    <fieldset id="formDonationOptions">
+                        <?php
+                        echo $this->Form->control('selectedRegion', ['options' => $regions, 'empty' => '- select region -', 'onChange' => 'app.regionSelected()']);
+                        ?>
 
-                    <div id="donation-type" v-if="inputDonationType">
-                        <label>Donate to</label>
-                        <?php echo $this->Form->radio('selectDonationType', ['PECSF Region Charity Fund', 'One Individual Charity', 'Two Individual Charities'], ['onChange' => 'app.donationTypeSelected()']); ?>
-                    </div>
-                    <div v-if="inputCharity1">
-                        <select id="selectedCharity1">
-                            <option value>- select charity -</option>
-                            <option v-for='data in availableCharities' :value='data.id'>{{ data.name }}</option>
-                        </select>
-                    </div>
-                    <div v-if="inputCharity2">
-                        <select id="selectedCharity2">
-                            <option value>- select charity -</option>
-                            <option v-for='data in availableCharities' :value='data.id'>{{ data.name }}</option>
-                        </select>
-                    </div>
+                        <div id="donation-type" v-if="inputDonationType">
+                            <label>Donate to</label>
+                            <?php echo $this->Form->radio('selectDonationType', ['PECSF Region Charity Fund', 'One Individual Charity', 'Two Individual Charities'], ['onChange' => 'app.donationTypeSelected()']); ?>
+                        </div>
+                        <div v-if="inputCharity1">
+                            <select id="selectedCharity1">
+                                <option value>- select charity -</option>
+                                <option v-for='data in availableCharities' :value='data.id'>{{ data.name }}</option>
+                            </select>
+                        </div>
+                        <div v-if="inputCharity2">
+                            <select id="selectedCharity2">
+                                <option value>- select charity -</option>
+                                <option v-for='data in availableCharities' :value='data.id'>{{ data.name }}</option>
+                            </select>
+                        </div>
 
-                </fieldset>
-            </div>
-            <div id="pop-up-errors">
+                    </fieldset>
+                </div>
+                <div id="pop-up-errors">
                         <span v-html="errorsOptions" class="lsa-errors-container">
                         </span>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" type="button" v-on:click="processOptions">Select</button>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="button" v-on:click="processOptions">Select</button>
+                </div>
             </div>
         </div>
     </div>
+
 </div>
+
+
 
 
 <script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -243,6 +245,9 @@ echo $this->Form->end();
 <script src="https://cdnjs.cloudflare.com/ajax/libs/smooth-scroll/16.1.0/smooth-scroll.min.js"></script>
 
 <script type="text/javascript">
+
+    var clrError = "#ff0000";
+    var clrDefault = "#d1d1d1";
 
     var awards=<?php echo json_encode($awardinfo); ?>;
     var milestones=<?php echo json_encode($milestoneinfo); ?>;
@@ -333,6 +338,7 @@ echo $this->Form->end();
             selectedCharity2: <?php echo $registration->pecsf_charity2_id ? $registration->pecsf_charity2_id : 0; ?>,
 
             pecsfDonation: <?php echo $registration->pecsf_donation ? 1 : 0; ?>,
+            pecsfDonationType: <?php echo $registration->pecsf_donation_type ? $registration->pecsf_donation_type : 0; ?>,
             pecsfRegion: <?php echo $registration->pecsf_region_id ? $registration->pecsf_region_id : 0; ?>,
             pecsfCharity1: <?php echo $registration->pecsf_first_charity ? 1 : 0; ?>,
             pecsfCharityId1: <?php echo $registration->pecsf_charity1_id ? $registration->pecsf_charity1_id : 0; ?>,
@@ -350,22 +356,22 @@ echo $this->Form->end();
 
             awardOptions: [],
 
-            inputDonationType: false,
-            inputCharity1: false,
-            inputCharity2: false,
+            inputDonationType: true,
+            inputCharity1: true,
+            inputCharity2: true,
 
             availableCharities: [],
             donationRegion: '',
             donationCharity1: '',
             donationCharity2: '',
 
+            errorsOptions: '',
+
         },
 
         mounted() {
 
-            this.setCharityOptions();
             this.setAvailableAwards();
-
             this.updateAwardDisplay(this.currentAwardIndex);
 
         },
@@ -376,10 +382,14 @@ echo $this->Form->end();
             processForm: function() {
                 console.log('processForm');
 
+                // error checking goes here
+                // 1. check an award has been selected
+
                 if (this.selectedAward !== this.originalAward) {
                     console.log('the award changed');
                     if (this.selectedAward !== 0) {
                         this.pecsfDonation = 0;
+                        this.pecsfDonationType = null;
                         this.pecsfRegion = 0;
                         this.pecsfCharity1 = 0;
                         this.pecsfCharityId1 = 0;
@@ -390,81 +400,6 @@ echo $this->Form->end();
                     }
 
                 }
-                // this.awardOptions = [];
-                // if (!this.showPecsfCharity1 && !this.showPecsfCharity2) {
-                //     this.awardOptions.push(this.currencyFormat(pecsfAmount1) + " Donation - PECSF Region Charity Fund");
-                // }
-                // else {
-                //     if (this.showPecsfCharity1) {
-                //         console.log('charity 1');
-                //         charity = this.getCharity($('#selectedCharity1').val());
-                //         this.awardOptions.push(this.currencyFormat(pecsfAmount1) + " Donation - (" + charity.vendor_code + ") " + charity.name);
-                //     }
-                //     if (this.showPecsfCharity2) {
-                //         console.log('charity 2');
-                //         charity = this.getCharity($('#selectedCharity2').val());
-                //         this.awardOptions.push(this.currencyFormat(pecsfAmount2) + " Donation - (" + charity.vendor_code + ") "  + charity.name);
-                //     }
-                // }
-            },
-
-            changeRegion: function (id) {
-                console.log('changeRegion - ' + id);
-            },
-
-            changeCharity1: function (id) {
-                console.log('changeCharity1 - ' + id);
-            },
-
-            changeCharity2: function (id) {
-                console.log('changeCharity2 - ' + id);
-            },
-
-            changeIndividualCharity: function (checked) {
-                console.log('changeFirstCharity - ' + checked);
-                // we only allow status of this to change if the is no second charity.
-                if (!this.showPecsfCharity2) {
-                    this.showPecsfCharity1 = checked;
-                }
-            },
-
-            changeSecondCharity: function (checked) {
-                console.log('changeSecondCharity - ' + checked);
-                milestone = this.getMilestone(this.selectedMilestone);
-                if (checked) {
-                    var amount = parseFloat(milestone.donation / 2).toFixed(2);
-                    this.pecsfAmount1 = amount;
-                    this.pecsfAmount2 = amount;
-                }
-                else {
-                    var amount = parseFloat(milestone.donation).toFixed(2);
-                    this.pecsfAmount1 = amount;
-                    this.pecsfAmount2 = 0.00;
-                }
-                this.setCharityOptions();
-                this.showPecsfCharity2 = checked;
-                $('#pecsf-first-charity').attr("disabled", this.showPecsfCharity2);
-            },
-
-            setCharityOptions: function () {
-
-                var $el1 = $("#pecsf-charity1-id");
-                var $el2 = $("#pecsf-charity2-id");
-
-                // console.log("region: " + this.selectedRegion)
-                // console.log("charity 1: " + this.selectedCharity1);
-                // console.log("charity 2: " + this.selectedCharity2);
-
-                $el1.empty();
-                $el2.empty();
-                for (var i = 0; i < allCharities.length; i++) {
-                    if (allCharities[i].pecsf_region_id == this.selectedRegion) {
-                        $el1.append($("<option></option>").attr("value", allCharities[i].id).text(allCharities[i].name));
-                        $el2.append($("<option></option>").attr("value", allCharities[i].id).text(allCharities[i].name));
-                    }
-                };
-                $("#pecsf-charity1-id").val(this.selectedCharity1);
-                $("#pecsf-charity2-id").val(this.selectedCharity2);
             },
 
             getMilestone: function (id) {
@@ -483,6 +418,15 @@ echo $this->Form->end();
                     }
                 }
                 return award;
+            },
+
+            getCharity: function (id) {
+                for (var i = 0; i < allCharities.length; i++) {
+                    if (allCharities[i].id == id) {
+                        charity = allCharities[i];
+                    }
+                }
+                return charity;
             },
 
             setAvailableAwards: function () {
@@ -552,12 +496,38 @@ echo $this->Form->end();
             },
 
             selectCharityOptions: function () {
-                $("#donation-1").modal('show');
-                this.selectedAward = 0;
-                this.inputDonationType = false;
-                this.inputCharity1 = false;
-                this.inputCharity2 = false;
                 console.log('selectCharityOptions');
+                console.log(this.selectedRegion);
+
+                $("#donation-1").modal('show');
+
+                this.inputDonationType = false;
+                if (this.selectedRegion > 0) {
+                    console.log('we have a region');
+                    $("#selectedregion").val(this.selectedRegion);
+                    this.inputDonationType = true;
+                    console.log(this.pecsfDonationType);
+                    // $("input[name='selectDonationType']").val(this.pecsfDonationType).prop('checked', true);
+                    // $("input:radio[name ='selectdonationtype-0']:checked").val(this.pecsfDonationType);
+                    $("#selectdonationtype-"+this.pecsfDonationType).prop("checked", true);
+                    this.regionSelected();
+                }
+
+                this.inputCharity1 = this.selectedCharity1 > 0;
+                this.inputCharity2 = this.selectedCharity2 > 0;
+                if (this.selectedCharity1 > 0) {
+                    console.log("charity 1:" + this.selectedCharity1);
+                    $("#selectedCharity1").val(this.selectedCharity1);
+                }
+
+                if (this.selectedCharity2 > 0) {
+                    console.log("charity 2:" + this.selectedCharity2);
+                    $("#selectedCharity2").val(this.selectedCharity2);
+                }
+
+
+                this.selectedAward = 0;
+
             },
 
             selectAwardOptions: function (select_id) {
@@ -608,6 +578,7 @@ echo $this->Form->end();
                     }
                 }
                 this.inputDonationType = true;
+                this.selectedRegion = $('#selectedregion').val();
                 // console.log(this.availableCharities);
             },
 
@@ -628,17 +599,15 @@ echo $this->Form->end();
             },
 
             processOptions: function () {
-                console.log('processOptions');
-                // if (this.selectedAward == 0) {
-                //     this.processDonationOptions();
-                // }
-                // else {
-                //     this.processAwardOptions();
-                // }
+                if (this.selectedAward == 0) {
+                    this.processDonationOptions();
+                }
+                else {
+                    this.processAwardOptions();
+                }
             },
 
             processDonationOptions: function() {
-
                 for (var i = 0; i < milestones.length; i++) {
                     if (milestones[i].id == $('#milestone-id').val()) {
                         milestone = milestones[i];
@@ -655,6 +624,10 @@ echo $this->Form->end();
                     amount = milestone.donation;
                     this.awardOptions.push(this.currencyFormat(amount) + " Donation - PECSF Region Charity Fund");
                     $('input[name=pecsf_amount1]').val(amount);
+                    $('input[name=pecsf_charity1_id]').val(0);
+                    $('input[name=pecsf_charity2_id]').val(0);
+                    $('input[name=pecsf_amount2]').val(0);
+                    $('input[name=pecsf_donation_type]').val(0);
                 }
                 else if ($("input:radio[name ='selectDonationType']:checked").val() == 1) {
                     if ($('#selectedCharity1').val() == 0) {
@@ -666,9 +639,11 @@ echo $this->Form->end();
                         charity = this.getCharity($('#selectedCharity1').val());
                         this.awardOptions.push(this.currencyFormat(amount) + " Donation - (" + charity.vendor_code + ") " + charity.name);
                         $('#selectedCharity1').css("border-color", clrDefault);
-
+                        $('input[name=pecsf_donation_type]').val(1);
                         $('input[name=pecsf_charity1_id]').val(charity.id);
                         $('input[name=pecsf_amount1]').val(amount);
+                        $('input[name=pecsf_charity2_id]').val(0);
+                        $('input[name=pecsf_amount2]').val(0);
                     }
 
                 }
@@ -683,6 +658,7 @@ echo $this->Form->end();
                         charity = this.getCharity($('#selectedCharity1').val());
                         this.awardOptions.push(this.currencyFormat(amount) + " Donation - (" + charity.vendor_code + ") "  + charity.name);
                         $('#selectedCharity1').css("border-color", clrDefault);
+                        $('input[name=pecsf_first_charity]').val(1);
                         $('input[name=pecsf_charity1_id]').val(charity.id);
                         $('input[name=pecsf_amount1]').val(amount);
                     }
@@ -699,6 +675,7 @@ echo $this->Form->end();
                         $('input[name=pecsf_charity2_id]').val(charity.id);
                         $('input[name=pecsf_amount2]').val(amount);
                     }
+                    $('input[name=pecsf_donation_type]').val(2);
                 }
                 else {
                     if (this.inputDonationType) {
@@ -713,7 +690,7 @@ echo $this->Form->end();
                 }
                 else {
                     $('#selectedregion').css("border-color", clrDefault);
-                    $('input[name=pecsf_region_id]').val(document.getElementById("selectedregion").selectedIndex);
+                    $('input[name=pecsf_region_id]').val($('#selectedregion').val());
                 }
 
                 if (errors.length == 0) {
@@ -729,6 +706,8 @@ echo $this->Form->end();
                     this.errorsOptions += '</ul>';
                 }
 
+                this.selectedCharity1 =
+                    
             },
 
 
@@ -768,9 +747,9 @@ echo $this->Form->end();
                     // Reset PECSF Donation values in case user previous selected PECSF donation option
                     $('input[name=pecsf_region_id]').val(0);
                     $('input[name=pecsf_donation]').val(0);
+                    $('input[name=pecsf_donation_type]').val(0);
                     $('input[name=pecsf_charity1_id]').val(0);
                     $('input[name=pecsf_amount1]').val(0);
-                    $('input[name=pecsf_second_charity]').val(0);
                     $('input[name=pecsf_charity2_id]').val(0);
                     $('input[name=pecsf_amount2]').val(0);
                 }
@@ -782,6 +761,24 @@ echo $this->Form->end();
                     this.errorsOptions += '</ul>';
                 }
             },
+
+            milestoneChanged: function (milestone) {
+
+                this.selectedMilestone = milestone;
+                this.setAvailableAwards();
+                this.currentAwardIndex = 0;
+                this.selectedAward = null;
+                this.updateAwardDisplay(this.currentAwardIndex);
+            },
+
+
+
+
+            currencyFormat: function (num) {
+                return '$' + parseFloat(num).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+            },
+
+
         }
 
     });

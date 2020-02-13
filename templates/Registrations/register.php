@@ -12,10 +12,10 @@
                 echo $this->Form->control('milestone_id', ['type' => 'select', 'label' => 'Milestone', 'options' => $milestones, 'empty' => '- select milestone -', 'onChange' => 'app.milestoneSelected(this.value)']);
                 echo $this->Form->hidden('award_id', ['value' => 0]);
                 echo $this->Form->hidden('pecsf_donation', ['value' => 0]);
+                echo $this->Form->hidden('pecsf_donation_type', ['value' => 0]);
                 echo $this->Form->hidden('pecsf_region_id', ['value' => 0]);
                 echo $this->Form->hidden('pecsf_charity1_id', ['value' => 0]);
                 echo $this->Form->hidden('pecsf_amount1', ['value' => 0]);
-                echo $this->Form->hidden('pecsf_second_charity', ['value' => 0]);
                 echo $this->Form->hidden('pecsf_charity2_id', ['value' => '0']);
                 echo $this->Form->hidden('pecsf_amount2', ['value' => 0]);
             ?>
@@ -369,6 +369,9 @@
             </div>
         </div>
     </div>
+
+
+
 </div>
 
 <!-- Optional JavaScript -->
@@ -665,6 +668,7 @@
                     amount = milestone.donation;
                     this.awardOptions.push(this.currencyFormat(amount) + " Donation - PECSF Region Charity Fund");
                     $('input[name=pecsf_amount1]').val(amount);
+                    $('input[name=pecsf_donation_type]').val(0);
                 }
                 else if ($("input:radio[name ='selectDonationType']:checked").val() == 1) {
                     if ($('#selectedCharity1').val() == 0) {
@@ -676,11 +680,10 @@
                         charity = this.getCharity($('#selectedCharity1').val());
                         this.awardOptions.push(this.currencyFormat(amount) + " Donation - (" + charity.vendor_code + ") " + charity.name);
                         $('#selectedCharity1').css("border-color", clrDefault);
-
                         $('input[name=pecsf_charity1_id]').val(charity.id);
                         $('input[name=pecsf_amount1]').val(amount);
                     }
-
+                    $('input[name=pecsf_donation_type]').val(1);
                 }
                 else if ($("input:radio[name ='selectDonationType']:checked").val() == 2) {
                     amount = milestone.donation / 2;
@@ -705,10 +708,10 @@
                         charity = this.getCharity($('#selectedCharity2').val());
                         this.awardOptions.push(this.currencyFormat(amount) + " Donation - (" + charity.vendor_code + ") "  + charity.name);
                         $('#selectedCharity2').css("border-color", clrDefault);
-                        $('input[name=pecsf_second_charity]').val(1);
                         $('input[name=pecsf_charity2_id]').val(charity.id);
                         $('input[name=pecsf_amount2]').val(amount);
                     }
+                    $('input[name=pecsf_donation_type]').val(2);
                 }
                 else {
                     if (this.inputDonationType) {
@@ -723,7 +726,7 @@
                 }
                 else {
                     $('#selectedregion').css("border-color", clrDefault);
-                    $('input[name=pecsf_region_id]').val(document.getElementById("selectedregion").selectedIndex);
+                    $('input[name=pecsf_region_id]').val($('#selectedregion').val());
                 }
 
                 if (errors.length == 0) {
@@ -778,9 +781,9 @@
                     // Reset PECSF Donation values in case user previous selected PECSF donation option
                     $('input[name=pecsf_region_id]').val(0);
                     $('input[name=pecsf_donation]').val(0);
+                    $('input[name=pecsf_donation_type]').val(0);
                     $('input[name=pecsf_charity1_id]').val(0);
                     $('input[name=pecsf_amount1]').val(0);
-                    $('input[name=pecsf_second_charity]').val(0);
                     $('input[name=pecsf_charity2_id]').val(0);
                     $('input[name=pecsf_amount2]').val(0);
                 }
