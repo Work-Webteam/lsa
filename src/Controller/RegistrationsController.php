@@ -94,6 +94,9 @@ class RegistrationsController extends AppController
             $registration->supervisor_province = "BC";
             $registration->retirement_date = $this->request->getData('date');
             $registration->retroactive = false;
+            if (empty($registration->award_options)) {
+                $registration->award_options = '[]';
+            }
             if ($this->Registrations->save($registration)) {
                 $this->Flash->success(__('Registration has been saved.'));
                 return $this->redirect(['action' => 'completed', $registration->id]);

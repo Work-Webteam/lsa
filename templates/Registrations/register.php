@@ -1088,11 +1088,11 @@
                 }
 
                 if (!this.ministryBranch) {
-                    $('#department').css("border-color", clrError);
+                    $('#branch').css("border-color", clrError);
                     error.push('Branch is required');
                 }
                 else {
-                    $('#department').css("border-color", clrDefault);
+                    $('#branch').css("border-color", clrDefault);
                 }
 
                 if (!this.govtEmail) {

@@ -18,12 +18,13 @@
 
         <?php
         echo '<tab name="Recipient" :selected="true">';
-        echo $this->Form->control('employee_id', ['type' => 'text', 'label' => 'Employee ID', 'onChange' => 'app.populateTestData()']);
+        echo $this->Form->control('employee_id', ['type' => 'text', 'label' => 'Employee ID']);
         echo $this->Form->control('first_name');
         echo $this->Form->control('last_name');
         echo $this->Form->control('ministry_id', ['options' => $ministries, 'empty' => '- select ministry -']);
         echo $this->Form->control('branch', ['label' => 'Branch']);
         echo $this->Form->control('preferred_email', ['label' => 'Government Email']);
+        echo $this->Form->control('alternate_email');
         echo '</tab>';
         ?>
 
@@ -77,7 +78,7 @@
         echo $this->Form->control('office_address', ['label' => 'Address']);
         echo $this->Form->control('office_suite', ['label' => 'Suite']);
         echo $this->Form->control('office_city_id', ['label' => 'City', 'options' => $cities, 'empty' => '- select city -']);
-        echo $this->Form->control('office_province', ['label' => 'Province']);
+        echo $this->Form->control('office_province', ['label' => 'Province','disabled' => true]);
         echo $this->Form->control('office_postal_code', ['label' => 'Postal Code']);
         echo $this->Form->control('work_phone', ['label' => 'Phone']);
         echo $this->Form->control('work_extension', ['label' => 'Phone Extension']);
@@ -90,7 +91,7 @@
         echo $this->Form->control('home_address', ['label' => 'Address']);
         echo $this->Form->control('home_suite', ['label' => 'Suite']);
         echo $this->Form->control('home_city_id', ['label' => 'City', 'options' => $cities, 'empty' => '- select city -']);
-        echo $this->Form->control('home_province', ['label' => 'Province']);
+        echo $this->Form->control('home_province', ['label' => 'Province','disabled' => true]);
         echo $this->Form->control('home_postal_code', ['label' => 'Postal Code']);
         echo $this->Form->control('home_phone', ['label' => 'Phone']);
         echo '</tab>';
@@ -105,7 +106,7 @@
         echo $this->Form->control('supervisor_address', ['label' => 'Address']);
         echo $this->Form->control('supervisor_suite', ['label' => 'Suite']);
         echo $this->Form->control('supervisor_city_id', ['label' => 'City', 'options' => $cities, 'empty' => '- select city -']);
-        echo $this->Form->control('supervisor_province', ['label' => 'Province']);
+        echo $this->Form->control('supervisor_province', ['label' => 'Province','disabled' => true]);
         echo $this->Form->control('supervisor_postal_code', ['label' => 'Postal Code']);
         echo $this->Form->control('supervisor_email', ['label' => 'Email']);
         echo '</tab>';
@@ -154,6 +155,10 @@
 
     </tabs>
 
+    <div id="lsa-edit-errors">
+        <span v-html="errorsOptions" class="lsa-errors-container">
+        </span>
+    </div>
     <?php
     echo $this->Form->button(__('Save Registration'), [
         'class' => 'btn btn-primary'
@@ -205,13 +210,13 @@
                             <?php echo $this->Form->radio('selectDonationType', ['PECSF Region Charity Fund', 'One Individual Charity', 'Two Individual Charities'], ['onChange' => 'app.donationTypeSelected()']); ?>
                         </div>
                         <div v-if="inputCharity1">
-                            <select id="selectedcharity1" v-model="selectedCharity1">
+                            <select id="selectedCharity1" v-model="selectedCharity1">
                                 <option value>- select charity -</option>
                                 <option v-for='data in availableCharities' :value='data.id'>{{ data.name }}</option>
                             </select>
                         </div>
                         <div v-if="inputCharity2">
-                            <select id="selectedcharity2" v-model="selectedCharity2">
+                            <select id="selectedCharity2" v-model="selectedCharity2">
                                 <option value>- select charity -</option>
                                 <option v-for='data in availableCharities' :value='data.id'>{{ data.name }}</option>
                             </select>
@@ -254,7 +259,7 @@
     var regions=<?php echo json_encode($regions); ?>;
     var allCharities=<?php echo json_encode($charities); ?>;
     var donation=<?php echo json_encode($donation); ?>;
-
+    var options=<?php echo $registration->award_options; ?>;
 
     Vue.component('tabs', {
         template: `
@@ -336,6 +341,7 @@
             selectedRegion: <?php echo $registration->pecsf_region_id ? $registration->pecsf_region_id : 0; ?>,
             selectedCharity1: <?php echo $registration->pecsf_charity1_id ? $registration->pecsf_charity1_id : 0; ?>,
             selectedCharity2: <?php echo $registration->pecsf_charity2_id ? $registration->pecsf_charity2_id : 0; ?>,
+            selectedOptions: [],
 
             pecsfDonation: <?php echo $registration->pecsf_donation ? 1 : 0; ?>,
             pecsfDonationType: <?php echo $registration->pecsf_donation_type ? $registration->pecsf_donation_type : 0; ?>,
@@ -347,14 +353,13 @@
             pecsfCharityId2: <?php echo $registration->pecsf_charity2_id ? $registration->pecsf_charity2_id : 0; ?>,
             pecsfAmount2: <?php echo $registration->pecsf_amount2; ?>,
 
-
             currentAwards: [],
             currentAwardIndex: 0,
             currentAwardImage: "",
             currentAwardName: "",
             currentAwardDescription: "",
+            currentAwardOptions: [],
 
-            awardOptions: <?php echo $registration->award_options ? json_encode($donation) : []; ?>,
 
             inputDonationType: true,
             inputCharity1: true,
@@ -373,20 +378,38 @@
 
             this.setAvailableAwards();
             this.updateAwardDisplay(this.currentAwardIndex);
-
+            this.selectedOptions = this.parseSelectedOptions(options);
+            $('input[name=award_options]').val(JSON.stringify(options));
         },
 
 
         methods: {
 
-            processForm: function() {
+            processForm: function(e) {
                 console.log('processForm');
 
                 // error checking goes here
                 // 1. check an award has been selected
+                errors = [];
+                errors = errors.concat(this.checkEmployeeInfo());
+                errors = errors.concat(this.checkOfficeAddress());
+                errors = errors.concat(this.checkHomeAddress());
+                errors = errors.concat(this.checkSupervisor());
+console.log(errors);
+
+                if (errors.length > 0) {
+                    this.errorsOptions = '<ul>';
+                    for (var i = 0; i < errors.length; i++) {
+                        this.errorsOptions += '<li>' + errors[i] + '</li>';
+                    }
+                    this.errorsOptions += '</ul>';
+                    e.preventDefault();
+                }
+                else {
+                    this.errorsOptions = '';
+                }
 
                 if (this.selectedAward !== this.originalAward) {
-                    console.log('the award changed');
                     if (this.selectedAward !== 0) {
                         this.pecsfDonation = 0;
                         this.pecsfDonationType = null;
@@ -398,8 +421,8 @@
                         this.pecsfCharityId2 = 0;
                         this.pecsfAmount2 = 0;
                     }
-
                 }
+
             },
 
             getMilestone: function (id) {
@@ -487,7 +510,6 @@
                     app.selectCharityOptions();
                 }
                 else {
-                    console.log(award);
                     app.selectAwardOptions(award.id);
                 }
 
@@ -496,77 +518,85 @@
             },
 
             selectCharityOptions: function () {
-                console.log('selectCharityOptions');
-                console.log(this.selectedRegion);
-
                 $("#donation-1").modal('show');
 
                 this.inputDonationType = false;
                 if (this.selectedRegion > 0) {
-                    console.log('we have a region');
                     $("#selectedregion").val(this.selectedRegion);
                     this.inputDonationType = true;
-                    console.log(this.pecsfDonationType);
                     $("#selectdonationtype-"+this.pecsfDonationType).prop("checked", true);
                     this.regionSelected();
                 }
 
                 this.inputCharity1 = this.selectedCharity1 > 0;
                 this.inputCharity2 = this.selectedCharity2 > 0;
-                if (this.selectedCharity1 > 0) {
-                    console.log("charity 1:" + this.selectedCharity1);
-                    $("#selectedcharity1").val(this.selectedCharity1);
-                }
-
-                if (this.selectedCharity2 > 0) {
-                    console.log("charity 2:" + this.selectedCharity2);
-                    $("#selectedcharity2").val(this.selectedCharity2);
-                }
-
-
                 this.selectedAward = 0;
-
             },
 
             selectAwardOptions: function (select_id) {
                 award = this.getAward(select_id);
-
                 options = JSON.parse(award.options);
+
                 if (options.length > 0) {
-                    if (this.selectedAward != award.id) {
                         jQuery('#formAwardOptions').empty();
 
                         availableOptions = "";
                         options.forEach((element, index, array) => {
                             availableOptions += "<p>" + element.name + "</p>";
                             if (element.type == "choice") {
+                                selectedValue = this.getSelectedOption(element.name);
+
                                 input = '<label for="award-option-' + index + '">' + element.name + '</label>';
                                 input += '<select id="award-option-' + index + '" requires="required">';
                                 input += '<option value>- select option -</option>';
 
                                 for (var i = 0; i < element.values.length; i++) {
+                                    sel = "";
+                                    if (element.values[i] == selectedValue) {
+                                        sel = "selected"
+                                    }
                                     optionValue = element.values[i];
-                                    input += '<option value="' + i + '">' + element.values[i] + '</option>';
+                                    input += '<option value="' + i + '" ' + sel + '>' + element.values[i] + '</option>';
                                 }
 
                                 input += '</select>';
                                 jQuery('#formAwardOptions').append(input);
                             }
                             if (element.type == "text") {
+                                optionText = this.getSelectedOption(element.name);
                                 input = '<label for="award-option-' + index + '">' + element.name + '</label>';
-                                input += '<input type="text" id="award-option-' + index + '">';
+                                input += '<input type="text" id="award-option-' + index + '" value="' + optionText + '">';
                                 jQuery('#formAwardOptions').append(input);
                             }
                         });
-                    }
+
                     $("#awardName").html(award.name);
                     $("#award-1").modal('show');
                 }
                 this.selectedAward = award.id;
             },
 
+            getSelectedOption: function (key) {
+                for (var i = 0; i < this.selectedOptions.length; i++) {
+                    if (this.selectedOptions[i][0] == key) {
+                        return this.selectedOptions[i][1];
+                    }
+                }
+                return "";
+            },
+
+            parseSelectedOptions: function (selections) {
+                var results = [];
+
+                for (var i = 0; i < selections.length; i++) {
+                    var res = this.split_str(selections[i], ': ', 2);
+                    results.push(res);
+                }
+                return results;
+            },
+
             regionSelected: function () {
-                console.log('regionSelected');
+
                 this.donationRegion = $('#selectedregion :selected').text();
 
                 this.availableCharities = [];
@@ -577,11 +607,10 @@
                 }
                 this.inputDonationType = true;
                 this.selectedRegion = $('#selectedregion').val();
-                // console.log(this.availableCharities);
             },
 
             donationTypeSelected: function() {
-                console.log('donationTypeSelected');
+
                 if ($("input:radio[name ='selectDonationType']:checked").val() == 0) {
                     this.inputCharity1 = false;
                     this.inputCharity2 = false;
@@ -745,6 +774,7 @@
 
                 if (errors.length == 0) {
                     $('input[name=award_options]').val(JSON.stringify(this.awardOptions));
+                    this.selectedOptions = this.parseSelectedOptions(this.awardOptions);
                     $("#award-1").modal('hide');
                     this.errorsOptions = '';
 
@@ -776,16 +806,288 @@
             },
 
 
+            checkEmployeeInfo: function () {
+
+                var error = [];
+
+                if ($('#employee-id').val().length == 0) {
+                    $('#employee-id').css("border-color", clrError);
+                    error.push('Employee ID is required');
+                }
+                else {
+                    $('#employee-id').css("border-color", clrDefault);
+                }
+
+                if ($('#first-name').val().length == 0) {
+                    $('#first-name').css("border-color", clrError);
+                    error.push('Employee first name is required');
+                }
+                else {
+                    $('#first-name').css("border-color", clrDefault);
+                }
+
+                if ($('#last-name').val().length == 0) {
+                    $('#last-name').css("border-color", clrError);
+                    error.push('Employee last name is required');
+                }
+                else {
+                    $('#last-name').css("border-color", clrDefault);
+                }
+
+                if ($('#ministry-id').val().length == 0) {
+                    $('#ministry-id').css("border-color", clrError);
+                    error.push('Ministry is required');
+                }
+                else {
+                    $('#ministry-id').css("border-color", clrDefault);
+                }
+
+                if ($('#branch').val().length == 0) {
+                    $('#branch').css("border-color", clrError);
+                    error.push('Branch is required');
+                }
+                else {
+                    $('#branch').css("border-color", clrDefault);
+                }
+
+                if ($('#preferred-email').val().length == 0) {
+                    $('#preferred-email').css("border-color", clrError);
+                    error.push('Government Email is required.');
+                }
+                else {
+                    if (!isEmail($('#preferred-email').val())) {
+                        $('#preferred-email').css("border-color", clrError);
+                        error.push('Government Email invalid format');
+                    }
+                    else {
+                        $('#preferred-email').css("border-color", clrDefault);
+                    }
+                }
+
+                if ($('#alternate-email').val().length > 0) {
+                    if (!isEmail($('#alternate-email').val())) {
+                        $('#alternate-email').css("border-color", clrError);
+                        error.push('Alternate Email invalid format');
+                    } else {
+                        $('#alternate-email').css("border-color", clrDefault);
+                    }
+                }
+
+                return error;
+            },
+
+            checkOfficeAddress: function () {
+
+                var error = [];
+
+                if ($('#office-address').val().length == 0) {
+                    $('#office-address').css("border-color", clrError);
+                    error.push('Office Address is required');
+                }
+                else {
+                    $('#office-address').css("border-color", clrDefault);
+                }
+
+                if ($('#office-city-id').val().length == 0) {
+                    $('#office-city-id').css("border-color", clrError);
+                    error.push ('Office City is required');
+                }
+                else {
+                    $('#office-city-id').css("border-color", clrDefault);
+                }
+
+                if ($('#office-postal-code').val().length == 0) {
+                    $('#office-postal-code').css("border-color", clrError);
+                    error.push ('Office Postal Code is required');
+                }
+                else {
+                    if (!isPostalCode($('#office-postal-code').val())) {
+                        $('#office-postal-code').css("border-color", clrError);
+                        error.push ('Office Postal Code invalid format (A1A 1A1)');
+                    }
+                    else {
+                        $('#office-postal-code').css("border-color", clrDefault);
+                    }
+                }
+
+                if ($('#work-phone').val().length == 0) {
+                    $('#work-phone').css("border-color", clrError);
+                    error.push ('Office Phone number is required');
+                }
+                else {
+                    if (!isPhone($('#work-phone').val())) {
+                        $('#work-phone').css("border-color", clrError);
+                        error.push ('Office Phone number invalid format (###) ###-####');
+                    }
+                    else {
+                        $('#work-phone').css("border-color", clrDefault);
+                    }
+                }
+
+                return error;
+            },
+
+            checkHomeAddress: function () {
+
+                var error = [];
+
+                if ($('#home-address').val().length == 0) {
+                    $('#home-address').css("border-color", clrError);
+                    error.push('Home Address is required');
+                }
+                else {
+                    $('#home-address').css("border-color", clrDefault);
+                }
+
+                if ($('#home-city-id').val().length == 0) {
+                    $('#home-city-id').css("border-color", clrError);
+                    error.push('Home City is required');
+                }
+                else {
+                    $('#home-city-id').css("border-color", clrDefault);
+                }
+
+                if ($('#home-postal-code').val().length == 0) {
+                    $('#home-postal-code').css("border-color", clrError);
+                    error.push('Home Postal Code is required');
+                }
+                else {
+                    if (!isPostalCode($('#home-postal-code').val())) {
+                        $('#home-postal-code').css("border-color", clrError);
+                        error.push('Home Postal Code invalid format (A1A 1A1)');
+                    }
+                    else {
+                        $('#home-postal-code').css("border-color", clrDefault);
+                    }
+                }
+
+                if ($('#home-phone').val().length == 0) {
+                    $('#home-phone').css("border-color", clrError);
+                    error.push('Home Phone number is required');
+                }
+                else {
+                    if (!isPhone($('#home-phone').val())) {
+                        $('#home-phone').css("border-color", clrError);
+                        error.push('Home Phone number invalid format (###) ###-####');
+                    }
+                    else {
+                        $('#home-phone').css("border-color", clrDefault);
+                    }
+                }
+
+                return error;
+            },
+
+
+            checkSupervisor: function () {
+
+                var error = [];
+
+                if ($('#supervisor-first-name').val().length == 0) {
+                    $('#supervisor-first-name').css("border-color", clrError);
+                    error.push('Supervisor First Name is required');
+                }
+                else {
+                    $('#supervisor-first-name').css("border-color", clrDefault);
+                }
+
+                if ($('#supervisor-last-name').val().length == 0) {
+                    $('#supervisor-last-name').css("border-color", clrError);
+                    error.push('Supervisor last name is required');
+                }
+                else {
+                    $('#supervisor-last-name').css("border-color", clrDefault);
+                }
+
+                if ($('#supervisor-address').val().length == 0) {
+                    $('#supervisor-address').css("border-color", clrError);
+                    error.push('Supervisor Address is required');
+                }
+                else {
+                    $('#supervisor-address').css("border-color", clrDefault);
+                }
+
+                if ($('#supervisor-city-id').val().length == 0) {
+                    $('#supervisor-city-id').css("border-color", clrError);
+                    error.push('Supervisor City is required');
+                }
+                else {
+                    $('#supervisor-city-id').css("border-color", clrDefault);
+                }
+
+                if ($('#supervisor-postal-code').val().length == 0) {
+                    $('#supervisor-postal-code').css("border-color", clrError);
+                    error.push('Supervisor Postal Code is required');
+                }
+                else {
+                    if (!isPostalCode($('#supervisor-postal-code').val())) {
+                        $('#supervisor-postal-code').css("border-color", clrError);
+                        error.push('Supervisor Postal Code invalid format (A1A 1A1)');
+                    }
+                    else {
+                        $('#supervisor-postal-code').css("border-color", clrDefault);
+                    }
+                }
+
+                if ($('#supervisor-email').val().length == 0) {
+                    $('#supervisor-email').css("border-color", clrError);
+                    error.push('Supervisor Email is required');
+                }
+                else {
+                    if (!isEmail($('#supervisor-email').val())) {
+                        $('#supervisor-email').css("border-color", clrError);
+                        error.push('Supervisor Email invalid format');
+                    }
+                    else {
+                        $('#supervisor-email').css("border-color", clrDefault);
+                    }
+                }
+
+                return error;
+            },
+
+
 
 
             currencyFormat: function (num) {
                 return '$' + parseFloat(num).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
             },
 
+            split_str: function (str, separator, max) {
+                var out = [],
+                    index = 0,
+                    next;
 
-        }
+                while (!max || out.length < max - 1 ) {
+                    next = str.indexOf(separator, index);
+                    if (next === -1) {
+                        break;
+                    }
+                    out.push(str.substring(index, next));
+                    index = next + separator.length;
+                }
+                out.push(str.substring(index));
+                return out;
+            },
 
-    });
 
+    }
+
+   });
+
+    function isEmail (email) {
+        var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        return regex.test(email);
+    }
+
+    function isPhone (phone) {
+        var regex = /\(([0-9]{3})\) ([0-9]{3})-([0-9]{4})/;
+        return regex.test(phone);
+    }
+
+    function isPostalCode (code) {
+        var regex = /^[ABCEGHJ-NPRSTVXY][0-9][ABCEGHJ-NPRSTV-Z] [0-9][ABCEGHJ-NPRSTV-Z][0-9]$/;
+        return regex.test(code);
+    }
 
 </script>
