@@ -205,13 +205,13 @@
                             <?php echo $this->Form->radio('selectDonationType', ['PECSF Region Charity Fund', 'One Individual Charity', 'Two Individual Charities'], ['onChange' => 'app.donationTypeSelected()']); ?>
                         </div>
                         <div v-if="inputCharity1">
-                            <select id="selectedCharity1">
+                            <select id="selectedcharity1" v-model="selectedCharity1">
                                 <option value>- select charity -</option>
                                 <option v-for='data in availableCharities' :value='data.id'>{{ data.name }}</option>
                             </select>
                         </div>
                         <div v-if="inputCharity2">
-                            <select id="selectedCharity2">
+                            <select id="selectedcharity2" v-model="selectedCharity2">
                                 <option value>- select charity -</option>
                                 <option v-for='data in availableCharities' :value='data.id'>{{ data.name }}</option>
                             </select>
@@ -354,7 +354,7 @@
             currentAwardName: "",
             currentAwardDescription: "",
 
-            awardOptions: [],
+            awardOptions: <?php echo $registration->award_options ? json_encode($donation) : []; ?>,
 
             inputDonationType: true,
             inputCharity1: true,
@@ -507,8 +507,6 @@
                     $("#selectedregion").val(this.selectedRegion);
                     this.inputDonationType = true;
                     console.log(this.pecsfDonationType);
-                    // $("input[name='selectDonationType']").val(this.pecsfDonationType).prop('checked', true);
-                    // $("input:radio[name ='selectdonationtype-0']:checked").val(this.pecsfDonationType);
                     $("#selectdonationtype-"+this.pecsfDonationType).prop("checked", true);
                     this.regionSelected();
                 }
@@ -517,12 +515,12 @@
                 this.inputCharity2 = this.selectedCharity2 > 0;
                 if (this.selectedCharity1 > 0) {
                     console.log("charity 1:" + this.selectedCharity1);
-                    $("#selectedCharity1").val(this.selectedCharity1);
+                    $("#selectedcharity1").val(this.selectedCharity1);
                 }
 
                 if (this.selectedCharity2 > 0) {
                     console.log("charity 2:" + this.selectedCharity2);
-                    $("#selectedCharity2").val(this.selectedCharity2);
+                    $("#selectedcharity2").val(this.selectedCharity2);
                 }
 
 
@@ -628,6 +626,9 @@
                     $('input[name=pecsf_charity2_id]').val(0);
                     $('input[name=pecsf_amount2]').val(0);
                     $('input[name=pecsf_donation_type]').val(0);
+                    this.pecsfDonationType = 0;
+                    this.selectedCharity1 = 0;
+                    this.selectedCharity2 = 0;
                 }
                 else if ($("input:radio[name ='selectDonationType']:checked").val() == 1) {
                     if ($('#selectedCharity1').val() == 0) {
@@ -644,6 +645,9 @@
                         $('input[name=pecsf_amount1]').val(amount);
                         $('input[name=pecsf_charity2_id]').val(0);
                         $('input[name=pecsf_amount2]').val(0);
+                        this.selectedCharity1 = charity.id;
+                        this.selectedCharity2 = 0;
+                        this.pecsfDonationType = 1;
                     }
 
                 }
@@ -658,9 +662,9 @@
                         charity = this.getCharity($('#selectedCharity1').val());
                         this.awardOptions.push(this.currencyFormat(amount) + " Donation - (" + charity.vendor_code + ") "  + charity.name);
                         $('#selectedCharity1').css("border-color", clrDefault);
-                        $('input[name=pecsf_first_charity]').val(1);
                         $('input[name=pecsf_charity1_id]').val(charity.id);
                         $('input[name=pecsf_amount1]').val(amount);
+                        this.selectedCharity1 = charity.id;
                     }
 
                     if ($('#selectedCharity2').val() == 0) {
@@ -671,11 +675,12 @@
                         charity = this.getCharity($('#selectedCharity2').val());
                         this.awardOptions.push(this.currencyFormat(amount) + " Donation - (" + charity.vendor_code + ") "  + charity.name);
                         $('#selectedCharity2').css("border-color", clrDefault);
-                        $('input[name=pecsf_second_charity]').val(1);
                         $('input[name=pecsf_charity2_id]').val(charity.id);
                         $('input[name=pecsf_amount2]').val(amount);
+                        this.selectedCharity2 = charity.id;
                     }
                     $('input[name=pecsf_donation_type]').val(2);
+                    this.pecsfDonationType = 2;
                 }
                 else {
                     if (this.inputDonationType) {
@@ -706,8 +711,7 @@
                     this.errorsOptions += '</ul>';
                 }
 
-                this.selectedCharity1 =
-                    
+
             },
 
 
