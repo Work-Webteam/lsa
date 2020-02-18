@@ -56,7 +56,7 @@ $cakeDescription = 'Long Service Awards';
 <body>
     <header>
         <div class="container text-center">
-            <a href="/" target="_blank">
+            <a href="/">
                 <img alt="Long Service Awards" src="img/lsa_logo.png" width="150" />
             </a>
             <h1>
@@ -81,9 +81,8 @@ $cakeDescription = 'Long Service Awards';
 
                 <div class="row">
                     <div class="column">
-                        <button type="button" class="btn btn-primary" onclick="register()">Register</button>
-                    </div>
-                    <div class="column">
+                        <button type="button" class="btn btn-primary" onclick="register()">Register</button>&nbsp;
+
                         <?php
                             $session = $this->getRequest()->getSession();
                             if ($session->read('user.role') <> 0) {
@@ -92,8 +91,6 @@ $cakeDescription = 'Long Service Awards';
                         ?>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </main>
