@@ -17,6 +17,8 @@ return [
      */
 
     'LSA' => [
+        'lsa_site_name' => 'Long Service Awards',
+        'lsa_site_slogan' => 'Celebrating Your Loyal Service',
         'lsa_contact_name' => 'LSA Admin Person',
         'lsa_contact_email' => 'lsa.admin@gov.bc.ca',
         'lsa_contact_phone' => '250-555-1111',

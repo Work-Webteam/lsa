@@ -54,55 +54,154 @@ $cakeDescription = 'Long Service Awards';
     <?= $this->fetch('script') ?>
 </head>
 <body>
-    <header>
-        <div class="container text-center">
-            <a href="/">
-                <img alt="Long Service Awards" src="img/lsa_logo.png" width="150" />
-            </a>
-            <h1>
-                Welcome to Long Service Awards
-            </h1>
-        </div>
-    </header>
+
+<nav class="top-nav">
+    <div class="top-nav-title">
+        <a href="/"><span><img src="/img/lsa_logo.png" class="lsa-logo"></span></a>
+    </div>
+    <div class="top-nav-links">
+        <?php
+        $session = $this->getRequest()->getSession();
+
+        echo '<a href="/pages/eligibility">Eligibility</a>';
+        echo '<a href="/registrations/register">Register</a>';
+        echo '<a href="/pages/ceremony">Ceremony</a>';
+        echo '<a href="/pages/travel">Travel</a>';
+        echo '<a href="/pages/Volunteer">Volunteer</a>';
+        if ($session->read('user.role') <> 0) {
+            echo '<a href="/registrations/register">Admin</a>';
+        }
+        ?>
+
+
+    </div>
+</nav>
+
+
     <main class="main">
-        <div class="container">
-            <?= $this->Flash->render() ?>
-            <div class="content">
+
+            <div class="container">
+                <div class="row">
+                    <h2><?php echo Configure::read('LSA.lsa_site_name') ?></h2>
+                </div>
+                <div class="row">
+                    <h4><?php echo Configure::read('LSA.lsa_site_slogan') ?></h4>
+                </div>
+                <div class="row">
+                    <p>
+                        Every year, we celebrate the dedication and commitment of employees with 25+ years in the BC Public Service
+                    </p>
+                    <p>
+                        Long Service Award ceremonies are prestigious and memorable events held at Government House. Government House
+                        is the official residence of B.C.'s Lieutenant Governor and the ceremonial home of all British Columbians.
+                    </p>
+                    <p>
+                        Upon your arrival, volunteers will usher you into the grand ballroom for a night of celebration. Enjoy
+                        a gourmet meal while you take in remarks from notabel attendees including the Lieutenant Governor, if in attendance.
+                        Receive your chosen award druing an intimate presentation and cap the night of with live music and
+                        decadent desserts!
+                    </p>
+                </div>
+
+                <div class="row">
+                    <h2>Check Your Eligibility</h2>
+                    <p>
+                        Register to celebrate your Long Service milestone if you have 25, 30, 35, 40, 45, 50+ years working for
+                        an eligible BC Public Service organization.
+                    </p>
+                    <p>
+                        Long service time is cumulative. If you've had a break in service, that time still counts twoard your years of service.
+                        Breaks in service may include times when you took paid leave or worked part-time or seasonally.
+                    </p>
+                    <button type="button" class="btn btn-primary" onclick="checkEligibility()">Check Eligibility</button>
+                </div>
+
+                <div class="row">
+                    <h2>Register</h2>
+                    <p>
+                        If you're eligible for a long service milestone, you'll need to register between March and June. Once you've
+                        registered, your supervisor will be notified and you'll receive an official invitation in September with your
+                        ceremony date.
+                    </p>
+                    <p>
+                        You invitation will include a link to RSVP. This is where you can let us know about your dietary restrictions,
+                        accessibility requirements and if you will be bringing a guest.
+                    </p>
+                    <button type="button" class="btn btn-primary" onclick="register()">Register</button>
+                </div>
+
+
+                <div class="row">
+                    <h2>Travel</h2>
+                    <div>
+                    <p>
+                        Your travel arrangements need to be approved by your supervisor or organization's LSA contact.
+                    </p>
+                    <p>
+                        It's recommended that you book your travel as soon as you've confirmed your attendance to the ceremony.
+                        For information on travel politices, check out the Policy section.
+                    </p>
+                    <p>
+                        Reimbursement processes vary for each organization, so confirm this with your LSA contact prior to traveling.
+                    </p>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="travel()">Travel</button>
+                </div>
+
+
                 <div class="row">
                     <div class="column">
-                        <h4>Long Service Awards Contact</h4>
-                        <ul>
-                            <li class="bullet"><?php echo Configure::read('LSA.lsa_contact_name') ?></li>
-                            <li class="bullet"><?php echo Configure::read('LSA.lsa_contact_email') ?></li>
-                            <li class="bullet"><?php echo Configure::read('LSA.lsa_contact_phone') ?></li>
-                        </ul>
+                        <h2>Volunteer</h2>
+                        <p>Volunteer info text goes here.</p>
+                    </div>
+                    <div class="column">
+                        <h2>Accessibility</h2>
+                        <p>Accessibility info text goes here.</p>
+                    </div>
+                    <div class="column">
+                        <h2>Defer Attendance</h2>
+                        <p>
+                            If you're unable to attend the ceremony in the year you register, you can defer to the following year.
+                            Your award will be sent to your ministry and presented to you by your supervisor, in the year you registered.
+                            Unfortunately, we cannot accommodate switching ceremony nights as each employee is scheduled to attend wit their ministry
+                            and executive members. If your ministry has another ceremony date schedule, email the Long Service Award team with your request.
+                        </p>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="column">
-                        <button type="button" class="btn btn-primary" onclick="register()">Register</button>&nbsp;
-
-                        <?php
-                            $session = $this->getRequest()->getSession();
-                            if ($session->read('user.role') <> 0) {
-                                echo '<button type="button" class="btn btn-primary" onclick="admin()">Admin</button>';
-                            }
-                        ?>
-                    </div>
+                    <h2>Questions?</h2>
+                    <p>
+                        Email YOURMINISTRY@gov.bc.ca or LongServiceAwards@gov.bc.ca
+                    </p>
                 </div>
+
+                <div class="row">
+                    <h2>Territorial Acknowledgement</h2>
+                    <p>
+                        The Long Service Award ceremonies take place in the territory of the Lekwungen Peoples, also known as Songhees and Esquimalt Nations.
+                        We acknowledge with respect that the public servants these ceremonies honor live and work throughout B.C. on the traditional lands of
+                        Indigenous peoples. The BC Public Service is deeply committed to <u>true and lasting reconciliation</u>.
+                    </p>
+
+                </div>
+
             </div>
-        </div>
+
     </main>
 </body>
 
 <script>
+    function checkEligibility() {
+        location.href = "/pages/eligibility";
+    }
+
     function register() {
         location.href = "/registrations/register";
     }
 
-    function admin() {
-        location.href = "/registrations";
+    function travel() {
+        location.href = "/pages/travel";
     }
 </script>
 

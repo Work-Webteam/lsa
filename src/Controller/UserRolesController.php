@@ -80,7 +80,14 @@ class UserRolesController extends AppController
             $this->Flash->error(__('Unable to update role.'));
         }
 
-        $roles = $this->Userroles->Roles->find('list');
+        if ($this->checkAuthorization(array(Configure::read('Role.admin')))) {
+            $roles = $this->Userroles->Roles->find('list');
+        }
+        else {
+            $roles = $this->Userroles->Roles->find('list', [
+                'conditions' => ['Roles.id <>' => 1]
+            ]);
+        }
         $this->set('roles', $roles);
 
         $ministries = $this->Userroles->Ministries->find('list', [
