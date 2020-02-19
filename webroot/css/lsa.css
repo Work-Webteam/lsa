@@ -1,7 +1,65 @@
+.top-nav {
+  margin: 0 auto 0 auto;
+  background-color: black;
+}
+
+.top-nav a {
+  color: white;
+}
+
+#page-footer {
+  background-color: black;
+}
+
+#home-header-container {
+  position: relative;
+  text-align: center;
+  color: white;
+  background-color: black;
+}
+
+#home-header-container img {
+  opacity: 40%;
+}
+
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .lsa-logo {
     width: 80px;
 }
 
+
+#home-page .info-text {
+  background-color: black;
+  color: white;
+}
+
+.info-text {
+  padding: 15px;
+  text-align: center;
+}
+
+.info-text h2 {
+  margin: auto;
+}
+
+.info-text p {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin: auto;
+}
+
+#ceremony-schedule,
+#ceremony-dinner,
+#travel-policy {
+  display: flex;
+  flex-direction: row;
+}
 
 #lsa-contact-info {
     padding-top: 35px;

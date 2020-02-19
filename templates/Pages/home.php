@@ -23,31 +23,26 @@ use Cake\Http\Exception\NotFoundException;
 $this->disableAutoLayout();
 
 
-$cakeDescription = 'Long Service Awards';
 ?>
 <!DOCTYPE html>
 <html>
 <head>
     <?= $this->Html->charset() ?>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>
-        <?= $cakeDescription ?>:
-        <?= $this->fetch('title') ?>
-    </title>
-    <?= $this->Html->meta('icon') ?>
-
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta
+        content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
 
     <!-- Bootstrap CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-    <link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css">
+    <title><?php echo Configure::read('LSA.lsa_site_name') ?></title>
 
     <?= $this->Html->css('milligram.min.css') ?>
     <?= $this->Html->css('cake.css') ?>
-    <?= $this->Html->css('home.css') ?>
+    <?= $this->Html->css('lsa.css') ?>
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
@@ -55,7 +50,7 @@ $cakeDescription = 'Long Service Awards';
 </head>
 <body>
 
-<nav class="top-nav">
+  <nav class="top-nav">
     <div class="top-nav-title">
         <a href="/"><span><img src="/img/lsa_logo.png" class="lsa-logo"></span></a>
     </div>
@@ -69,35 +64,34 @@ $cakeDescription = 'Long Service Awards';
         echo '<a href="/pages/travel">Travel</a>';
         echo '<a href="/pages/Volunteer">Volunteer</a>';
         if ($session->read('user.role') <> 0) {
-            echo '<a href="/registrations/register">Admin</a>';
+            echo '<a href="/registrations">Admin</a>';
         }
         ?>
 
 
     </div>
-</nav>
+  </nav>
 
-
-    <main class="main">
-
+    <main id="home-page" class="main">
             <div class="container">
-                <div class="row">
-                    <h2><?php echo Configure::read('LSA.lsa_site_name') ?></h2>
+                <div id="home-header-container" class="row">
+                  <img src="/img/government-house.jpg">
+                    <div class="centered">
+                      <h1><?php echo Configure::read('LSA.lsa_site_name') ?></h1>
+                    </div>
                 </div>
-                <div class="row">
-                    <h4><?php echo Configure::read('LSA.lsa_site_slogan') ?></h4>
-                </div>
-                <div class="row">
-                    <p>
-                        Every year, we celebrate the dedication and commitment of employees with 25+ years in the BC Public Service
-                    </p>
-                    <p>
-                        Long Service Award ceremonies are prestigious and memorable events held at Government House. Government House
+                <div class="row info-text">
+                  <h2>Celebrating Your Loyal Service</h2>
+                  <p>
+                    Every year, we celebrate the dedication and commitment of employees with 25+ years in the BC Public Service
+                  </p>
+                  <p>
+                    Long Service Award ceremonies are prestigious and memorable events held at Government House. Government House
                         is the official residence of B.C.'s Lieutenant Governor and the ceremonial home of all British Columbians.
                     </p>
                     <p>
                         Upon your arrival, volunteers will usher you into the grand ballroom for a night of celebration. Enjoy
-                        a gourmet meal while you take in remarks from notabel attendees including the Lieutenant Governor, if in attendance.
+                        a gourmet meal while you take in remarks from notable attendees including the Lieutenant Governor, if in attendance.
                         Receive your chosen award druing an intimate presentation and cap the night of with live music and
                         decadent desserts!
                     </p>
@@ -169,25 +163,29 @@ $cakeDescription = 'Long Service Awards';
                     </div>
                 </div>
 
-                <div class="row">
-                    <h2>Questions?</h2>
-                    <p>
-                        Email YOURMINISTRY@gov.bc.ca or LongServiceAwards@gov.bc.ca
-                    </p>
-                </div>
-
-                <div class="row">
-                    <h2>Territorial Acknowledgement</h2>
-                    <p>
-                        The Long Service Award ceremonies take place in the territory of the Lekwungen Peoples, also known as Songhees and Esquimalt Nations.
-                        We acknowledge with respect that the public servants these ceremonies honor live and work throughout B.C. on the traditional lands of
-                        Indigenous peoples. The BC Public Service is deeply committed to <u>true and lasting reconciliation</u>.
-                    </p>
-
-                </div>
-
             </div>
 
+
+            <div id="page-footer" class="container">
+            <div >
+                <h4>Questions?</h4>
+                <div>
+                  <p>
+                      Email YOURMINISTRY@gov.bc.ca or LongServiceAwards@gov.bc.ca
+                    </p>
+                  </div>
+            </div>
+
+            <div class="row">
+                <h4>Territorial Acknowledgement</h4>
+                <p>
+                    The Long Service Award ceremonies take place in the territory of the Lekwungen Peoples, also known as Songhees and Esquimalt Nations.
+                    We acknowledge with respect that the public servants these ceremonies honor live and work throughout B.C. on the traditional lands of
+                    Indigenous peoples. The BC Public Service is deeply committed to <u>true and lasting reconciliation</u>.
+                </p>
+
+            </div>
+          </div>
     </main>
 </body>
 

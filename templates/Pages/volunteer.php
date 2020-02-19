@@ -23,55 +23,68 @@ use Cake\Http\Exception\NotFoundException;
 $this->disableAutoLayout();
 
 
-$pageTitle = 'Volunteer';
 ?>
 <!DOCTYPE html>
 <html>
 <head>
     <?= $this->Html->charset() ?>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>
-        <?= $pageTitle ?>:
-        <?= $this->fetch('title') ?>
-    </title>
-    <?= $this->Html->meta('icon') ?>
-
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta
+        content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
 
     <!-- Bootstrap CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-    <link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css">
+    <title><?php echo Configure::read('LSA.lsa_site_name') ?></title>
 
     <?= $this->Html->css('milligram.min.css') ?>
     <?= $this->Html->css('cake.css') ?>
-    <?= $this->Html->css('home.css') ?>
+    <?= $this->Html->css('lsa.css') ?>
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
 </head>
 <body>
-<header>
-    <div class="container text-center">
-        <a href="/">
-            <img alt="Long Service Awards" src="img/lsa_logo.png" width="150" />
-        </a>
-        <h1><?= $pageTitle ?></h1>
-    </div>
-</header>
-<main class="main">
-    <div class="container">
-        <div class="row">
-            <p>Volunteer info goes here.</p>
-        </div>
-    </div>
 
-</main>
+  <nav class="top-nav">
+    <div class="top-nav-title">
+        <a href="/"><span><img src="/img/lsa_logo.png" class="lsa-logo"></span></a>
+    </div>
+    <div class="top-nav-links">
+        <?php
+        $session = $this->getRequest()->getSession();
+
+        echo '<a href="/pages/eligibility">Eligibility</a>';
+        echo '<a href="/registrations/register">Register</a>';
+        echo '<a href="/pages/ceremony">Ceremony</a>';
+        echo '<a href="/pages/travel">Travel</a>';
+        echo '<a href="/pages/Volunteer">Volunteer</a>';
+        if ($session->read('user.role') <> 0) {
+            echo '<a href="/registrations">Admin</a>';
+        }
+        ?>
+
+
+    </div>
+  </nav>
+
+    <main id="ceremony-info" class="main">
+            <div class="container">
+                <div class="info-text">
+                    <h2>Volunteer</h2>
+                    <p>
+                        Volunteer info goes here.
+                    </p>
+                </div>
+
+
+          </div>
+    </main>
 </body>
-
 
 
 </html>

@@ -131,31 +131,30 @@ else {
          * See app.php for more configuration options.
          */
         'Datasources' => [
-            'default' => [
-                'host' => getenv('LSA_DB_HOST'),
-                /*
-                 * CakePHP will use the default DB port based on the driver selected
-                 * MySQL on MAMP uses port 8889, MAMP users will want to uncomment
-                 * the following line and set the port accordingly
-                 */
-                // 'port' => getenv('LSA_DB_PORT'),  // '3306',
+          'default' => [
+              'host' => 'localhost',
+              /*
+               * CakePHP will use the default DB port based on the driver selected
+               * MySQL on MAMP uses port 8889, MAMP users will want to uncomment
+               * the following line and set the port accordingly
+               */
+              'port' => '3308',
 
-                'username' => getenv('LSA_DB_USER'),
-                'password' => getenv('LSA_DB_PASSWORD'),
+              'username' => 'root',
+              'password' => '',
 
-                'database' => getenv('LSA_DB_NAME', true),
-                /**
-                 * If not using the default 'public' schema with the PostgreSQL driver
-                 * set it here.
-                 */
-                //'schema' => 'myapp',
+              'database' => 'lsa',
+              /**
+               * If not using the default 'public' schema with the PostgreSQL driver
+               * set it here.
+               */
+              //'schema' => 'myapp',
 
-                /**
-                 * You can use a DSN string to set the entire configuration
-                 */
-                'url' => env('DATABASE_URL', null),
-            ],
-
+              /**
+               * You can use a DSN string to set the entire configuration
+               */
+              'url' => env('DATABASE_URL', null),
+          ],
             /*
              * The test connection is used during the test suite.
              */

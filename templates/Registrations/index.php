@@ -51,6 +51,8 @@
             pageLength: 15,
             lengthChange: false,
 
+            dom: '<"toolbar">frtip',
+
             initComplete: function () {
                 this.api().columns([2,3,5,6,7,8]).every( function () {
                     var column = this;
@@ -74,5 +76,12 @@
 
 
         } );
+
+        $("div.toolbar").html('<button onClick="whatUp()">Reset</button.');
+
     } );
+
+    function whatUp() {
+      console.log('whatUp');
+    }
 </script>

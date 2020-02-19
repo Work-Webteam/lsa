@@ -237,6 +237,8 @@ INSERT INTO `user_roles` (`id`, `idir`, `guid`, `role_id`, `ministry_id`) VALUES
 INSERT INTO `user_roles` (`id`, `idir`, `guid`, `role_id`, `ministry_id`) VALUES(3, 'apunshon', 'C68FF67FB334907A25DB8B07767CC1FC', 3, 0);
 INSERT INTO `user_roles` (`id`, `idir`, `guid`, `role_id`, `ministry_id`) VALUES(4, 'cdeakin', '26B243BA60AE8F60B4BB3C81E1450423', 5, 2);
 INSERT INTO `user_roles` (`id`, `idir`, `guid`, `role_id`, `ministry_id`) VALUES(5, 'jvernon', '5F4CF1B88565FCA2E8D17AD85B57CE0A', 6, 0);
+INSERT INTO `user_roles` (`id`, `idir`, `guid`, `role_id`, `ministry_id`) VALUES(6, 'gikish', '', 2, 0);
+
 
 INSERT INTO `diet` (`name`) VALUES ('Dairy Free');
 INSERT INTO `diet` (`name`) VALUES ('Gluten Free');
