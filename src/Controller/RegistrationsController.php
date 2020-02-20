@@ -75,6 +75,8 @@ class RegistrationsController extends AppController
 
     public function register()
     {
+        $this->viewBuilder()->setLayout('register');
+
         $registration = $this->Registrations->newEmptyEntity();
         if ($this->request->is('post')) {
             $registration = $this->Registrations->patchEntity($registration, $this->request->getData());

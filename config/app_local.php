@@ -132,18 +132,18 @@ else {
          */
         'Datasources' => [
           'default' => [
-              'host' => 'localhost',
+              'host' => getenv('LSA_DB_HOST'),
               /*
                * CakePHP will use the default DB port based on the driver selected
                * MySQL on MAMP uses port 8889, MAMP users will want to uncomment
                * the following line and set the port accordingly
                */
-              'port' => '3308',
+              'port' => '3306',
 
-              'username' => 'root',
-              'password' => '',
+              'username' => getenv('LSA_DB_USER'),
+              'password' => getenv('LSA_DB_PASSWORD'),
 
-              'database' => 'lsa',
+              'database' => getenv('LSA_DB_NAME'),
               /**
                * If not using the default 'public' schema with the PostgreSQL driver
                * set it here.

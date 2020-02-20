@@ -69,6 +69,13 @@ $routes->scope('/', function (RouteBuilder $builder) {
      */
     $builder->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
 
+    $builder->connect('/register', ['controller' => 'Registrations', 'action' => 'register']);
+
+    $builder->connect('/ceremony', ['controller' => 'Pages', 'action' => 'display', 'ceremony']);
+    $builder->connect('/eligibility', ['controller' => 'Pages', 'action' => 'display', 'eligibility']);
+    $builder->connect('/travel', ['controller' => 'Pages', 'action' => 'display', 'travel']);
+    $builder->connect('/volunteer', ['controller' => 'Pages', 'action' => 'display', 'volunteer']);
+
     /*
      * Connect catchall routes for all controllers.
      *

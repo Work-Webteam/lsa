@@ -58,11 +58,11 @@ $this->disableAutoLayout();
         <?php
         $session = $this->getRequest()->getSession();
 
-        echo '<a href="/pages/eligibility">Eligibility</a>';
-        echo '<a href="/registrations/register">Register</a>';
-        echo '<a href="/pages/ceremony">Ceremony</a>';
-        echo '<a href="/pages/travel">Travel</a>';
-        echo '<a href="/pages/Volunteer">Volunteer</a>';
+        echo '<a href="/eligibility">Eligibility</a>';
+        echo '<a href="/register">Register</a>';
+        echo '<a href="/ceremony">Ceremony</a>';
+        echo '<a href="/travel">Travel</a>';
+        echo '<a href="/volunteer">Volunteer</a>';
         if ($session->read('user.role') <> 0) {
             echo '<a href="/registrations">Admin</a>';
         }
@@ -191,15 +191,15 @@ $this->disableAutoLayout();
 
 <script>
     function checkEligibility() {
-        location.href = "/pages/eligibility";
+        location.href = "/eligibility";
     }
 
     function register() {
-        location.href = "/registrations/register";
+        location.href = "/register";
     }
 
     function travel() {
-        location.href = "/pages/travel";
+        location.href = "/travel";
     }
 </script>
 
