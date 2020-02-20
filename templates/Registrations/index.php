@@ -55,8 +55,9 @@
 
             initComplete: function () {
                 this.api().columns([2,3,5,6,7,8]).every( function () {
+
                     var column = this;
-                    var select = $('<select><option value=""></option></select><br>')
+                    var select = $('<select id="column-' + column.index() + '"><option value=""></option></select><br>')
                         .prependTo( $(column.header()) )
                         .on( 'change', function () {
                             var val = $.fn.dataTable.util.escapeRegex(
@@ -77,11 +78,23 @@
 
         } );
 
-        $("div.toolbar").html('<button onClick="whatUp()">Reset</button.');
+        $("div.toolbar").html('<button class="btn btn-primary" onClick="resetFilters()">Reset Filters</button.');
 
     } );
 
-    function whatUp() {
-      console.log('whatUp');
+
+    function resetFilters() {
+
+      var table = $('#example').DataTable();
+
+      $('#column-2').prop("selectedIndex", 0);
+      $('#column-3').prop("selectedIndex", 0);
+      $('#column-5').prop("selectedIndex", 0);
+      $('#column-6').prop("selectedIndex", 0);
+      $('#column-7').prop("selectedIndex", 0);
+      $('#column-8').prop("selectedIndex", 0);
+
+      table.search('').columns().search('').draw();
+
     }
 </script>
