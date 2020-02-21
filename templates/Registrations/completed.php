@@ -1,5 +1,5 @@
 <h1>Congratulations</h1>
-<p style="background:red">add security check registration user id matched connected user id</p>
+
 <h3><?= $registration->first_name ?> <?= $registration->last_name ?></h3>
 <p>You have successfully registered for the <?= date("Y") ?> Long Service Awards</p>
 <div id="lsa-contact-info" class="container">

@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use Cake\Core\Configure;
 use Cake\Error\Debugger;
+use Cake\Mailer\Mailer;
+
 
 class RegistrationsController extends AppController
 {
@@ -75,6 +77,8 @@ class RegistrationsController extends AppController
 
     public function register()
     {
+
+        // customized layout excluding top nav, etc.
         $this->viewBuilder()->setLayout('register');
 
         $registration = $this->Registrations->newEmptyEntity();
@@ -101,6 +105,17 @@ class RegistrationsController extends AppController
             }
             if ($this->Registrations->save($registration)) {
                 $this->Flash->success(__('Registration has been saved.'));
+
+                // Send email here
+                $mailer = new Mailer('default');
+
+                $message = "Congratulations, you have sucessfully registed for your Long Service Award.";
+                $mailer->setFrom(['longserviceaward@gov.bc.ca' => 'Long Service Awards'])
+                    ->setTo($registration->preferred_email)
+                    ->setSubject('Long Service Award Registration Completed')
+                    ->deliver($message);
+
+
                 return $this->redirect(['action' => 'completed', $registration->id]);
             }
             $this->Flash->error(__('Unable to add registration.'));
@@ -160,6 +175,11 @@ class RegistrationsController extends AppController
         $this->set('lsa_name' , Configure::read('LSA.lsa_contact_name'));
         $this->set('lsa_email' , Configure::read('LSA.lsa_contact_email'));
         $this->set('lsa_phone' , Configure::read('LSA.lsa_contact_phone'));
+
+        if (!$this->checkGUID($registration->user_guid)) {
+            $this->Flash->error(__('You do not have access to this page.'));
+            $this->redirect('/');
+        }
     }
 
     public function edit($id)
