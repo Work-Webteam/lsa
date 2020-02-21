@@ -1,6 +1,6 @@
 
 <h1>Ceremonies</h1>
-<p>NOTE: Only ceremony dates for the current year are displayed.</p>
+<p>NOTE: Only ceremony dates for the current award year are displayed.</p>
 <?= $this->Html->link('Add Ceremony', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 <table>
     <tr>
@@ -10,8 +10,6 @@
         <th>Date</th>
         <th colspan = 2>Operations</th>
     </tr>
-
-    <!-- Here is where we iterate through our $ceremonies query object, printing out article info -->
 
     <?php foreach ($ceremonies as $ceremony): ?>
         <tr>

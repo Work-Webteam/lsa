@@ -37,7 +37,7 @@
                 }
             ],
             // stateSave: true,
-            pageLength: 15,
+            pageLength: 25,
             lengthChange: false,
 
             dom: '<"toolbar">frtip',
