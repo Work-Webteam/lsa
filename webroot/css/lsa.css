@@ -67,13 +67,24 @@
 
 
 #lsa-award-card {
+    display: flex;
+    flex-direction: row;
     padding: 10px;
     margin-bottom: 15px;
 }
 
+#lsa-award-image-container {
+
+}
+
+#lsa-award-description-container {
+    padding-left: 10px;
+}
+
 .lsa-award-image {
-    width: 300px;
-    height: 300px;
+    width: max-width: 100%;
+    height: auto;
+    overflow: hidden;
 }
 
 

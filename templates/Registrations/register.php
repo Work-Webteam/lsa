@@ -39,8 +39,10 @@
             </span>
 
             <div id="lsa-award-card">
-                <img alt="..." v-bind:src="'/img/awards/' + currentAwardImage" class="lsa-award-image">
-                <div class="card-body">
+                <div id="lsa-award-image-container">
+                    <img alt="..." v-bind:src="'/img/awards/' + currentAwardImage" class="lsa-award-image">
+                </div>
+                <div id="lsa-award-description-container">
                     <h5 class="card-title">{{ currentAwardName }}</h5>
                     <p class="card-text">{{ currentAwardDescription }}</p>
                 </div>
