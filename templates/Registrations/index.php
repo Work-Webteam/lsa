@@ -5,27 +5,16 @@
 <h1>Registrations</h1>
     <div id="container">
         <?= $this->Flash->render() ?>
-        <table id="example" class="display" style="width:100%">
-
+        <table id="lsa-registrations" class="display" style="font-size: 12px; width:100%">
         </table>
     </div>
 
 <script>
     var registrations=<?php echo json_encode($registrations); ?>;
 
-    // console.log(registrations);
-
-    $.fn.dataTable.ext.buttons.alert = {
-        className: 'buttons-alert',
-
-        action: function ( e, dt, node, config ) {
-            alert( this.text() );
-        }
-    };
-
     $(document).ready(function() {
 
-        $('#example').DataTable( {
+        $('#lsa-registrations').DataTable( {
             data: registrations,
             columns: [
                 { data: "first_name", title: "First Name" },
@@ -80,12 +69,13 @@
 
         $("div.toolbar").html('<button class="btn btn-primary" onClick="resetFilters()">Reset Filters</button.');
 
+        $("table thead tr").attr("valign", "bottom");
     } );
 
 
     function resetFilters() {
 
-      var table = $('#example').DataTable();
+      var table = $('#lsa-registrations').DataTable();
 
       $('#column-2').prop("selectedIndex", 0);
       $('#column-3').prop("selectedIndex", 0);
@@ -95,6 +85,6 @@
       $('#column-8').prop("selectedIndex", 0);
 
       table.search('').columns().search('').draw();
-
     }
+
 </script>

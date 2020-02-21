@@ -2,7 +2,7 @@
     <h1>Register for Long Service Award</h1>
 
     <?php
-        echo $this->Form->create($registration);
+       echo $this->Form->create($registration);
     ?>
 
     <transition name="fade">
@@ -43,8 +43,8 @@
                     <img alt="..." v-bind:src="'/img/awards/' + currentAwardImage" class="lsa-award-image">
                 </div>
                 <div id="lsa-award-description-container">
-                    <h5 class="card-title">{{ currentAwardName }}</h5>
-                    <p class="card-text">{{ currentAwardDescription }}</p>
+                    <h4 class="card-title">{{ currentAwardName }}</h4>
+                    <p class="card-text" v-html="currentAwardDescription">{{ currentAwardDescription }}</p>
                 </div>
             </div>
             <div>
@@ -55,18 +55,10 @@
                     echo "&nbsp;";
                     echo $this->Form->button('>', ['type' => 'button',  'onclick' => 'app.showNextAward()', 'class' => 'btn btn-primary']);
                 ?>
-<!--                <button onClick="app.showPreviousAward"> < </button><button>Select</button><button v-on:click="showNextAward"> > </button>-->
             </div>
         </div>
 
     </transition>
-
-<!--    <transition name="fade">-->
-<!--        <div class="form-group" v-if="awardSelected">-->
-<!--            <a id="selected-award" class="btn btn-primary" href="#identifyingInfo" v-on:click="showIdentifyingInfoInputs">Selected Award</a>-->
-<!--        </div>-->
-<!--    </transition>-->
-
 
     <transition name="fade">
         <div id="employeeAnchor">
@@ -476,11 +468,11 @@
             supervisorEmail: '',
 
             availableAwards: '',
-            availableAwardOptions: '[display available options]',
+            availableAwardOptions: '',
 
-            currentAwardName: 'PECSF Donation',
-            currentAwardImage: '25_pecsf.jpg',
-            currentAwardDescription: 'description',
+            currentAwardName: '',
+            currentAwardImage: '',
+            currentAwardDescription: '',
             currentAwardIndex: 0,
             currentAwards: [],
 
@@ -488,7 +480,7 @@
             awardName: '',
             awardDescription: '',
             awardOptions: [],
-            awardImage: 'Watches-group-thumb.png',
+            awardImage: '',
 
             availableCharities: [],
             donationRegion: '',
@@ -845,7 +837,7 @@
             updateAwardDisplay: function(awardIndex) {
                 this.currentAwardName = this.currentAwards[awardIndex].name;
                 this.currentAwardImage = this.currentAwards[awardIndex].image;
-                this.currentAwardDescription = this.currentAwards[awardIndex].description;
+                this.currentAwardDescription = nl2br(this.currentAwards[awardIndex].description);
                 if (this.selectedAward == this.currentAwards[awardIndex].id) {
                     $('#lsa-award-card').css('background-color', 'lightblue');
                 }
@@ -1311,6 +1303,11 @@
     function isPostalCode (code) {
         var regex = /^[ABCEGHJ-NPRSTVXY][0-9][ABCEGHJ-NPRSTV-Z] [0-9][ABCEGHJ-NPRSTV-Z][0-9]$/;
         return regex.test(code);
+    }
+
+    function nl2br (str, is_xhtml) {
+        var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
+        return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1'+ breakTag +'$2');
     }
 
     var scroll = new SmoothScroll('a[href*="#"]', {

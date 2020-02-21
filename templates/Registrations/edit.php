@@ -264,10 +264,10 @@
     Vue.component('tabs', {
         template: `
         <div>
-            <div class="tabs">
-              <ul class="nav">
-                <li class="nav-item" v-for="tab in tabs" :class="{ 'is-active': tab.isActive }">
-                    <a :href="tab.href" @click="selectTab(tab)">{{ tab.name }}</a>
+            <div id="lsa-registration-nav" class="tabs">
+              <ul class="nav nav-tabs">
+                <li class="nav-item" v-for="tab in tabs" :class="{ 'active': tab.isActive }">
+                    <a class="nav-link" :class="{ 'active': tab.isActive }" :href="tab.href" @click="selectTab(tab)">{{ tab.name }}</a>
                 </li>
               </ul>
             </div>
@@ -487,7 +487,7 @@ console.log(errors);
             updateAwardDisplay: function(awardIndex) {
                 this.currentAwardName = this.currentAwards[awardIndex].name;
                 this.currentAwardImage = this.currentAwards[awardIndex].image;
-                this.currentAwardDescription = this.currentAwards[awardIndex].description;
+                this.currentAwardDescription = nl2br(this.currentAwards[awardIndex].description);
                 if (this.selectedAward == this.currentAwards[awardIndex].id) {
                     $('#lsa-award-card').css('background-color', 'lightblue');
                 }
@@ -1088,6 +1088,11 @@ console.log(errors);
     function isPostalCode (code) {
         var regex = /^[ABCEGHJ-NPRSTVXY][0-9][ABCEGHJ-NPRSTV-Z] [0-9][ABCEGHJ-NPRSTV-Z][0-9]$/;
         return regex.test(code);
+    }
+
+    function nl2br (str, is_xhtml) {
+        var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
+        return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1'+ breakTag +'$2');
     }
 
 </script>

@@ -73,18 +73,12 @@
     margin-bottom: 15px;
 }
 
-#lsa-award-image-container {
-
+#lsa-award-image-container  img {
+    max-width: 300px;
 }
 
 #lsa-award-description-container {
     padding-left: 10px;
-}
-
-.lsa-award-image {
-    width: max-width: 100%;
-    height: auto;
-    overflow: hidden;
 }
 
 
@@ -111,6 +105,16 @@ label {
     margin-bottom: .5em;
 }
 
-.tab-pane {
-    padding:20px;
+#lsa-registration-nav {
+    padding-bottom: 25px;
+}
+
+
+textarea#description {
+    height: 250px;
+}
+
+.toolbar {
+    display: flex;
+    justify-content: flex-end;
 }

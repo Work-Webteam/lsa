@@ -139,7 +139,10 @@ class RegistrationsController extends AppController
 
         $awardInfo = $this->Registrations->Awards->find('all');
         $this->set('awardinfo', $awardInfo);
-
+//        debug($this->awardinfo)
+//        foreach ($this->awardInfo as $key => $value) {
+//            $this->awardInfo[$key]->description = nl2br($this->awardInfo[$key]->description);
+//        }
         $ministries = $this->Registrations->Ministries->find('list', [
             'order' => ['Ministries.name' => 'ASC']
         ]);
