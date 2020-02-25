@@ -118,3 +118,7 @@ textarea#description {
     display: flex;
     justify-content: flex-end;
 }
+
+.message {
+    margin: 10px;
+}

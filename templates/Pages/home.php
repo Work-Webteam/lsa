@@ -37,6 +37,9 @@ $this->disableAutoLayout();
 
     <main id="home-page" class="main">
             <div class="container">
+                <div id="flash-container">
+                    <?= $this->Flash->render() ?>
+                </div>
                 <div id="home-header-container" class="row">
                   <img src="/img/government-house.jpg">
                     <div class="centered">

@@ -5,7 +5,7 @@ namespace App\Controller;
 use Cake\Core\Configure;
 use Cake\Error\Debugger;
 use Cake\Mailer\Mailer;
-
+use DateTime;
 
 class RegistrationsController extends AppController
 {
@@ -77,6 +77,17 @@ class RegistrationsController extends AppController
 
     public function register()
     {
+        $query = $this->Registrations->RegistrationPeriods->find('all')
+            ->where([
+                'Registrationperiods.open_registration <=' => date('Y-m-d H:i:s'),
+                'Registrationperiods.close_registration >=' => date('Y-m-d H:i:s')
+            ]);
+        $registrationperiods = $query->first();
+
+        if (!$registrationperiods) {
+            $this->Flash->error(__('Long Service Awards are not currently open for registration.'));
+            $this->redirect('/');
+        }
 
         // customized layout excluding top nav, etc.
         $this->viewBuilder()->setLayout('register');
@@ -84,9 +95,6 @@ class RegistrationsController extends AppController
         $registration = $this->Registrations->newEmptyEntity();
         if ($this->request->is('post')) {
             $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
-
-            // Hardcoding the user_id is temporary, and will be removed later
-            // when we build authentication out.
 
             $session = $this->getRequest()->getSession();
             $registration->user_idir = $session->read('user.idir');
