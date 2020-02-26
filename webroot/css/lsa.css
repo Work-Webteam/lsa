@@ -122,3 +122,12 @@ textarea#description {
 .message {
     margin: 10px;
 }
+
+#datatable-container {
+    padding-bottom: 15px;
+}
+
+#lsa-registrations_filter {
+    width: 100%;
+}
+

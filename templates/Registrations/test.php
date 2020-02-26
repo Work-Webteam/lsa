@@ -8,14 +8,10 @@
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
 
-<!--<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script-->
-<!--<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>-->
-
 <h1>Registrations</h1>
-    <div id="datatable-container">
+    <div id="container">
         <?= $this->Flash->render() ?>
         <table id="lsa-registrations" class="display" style="font-size: 12px; width:100%">
-
         </table>
     </div>
 
@@ -50,71 +46,17 @@
             pageLength: 15,
             lengthChange: false,
 
-            dom: '<"toolbar">frtip',
+            dom: 'Bfrtip',
             buttons: [
-                'csv', 'excel'
+                'csvHtml5', 'excelHtml5'
             ],
-
-            initComplete: function () {
-                $('<tr id="select-filters">').appendTo( '#lsa-registrations thead' );
-                this.api().columns().every( function () {
-                    var column = this;
-                    if (column.visible()) {
-                        $('<td id="data-column-' + column.index() + '"></td>').appendTo('#lsa-registrations thead');
-                    }
-                });
-                $('</tr>').appendTo( '#lsa-registrations thead' );
-
-                this.api().columns([2,3,5,6,7,8]).every( function () {
-
-                    var column = this;
-                    var select = $('<select id="column-' + column.index() + '"><option value=""></option></select><br>')
-                        .appendTo( $('#data-column-'+column.index()) )
-                        .on( 'change', function () {
-                            var val = $.fn.dataTable.util.escapeRegex(
-                                $(this).val()
-                            );
-
-                            column
-                                .search( val ? '^'+val+'$' : '', true, false )
-                                .draw();
-                        } );
-
-                    column.data().unique().sort().each( function ( d, j ) {
-                        select.append( '<option value="'+d+'">'+d+'</option>' )
-                    } );
-                } );
-            }
 
 
         } );
 
-        btns = '<button class="btn btn-primary" onClick="resetFilters()">Reset Filters</button>';
-        btns += '&nbsp;';
-        btns += '<button class="btn btn-primary" onClick="dataExport()">Export</button>'
-        $("div.toolbar").html(btns);
-
         $("table thead tr").attr("valign", "bottom");
     } );
 
-
-    function resetFilters() {
-
-      var table = $('#lsa-registrations').DataTable();
-
-      $('#column-2').prop("selectedIndex", 0);
-      $('#column-3').prop("selectedIndex", 0);
-      $('#column-5').prop("selectedIndex", 0);
-      $('#column-6').prop("selectedIndex", 0);
-      $('#column-7').prop("selectedIndex", 0);
-      $('#column-8').prop("selectedIndex", 0);
-
-      table.search('').columns().search('').draw();
-    }
-
-    function dataExport() {
-        console.log('dataExport');
-    }
 
 
 </script>

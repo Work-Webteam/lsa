@@ -339,6 +339,33 @@ class RegistrationsController extends AppController
     }
 
 
+    public function test()
+    {
+        $conditions = array();
+//        $conditions['Registrations.created >='] = date('Y');
+        $conditions['Registrations.award_year ='] = date('Y');
+
+        // if Ministry Contact only list registrations from their ministry
+        if ($this->checkAuthorization(Configure::read('Role.ministry_contact'))) {
+            $session = $this->getRequest()->getSession();
+            $conditions['Registrations.ministry_id ='] = $session->read("user.ministry");
+        }
+
+        $registrations = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+            'contain' => [
+                'Milestones',
+                'Ministries',
+                'Awards',
+                'OfficeCity',
+                'HomeCity',
+                'SupervisorCity'
+            ],
+        ]);
+
+        $this->set(compact('registrations'));
+    }
+
 
 
 
