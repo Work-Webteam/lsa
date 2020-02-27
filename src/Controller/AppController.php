@@ -61,11 +61,18 @@ class AppController extends Controller
 //        $_SERVER['HTTP_SMGOV_USERGUID'] = '5F4CF1B88565FCA2E8D17AD85B57CE0A';   // supervisor
 //        $_SERVER['HTTP_SMGOV_USERGUID'] = '3BC010F8C876571F3D29DB46012A326B';   // recipient
 
-//        $_SERVER['HTTP_SM_USER'] = 'jvernon';
-//        $_SERVER['HTTP_SMGOV_USERGUID'] = '9A268C3025C27C8C86F79592BC816B74';   // protocol
+
+//        $_SERVER['HTTP_SM_USER'] = 'jadams';
+//        $_SERVER['HTTP_SMGOV_USERGUID'] = '26B243BA60AE8F60B4BB3C81E1450423';   // ministry contact
+
+        $_SERVER['HTTP_SM_USER'] = 'kblack';
+        $_SERVER['HTTP_SMGOV_USERGUID'] = '5F4CF1B88565FCA2E8D17AD85B57CE0A';   // supervisor
+//
+//        $_SERVER['HTTP_SM_USER'] = 'asmith';
+//        $_SERVER['HTTP_SMGOV_USERGUID'] = 'C68FF67FB334907A25DB8B07767CC1FC';   // protocol
 
 //        $_SERVER['HTTP_SM_USER'] = 'rsharples';
-//        $_SERVER['HTTP_SMGOV_USERGUID'] = '7B9AC399055CC69EE1C50CAB45CB6BBA';   // recipient
+//        $_SERVER['HTTP_SMGOV_USERGUID'] = '3BC010F8C876571F3D29DB46012A326B';   // recipient
 //
 
         // check if user has administrative privileges
@@ -116,6 +123,7 @@ class AppController extends Controller
 
 
     public function checkAuthorization($roles = 1, $ministry = 0) {
+
         if (!is_array($roles)) {
             $roles = array($roles);
         }

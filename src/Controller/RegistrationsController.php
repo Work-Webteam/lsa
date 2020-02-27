@@ -16,21 +16,35 @@ class RegistrationsController extends AppController
             $this->redirect('/');
         }
 
+        $query = $this->Registrations->RegistrationPeriods->find('all')
+            ->where([
+                'Registrationperiods.open_registration <=' => date('Y-m-d H:i:s'),
+                'Registrationperiods.close_registration >=' => date('Y-m-d H:i:s')
+            ]);
+        $registrationperiods = $query->first();
+
         $conditions = array();
-//        $conditions['Registrations.created >='] = date('Y');
         $conditions['Registrations.award_year ='] = date('Y');
+
+        $edit = true;
+        $toolbar = true;
 
         // if Ministry Contact only list registrations from their ministry
         if ($this->checkAuthorization(Configure::read('Role.ministry_contact'))) {
             $session = $this->getRequest()->getSession();
             $conditions['Registrations.ministry_id ='] = $session->read("user.ministry");
+            $edit = !empty($registrationperiods);
+            $toolbar = false;
         }
 
         // if Supervisor role only list registrations they created
         if ($this->checkAuthorization(Configure::read('Role.supervisor'))) {
             $session = $this->getRequest()->getSession();
             $conditions['Registrations.user_guid ='] = $session->read("user.guid");
+            $edit = !empty($registrationperiods);
+            $toolbar = false;
         }
+
         $registrations = $this->Registrations->find('all', [
             'conditions' => $conditions,
             'contain' => [
@@ -44,6 +58,8 @@ class RegistrationsController extends AppController
         ]);
 
         $this->set(compact('registrations'));
+        $this->set(compact('edit'));
+        $this->set(compact('toolbar'));
     }
 
     public function view($id = null)
@@ -291,6 +307,14 @@ class RegistrationsController extends AppController
         $this->set('registration', $registration);
 
         $isadmin = true;
+
+        $query = $this->Registrations->RegistrationPeriods->find('all')
+            ->where([
+                'Registrationperiods.open_registration <=' => date('Y-m-d H:i:s'),
+                'Registrationperiods.close_registration >=' => date('Y-m-d H:i:s')
+            ]);
+        $registrationperiods = $query->first();
+
         if ($this->checkAuthorization(array(
             Configure::read('Role.authenticated'),
             Configure::read('Role.ministry_contact'),
@@ -306,11 +330,19 @@ class RegistrationsController extends AppController
                     $this->Flash->error(__('You are not authorized to edit this Registration.'));
                     $this->redirect('/registrations');
                 }
+                if (!$registrationperiods) {
+                    $this->Flash->error(__('You may no longer edit this Registration.'));
+                    $this->redirect('/');
+                }
             }
             else if ($this->checkAuthorization(Configure::read('Role.ministry_contact'))) {
                 if (!$this->checkAuthorization(Configure::read('Role.ministry_contact'), $registration->ministry_id)) {
                     $this->Flash->error(__('You are not authorized to edit this Registration.'));
                     $this->redirect('/registrations');
+                }
+                if (!$registrationperiods) {
+                    $this->Flash->error(__('You may no longer edit this Registration.'));
+                    $this->redirect('/');
                 }
             }
             $isadmin = false;
@@ -336,6 +368,61 @@ class RegistrationsController extends AppController
             $this->Flash->success(__('The {0} registration has been deleted.', $registration->name));
             return $this->redirect(['action' => 'index']);
         }
+    }
+
+    public function awardsummary() {
+        if (!$this->checkAuthorization(array(
+            Configure::read('Role.admin'),
+            Configure::read('Role.lsa_admin'),
+            Configure::read('Role.protocol')))) {
+            $this->Flash->error(__('You are not authorized to view this page.'));
+            $this->redirect('/');
+        }
+
+        $conditions = array();
+        $conditions['Registrations.award_year ='] = date('Y');
+
+        // if Supervisor role only list registrations they created
+        $registrations = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+            'contain' => [
+                'Awards'
+            ],
+            'group' => ['Registrations.award_id']
+        ]);
+        $registrations->select([
+            'Awards.name',
+            'count' => $registrations->func()->count('*')]);
+        $registrations->order(['count' => 'DESC']);
+        $this->set(compact('registrations'));
+
+    }
+
+    public function ministrysummary() {
+        if (!$this->checkAuthorization(array(
+            Configure::read('Role.admin'),
+            Configure::read('Role.lsa_admin'),
+            Configure::read('Role.protocol')))) {
+            $this->Flash->error(__('You are not authorized to view this page.'));
+            $this->redirect('/');
+        }
+
+        $conditions = array();
+        $conditions['Registrations.award_year ='] = date('Y');
+
+        // if Supervisor role only list registrations they created
+        $registrations = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+            'contain' => [
+                'Ministries',
+            ],
+            'group' => ['Registrations.ministry_id']
+        ]);
+        $registrations->select([
+            'Ministries.name',
+            'count' => $registrations->func()->count('*')]);
+        $registrations->order(['count' => 'DESC', 'Ministries.name' => 'ASC']);
+        $this->set(compact('registrations'));
     }
 
 

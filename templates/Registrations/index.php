@@ -1,15 +1,14 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"/>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css"/>
 
+<?= $this->Html->css('lsa-datatables.css') ?>
+
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
-
-<!--<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script-->
-<!--<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>-->
 
 <h1>Registrations</h1>
     <div id="datatable-container">
@@ -21,6 +20,8 @@
 
 <script>
     var registrations=<?php echo json_encode($registrations); ?>;
+    var edit=<?php echo json_encode($edit); ?>;
+    var toolbar=<?php echo json_encode($toolbar); ?>;
 
     $(document).ready(function() {
 
@@ -35,14 +36,20 @@
                 { data: "milestone.name", title: "Year of Service" },
                 { data: "award.name", title: "Award", defaultContent: "PECSF Donation" },
                 { data: "office_city.name", title: "Office City", visible: true },
-                { data: "retroactive", title: "Retroactive", visible: true },
+                { data: "retroactive", title: "Retroactive", visible: true, orderable: false },
                 { data: "home_city.name", title: "Home City", visible: false },
                 { data: "supervisor_city.name", title: "Supervisor City", visible: false },
                 { data: "preferred_email", title: "Work Email", visible: false },
                 { data: "alternate_email", title: "Personal Email", visible: false },
                 { data: "supervisor_email", title: "Supervisor Email", visible: false },
-                { data: "id", render: function( data, type, row, meta) {
-                        return '<a href="/registrations/view/' + data + '">view</a> | <a href="/registrations/edit/' + data + '">edit</a>';
+                { data: "id", orderable: false, render: function( data, type, row, meta) {
+                        if (edit) {
+                            link = '<a href="/registrations/view/' + data + '">view</a> | <a href="/registrations/edit/' + data + '">edit</a>';
+                        }
+                        else {
+                            link = '<a href="/registrations/view/' + data + '">view</a>';
+                        }
+                        return link;
                     }
                 }
             ],
@@ -50,10 +57,15 @@
             pageLength: 15,
             lengthChange: false,
 
-            dom: '<"toolbar">frtip',
+            dom: '<"toolbar">Bfrtip',
             buttons: [
                 'csv', 'excel'
             ],
+
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Search..."
+            },
 
             initComplete: function () {
                 $('<tr id="select-filters">').appendTo( '#lsa-registrations thead' );
@@ -89,12 +101,24 @@
 
         } );
 
-        btns = '<button class="btn btn-primary" onClick="resetFilters()">Reset Filters</button>';
+        btns = '<div>';
+        btns += '<button class="btn btn-primary" onClick="resetFilters()">Reset Filters</button>';
+        btns += '</div><div>';
+        // btns += '<button class="btn btn-info" onClick="dataExport()">Export</button>';
+        // btns += '&nbsp;';
+        btns += '<button class="btn btn-info" onClick="summaryAward()">Award Summary</button>';
         btns += '&nbsp;';
-        btns += '<button class="btn btn-primary" onClick="dataExport()">Export</button>'
+        btns += '<button class="btn btn-info" onClick="summaryMinistry()">Ministry Summary</button>';
+        btns += '</div>';
+
         $("div.toolbar").html(btns);
 
         $("table thead tr").attr("valign", "bottom");
+
+        if (!toolbar) {
+            $("div.toolbar").hide();
+            $(".dt-buttons").hide();
+        }
     } );
 
 
@@ -116,5 +140,12 @@
         console.log('dataExport');
     }
 
+    function summaryAward() {
+        location.href = "/registrations/awardsummary";
+    }
+
+    function summaryMinistry() {
+        location.href = "/registrations/ministrysummary";
+    }
 
 </script>

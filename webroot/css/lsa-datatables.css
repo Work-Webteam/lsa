@@ -1,0 +1,23 @@
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+}
+
+#datatable-container {
+    padding-bottom: 15px;
+}
+
+#lsa-registrations_filter {
+    width: 100%;
+}
+
+#lsa-registrations select {
+    margin-bottom: 0rem;
+    padding-right: 0rem;
+    padding: 0.2rem 0.2rem;
+    height: 2rem;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    margin-left: 0em;
+}
