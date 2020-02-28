@@ -11,9 +11,9 @@
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
 
 <h1>Registrations</h1>
-    <div id="datatable-container">
+    <div class="datatable-container">
         <?= $this->Flash->render() ?>
-        <table id="lsa-registrations" class="display" style="font-size: 12px; width:100%">
+        <table id="lsa-registrations" class="display lsa-datatable" style="font-size: 12px; width:100%">
 
         </table>
     </div>
@@ -24,6 +24,8 @@
     var toolbar=<?php echo json_encode($toolbar); ?>;
 
     $(document).ready(function() {
+
+        console.log(registrations);
 
         $('#lsa-registrations').DataTable( {
             data: registrations,
@@ -36,22 +38,27 @@
                 { data: "milestone.name", title: "Year of Service" },
                 { data: "award.name", title: "Award", defaultContent: "PECSF Donation" },
                 { data: "office_city.name", title: "Office City", visible: true },
+                { data: "home_city.name", title: "Home City", visible: true },
+                { data: "supervisor_city.name", title: "Supervisor City", visible: true },
                 { data: "retroactive", title: "Retroactive", visible: true, orderable: false },
-                { data: "home_city.name", title: "Home City", visible: false },
-                { data: "supervisor_city.name", title: "Supervisor City", visible: false },
                 { data: "preferred_email", title: "Work Email", visible: false },
                 { data: "alternate_email", title: "Personal Email", visible: false },
                 { data: "supervisor_email", title: "Supervisor Email", visible: false },
                 { data: "id", orderable: false, render: function( data, type, row, meta) {
                         if (edit) {
-                            link = '<a href="/registrations/view/' + data + '">view</a> | <a href="/registrations/edit/' + data + '">edit</a>';
+                            // link = '<a href="/registrations/view/' + data + '">view</a> | <a href="/registrations/edit/' + data + '">edit</a>';
+                            link = '<a href="/registrations/edit/' + data + '">edit</a>';
                         }
                         else {
                             link = '<a href="/registrations/view/' + data + '">view</a>';
                         }
                         return link;
                     }
-                }
+                },
+                { data: "award_instructions", title: "Award Instructions", visible: false, orderable: false },
+                { data: "award_received", title: "Award Received", visible: true, orderable: false },
+                { data: "engraving_sent", title: "Engraving Sent", visible: true, orderable: false },
+                { data: "survey_participation", title: "LSA Consent", visible: true, orderable: false },
             ],
             // stateSave: true,
             pageLength: 15,
@@ -77,7 +84,7 @@
                 });
                 $('</tr>').appendTo( '#lsa-registrations thead' );
 
-                this.api().columns([2,3,5,6,7,8]).every( function () {
+                this.api().columns([2,3,5,6,7,8,9,10,16,17,18]).every( function () {
 
                     var column = this;
                     var select = $('<select id="column-' + column.index() + '"><option value=""></option></select><br>')
@@ -87,9 +94,7 @@
                                 $(this).val()
                             );
 
-                            column
-                                .search( val ? '^'+val+'$' : '', true, false )
-                                .draw();
+                            column.search(val ? '^' + val + '$' : '', true, false).draw();
                         } );
 
                     column.data().unique().sort().each( function ( d, j ) {
@@ -113,8 +118,10 @@
 
         $("div.toolbar").html(btns);
 
-        $("table thead tr").attr("valign", "bottom");
 
+        // $("table thead th").css('border-bottom', '0px');
+
+        // only show buttons for users with appropriate permissions
         if (!toolbar) {
             $("div.toolbar").hide();
             $(".dt-buttons").hide();
@@ -126,13 +133,10 @@
 
       var table = $('#lsa-registrations').DataTable();
 
-      $('#column-2').prop("selectedIndex", 0);
-      $('#column-3').prop("selectedIndex", 0);
-      $('#column-5').prop("selectedIndex", 0);
-      $('#column-6').prop("selectedIndex", 0);
-      $('#column-7').prop("selectedIndex", 0);
-      $('#column-8').prop("selectedIndex", 0);
-
+      table.columns().every( function () {
+          var column = this;
+          $('#column-' + column.index()).prop("selectedIndex", 0);
+      });
       table.search('').columns().search('').draw();
     }
 

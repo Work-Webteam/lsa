@@ -118,3 +118,7 @@ textarea#description {
     margin: 10px;
 }
 
+#lsa-registration-view h4 {
+    margin-top:25px;
+    margin-bottom: 5px;
+}

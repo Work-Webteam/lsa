@@ -64,10 +64,12 @@ class RegistrationsController extends AppController
 
     public function view($id = null)
     {
-        if (!$this->checkAuthorization(array(Configure::read('Role.admin'), Configure::read('Role.lsa_admin')))) {
-            $this->Flash->error(__('You are not authorized to view this page.'));
-            $this->redirect('/');
-        }
+//        if (!$this->checkAuthorization(array(Configure::read('Role.admin'), Configure::read('Role.lsa_admin')))) {
+        if ($this->checkAuthorization(array(Configure::read('Role.authenticated')))) {
+                $this->Flash->error(__('You are not authorized to view this page.'));
+                $this->redirect('/');
+            }
+//        }
         $registration = $this->Registrations->find('all', [
             'conditions' => array(
                 'Registrations.id' => $id
@@ -82,6 +84,38 @@ class RegistrationsController extends AppController
             ],
         ])->first();
         if ($registration) {
+
+            $query = $this->Registrations->RegistrationPeriods->find('all')
+                ->where([
+                    'Registrationperiods.open_registration <=' => date('Y-m-d H:i:s'),
+                    'Registrationperiods.close_registration >=' => date('Y-m-d H:i:s')
+                ]);
+            $registrationperiods = $query->first();
+
+            if ($this->checkAuthorization(array(
+                Configure::read('Role.ministry_contact'),
+                Configure::read('Role.supervisor')))) {
+                if ($this->checkAuthorization(Configure::read('Role.supervisor'))) {
+                    if (!$this->checkGUID($registration->user_guid)) {
+                        $this->Flash->error(__('You are not authorized to edit this Registration.'));
+                        $this->redirect('/registrations');
+                    }
+                    if (!$registrationperiods) {
+                        $this->Flash->error(__('You may no longer edit this Registration.'));
+                        $this->redirect('/');
+                    }
+                } else if ($this->checkAuthorization(Configure::read('Role.ministry_contact'))) {
+                    if (!$this->checkAuthorization(Configure::read('Role.ministry_contact'), $registration->ministry_id)) {
+                        $this->Flash->error(__('You are not authorized to edit this Registration.'));
+                        $this->redirect('/registrations');
+                    }
+                    if (!$registrationperiods) {
+                        $this->Flash->error(__('You may no longer edit this Registration.'));
+                        $this->redirect('/');
+                    }
+                }
+            }
+
             $this->set(compact('registration'));
         }
         else {
