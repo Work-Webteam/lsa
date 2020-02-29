@@ -5,6 +5,7 @@
         <th>Id</th>
         <th>Name</th>
         <th>Milestone</th>
+        <th>Personalized</th>
         <th>Status</th>
         <th colspan = "3">Operations</th>
     </tr>
@@ -18,7 +19,10 @@
                 <?= $award->name ?>
             </td>
             <td>
-                <?= $award->milestone_id ?>
+                <?= $award->milestone->name ?>
+            </td>
+            <td>
+                <?= $award->personalized ? 'yes' : '' ?>
             </td>
             <td>
                 <?= $award->active ? 'active' : 'inactive' ?>

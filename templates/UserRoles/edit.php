@@ -2,7 +2,7 @@
 <h1>Edit User Role</h1>
 <?php
 echo $this->Form->create($userrole, ['@submit' => 'checkForm', 'horizontal' => true]);
-echo $this->Form->control('idir', ['type' => 'text', 'label' => 'IDIR']);
+echo $this->Form->control('idir', ['type' => 'text', 'label' => 'IDIR', 'style' => 'text-transform: lowercase;']);
 echo $this->Form->control('role_id', ['empty' => '- select role -', 'onChange' => 'app.showMinistry(this.value)']);
 ?>
 <div v-if="selectMinistry">

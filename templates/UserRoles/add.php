@@ -2,7 +2,7 @@
 <h1>Add User Role</h1>
 <?php
 echo $this->Form->create($userrole, ['@submit' => 'checkForm']);
-echo $this->Form->control('idir', ['type' => 'text', 'label' => 'IDIR']);
+echo $this->Form->control('idir', ['type' => 'text', 'label' => 'IDIR', 'v-model' => 'idir', 'style' => 'text-transform: lowercase;']);
 echo $this->Form->control('role_id', ['empty' => '- select role -', 'onChange' => 'app.showMinistry(this.value)']);
 ?>
     <div v-if="selectMinistry">
@@ -47,6 +47,7 @@ echo $this->Form->end();
         el: '#app',
         data: {
             selectMinistry: false,
+            idir: '',
             roleID: 0,
             ministryID: 0,
             errors: '',
@@ -72,12 +73,25 @@ echo $this->Form->end();
 
             checkForm: function (e) {
                 var sel = document.getElementById("ministry-id");
-                console.log (this.roleID);
-                console.log(sel.selectedIndex);
+                var selRole = document.getElementById("role-id");
+
+                var errors = [];
+
+                if (!this.idir) {
+                    errors.push('IDIR is required');
+                }
+                if (selRole.selectedIndex == 0) {
+                    errors.push ('Role is required');
+                }
                 if (this.roleID == 5 && sel.selectedIndex == 0) {
+                    errors.push ('Ministry is required');
+                }
+                if (errors.length > 0) {
                     this.errors = '<ul>';
-                    this.errors += '<li>Ministry is required</li>';
-                    this.errorsOffice += '</ul>';
+                    for (var i = 0; i < errors.length; i++) {
+                        this.errors += '<li>' + errors[i] + '</li>';
+                    }
+                    this.errors += '</ul>';
                     e.preventDefault();
                 }
             }

@@ -10,6 +10,8 @@ class AwardsTable extends Table
     public function initialize(array $config) : Void
     {
         $this->addBehavior('Timestamp');
-        $this->hasOne('Milestones');
+        $this->hasOne('Milestones')
+            ->setForeignKey('id')
+            ->setBindingKey('milestone_id');
     }
 }

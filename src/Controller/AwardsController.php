@@ -13,7 +13,12 @@ class AwardsController extends AppController
             $this->redirect('/');
         }
         $this->loadComponent('Paginator');
-        $awards = $this->Paginator->paginate($this->Awards->find());
+        $awards = $this->Paginator->paginate($this->Awards->find('all', [
+            'contain' => ['Milestones']
+        ]));
+
+
+
         $this->set(compact('awards'));
     }
 

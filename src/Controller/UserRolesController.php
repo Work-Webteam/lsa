@@ -41,6 +41,10 @@ class UserRolesController extends AppController
         $userrole = $this->Userroles->newEmptyEntity();
         if ($this->request->is('post')) {
             $userrole = $this->Userroles->patchEntity($userrole, $this->request->getData());
+            $userrole->idir = strtolower($userrole->idir);
+            if($userrole->role_id <> 5) {
+                $userrole->ministry_id = 0;
+            }
 
             if ($this->Userroles->save($userrole)) {
                 $this->Flash->success(__('Your role has been saved.'));
@@ -69,7 +73,7 @@ class UserRolesController extends AppController
         $userrole = $this->Userroles->findById($id)->firstOrFail();
         if ($this->request->is(['post', 'put'])) {
             $userrole = $this->Userroles->patchEntity($userrole, $this->request->getData());
-
+            $userrole->idir = strtolower($userrole->idir);
             if($userrole->role_id <> 5) {
                 $userrole->ministry_id = 0;
             }
