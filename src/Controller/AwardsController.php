@@ -18,7 +18,8 @@ class AwardsController extends AppController
         ]));
 
 
-
+        $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
+        $this->set(compact('isadmin'));
         $this->set(compact('awards'));
     }
 

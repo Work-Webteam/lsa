@@ -19,11 +19,7 @@
             </td>
 
             <td valign="top">
-                <?= $this->Html->link(
-                    'Edit',
-                    ['action' => 'editoption', $award->id, $key],
-                    ['class' => 'btn btn-primary', 'role' => 'button'])
-                ?>
+                <?= $this->Html->link('Edit',['action' => 'editoption', $award->id, $key], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>
             <td valign="top">
                 <?= $this->Form->postLink(

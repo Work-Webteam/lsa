@@ -15,6 +15,9 @@ class MinistriesController extends AppController
         }
         $this->loadComponent('Paginator');
         $ministries = $this->Paginator->paginate($this->Ministries->find());
+
+        $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
+        $this->set(compact('isadmin'));
         $this->set(compact('ministries'));
     }
 
@@ -25,6 +28,9 @@ class MinistriesController extends AppController
             $this->redirect('/');
         }
         $ministry = $this->Ministries->findById($id)->firstOrFail();
+
+        $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
+        $this->set(compact('isadmin'));
         $this->set(compact('ministry'));
     }
 

@@ -14,6 +14,9 @@ class DietController extends AppController
         }
         $this->loadComponent('Paginator');
         $diets = $this->Paginator->paginate($this->Diet->find());
+
+        $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
+        $this->set(compact('isadmin'));
         $this->set(compact('diets'));
     }
 
@@ -24,6 +27,9 @@ class DietController extends AppController
             $this->redirect('/');
         }
         $diet = $this->Diet->findById($id)->firstOrFail();
+
+        $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
+        $this->set(compact('isadmin'));
         $this->set(compact('diet'));
     }
 

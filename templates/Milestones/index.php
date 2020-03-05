@@ -4,7 +4,7 @@
 <?= $this->Html->link('Add Milestone', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 <table>
     <tr>
-        <th>Id</th>
+        <?= $isadmin ? "<th>Id</th>" : "" ?>
         <th>Milestone</th>
         <th>Donation Amount</th>
         <th colspan = 2>Operations</th>
@@ -14,9 +14,7 @@
 
     <?php foreach ($milestones as $milestone): ?>
         <tr>
-            <td>
-                <?= $milestone->id ?>
-            </td>
+            <?= $isadmin ? "<td>" . $milestone->id . "</td>" : "" ?>
             <td>
                 <?= $this->Html->link($milestone->name, ['action' => 'view', $milestone->id]) ?>
             </td>
@@ -24,12 +22,10 @@
                 <?= $milestone->donation ?>
             </td>
             <td>
-                <?= $this->Html->link('Edit', ['action' => 'edit', $milestone->id]) ?> |
-                <?= $this->Form->postLink(
-                    'Delete',
-                    ['action' => 'delete', $milestone->id],
-                    ['confirm' => 'Are you sure?'])
-                ?>
+                <?= $this->Html->link('Edit', ['action' => 'edit', $milestone->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
+            </td>
+            <td>
+                <?= $this->Form->postLink('Delete', ['action' => 'delete', $milestone->id], ['confirm' => 'Are you sure?','class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>
         </tr>
     <?php endforeach; ?>

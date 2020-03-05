@@ -1,4 +1,7 @@
-<h1><?= h($milestone->name) ?></h1>
-<p><?= h($milestone->id) ?></p>
-<p><?= h($milestone->donation) ?></p>
-<p><?= $this->Html->link('Edit', ['action' => 'edit', $milestone->id]) ?></p>
+<h1><?= h($charity->name) ?></h1>
+<p><?= h($charity->Pecsfregions['name']) ?></p>
+<p><?= h($charity->vendor_code) ?></p>
+<p>
+    <?= $this->Html->link('Edit', ['action' => 'edit', $charity->id], ['class' => 'btn btn-primary btn-lg', 'role' => 'button']) ?>
+    <?= $this->Html->link('Cancel', ['action' => 'index'], ['class' => 'btn btn-secondary btn-lg', 'role' => 'button']) ?>
+</p>

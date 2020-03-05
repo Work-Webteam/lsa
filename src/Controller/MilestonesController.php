@@ -14,6 +14,9 @@ class MilestonesController extends AppController
         }
         $this->loadComponent('Paginator');
         $milestones = $this->Paginator->paginate($this->Milestones->find());
+
+        $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
+        $this->set(compact('isadmin'));
         $this->set(compact('milestones'));
     }
 
@@ -24,6 +27,9 @@ class MilestonesController extends AppController
             $this->redirect('/');
         }
         $milestone = $this->Milestones->findById($id)->firstOrFail();
+
+        $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
+        $this->set(compact('isadmin'));
         $this->set(compact('milestone'));
     }
 

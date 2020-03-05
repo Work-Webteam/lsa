@@ -18,6 +18,8 @@ class CeremoniesController extends AppController
             'conditions' => ['Ceremonies.award_year =' => date('Y')],
         ]));
 
+        $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
+        $this->set(compact('isadmin'));
         $this->set(compact('ceremonies'));
     }
 
@@ -28,6 +30,12 @@ class CeremoniesController extends AppController
             $this->redirect('/');
         }
         $ceremony = $this->Ceremonies->findById($id)->firstOrFail();
+
+        $attending = json_decode($ceremony->attending, true);
+        $this->set(compact('attending'));
+
+        $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
+        $this->set(compact('isadmin'));
         $this->set(compact('ceremony'));
     }
 
@@ -42,6 +50,7 @@ class CeremoniesController extends AppController
             $ceremony = $this->Ceremonies->patchEntity($ceremony, $this->request->getData());
             $ceremony->award_year = date("Y");
             $ceremony->date = $this->request->getData('ceremony_date') . " " . $this->request->getData('ceremony_time');
+            $ceremony->attending = json_encode(array());
             if ($this->Ceremonies->save($ceremony)) {
                 $this->Flash->success(__('Your ceremony has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -88,5 +97,35 @@ class CeremoniesController extends AppController
         }
     }
 
+    public function addattending($id) {
+        if (!$this->checkAuthorization(array(
+            Configure::read('Role.admin'),
+            Configure::read('Role.lsa_admin'),
+            Configure::read('Role.protocol')))) {
+            $this->Flash->error(__('You are not authorized to administer Ceremonies.'));
+            $this->redirect('/');
+        }
+        $ceremony = $this->Ceremonies->findById($id)->firstOrFail();
+        if ($this->request->is('post')) {
+            $ministry_id = $this->request->getData('ministry_id');
+            if (!empty($ministry_id)) {
+                $new = array(
+                    'ministry' => $this->request->getData('ministry_id'),
+                    'milestone' => $this->request->getData('milestone_id'),
+                    'city' => array($this->request->getData('city_id'), $this->request->getData('city_type'))
+                );
+                $attending = json_decode($award->attending, true);
+                $attending[] = $new;
+                $award->attending = json_encode($attending);
+            }
+            if ($this->Awards->save($award)) {
+                $this->Flash->success(__('Option has been saved.'));
+                return $this->redirect(['action' => 'view/'.$award->id]);
+            }
+            $this->Flash->error(__('Unable to add option.'));
+        }
+
+        $this->set('award', $award);
+    }
 }
 

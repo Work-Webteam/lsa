@@ -13,7 +13,12 @@ class PecsfCharitiesController extends AppController
             $this->redirect('/');
         }
         $this->loadComponent('Paginator');
-        $charities = $this->Paginator->paginate($this->Pecsfcharities->find());
+        $charities = $this->Paginator->paginate($this->Pecsfcharities->find('all', [
+                'contain' => ['PecsfRegions']
+            ]));
+
+        $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
+        $this->set(compact('isadmin'));
         $this->set(compact('charities'));
     }
 
@@ -23,7 +28,13 @@ class PecsfCharitiesController extends AppController
             $this->Flash->error(__('You are not authorized to administer PECSF Charities.'));
             $this->redirect('/');
         }
-        $charity = $this->Pecsfcharities->findById($id)->firstOrFail();
+        $charity = $this->Pecsfcharities->find('all', [
+            'conditions' => ['PecsfCharities.id' => $id],
+            'contain' => ['PecsfRegions']
+        ])->firstOrFail();
+
+        $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
+        $this->set(compact('isadmin'));
         $this->set(compact('charity'));
     }
 

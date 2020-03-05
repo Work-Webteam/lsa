@@ -14,6 +14,9 @@ class PecsfRegionsController extends AppController
         }
         $this->loadComponent('Paginator');
         $pecsfregions = $this->Paginator->paginate($this->Pecsfregions->find());
+
+        $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
+        $this->set(compact('isadmin'));
         $this->set(compact('pecsfregions'));
     }
 
@@ -24,6 +27,9 @@ class PecsfRegionsController extends AppController
             $this->redirect('/');
         }
         $region = $this->Pecsfregions->findById($id)->firstOrFail();
+
+        $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
+        $this->set(compact('isadmin'));
         $this->set(compact('region'));
     }
 

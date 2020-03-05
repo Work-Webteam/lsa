@@ -5154,22 +5154,22 @@ INSERT INTO `awards` (`id`, `name`, `milestone_id`, `description`, `image`, `opt
 
 INSERT INTO `registration_periods` (`id`, `award_year`, `open_registration`, `close_registration`) VALUES(1, 2020, '2020-02-01 00:00:00', '2020-03-31 23:59:59');
 
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(1, 2019, 1, '2019-10-10 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(2, 2019, 2, '2019-10-11 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(3, 2019, 3, '2019-10-12 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(4, 2020, 1, '2021-02-05 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(5, 2020, 2, '2021-02-06 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(6, 2020, 3, '2021-02-11 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(7, 2020, 4, '2021-02-12 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(8, 2020, 5, '2021-02-13 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(9, 2020, 6, '2021-02-17 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(10, 2020, 7, '2021-02-18 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(11, 2020, 8, '2021-02-19 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(12, 2020, 9, '2021-02-20 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(13, 2020, 10, '2021-02-25 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(14, 2020, 11, '2021-02-26 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(15, 2020, 12, '2021-02-27 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(16, 2021, 12, '2021-10-15 19:30:00', NULL, NULL);
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(1, 2019, 1, '2019-10-10 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(2, 2019, 2, '2019-10-11 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(3, 2019, 3, '2019-10-12 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(4, 2020, 1, '2021-02-05 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(5, 2020, 2, '2021-02-06 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(6, 2020, 3, '2021-02-11 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(7, 2020, 4, '2021-02-12 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(8, 2020, 5, '2021-02-13 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(9, 2020, 6, '2021-02-17 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(10, 2020, 7, '2021-02-18 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(11, 2020, 8, '2021-02-19 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(12, 2020, 9, '2021-02-20 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(13, 2020, 10, '2021-02-25 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(14, 2020, 11, '2021-02-26 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(15, 2020, 12, '2021-02-27 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(16, 2021, 1, '2021-10-15 19:30:00', NULL, '[]');
 
 
 INSERT INTO `registrations` (`id`, `created`, `modified`, `user_idir`, `user_guid`, `employee_id`, `first_name`, `last_name`, `milestone_id`, `award_id`, `award_options`, `award_instructions`, `award_year`, `award_received`, `engraving_sent`, `certificate_name`, `certificate_ordered`, `pecsf_donation`, `pecsf_donation_type`, `pecsf_region_id`, `pecsf_charity1_id`, `pecsf_amount1`, `pecsf_charity2_id`, `pecsf_amount2`, `pecsf_cheque_date`, `retiring_this_year`, `retirement_date`, `retroactive`, `member_bcgeu`, `admin_notes`, `alternate_ministry_id`, `invite_sent`, `attending`, `ceremony_id`, `accessibility_requirements_recipient`, `accessibility_requirements_guest`, `accessibility_recipient_notes`, `accessibility_guest_notes`, `accessibility_admin_notes`, `presentation_number`, `ministry_id`, `branch`, `executive_recipient`, `recipient_speaker`, `reserved_seating`, `recipient_diet_id`, `recipient_diet_other`, `guest`, `guest_diet_id`, `guest_diet_other`, `office_careof`, `office_address`, `office_suite`, `office_city_id`, `office_province`, `office_postal_code`, `home_address`, `home_suite`, `home_city_id`, `home_province`, `home_postal_code`, `home_phone`, `work_phone`, `work_extension`, `preferred_email`, `alternate_email`, `supervisor_first_name`, `supervisor_last_name`, `supervisor_careof`, `supervisor_address`, `supervisor_suite`, `supervisor_city_id`, `supervisor_province`, `supervisor_postal_code`, `supervisor_email`, `photo_frame_range`, `photo_order`, `photo_sent`, `survey_participation`) VALUES(1, '2019-05-28 23:09:20', '2019-05-28 23:09:20', 'rkuyvenh', '60DCD2AF73FB44AE9345F11B71CD3495', 23423, 'Raine', 'Kostis', 3, 9, '[\"Size: Large (men\'s) = 38 mm watch face, 20 mm strap width\",\"Watch Colour: Silver\",\"Strap Colour: Black\",\"Engravement: rjk\"]', NULL, 2019, 0, 0, NULL, NULL, 0, NULL, NULL, NULL, '0.0000', NULL, '0.0000', NULL, 0, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 7, 'Branch 1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 'Office Address 1', '', 11, 'BC', 'L1Z 1Z1', 'Home Address 1', '', 216, 'BC', 'V9E 1M3', '(250) 555-1234', '(250) 555-1234', '', 'rjkuyvenhoven@gmail.com', '', 'Bob', 'Schlar', '', 'Supervisor Address 1', '', 283, 'BC', 'V4T 1G6', 'supervisor@local.com', NULL, NULL, NULL, 0);

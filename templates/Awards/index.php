@@ -2,7 +2,7 @@
 <?= $this->Html->link('Add Award', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 <table>
     <tr>
-        <th>Id</th>
+        <?= $isadmin ? "<th>Id</th>" : "" ?>
         <th>Name</th>
         <th>Milestone</th>
         <th>Personalized</th>
@@ -12,9 +12,7 @@
 
     <?php foreach ($awards as $award): ?>
         <tr>
-            <td>
-                <?= $award->id ?>
-            </td>
+            <?= $isadmin ? "<td>" . $award->id . "</td>" : "" ?>
             <td>
                 <?= $award->name ?>
             </td>

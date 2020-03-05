@@ -2,7 +2,7 @@
 <?= $this->Html->link('Add Diet', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 <table>
     <tr>
-        <th>Id</th>
+        <?= $isadmin ? "<th>Id</th>" : "" ?>
         <th>Diet</th>
         <th colspan = 2>Operations</th>
     </tr>
@@ -11,19 +11,15 @@
 
     <?php foreach ($diets as $diet): ?>
         <tr>
-            <td>
-                <?= $diet->id ?>
-            </td>
+            <?= $isadmin ? "<td>" . $diet->id . "</td>" : "" ?>
             <td>
                 <?= $this->Html->link($diet->name, ['action' => 'view', $diet->id]) ?>
             </td>
             <td>
-                <?= $this->Html->link('Edit', ['action' => 'edit', $diet->id]) ?> |
-                <?= $this->Form->postLink(
-                    'Delete',
-                    ['action' => 'delete', $diet->id],
-                    ['confirm' => 'Are you sure?'])
-                ?>
+                <?= $this->Html->link('Edit', ['action' => 'edit', $diet->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
+            </td>
+            <td>
+                <?= $this->Form->postLink('Delete', ['action' => 'delete', $diet->id], ['confirm' => 'Are you sure?','class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>
         </tr>
     <?php endforeach; ?>

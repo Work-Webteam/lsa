@@ -18,6 +18,8 @@ class RegistrationPeriodsController extends AppController
             'order' => ['Registrationperiods.open_registration' => 'DESC']
         ]));
 
+        $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
+        $this->set(compact('isadmin'));
         $this->set(compact('registrationperiods'));
     }
 
@@ -27,8 +29,11 @@ class RegistrationPeriodsController extends AppController
             $this->Flash->error(__('You are not authorized to administer Registration Periods.'));
             $this->redirect('/');
         }
-        $registrationperiod = $this->Registrationperiods->findById($id)->firstOrFail();
-        $this->set(compact('registrationperiod'));
+        $period = $this->Registrationperiods->findById($id)->firstOrFail();
+
+        $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
+        $this->set(compact('isadmin'));
+        $this->set(compact('period'));
     }
 
     public function add()

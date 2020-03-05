@@ -2,7 +2,7 @@
 <?= $this->Html->link('Add City', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 <table>
     <tr>
-        <th>Id</th>
+        <?= $isadmin ? "<th>Id</th>" : "" ?>
         <th>City</th>
         <th colspan = 2>Operations</th>
     </tr>
@@ -11,19 +11,15 @@
 
     <?php foreach ($cities as $city): ?>
         <tr>
-            <td>
-                <?= $city->id ?>
-            </td>
+            <?= $isadmin ? "<td>" . $city->id . "</td>" : "" ?>
             <td>
                 <?= $this->Html->link($city->name, ['action' => 'view', $city->id]) ?>
             </td>
             <td>
-                <?= $this->Html->link('Edit', ['action' => 'edit', $city->id]) ?> |
-                <?= $this->Form->postLink(
-                    'Delete',
-                    ['action' => 'delete', $city->id],
-                    ['confirm' => 'Are you sure?'])
-                ?>
+                <?= $this->Html->link('Edit', ['action' => 'edit', $city->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
+            </td>
+            <td>
+                <?= $this->Form->postLink('Delete', ['action' => 'delete', $city->id], ['confirm' => 'Are you sure?','class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>
         </tr>
     <?php endforeach; ?>

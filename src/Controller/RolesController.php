@@ -14,6 +14,9 @@ class RolesController extends AppController
         }
         $this->loadComponent('Paginator');
         $roles = $this->Paginator->paginate($this->Roles->find());
+
+        $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
+        $this->set(compact('isadmin'));
         $this->set(compact('roles'));
     }
 
@@ -24,6 +27,9 @@ class RolesController extends AppController
             $this->redirect('/');
         }
         $role = $this->Roles->findById($id)->firstOrFail();
+
+        $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
+        $this->set(compact('isadmin'));
         $this->set(compact('role'));
     }
 

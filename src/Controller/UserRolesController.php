@@ -19,6 +19,9 @@ class UserRolesController extends AppController
                 'Roles',
                 'Ministries',
             ]]));
+
+        $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
+        $this->set(compact('isadmin'));
         $this->set(compact('userroles'));
     }
 
@@ -28,7 +31,16 @@ class UserRolesController extends AppController
             $this->Flash->error(__('You are not authorized to administer User Roles.'));
             $this->redirect('/');
         }
-        $userrole = $this->Userroles->findById($id)->firstOrFail();
+        $userrole = $this->Userroles->find('all', [
+            'conditions' => ['Userroles.id' => $id],
+            'contain' => [
+                'Roles',
+                'Ministries',
+            ]
+        ])->firstOrFail();
+
+        $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
+        $this->set(compact('isadmin'));
         $this->set(compact('userrole'));
     }
 

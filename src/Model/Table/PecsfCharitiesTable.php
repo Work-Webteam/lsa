@@ -9,6 +9,8 @@ class PecsfCharitiesTable extends Table
 {
     public function initialize(array $config) : Void
     {
-        $this->hasOne('Pecsfregions');
+        $this->hasOne('Pecsfregions')
+        ->setForeignKey('id')
+        ->setBindingKey('pecsf_region_id');
     }
 }

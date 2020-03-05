@@ -1,23 +1,23 @@
 <h1>PECSF Charities</h1>
 <?= $this->Html->link('Add PECSF Charity', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
+
 <table>
     <tr>
-        <th>Id</th>
-        <th>Vendor</th>
+        <?= $isadmin ? "<th>Id</th>" : "" ?>
         <th>Region</th>
+        <th>Vendor</th>
         <th>Charity</th>
         <th colspan = 2>Operations</th>
     </tr>
 
     <!-- Here is where we iterate through our $articles query object, printing out article info -->
 
-    <?php foreach ($charities as $charity): ?>
+
+    <?php foreach ($charities as $key => $charity): ?>
         <tr>
+            <?= $isadmin ? "<td>" . $charity->id . "</td>" : "" ?>
             <td>
-                <?= $charity->id ?>
-            </td>
-            <td>
-                <?= $charity->pecsf_region_id ?>
+                <?= $charity->Pecsfregions['name'] ?>
             </td>
             <td>
                 <?= $charity->vendor_code ?>
@@ -26,11 +26,10 @@
                 <?= $this->Html->link($charity->name, ['action' => 'view', $charity->id]) ?>
             </td>
             <td>
-                <?= $this->Html->link('Edit', ['action' => 'edit', $charity->id]) ?> |
-                <?= $this->Form->postLink(
-                    'Delete',
-                    ['action' => 'delete', $charity->id],
-                    ['confirm' => 'Are you sure?']) ?>
+                <?= $this->Html->link('Edit', ['action' => 'edit', $charity->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
+            </td>
+            <td>
+                <?= $this->Form->postLink('Delete', ['action' => 'delete', $charity->id], ['confirm' => 'Are you sure?','class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>
         </tr>
     <?php endforeach; ?>
@@ -61,3 +60,10 @@ $paginator = $this->Paginator->setTemplates([
         ?>
     </ul>
 </nav>
+
+
+<script>
+    var allCharities=<?php echo json_encode($charities); ?>;
+
+    console.log(allCharities);
+</script>

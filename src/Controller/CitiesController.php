@@ -16,6 +16,9 @@ class CitiesController extends AppController
         $this->loadComponent('Paginator');
 
         $cities = $this->Paginator->paginate($this->Cities->find());
+
+        $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
+        $this->set(compact('isadmin'));
         $this->set(compact('cities'));
     }
 
@@ -26,6 +29,9 @@ class CitiesController extends AppController
             $this->redirect('/');
         }
         $city = $this->Cities->findById($id)->firstOrFail();
+
+        $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
+        $this->set(compact('isadmin'));
         $this->set(compact('city'));
     }
 

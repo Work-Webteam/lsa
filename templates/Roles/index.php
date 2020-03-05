@@ -2,7 +2,7 @@
 <?= $this->Html->link('Add Roles', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 <table>
     <tr>
-        <th>Id</th>
+        <?= $isadmin ? "<th>Id</th>" : "" ?>
         <th>Roles</th>
         <th colspan = 2>Operations</th>
     </tr>
@@ -11,19 +11,12 @@
 
     <?php foreach ($roles as $role): ?>
         <tr>
-            <td>
-                <?= $role->id ?>
-            </td>
+            <?= $isadmin ? "<td>" . $role->id . "</td>" : "" ?>
             <td>
                 <?= $this->Html->link($role->name, ['action' => 'view', $role->id]) ?>
             </td>
             <td>
-                <?= $this->Html->link('Edit', ['action' => 'edit', $role->id]) ?> |
-                <?= $this->Form->postLink(
-                    'Delete',
-                    ['action' => 'delete', $role->id],
-                    ['confirm' => 'Are you sure?'])
-                ?>
+                <?= $this->Html->link('Edit', ['action' => 'edit', $role->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>
         </tr>
     <?php endforeach; ?>

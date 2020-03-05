@@ -1,3 +1,6 @@
 <h1><?= h($city->name) ?></h1>
-<p><?= h($city->id) ?></p>
-<p><?= $this->Html->link('Edit', ['action' => 'edit', $city->id]) ?></p>
+
+<p>
+    <?= $this->Html->link('Edit', ['action' => 'edit', $city->id], ['class' => 'btn btn-primary btn-lg', 'role' => 'button']) ?>
+    <?= $this->Html->link('Cancel', ['action' => 'index'], ['class' => 'btn btn-secondary btn-lg', 'role' => 'button']) ?>
+</p>

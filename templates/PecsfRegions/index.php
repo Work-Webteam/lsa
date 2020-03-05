@@ -2,7 +2,7 @@
 <?= $this->Html->link('Add PECSF Region', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 <table>
     <tr>
-        <th>Id</th>
+        <?= $isadmin ? "<th>Id</th>" : "" ?>
         <th>Region</th>
         <th colspan = 2>Operations</th>
     </tr>
@@ -11,18 +11,15 @@
 
     <?php foreach ($pecsfregions as $region): ?>
         <tr>
-            <td>
-                <?= $region->id ?>
-            </td>
+            <?= $isadmin ? "<td>" . $region->id . "</td>" : "" ?>
             <td>
                 <?= $this->Html->link($region->name, ['action' => 'view', $region->id]) ?>
             </td>
             <td>
-                <?= $this->Html->link('Edit', ['action' => 'edit', $region->id]) ?> |
-                <?= $this->Form->postLink(
-                    'Delete',
-                    ['action' => 'delete', $region->id],
-                    ['confirm' => 'Are you sure?']) ?>
+                <?= $this->Html->link('Edit', ['action' => 'edit', $region->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
+            </td>
+            <td>
+                <?= $this->Form->postLink('Delete', ['action' => 'delete', $region->id], ['confirm' => 'Are you sure?','class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>
         </tr>
     <?php endforeach; ?>

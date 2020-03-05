@@ -3,7 +3,7 @@
 <?= $this->Html->link('Add Ministry', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 <table>
     <tr>
-        <th>Id</th>
+        <?= $isadmin ? "<th>Id</th>" : "" ?>
         <th>Ministry</th>
         <th colspan = 2>Operations</th>
     </tr>
@@ -12,19 +12,15 @@
 
     <?php foreach ($ministries as $ministry): ?>
         <tr>
-            <td>
-                <?= $ministry->id ?>
-            </td>
+            <?= $isadmin ? "<td>" . $ministry->id . "</td>" : "" ?>
             <td>
                 <?= $this->Html->link($ministry->name, ['action' => 'view', $ministry->id]) ?>
             </td>
             <td>
-                <?= $this->Html->link('Edit', ['action' => 'edit', $ministry->id]) ?> |
-                <?= $this->Form->postLink(
-                    'Delete',
-                    ['action' => 'delete', $ministry->id],
-                    ['confirm' => 'Are you sure?'])
-                ?>
+                <?= $this->Html->link('Edit', ['action' => 'edit', $ministry->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
+            </td>
+            <td>
+                <?= $this->Form->postLink('Delete', ['action' => 'delete', $ministry->id], ['confirm' => 'Are you sure?','class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>
         </tr>
     <?php endforeach; ?>

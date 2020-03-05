@@ -3,7 +3,7 @@
 
 <table>
     <tr>
-        <th>Id</th>
+        <?= $isadmin ? "<th>Id</th>" : "" ?>
         <th>User Id</th>
         <th>Role Id</th>
         <th colspan = 2>Operations</th>
@@ -11,17 +11,15 @@
 
     <?php foreach ($userroles as $userrole): ?>
         <tr>
+            <?= $isadmin ? "<td>" . $userrole->id . "</td>" : "" ?>
             <td>
-                <?= $userrole->id ?>
-            </td>
-            <td>
-                <?= $userrole->idir ?>
+                <?= $this->Html->link($userrole->idir, ['action' => 'view', $userrole->id]) ?>
             </td>
             <td>
                 <?= $userrole->role->name ?>
             </td>
             <td>
-                <?= $this->Html->link('Edit', ['action' => 'edit', $userrole->id]) ?>
+                <?= $this->Html->link('Edit', ['action' => 'edit', $userrole->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>
         </tr>
     <?php endforeach; ?>

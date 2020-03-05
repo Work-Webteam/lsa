@@ -5141,22 +5141,22 @@ INSERT INTO `awards` (`id`, `name`, `milestone_id`, `description`, `image`, `opt
 INSERT INTO `awards` (`id`, `name`, `milestone_id`, `description`, `image`, `options`, `personalized`, `active`) VALUES(25, 'Bulova® \"Yarmouth\" Clock', 6, 'Bulova wall clock with thermometer and hygrometer. Comes in a beautiful walnut finish and has an engraved plate, “In recognition of fifty years of service.”\r\nSize: 17 ¼ \"H x 10 ¾” W x 3“ D', 'bulova-clock-yarmouth.jpg', '[]', 0, 1);
 
 
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(1, 2019, 1, '2019-10-10 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(2, 2019, 2, '2019-10-11 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(3, 2019, 3, '2019-10-12 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(4, 2020, 1, '2021-02-05 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(5, 2020, 2, '2021-02-06 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(6, 2020, 3, '2021-02-11 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(7, 2020, 4, '2021-02-12 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(8, 2020, 5, '2021-02-13 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(9, 2020, 6, '2021-02-17 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(10, 2020, 7, '2021-02-18 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(11, 2020, 8, '2021-02-19 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(12, 2020, 9, '2021-02-20 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(13, 2020, 10, '2021-02-25 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(14, 2020, 11, '2021-02-26 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(15, 2020, 12, '2021-02-27 19:30:00', NULL, NULL);
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(16, 2021, 12, '2021-10-15 19:30:00', NULL, NULL);
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(1, 2019, 1, '2019-10-10 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(2, 2019, 2, '2019-10-11 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(3, 2019, 3, '2019-10-12 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(4, 2020, 1, '2021-02-05 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(5, 2020, 2, '2021-02-06 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(6, 2020, 3, '2021-02-11 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(7, 2020, 4, '2021-02-12 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(8, 2020, 5, '2021-02-13 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(9, 2020, 6, '2021-02-17 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(10, 2020, 7, '2021-02-18 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(11, 2020, 8, '2021-02-19 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(12, 2020, 9, '2021-02-20 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(13, 2020, 10, '2021-02-25 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(14, 2020, 11, '2021-02-26 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(15, 2020, 12, '2021-02-27 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(16, 2021, 12, '2021-10-15 19:30:00', NULL, '[]');
 
 INSERT INTO `user_roles` (`id`, `idir`, `guid`, `role_id`, `ministry_id`) VALUES(1, 'rkuyvenh', '60DCD2AF73FB44AE9345F11B71CD3495', 1, 0);
 INSERT INTO `user_roles` (`id`, `idir`, `guid`, `role_id`, `ministry_id`) VALUES(2, 'twerdal', '', 1, 0);

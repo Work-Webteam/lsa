@@ -4,18 +4,16 @@
 <?= $this->Html->link('Add Ceremony', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 <table>
     <tr>
-        <th>Id</th>
+        <?= $isadmin ? "<th>Id</th>" : "" ?>
         <th>Award Year</th>
         <th>Ceremony Night</th>
         <th>Date</th>
-        <th colspan = 2>Operations</th>
+        <th colspan = 3>Operations</th>
     </tr>
 
     <?php foreach ($ceremonies as $ceremony): ?>
         <tr>
-            <td>
-                <?= $ceremony->id ?>
-            </td>
+            <?= $isadmin ? "<td>" . $ceremony->id . "</td>" : "" ?>
             <td>
                 <?= $ceremony->award_year ?>
             </td>
@@ -25,13 +23,16 @@
             <td>
                 <?= date("D Y-M-d g:ia", strtotime($ceremony->date)) ?>
             </td>
+
+
             <td>
-                <?= $this->Html->link('Edit', ['action' => 'edit', $ceremony->id]) ?> |
-                <?= $this->Form->postLink(
-                    'Delete',
-                    ['action' => 'delete', $ceremony->id],
-                    ['confirm' => 'Are you sure?'])
-                ?>
+                <?= $this->Html->link('View', ['action' => 'view', $ceremony->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
+            </td>
+            <td>
+                <?= $this->Html->link('Edit', ['action' => 'edit', $ceremony->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
+            </td>
+            <td>
+                <?= $this->Form->postLink('Delete', ['action' => 'delete', $ceremony->id], ['confirm' => 'Are you sure?','class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>
         </tr>
     <?php endforeach; ?>
