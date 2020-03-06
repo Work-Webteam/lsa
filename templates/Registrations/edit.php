@@ -388,8 +388,6 @@
             processForm: function(e) {
                 console.log('processForm');
 
-                // error checking goes here
-                // 1. check an award has been selected
                 errors = [];
                 errors = errors.concat(this.checkEmployeeInfo());
                 errors = errors.concat(this.checkOfficeAddress());

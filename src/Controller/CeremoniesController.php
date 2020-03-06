@@ -112,20 +112,35 @@ class CeremoniesController extends AppController
                 $new = array(
                     'ministry' => $this->request->getData('ministry_id'),
                     'milestone' => $this->request->getData('milestone_id'),
-                    'city' => array($this->request->getData('city_id'), $this->request->getData('city_type'))
+                    'city' => array('id' => $this->request->getData('city_id'), 'type' => $this->request->getData('city_type'))
                 );
-                $attending = json_decode($award->attending, true);
+                $attending = json_decode($ceremony->attending, true);
                 $attending[] = $new;
-                $award->attending = json_encode($attending);
+                $ceremony->attending = json_encode($attending);
             }
-            if ($this->Awards->save($award)) {
+            if ($this->Ceremonies->save($ceremony)) {
                 $this->Flash->success(__('Option has been saved.'));
                 return $this->redirect(['action' => 'view/'.$award->id]);
             }
             $this->Flash->error(__('Unable to add option.'));
         }
 
-        $this->set('award', $award);
+
+        $ministries = $this->Ceremonies->Ministries->find('list', [
+            'order' => ['Ministries.name' => 'ASC']
+        ]);
+        $this->set('ministries', $ministries);
+
+        $milestones = $this->Ceremonies->Milestones->find('list');
+        $this->set('milestones', $milestones);
+
+        $cities = $this->Ceremonies->Cities->find('list', [
+            'order' => ['Cities.name' => 'ASC']
+        ]);
+        $this->set('cities', $cities);
+
+
+        $this->set('ceremony', $ceremony);
     }
 }
 

@@ -10,5 +10,9 @@ class CeremoniesTable extends Table
     public function initialize(array $config) : Void
     {
         $this->addBehavior('Timestamp');
+
+        $this->hasOne('Ministries');
+        $this->hasOne('Milestones');
+        $this->hasOne('Cities');
     }
 }
