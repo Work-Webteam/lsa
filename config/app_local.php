@@ -140,10 +140,10 @@ else {
                */
               'port' => '3306',
 
-              'username' => env('LSA_DB_USER', 'root'),
+              'username' => env('LSA_DB_USER'),
               'password' => env('LSA_DB_PASSWORD'),
-              'database' => env('LSA_DB_NAME', 'lsa'),
-              
+              'database' => env('LSA_DB_NAME'),
+
               /**
                * If not using the default 'public' schema with the PostgreSQL driver
                * set it here.
