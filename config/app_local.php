@@ -142,8 +142,8 @@ else {
 
               'username' => env('LSA_DB_USER', 'root'),
               'password' => env('LSA_DB_PASSWORD'),
-
               'database' => env('LSA_DB_NAME', 'lsa'),
+              
               /**
                * If not using the default 'public' schema with the PostgreSQL driver
                * set it here.
