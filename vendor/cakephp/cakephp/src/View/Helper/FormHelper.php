@@ -72,6 +72,7 @@ class FormHelper extends Helper
             'datetimefractional' => 'datetime',
             'timestamp' => 'datetime',
             'timestampfractional' => 'datetime',
+            'timestamptimezone' => 'datetime',
             'date' => 'date',
             'time' => 'time',
             'year' => 'year',
@@ -445,7 +446,7 @@ class FormHelper extends Helper
         if ($this->requestType !== 'get') {
             $formTokenData = $this->_View->getRequest()->getAttribute('formTokenData');
             if ($formTokenData !== null) {
-                $this->formProtector = $this->createFormProtector($this->_lastAction, $formTokenData);
+                $this->formProtector = $this->createFormProtector($formTokenData);
             }
 
             $append .= $this->_csrfField();
@@ -602,7 +603,10 @@ class FormHelper extends Helper
         $secureAttributes['secure'] = static::SECURE_SKIP;
         $secureAttributes['autocomplete'] = 'off';
 
-        $tokenData = $this->formProtector->buildTokenData();
+        $tokenData = $this->formProtector->buildTokenData(
+            $this->_lastAction,
+            $this->_View->getRequest()->getSession()->id()
+        );
         $tokenFields = array_merge($secureAttributes, [
             'value' => $tokenData['fields'],
         ]);
@@ -639,18 +643,15 @@ class FormHelper extends Helper
     /**
      * Create FormProtector instance.
      *
-     * @param string $url URL
      * @param array $formTokenData Token data.
      * @return \Cake\Form\FormProtector
      */
-    protected function createFormProtector(string $url, array $formTokenData): FormProtector
+    protected function createFormProtector(array $formTokenData): FormProtector
     {
         $session = $this->_View->getRequest()->getSession();
         $session->start();
 
         return new FormProtector(
-            $url,
-            $session->id(),
             $formTokenData
         );
     }
@@ -1807,7 +1808,7 @@ class FormHelper extends Helper
 
         $formTokenData = $this->_View->getRequest()->getAttribute('formTokenData');
         if ($formTokenData !== null) {
-            $this->formProtector = $this->createFormProtector($this->_lastAction, $formTokenData);
+            $this->formProtector = $this->createFormProtector($formTokenData);
         }
 
         $fields = [];

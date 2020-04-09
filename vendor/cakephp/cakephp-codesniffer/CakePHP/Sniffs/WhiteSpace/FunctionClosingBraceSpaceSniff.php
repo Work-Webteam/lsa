@@ -14,7 +14,6 @@
 
 /**
  * Checks that there is one empty line before the closing brace of a function.
- *
  */
 namespace CakePHP\Sniffs\WhiteSpace;
 
@@ -24,7 +23,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 class FunctionClosingBraceSpaceSniff implements Sniff
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function register()
     {
@@ -32,7 +31,7 @@ class FunctionClosingBraceSpaceSniff implements Sniff
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function process(File $phpcsFile, $stackPtr)
     {
@@ -44,7 +43,7 @@ class FunctionClosingBraceSpaceSniff implements Sniff
         }
 
         $closeBrace = $tokens[$stackPtr]['scope_closer'];
-        $prevContent = $phpcsFile->findPrevious(T_WHITESPACE, ($closeBrace - 1), null, true);
+        $prevContent = $phpcsFile->findPrevious(T_WHITESPACE, $closeBrace - 1, null, true);
 
         $braceLine = $tokens[$closeBrace]['line'];
         $prevLine = $tokens[$prevContent]['line'];

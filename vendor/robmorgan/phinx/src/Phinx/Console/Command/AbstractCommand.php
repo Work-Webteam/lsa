@@ -53,6 +53,31 @@ abstract class AbstractCommand extends Command
     protected $manager;
 
     /**
+     * Exit code for when command executes successfully
+     * @var int
+     */
+    const CODE_SUCCESS = 0;
+
+    /**
+     * Exit code for when command hits a non-recoverable error during execution
+     * @var int
+     */
+    const CODE_ERROR = 1;
+
+    /**
+     * Exit code for when status command is run and there are missing migrations
+     * @var int
+     */
+    const CODE_STATUS_MISSING = 2;
+
+    /**
+     * Exit code for when status command is run and there are no missing migations,
+     * but does have down migrations
+     * @var int
+     */
+    const CODE_STATUS_DOWN = 3;
+
+    /**
      * {@inheritDoc}
      *
      * @return void
@@ -208,10 +233,10 @@ abstract class AbstractCommand extends Command
             return $locator->locate($configFile, $cwd, $first = true);
         }
 
-        $possibleConfigFiles = ['phinx.php', 'phinx.json', 'phinx.yml'];
+        $possibleConfigFiles = ['phinx.php', 'phinx.json', 'phinx.yaml', 'phinx.yml'];
         foreach ($possibleConfigFiles as $configFile) {
             try {
-                return $locator->locate($configFile, $cwd, $first = true);
+                return $locator->locate($configFile, $cwd, true);
             } catch (InvalidArgumentException $exception) {
                 $lastException = $exception;
             }
@@ -247,6 +272,7 @@ abstract class AbstractCommand extends Command
                 case 'php':
                     $parser = 'php';
                     break;
+                case 'yaml':
                 case 'yml':
                 default:
                     $parser = 'yaml';

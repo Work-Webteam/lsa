@@ -28,7 +28,10 @@ use Cake\Routing\Router;
 use Cake\TestSuite\Constraint\EventFired;
 use Cake\TestSuite\Constraint\EventFiredWith;
 use Cake\Utility\Inflector;
+use LogicException;
 use PHPUnit\Framework\TestCase as BaseTestCase;
+use ReflectionClass;
+use ReflectionException;
 use RuntimeException;
 
 /**
@@ -196,6 +199,33 @@ abstract class TestCase extends BaseTestCase
     }
 
     /**
+     * Load routes for the application.
+     *
+     * If no application class can be found an exception will be raised.
+     * Routes for plugins will *not* be loaded. Use `loadPlugins()` or use
+     * `Cake\TestSuite\IntegrationTestCaseTrait` to better simulate all routes
+     * and plugins being loaded.
+     *
+     * @param array|null $appArgs Constuctor parameters for the application class.
+     * @return void
+     * @since 4.0.1
+     */
+    public function loadRoutes(?array $appArgs = null): void
+    {
+        $appArgs = $appArgs ?? [rtrim(CONFIG, DIRECTORY_SEPARATOR)];
+        $className = Configure::read('App.namespace') . '\\Application';
+        try {
+            $reflect = new ReflectionClass($className);
+            /** @var \Cake\Routing\RoutingApplicationInterface $app */
+            $app = $reflect->newInstanceArgs($appArgs);
+        } catch (ReflectionException $e) {
+            throw new LogicException(sprintf('Cannot load "%s" to load routes from.', $className), 0, $e);
+        }
+        $builder = Router::createRouteBuilder('/');
+        $app->routes($builder);
+    }
+
+    /**
      * Load plugins into a simulated application.
      *
      * Useful to test how plugins being loaded/not loaded interact with other
@@ -277,7 +307,7 @@ abstract class TestCase extends BaseTestCase
      *
      * @param string $name Event name
      * @param string $dataKey Data key
-     * @param string $dataValue Data value
+     * @param mixed $dataValue Data value
      * @param \Cake\Event\EventManager|null $eventManager Event manager to check, defaults to global event manager
      * @param string $message Assertion failure message
      * @return void
@@ -285,7 +315,7 @@ abstract class TestCase extends BaseTestCase
     public function assertEventFiredWith(
         string $name,
         string $dataKey,
-        string $dataValue,
+        $dataValue,
         ?EventManager $eventManager = null,
         string $message = ''
     ): void {
@@ -536,8 +566,8 @@ abstract class TestCase extends BaseTestCase
                 ];
                 continue;
             }
-            /** @var array<string, true|array> $tags */
             foreach ($tags as $tag => $attributes) {
+                /** @psalm-suppress PossiblyFalseArgument */
                 $regex[] = [
                     sprintf('Open %s tag', $tag),
                     sprintf('[\s]*<%s', preg_quote($tag, '/')),
@@ -584,6 +614,7 @@ abstract class TestCase extends BaseTestCase
                         'attrs' => $attrs,
                     ];
                 }
+                /** @psalm-suppress PossiblyFalseArgument */
                 $regex[] = [
                     sprintf('End %s tag', $tag),
                     '[\s]*\/?[\s]*>[\n\r]*',
@@ -602,11 +633,8 @@ abstract class TestCase extends BaseTestCase
                 continue;
             }
 
-            /**
-             * If 'attrs' is not present then the array is just a regular int-offset one
-             *
-             * @var array<int, string> $assertion
-             */
+            // If 'attrs' is not present then the array is just a regular int-offset one
+            /** @psalm-suppress PossiblyUndefinedArrayOffset */
             [$description, $expressions, $itemNum] = $assertion;
             $expression = '';
             foreach ((array)$expressions as $expression) {

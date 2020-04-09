@@ -23,11 +23,11 @@ use Cake\Http\ServerRequest;
 use Cake\Http\ServerRequestFactory;
 use Cake\Routing\Router;
 use Cake\Routing\RoutingApplicationInterface;
+use Laminas\Diactoros\Stream;
 use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionClass;
 use ReflectionException;
-use Zend\Diactoros\Stream;
 
 /**
  * Dispatches a request capturing the response for integration
@@ -90,7 +90,7 @@ class MiddlewareDispatcher
             $app = $reflect->newInstanceArgs($this->_constructorArgs);
             $this->app = $app;
         } catch (ReflectionException $e) {
-            throw new LogicException(sprintf('Cannot load "%s" for use in integration testing.', $this->_class));
+            throw new LogicException("Cannot load `{$this->_class}` for use in integration testing.", 0, $e);
         }
     }
 

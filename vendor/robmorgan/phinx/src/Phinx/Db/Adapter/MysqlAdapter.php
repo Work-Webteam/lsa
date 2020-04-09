@@ -11,7 +11,6 @@ use Cake\Database\Connection;
 use Cake\Database\Driver\Mysql as MysqlDriver;
 use InvalidArgumentException;
 use PDO;
-use PDOException;
 use Phinx\Db\Table\Column;
 use Phinx\Db\Table\ForeignKey;
 use Phinx\Db\Table\Index;
@@ -25,7 +24,7 @@ use RuntimeException;
  *
  * @author Rob Morgan <robbym@gmail.com>
  */
-class MysqlAdapter extends PdoAdapter implements AdapterInterface
+class MysqlAdapter extends PdoAdapter
 {
     protected $signedColumnTypes = [
         'integer' => true,
@@ -77,7 +76,6 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
                 // @codeCoverageIgnoreEnd
             }
 
-            $db = null;
             $options = $this->getOptions();
 
             $dsn = 'mysql:';
@@ -100,7 +98,12 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
                 $dsn .= ';charset=' . $options['charset'];
             }
 
-            $driverOptions = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
+            $driverOptions = [];
+
+            // use custom data fetch mode
+            if (!empty($options['fetch_mode'])) {
+                $driverOptions[PDO::ATTR_DEFAULT_FETCH_MODE] = constant('\PDO::FETCH_' . strtoupper($options['fetch_mode']));
+            }
 
             // support arbitrary \PDO::MYSQL_ATTR_* driver options and pass them to PDO
             // http://php.net/manual/en/ref.pdo-mysql.php#pdo-mysql.constants
@@ -110,14 +113,7 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
                 }
             }
 
-            try {
-                $db = new PDO($dsn, $options['user'], $options['pass'], $driverOptions);
-            } catch (PDOException $exception) {
-                throw new InvalidArgumentException(sprintf(
-                    'There was a problem connecting to the database: %s',
-                    $exception->getMessage()
-                ));
-            }
+            $db = $this->createPdoConnection($dsn, $options['user'], $options['pass'], $driverOptions);
 
             $this->setConnection($db);
         }
@@ -242,6 +238,9 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
                    ->setIdentity(true);
 
             array_unshift($columns, $column);
+            if (isset($options['primary_key'])) {
+                throw new InvalidArgumentException('You cannot enable an auto incrementing ID field and a primary key');
+            }
             $options['primary_key'] = $options['id'];
         }
 
@@ -262,12 +261,12 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
 
         // set the table comment
         if (isset($options['comment'])) {
-            $optionsStr .= sprintf(" COMMENT=%s ", $this->getConnection()->quote($options['comment']));
+            $optionsStr .= sprintf(' COMMENT=%s ', $this->getConnection()->quote($options['comment']));
         }
 
         // set the table row format
         if (isset($options['row_format'])) {
-            $optionsStr .= sprintf(" ROW_FORMAT=%s ", $options['row_format']);
+            $optionsStr .= sprintf(' ROW_FORMAT=%s ', $options['row_format']);
         }
 
         $sql = 'CREATE TABLE ';
@@ -328,7 +327,7 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
                 $sql .= implode(',', array_map([$this, 'quoteColumnName'], $newColumns));
             } else {
                 throw new InvalidArgumentException(sprintf(
-                    "Invalid value for primary key: %s",
+                    'Invalid value for primary key: %s',
                     json_encode($newColumns)
                 ));
             }
@@ -350,7 +349,7 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
         $newComment = ($newComment !== null)
             ? $newComment
             : '';
-        $sql = sprintf(" COMMENT=%s ", $this->getConnection()->quote($newComment));
+        $sql = sprintf(' COMMENT=%s ', $this->getConnection()->quote($newComment));
         $instructions->addAlter($sql);
 
         return $instructions;
@@ -494,7 +493,7 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
         }
 
         throw new InvalidArgumentException(sprintf(
-            'The specified column doesn\'t exist: ' .
+            "The specified column doesn't exist: " .
             $columnName
         ));
     }
@@ -1162,7 +1161,7 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
         $def .= $column->getEncoding() ? ' CHARACTER SET ' . $column->getEncoding() : '';
         $def .= $column->getCollation() ? ' COLLATE ' . $column->getCollation() : '';
         $def .= (!$column->isSigned() && isset($this->signedColumnTypes[$column->getType()])) ? ' unsigned' : '';
-        $def .= ($column->isNull() == false) ? ' NOT NULL' : ' NULL';
+        $def .= $column->isNull() ? ' NULL' : ' NOT NULL';
         $def .= $column->isIdentity() ? ' AUTO_INCREMENT' : '';
         $def .= $this->getDefaultValueDefinition($column->getDefault(), $column->getType());
 

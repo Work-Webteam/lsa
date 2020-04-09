@@ -132,7 +132,7 @@ else {
          */
         'Datasources' => [
           'default' => [
-              'host' => getenv('LSA_DB_HOST'),
+              'host' => env('LSA_DB_HOST', 'localhost'),
               /*
                * CakePHP will use the default DB port based on the driver selected
                * MySQL on MAMP uses port 8889, MAMP users will want to uncomment
@@ -140,10 +140,10 @@ else {
                */
               'port' => '3306',
 
-              'username' => getenv('LSA_DB_USER'),
-              'password' => getenv('LSA_DB_PASSWORD'),
+              'username' => env('LSA_DB_USER', 'root'),
+              'password' => env('LSA_DB_PASSWORD'),
 
-              'database' => getenv('LSA_DB_NAME'),
+              'database' => env('LSA_DB_NAME', 'lsa'),
               /**
                * If not using the default 'public' schema with the PostgreSQL driver
                * set it here.
@@ -155,6 +155,8 @@ else {
                */
               'url' => env('DATABASE_URL', null),
           ],
+
+
             /*
              * The test connection is used during the test suite.
              */
@@ -177,8 +179,8 @@ else {
          */
         'EmailTransport' => [
             'default' => [
-                'host' => getenv('LSA_EMAIL_HOST'),   //'localhost',
-                'port' => getenv('LSA_EMAIL_PORT'),   // 25
+                'host' => env('LSA_EMAIL_HOST', 'localhost'),
+                'port' => env('LSA_EMAIL_PORT', 25),
                 'username' => null,
                 'password' => null,
                 'client' => null,

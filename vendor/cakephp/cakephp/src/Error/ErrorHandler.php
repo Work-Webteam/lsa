@@ -157,6 +157,7 @@ class ErrorHandler extends BaseErrorHandler
         $renderer = $this->_config['exceptionRenderer'];
 
         if (is_string($renderer)) {
+            /** @var class-string<\Cake\Error\ExceptionRendererInterface>|null $class */
             $class = App::className($renderer, 'Error');
             if (!$class) {
                 throw new RuntimeException(sprintf(
@@ -165,7 +166,6 @@ class ErrorHandler extends BaseErrorHandler
                 ));
             }
 
-            /** @var \Cake\Error\ExceptionRendererInterface */
             return new $class($exception, $request);
         }
 
@@ -186,9 +186,11 @@ class ErrorHandler extends BaseErrorHandler
         // Disable trace for internal errors.
         $this->_config['trace'] = false;
         $message = sprintf(
-            "[%s] %s\n%s", // Keeping same message format
+            "[%s] %s (%s:%s)\n%s", // Keeping same message format
             get_class($exception),
             $exception->getMessage(),
+            $exception->getFile(),
+            $exception->getLine(),
             $exception->getTraceAsString()
         );
         trigger_error($message, E_USER_ERROR);

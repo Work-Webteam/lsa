@@ -15,7 +15,6 @@
 
 /**
  * Checks the separation between methods in a class or interface.
- *
  */
 namespace CakePHP\Sniffs\WhiteSpace;
 
@@ -26,7 +25,7 @@ use PHP_CodeSniffer\Util\Tokens;
 class FunctionCallSpacingSniff implements Sniff
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function register()
     {
@@ -42,14 +41,14 @@ class FunctionCallSpacingSniff implements Sniff
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
 
         // Find the next non-empty token.
-        $openBracket = $phpcsFile->findNext(Tokens::$emptyTokens, ($stackPtr + 1), null, true);
+        $openBracket = $phpcsFile->findNext(Tokens::$emptyTokens, $stackPtr + 1, null, true);
 
         if ($tokens[$openBracket]['code'] !== T_OPEN_PARENTHESIS) {
             // Not a function call.
@@ -57,7 +56,7 @@ class FunctionCallSpacingSniff implements Sniff
         }
 
         // Look for funcName (
-        if (($stackPtr + 1) !== $openBracket) {
+        if ($stackPtr + 1 !== $openBracket) {
             $error = 'Space before opening parenthesis of function call not allowed';
             $phpcsFile->addError($error, $stackPtr, 'SpaceBeforeOpenBracket');
         }

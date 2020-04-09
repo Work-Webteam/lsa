@@ -489,7 +489,7 @@ class ConsoleIo
         $this->_out->write('<question>' . $prompt . "</question>$optionsText\n$defaultText> ", 0);
         $result = $this->_in->read();
 
-        $result = trim($result);
+        $result = $result === null ? '' : trim($result);
         if ($default !== null && $result === '') {
             return $default;
         }
@@ -612,7 +612,8 @@ class ConsoleIo
         }
 
         $file->rewind();
-        if ($file->fwrite($contents) > 0) {
+        $file->fwrite($contents);
+        if (file_exists($path)) {
             $this->out("<success>Wrote</success> `{$path}`");
 
             return true;

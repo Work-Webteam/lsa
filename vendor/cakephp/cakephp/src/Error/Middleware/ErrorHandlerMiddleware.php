@@ -131,9 +131,10 @@ class ErrorHandlerMiddleware implements MiddlewareInterface
     public function handleException(Throwable $exception, ServerRequestInterface $request): ResponseInterface
     {
         $errorHandler = $this->getErrorHandler();
+        $renderer = $errorHandler->getRenderer($exception, $request);
 
         try {
-            $response = $errorHandler->getRenderer($exception, $request)->render();
+            $response = $renderer->render();
             $errorHandler->logException($exception, $request);
         } catch (Throwable $internalException) {
             $errorHandler->logException($internalException, $request);
@@ -163,9 +164,8 @@ class ErrorHandlerMiddleware implements MiddlewareInterface
     protected function getErrorHandler(): ErrorHandler
     {
         if ($this->errorHandler === null) {
-            /** @var string $className */
+            /** @var class-string<\Cake\Error\ErrorHandler> $className */
             $className = App::className('ErrorHandler', 'Error');
-            /** @var \Cake\Error\ErrorHandler $this->errorHandler */
             $this->errorHandler = new $className($this->getConfig());
         }
 

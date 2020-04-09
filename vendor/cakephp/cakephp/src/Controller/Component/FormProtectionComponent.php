@@ -33,7 +33,7 @@ use Closure;
  * - Existing fields have not been removed from the form.
  * - Values of hidden inputs have not been changed.
  *
- * @psalm-property array{validatePost:bool, unlockedFields:array, unlockedActions:array, validationFailureCallback:?\Closure} $_config
+ * @psalm-property array{validate:bool, unlockedFields:array, unlockedActions:array, validationFailureCallback:?\Closure} $_config
  */
 class FormProtectionComponent extends Component
 {
@@ -84,13 +84,12 @@ class FormProtectionComponent extends Component
             && $hasData
             && $this->_config['validate']
         ) {
-            $formProtector = new FormProtector();
-            $request->getSession()->start();
-            $isValid = $formProtector->validate(
-                $data,
-                Router::url($request->getRequestTarget()),
-                $request->getSession()->id()
-            );
+            $session = $request->getSession();
+            $session->start();
+            $url = Router::url($request->getRequestTarget());
+
+            $formProtector = new FormProtector($this->_config);
+            $isValid = $formProtector->validate($data, $url, $session->id());
 
             if (!$isValid) {
                 return $this->validationFailure($formProtector);

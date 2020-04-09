@@ -34,7 +34,7 @@ class CellCommand extends SimpleBakeCommand
     public $pathFragment = 'View/Cell/';
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function name(): string
     {
@@ -42,7 +42,7 @@ class CellCommand extends SimpleBakeCommand
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function fileName(string $name): string
     {
@@ -50,7 +50,7 @@ class CellCommand extends SimpleBakeCommand
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function template(): string
     {
@@ -106,7 +106,7 @@ class CellCommand extends SimpleBakeCommand
         $path = $this->getTemplatePath($args, 'cell');
         $path .= implode(DS, [$name, 'display.php']);
 
-        $io->createFile($path, '');
+        $io->createFile($path, '', $args->getOption('force'));
     }
 
     /**

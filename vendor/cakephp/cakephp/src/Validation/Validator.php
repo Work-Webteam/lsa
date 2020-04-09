@@ -22,6 +22,7 @@ use Countable;
 use InvalidArgumentException;
 use IteratorAggregate;
 use Psr\Http\Message\UploadedFileInterface;
+use Traversable;
 
 /**
  * Validator object encapsulates all methods related to data validations for a model
@@ -125,7 +126,8 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
     /**
      * Holds the ValidationSet objects array
      *
-     * @var array
+     * @var \Cake\Validation\ValidationSet[]
+     * @psalm-var array<string, \Cake\Validation\ValidationSet>
      */
     protected $_fields = [];
 
@@ -397,9 +399,10 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
     {
         if (!$rules instanceof ValidationSet) {
             $set = new ValidationSet();
-            foreach ((array)$rules as $name => $rule) {
+            foreach ($rules as $name => $rule) {
                 $set->add($name, $rule);
             }
+            $rules = $set;
         }
         $this->_fields[$field] = $rules;
     }
@@ -418,9 +421,10 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
     /**
      * Returns an iterator for each of the fields to be validated
      *
-     * @return \ArrayIterator
+     * @return \Cake\Validation\ValidationSet[]
+     * @psalm-return \Traversable<string, \Cake\Validation\ValidationSet>
      */
-    public function getIterator(): ArrayIterator
+    public function getIterator(): Traversable
     {
         return new ArrayIterator($this->_fields);
     }
@@ -456,6 +460,7 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
      * @param string $field The name of the field from which the rule will be added
      * @param array|string $name The alias for a single rule or multiple rules array
      * @param array|\Cake\Validation\ValidationRule $rule the rule to add
+     * @throws \InvalidArgumentException If numeric index cannot be resolved to a string one
      * @return $this
      */
     public function add(string $field, $name, $rule = [])
@@ -472,6 +477,22 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
             if (is_array($rule)) {
                 $rule += ['rule' => $name];
             }
+            if (!is_string($name)) {
+                $name = $rule['rule'];
+                if (is_array($name)) {
+                    $name = array_shift($name);
+                }
+
+                if ($validationSet->offsetExists($name)) {
+                    $message = 'You cannot add a rule without a unique name, already existing rule found: ' . $name;
+                    throw new InvalidArgumentException($message);
+                }
+
+                deprecationWarning(
+                    'Adding validation rules without a name key is deprecated. Update rules array to have string keys.'
+                );
+            }
+
             $validationSet->add($name, $rule);
         }
 

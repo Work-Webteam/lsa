@@ -96,7 +96,7 @@ class Marshaller
                 if (substr($key, 0, 1) !== '_') {
                     throw new InvalidArgumentException(sprintf(
                         'Cannot marshal data for "%s" association. It is not associated with "%s".',
-                        $key,
+                        (string)$key,
                         $this->_table->getAlias()
                     ));
                 }
@@ -157,6 +157,14 @@ class Marshaller
      * ```
      * $result = $marshaller->one($data, [
      *   'associated' => ['Tags' => ['onlyIds' => true]]
+     * ]);
+     * ```
+     *
+     * ```
+     * $result = $marshaller->one($data, [
+     *   'associated' => [
+     *     'Tags' => ['accessibleFields' => ['*' => true]]
+     *   ]
      * ]);
      * ```
      *
@@ -632,7 +640,7 @@ class Marshaller
      *   the accessible fields list in the entity will be used.
      * - accessibleFields: A list of fields to allow or deny in entity accessible fields.
      *
-     * @param \Cake\Datasource\EntityInterface[]|\Traversable<\Cake\Datasource\EntityInterface> $entities the entities that will get the
+     * @param iterable<\Cake\Datasource\EntityInterface> $entities the entities that will get the
      *   data merged in
      * @param array $data list of arrays to be merged into the entities
      * @param array $options List of options.
@@ -735,11 +743,11 @@ class Marshaller
         $types = [Association::ONE_TO_ONE, Association::MANY_TO_ONE];
         $type = $assoc->type();
         if (in_array($type, $types, true)) {
-            /** @var \Cake\Datasource\EntityInterface $original */
+            /** @psalm-suppress PossiblyInvalidArgument */
             return $marshaller->merge($original, $value, (array)$options);
         }
         if ($type === Association::MANY_TO_MANY) {
-            /** @var \Cake\Datasource\EntityInterface[] $original */
+            /** @psalm-suppress PossiblyInvalidArgument */
             return $marshaller->_mergeBelongsToMany($original, $assoc, $value, (array)$options);
         }
 
@@ -754,7 +762,7 @@ class Marshaller
             }
         }
 
-        /** @var \Cake\Datasource\EntityInterface[] $original */
+        /** @psalm-suppress PossiblyInvalidArgument */
         return $marshaller->mergeMany($original, $value, (array)$options);
     }
 

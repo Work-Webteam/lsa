@@ -10,6 +10,7 @@ namespace Phinx\Db\Adapter;
 use BadMethodCallException;
 use InvalidArgumentException;
 use PDO;
+use PDOException;
 use Phinx\Config\Config;
 use Phinx\Db\Action\AddColumn;
 use Phinx\Db\Action\AddForeignKey;
@@ -61,6 +62,30 @@ abstract class PdoAdapter extends AbstractAdapter implements DirectActionInterfa
         }
 
         $this->getOutput()->writeln($message);
+    }
+
+    /**
+     * Create PDO connection
+     *
+     * @param string $dsn Connection string
+     * @param string|null $username Database username
+     * @param string|null $password Database password
+     * @param array $options Connection options
+     * @return \PDO
+     */
+    protected function createPdoConnection($dsn, $username = null, $password = null, array $options = [])
+    {
+        try {
+            $db = new PDO($dsn, $username, $password, $options);
+            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            throw new InvalidArgumentException(sprintf(
+                'There was a problem connecting to the database: %s',
+                $e->getMessage()
+            ), $e->getCode(), $e);
+        }
+
+        return $db;
     }
 
     /**
@@ -345,7 +370,7 @@ abstract class PdoAdapter extends AbstractAdapter implements DirectActionInterfa
                 throw new RuntimeException('Invalid version_order configuration option');
         }
 
-        $rows = $this->fetchAll(sprintf('SELECT * FROM %s ORDER BY %s', $this->getSchemaTableName(), $orderBy));
+        $rows = $this->fetchAll(sprintf('SELECT * FROM %s ORDER BY %s', $this->quoteTableName($this->getSchemaTableName()), $orderBy));
         foreach ($rows as $version) {
             $result[$version['version']] = $version;
         }
@@ -399,7 +424,7 @@ abstract class PdoAdapter extends AbstractAdapter implements DirectActionInterfa
         $this->query(
             sprintf(
                 'UPDATE %1$s SET %2$s = CASE %2$s WHEN %3$s THEN %4$s ELSE %3$s END, %7$s = %7$s WHERE %5$s = \'%6$s\';',
-                $this->getSchemaTableName(),
+                $this->quoteTableName($this->getSchemaTableName()),
                 $this->quoteColumnName('breakpoint'),
                 $this->castToBool(true),
                 $this->castToBool(false),
@@ -420,7 +445,7 @@ abstract class PdoAdapter extends AbstractAdapter implements DirectActionInterfa
         return $this->execute(
             sprintf(
                 'UPDATE %1$s SET %2$s = %3$s, %4$s = %4$s WHERE %2$s <> %3$s;',
-                $this->getSchemaTableName(),
+                $this->quoteTableName($this->getSchemaTableName()),
                 $this->quoteColumnName('breakpoint'),
                 $this->castToBool(false),
                 $this->quoteColumnName('start_time')
@@ -457,7 +482,7 @@ abstract class PdoAdapter extends AbstractAdapter implements DirectActionInterfa
         $this->query(
             sprintf(
                 'UPDATE %1$s SET %2$s = %3$s, %4$s = %4$s WHERE %5$s = \'%6$s\';',
-                $this->getSchemaTableName(),
+                $this->quoteTableName($this->getSchemaTableName()),
                 $this->quoteColumnName('breakpoint'),
                 $this->castToBool($state),
                 $this->quoteColumnName('start_time'),

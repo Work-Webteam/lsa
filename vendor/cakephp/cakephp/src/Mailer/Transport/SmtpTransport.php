@@ -440,7 +440,7 @@ class SmtpTransport extends AbstractTransport
      * Protected method for sending data to SMTP connection
      *
      * @param string|null $data Data to be sent to SMTP server
-     * @param string|bool $checkCode Code to check for in server response, false to skip
+     * @param string|false $checkCode Code to check for in server response, false to skip
      * @return string|null The matched code, or null if nothing matched
      * @throws \Cake\Network\Exception\SocketException
      */
@@ -457,15 +457,17 @@ class SmtpTransport extends AbstractTransport
         while ($checkCode !== false) {
             $response = '';
             $startTime = time();
-            while (substr($response, -2) !== "\r\n" && ((time() - $startTime) < $timeout)) {
+            while (substr($response, -2) !== "\r\n" && (time() - $startTime < $timeout)) {
                 $bytes = $this->_socket()->read();
                 if ($bytes === null) {
                     break;
                 }
                 $response .= $bytes;
             }
+            // Catch empty or malformed responses.
             if (substr($response, -2) !== "\r\n") {
-                throw new SocketException('SMTP timeout.');
+                // Use response message or assume operation timed out.
+                throw new SocketException($response ?: 'SMTP timeout.');
             }
             $responseLines = explode("\r\n", rtrim($response, "\r\n"));
             $response = end($responseLines);

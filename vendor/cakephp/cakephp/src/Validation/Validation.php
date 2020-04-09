@@ -751,7 +751,12 @@ class Validation
         $decimalPoint = $formatter->getSymbol(NumberFormatter::DECIMAL_SEPARATOR_SYMBOL);
         $groupingSep = $formatter->getSymbol(NumberFormatter::GROUPING_SEPARATOR_SYMBOL);
 
-        $check = str_replace([$groupingSep, $decimalPoint], ['', '.'], (string)$check);
+        // There are two types of non-breaking spaces - we inject a space to account for human input
+        if ($groupingSep == "\xc2\xa0" || $groupingSep == "\xe2\x80\xaf") {
+            $check = str_replace([' ', $groupingSep, $decimalPoint], ['', '', '.'], (string)$check);
+        } else {
+            $check = str_replace([$groupingSep, $decimalPoint], ['', '.'], (string)$check);
+        }
 
         return static::_check($check, $regex);
     }
@@ -1575,14 +1580,14 @@ class Validation
      */
     public static function isInteger($value): bool
     {
-        if (!is_numeric($value) || is_float($value)) {
-            return false;
-        }
         if (is_int($value)) {
             return true;
         }
 
-        /** @var string $value */
+        if (!is_string($value) || !is_numeric($value)) {
+            return false;
+        }
+
         return (bool)preg_match('/^-?[0-9]+$/', $value);
     }
 
@@ -1657,7 +1662,7 @@ class Validation
             $checksum %= 97;
         }
 
-        return (98 - $checksum) === $checkInt;
+        return $checkInt === 98 - $checksum;
     }
 
     /**

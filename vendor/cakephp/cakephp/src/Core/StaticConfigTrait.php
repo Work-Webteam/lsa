@@ -105,6 +105,7 @@ trait StaticConfigTrait
             $config['className'] = $config['engine'];
             unset($config['engine']);
         }
+        /** @psalm-suppress InvalidPropertyAssignmentValue */
         static::$_config[$key] = $config;
     }
 
@@ -156,7 +157,6 @@ trait StaticConfigTrait
         }
         /** @psalm-suppress UndefinedPropertyFetch */
         if (isset(static::$_registry)) {
-            /** @var \Cake\Core\ObjectRegistry $_registry */
             static::$_registry->unload($config);
         }
         unset(static::$_config[$config]);
@@ -171,7 +171,11 @@ trait StaticConfigTrait
      */
     public static function configured(): array
     {
-        return array_keys(static::$_config);
+        $configurations = array_keys(static::$_config);
+
+        return array_map(function ($key) {
+            return (string)$key;
+        }, $configurations);
     }
 
     /**
@@ -300,6 +304,7 @@ REGEXP;
      *
      * @param string[] $map Additions/edits to the class map to apply.
      * @return void
+     * @psalm-param array<string, class-string> $map
      */
     public static function setDsnClassMap(array $map): void
     {
@@ -310,6 +315,7 @@ REGEXP;
      * Returns the DSN class map for this class.
      *
      * @return string[]
+     * @psalm-return array<string, class-string>
      */
     public static function getDsnClassMap(): array
     {

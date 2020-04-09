@@ -42,7 +42,7 @@ class ControllerCommand extends BakeCommand
      *
      * @param \Cake\Console\Arguments $args The command arguments.
      * @param \Cake\Console\ConsoleIo $io The console io
-     * @return null|int The exit code or null for success
+     * @return int|null The exit code or null for success
      */
     public function execute(Arguments $args, ConsoleIo $io): ?int
     {
@@ -51,7 +51,9 @@ class ControllerCommand extends BakeCommand
         $name = $this->_getName($name);
 
         if (empty($name)) {
-            $scanner = new TableScanner(ConnectionManager::get($this->connection));
+            /** @var \Cake\Database\Connection $connection */
+            $connection = ConnectionManager::get($this->connection);
+            $scanner = new TableScanner($connection);
             $io->out('Possible controllers based on your current database:');
             foreach ($scanner->listUnskipped() as $table) {
                 $io->out('- ' . $this->_camelize($table));
@@ -95,9 +97,15 @@ class ControllerCommand extends BakeCommand
             $prefix = '\\' . str_replace('/', '\\', $prefix);
         }
 
-        $namespace = Configure::read('App.namespace');
+        // Controllers default to importing AppController from `App`
+        $baseNamespace = $namespace = Configure::read('App.namespace');
         if ($this->plugin) {
             $namespace = $this->_pluginNamespace($this->plugin);
+        }
+        // If the plugin has an AppController other plugin controllers
+        // should inherit from it.
+        if ($this->plugin && class_exists("{$namespace}\Controller\AppController")) {
+            $baseNamespace = $namespace;
         }
 
         $currentModelName = $controllerName;
@@ -134,6 +142,7 @@ class ControllerCommand extends BakeCommand
             'helpers',
             'modelObj',
             'namespace',
+            'baseNamespace',
             'plugin',
             'pluralHumanName',
             'pluralName',
@@ -176,7 +185,7 @@ class ControllerCommand extends BakeCommand
 
         $path = $this->getPath($args);
         $filename = $path . $controllerName . 'Controller.php';
-        $io->createFile($filename, $contents);
+        $io->createFile($filename, $contents, $args->getOption('force'));
     }
 
     /**

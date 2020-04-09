@@ -309,6 +309,27 @@ return [
             //'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
         ],
 
+
+        'debug_kit' => [
+            'className' => Connection::class,
+            'driver' => Mysql::class,
+            'persistent' => false,
+
+            'username' => env('LSA_DB_USER'),
+            'password' => env('LSA_DB_PASSWORD'),
+            'database' => env('LSA_DB_NAME'),
+
+            'timezone' => 'UTC',
+
+            'flags' => [],
+            'cacheMetadata' => true,
+            'log' => false,
+
+            'quoteIdentifiers' => false,
+
+        ],
+
+
         /*
          * The test connection is used during the test suite.
          */

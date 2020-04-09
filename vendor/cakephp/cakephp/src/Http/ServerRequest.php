@@ -22,13 +22,13 @@ use Cake\Http\Cookie\CookieCollection;
 use Cake\Http\Exception\MethodNotAllowedException;
 use Cake\Utility\Hash;
 use InvalidArgumentException;
+use Laminas\Diactoros\PhpInputStream;
+use Laminas\Diactoros\Stream;
+use Laminas\Diactoros\UploadedFile;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriInterface;
-use Zend\Diactoros\PhpInputStream;
-use Zend\Diactoros\Stream;
-use Zend\Diactoros\UploadedFile;
 
 /**
  * A class that helps wrap Request information and particulars about a single request.
@@ -108,13 +108,6 @@ class ServerRequest implements ServerRequestInterface
      * @var string[]
      */
     protected $trustedProxies = [];
-
-    /**
-     * Contents of php://input
-     *
-     * @var string
-     */
-    protected $_input;
 
     /**
      * The built in detectors used with `is()` can be modified with `addDetector()`.
@@ -1334,13 +1327,13 @@ class ServerRequest implements ServerRequestInterface
     /**
      * Read a specific query value or dotted path.
      *
-     * Developers are encouraged to use getQueryParams() when possible as it is PSR-7 compliant, and this method
-     * is not.
+     * Developers are encouraged to use getQueryParams() if they need the whole query array,
+     * as it is PSR-7 compliant, and this method is not. Using Hash::get() you can also get single params.
      *
      * ### PSR-7 Alternative
      *
      * ```
-     * $value = Hash::get($request->getQueryParams(), 'Post.id', null);
+     * $value = Hash::get($request->getQueryParams(), 'Post.id');
      * ```
      *
      * @param string|null $name The name or dotted path to the query param or null to read all.
@@ -1375,6 +1368,15 @@ class ServerRequest implements ServerRequestInterface
      * ```
      *
      * When reading values you will get `null` for keys/values that do not exist.
+     *
+     * Developers are encouraged to use getParsedBody() if they need the whole data array,
+     * as it is PSR-7 compliant, and this method is not. Using Hash::get() you can also get single params.
+     *
+     * ### PSR-7 Alternative
+     *
+     * ```
+     * $value = Hash::get($request->getParsedBody(), 'Post.id');
+     * ```
      *
      * @param string|null $name Dot separated name of the value to read. Or null to read all data.
      * @param mixed $default The default data.
@@ -1645,23 +1647,6 @@ class ServerRequest implements ServerRequestInterface
         $e = new MethodNotAllowedException();
         $e->responseHeader('Allow', $allowed);
         throw $e;
-    }
-
-    /**
-     * Read data from php://input, mocked in tests.
-     *
-     * @return string contents of php://input
-     */
-    protected function _readInput(): string
-    {
-        if (empty($this->_input)) {
-            $fh = fopen('php://input', 'rb');
-            $content = stream_get_contents($fh);
-            fclose($fh);
-            $this->_input = $content;
-        }
-
-        return $this->_input;
     }
 
     /**

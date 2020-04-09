@@ -37,8 +37,19 @@ class Query implements ExpressionInterface, IteratorAggregate
 {
     use TypeMapTrait;
 
+    /**
+     * @var string
+     */
     public const JOIN_TYPE_INNER = 'INNER';
+
+    /**
+     * @var string
+     */
     public const JOIN_TYPE_LEFT = 'LEFT';
+
+    /**
+     * @var string
+     */
     public const JOIN_TYPE_RIGHT = 'RIGHT';
 
     /**
@@ -318,9 +329,8 @@ class Query implements ExpressionInterface, IteratorAggregate
      */
     public function traverse($visitor)
     {
-        $parts = array_keys($this->_parts);
-        foreach ($parts as $name) {
-            $visitor($this->_parts[$name], $name);
+        foreach ($this->_parts as $name => $part) {
+            $visitor($part, $name);
         }
 
         return $this;
@@ -626,7 +636,7 @@ class Query implements ExpressionInterface, IteratorAggregate
      * @param array|string $tables list of tables to be joined in the query
      * @param array $types associative array of type names used to bind values to query
      * @param bool $overwrite whether to reset joins with passed list or not
-     * @see \Cake\Database\Type
+     * @see \Cake\Database\TypeFactory
      * @return $this
      */
     public function join($tables, $types = [], $overwrite = false)
@@ -914,7 +924,7 @@ class Query implements ExpressionInterface, IteratorAggregate
      * @param string|array|\Cake\Database\ExpressionInterface|\Closure|null $conditions The conditions to filter on.
      * @param array $types associative array of type names used to bind values to query
      * @param bool $overwrite whether to reset conditions with passed list or not
-     * @see \Cake\Database\Type
+     * @see \Cake\Database\TypeFactory
      * @see \Cake\Database\Expression\QueryExpression
      * @return $this
      */
@@ -1084,7 +1094,7 @@ class Query implements ExpressionInterface, IteratorAggregate
      * @param string|array|\Cake\Database\ExpressionInterface|\Closure $conditions The conditions to add with AND.
      * @param array $types associative array of type names used to bind values to query
      * @see \Cake\Database\Query::where()
-     * @see \Cake\Database\Type
+     * @see \Cake\Database\TypeFactory
      * @return $this
      */
     public function andWhere($conditions, array $types = [])
@@ -1892,25 +1902,45 @@ class Query implements ExpressionInterface, IteratorAggregate
      */
     public function traverseExpressions(callable $callback)
     {
-        $visitor = function ($expression) use (&$visitor, $callback) {
-            if (is_array($expression)) {
-                foreach ($expression as $e) {
-                    $visitor($e);
-                }
+        if (!$callback instanceof Closure) {
+            $callback = Closure::fromCallable($callback);
+        }
 
-                return null;
+        foreach ($this->_parts as $part) {
+            $this->_expressionsVisitor($part, $callback);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Query parts traversal method used by traverseExpressions()
+     *
+     * @param \Cake\Database\ExpressionInterface|\Cake\Database\ExpressionInterface[] $expression Query expression or
+     *   array of expressions.
+     * @param \Closure $callback The callback to be executed for each ExpressionInterface
+     *   found inside this query.
+     * @return void
+     */
+    protected function _expressionsVisitor($expression, Closure $callback): void
+    {
+        if (is_array($expression)) {
+            foreach ($expression as $e) {
+                $this->_expressionsVisitor($e, $callback);
             }
 
-            if ($expression instanceof ExpressionInterface) {
-                $expression->traverse($visitor);
+            return;
+        }
 
-                if (!($expression instanceof self)) {
-                    $callback($expression);
-                }
+        if ($expression instanceof ExpressionInterface) {
+            $expression->traverse(function ($exp) use ($callback) {
+                $this->_expressionsVisitor($exp, $callback);
+            });
+
+            if (!$expression instanceof self) {
+                $callback($expression);
             }
-        };
-
-        return $this->traverse($visitor);
+        }
     }
 
     /**

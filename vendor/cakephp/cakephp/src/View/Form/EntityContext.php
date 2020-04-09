@@ -132,12 +132,11 @@ class EntityContext implements ContextInterface
     {
         /** @var \Cake\ORM\Table|null $table */
         $table = $this->_context['table'];
-        /** @var \Cake\ORM\Entity|\Traversable $entity */
+        /** @var \Cake\Datasource\EntityInterface|iterable $entity */
         $entity = $this->_context['entity'];
         if (empty($table)) {
             if (is_iterable($entity)) {
                 foreach ($entity as $e) {
-                    /** @psalm-suppress LoopInvalidation */
                     $entity = $e;
                     break;
                 }
@@ -145,7 +144,7 @@ class EntityContext implements ContextInterface
             $isEntity = $entity instanceof EntityInterface;
 
             if ($isEntity) {
-                /** @var \Cake\ORM\Entity $entity */
+                /** @psalm-suppress PossiblyInvalidMethodCall */
                 $table = $entity->getSource();
             }
             if (!$table && $isEntity && get_class($entity) !== Entity::class) {
@@ -227,7 +226,6 @@ class EntityContext implements ContextInterface
         $entity = $this->_context['entity'];
         if (is_iterable($entity)) {
             foreach ($entity as $e) {
-                /** @psalm-suppress LoopInvalidation */
                 $entity = $e;
                 break;
             }
@@ -658,11 +656,11 @@ class EntityContext implements ContextInterface
         }
 
         $table = $this->_tables[$this->_rootName];
-        /** @var \Cake\ORM\Association\BelongsToMany|null $assoc */
         $assoc = null;
         foreach ($normalized as $part) {
             if ($part === '_joinData') {
-                if ($assoc) {
+                if ($assoc !== null) {
+                    /** @psalm-suppress UndefinedMagicMethod */
                     $table = $assoc->junction();
                     $assoc = null;
                     continue;
@@ -672,14 +670,14 @@ class EntityContext implements ContextInterface
                 $assoc = $associationCollection->getByProperty($part);
             }
 
-            if (!$assoc && $fallback) {
-                break;
-            }
-            if (!$assoc && !$fallback) {
+            if ($assoc === null) {
+                if ($fallback) {
+                    break;
+                }
+
                 return null;
             }
 
-            /** @var \Cake\ORM\Association $assoc  */
             $table = $assoc->getTarget();
         }
 
@@ -691,7 +689,7 @@ class EntityContext implements ContextInterface
      *
      * @param string $field A dot separated path to get a schema type for.
      * @return string|null An abstract data type or null.
-     * @see \Cake\Database\Type
+     * @see \Cake\Database\TypeFactory
      */
     public function type(string $field): ?string
     {

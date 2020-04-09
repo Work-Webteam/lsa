@@ -26,7 +26,7 @@ use Cake\Console\ConsoleOptionParser;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\Filesystem\Folder;
+use Cake\Filesystem\Filesystem;
 use Cake\Utility\Inflector;
 
 /**
@@ -57,7 +57,7 @@ class PluginCommand extends BakeCommand
      *
      * @param \Cake\Console\Arguments $args The command arguments.
      * @param \Cake\Console\ConsoleIo $io The console io
-     * @return null|int The exit code or null for success
+     * @return int|null The exit code or null for success
      */
     public function execute(Arguments $args, ConsoleIo $io): ?int
     {
@@ -100,7 +100,7 @@ class PluginCommand extends BakeCommand
     {
         $pathOptions = App::path('plugins');
         if (count($pathOptions) > 1) {
-            $this->findPath($io, $pathOptions);
+            $this->findPath($pathOptions, $io);
         }
         $io->out(sprintf("<info>Plugin Name:</info> %s", $plugin));
         $io->out(sprintf("<info>Plugin Directory:</info> %s", $this->path . $plugin));
@@ -195,10 +195,15 @@ class PluginCommand extends BakeCommand
         $paths = array_merge($paths, Configure::read('App.paths.templates'));
         $paths[] = Plugin::templatePath('Bake');
 
+        $fs = new Filesystem();
+        $templates = [];
         do {
             $templatesPath = array_shift($paths) . BakeView::BAKE_TEMPLATE_FOLDER . '/Plugin';
-            $templatesDir = new Folder($templatesPath);
-            $templates = $templatesDir->findRecursive('.*\.(twig|php)');
+            if (is_dir($templatesPath)) {
+                $templates = array_keys(iterator_to_array(
+                    $fs->findRecursive($templatesPath, '/.*\.(twig|php)/')
+                ));
+            }
         } while (!$templates);
 
         sort($templates);
@@ -264,7 +269,7 @@ class PluginCommand extends BakeCommand
         $io->out('<info>Modifying composer autoloader</info>');
 
         $out = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "\n";
-        $io->createFile($file, $out);
+        $io->createFile($file, $out, (bool)$args->getOption('force'));
 
         $composer = $this->findComposer($args, $io);
 

@@ -16,7 +16,6 @@
 /**
  * Ensures curly brackets are used with if, else, elseif, foreach and for.
  * while and dowhile are covered elsewhere
- *
  */
 
 namespace CakePHP\Sniffs\ControlStructures;
@@ -27,7 +26,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 class ControlStructuresSniff implements Sniff
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function register()
     {
@@ -35,13 +34,13 @@ class ControlStructuresSniff implements Sniff
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
 
-        $nextToken = $phpcsFile->findNext(T_WHITESPACE, ($stackPtr + 1), null, true);
+        $nextToken = $phpcsFile->findNext(T_WHITESPACE, $stackPtr + 1, null, true);
         if ($tokens[$nextToken]['code'] === T_OPEN_PARENTHESIS) {
             $closer = $tokens[$nextToken]['parenthesis_closer'];
             $diff = $closer - $stackPtr;

@@ -9,15 +9,24 @@ class ComposerStaticInitf417b255115e95e575fa7b0043c917ae
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        '7e9bd612cc444b3eed788ebbe46263a0' => __DIR__ . '/..' . '/laminas/laminas-zendframework-bridge/src/autoload.php',
+        '07d7f1a47144818725fd8d91a907ac57' => __DIR__ . '/..' . '/laminas/laminas-diactoros/src/functions/create_uploaded_file.php',
+        'da94ac5d3ca7d2dbab84ce561ce72bfd' => __DIR__ . '/..' . '/laminas/laminas-diactoros/src/functions/marshal_headers_from_sapi.php',
+        '3d97c8dcdfba8cb85d3b34f116bb248b' => __DIR__ . '/..' . '/laminas/laminas-diactoros/src/functions/marshal_method_from_sapi.php',
+        'e6f3bc6883e449ab367280b34158c05b' => __DIR__ . '/..' . '/laminas/laminas-diactoros/src/functions/marshal_protocol_version_from_sapi.php',
+        'd59fbae42019aedf227094ac49a46f50' => __DIR__ . '/..' . '/laminas/laminas-diactoros/src/functions/marshal_uri_from_sapi.php',
+        'de95e0ac670b27c84ef8c5ac41fc1b34' => __DIR__ . '/..' . '/laminas/laminas-diactoros/src/functions/normalize_server.php',
+        'b6c2870932b0250c10334a86dcb33c7f' => __DIR__ . '/..' . '/laminas/laminas-diactoros/src/functions/normalize_uploaded_files.php',
+        'd02cf21124526632320d6f20b1bbf905' => __DIR__ . '/..' . '/laminas/laminas-diactoros/src/functions/parse_cookie_header.php',
+        'd919fc9d5ad52cfb7f322f7fe36458ab' => __DIR__ . '/..' . '/laminas/laminas-diactoros/src/functions/create_uploaded_file.legacy.php',
+        'e397f74f8af3b1e56166a6e99f216ee7' => __DIR__ . '/..' . '/laminas/laminas-diactoros/src/functions/marshal_headers_from_sapi.legacy.php',
+        'd154b49fab8e4da34fb553a2d644918c' => __DIR__ . '/..' . '/laminas/laminas-diactoros/src/functions/marshal_method_from_sapi.legacy.php',
+        '9d3db23ca418094bcf0b641a0c9559ed' => __DIR__ . '/..' . '/laminas/laminas-diactoros/src/functions/marshal_protocol_version_from_sapi.legacy.php',
+        'b0b88a3b89caae681462c58ff19a7059' => __DIR__ . '/..' . '/laminas/laminas-diactoros/src/functions/marshal_uri_from_sapi.legacy.php',
+        'cc8e14526dc240491e17a838cb78508c' => __DIR__ . '/..' . '/laminas/laminas-diactoros/src/functions/normalize_server.legacy.php',
+        '786bf90caabc9e09b6ad4cc5ca8f0e30' => __DIR__ . '/..' . '/laminas/laminas-diactoros/src/functions/normalize_uploaded_files.legacy.php',
+        '751a5a3f463e4be759be31748b61737c' => __DIR__ . '/..' . '/laminas/laminas-diactoros/src/functions/parse_cookie_header.legacy.php',
         '0d59ee240a4cd96ddbb4ff164fccea4d' => __DIR__ . '/..' . '/symfony/polyfill-php73/bootstrap.php',
-        'cf97c57bfe0f23854afd2f3818abb7a0' => __DIR__ . '/..' . '/zendframework/zend-diactoros/src/functions/create_uploaded_file.php',
-        '9bf37a3d0dad93e29cb4e1b1bfab04e9' => __DIR__ . '/..' . '/zendframework/zend-diactoros/src/functions/marshal_headers_from_sapi.php',
-        'ce70dccb4bcc2efc6e94d2ee526e6972' => __DIR__ . '/..' . '/zendframework/zend-diactoros/src/functions/marshal_method_from_sapi.php',
-        'f86420df471f14d568bfcb71e271b523' => __DIR__ . '/..' . '/zendframework/zend-diactoros/src/functions/marshal_protocol_version_from_sapi.php',
-        'b87481e008a3700344428ae089e7f9e5' => __DIR__ . '/..' . '/zendframework/zend-diactoros/src/functions/marshal_uri_from_sapi.php',
-        '0b0974a5566a1077e4f2e111341112c1' => __DIR__ . '/..' . '/zendframework/zend-diactoros/src/functions/normalize_server.php',
-        '1ca3bc274755662169f9629d5412a1da' => __DIR__ . '/..' . '/zendframework/zend-diactoros/src/functions/normalize_uploaded_files.php',
-        '40360c0b9b437e69bcbb7f1349ce029e' => __DIR__ . '/..' . '/zendframework/zend-diactoros/src/functions/parse_cookie_header.php',
         '34122c0574b76bf21c9a8db62b5b9cf3' => __DIR__ . '/..' . '/cakephp/chronos/src/carbon_compat.php',
         'c720f792236cd163ece8049879166850' => __DIR__ . '/..' . '/cakephp/cakephp/src/Core/functions.php',
         'ede59e3a405fb689cd1cebb7bb1db3fb' => __DIR__ . '/..' . '/cakephp/cakephp/src/Collection/functions.php',
@@ -33,11 +42,6 @@ class ComposerStaticInitf417b255115e95e575fa7b0043c917ae
         array (
             'phpDocumentor\\Reflection\\' => 25,
         ),
-        'Z' => 
-        array (
-            'Zend\\HttpHandlerRunner\\' => 23,
-            'Zend\\Diactoros\\' => 15,
-        ),
         'X' => 
         array (
             'XdgBaseDir\\' => 11,
@@ -49,6 +53,7 @@ class ComposerStaticInitf417b255115e95e575fa7b0043c917ae
         ),
         'T' => 
         array (
+            'Twig\\Extra\\Markdown\\' => 20,
             'Twig\\' => 5,
         ),
         'S' => 
@@ -57,7 +62,6 @@ class ComposerStaticInitf417b255115e95e575fa7b0043c917ae
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Polyfill\\Ctype\\' => 23,
             'Symfony\\Contracts\\Service\\' => 26,
-            'Symfony\\Component\\Yaml\\' => 23,
             'Symfony\\Component\\VarDumper\\' => 28,
             'Symfony\\Component\\Process\\' => 26,
             'Symfony\\Component\\Finder\\' => 25,
@@ -87,12 +91,16 @@ class ComposerStaticInitf417b255115e95e575fa7b0043c917ae
             'Migrations\\' => 11,
             'M1\\Env\\' => 7,
         ),
+        'L' => 
+        array (
+            'Laminas\\ZendFrameworkBridge\\' => 28,
+            'Laminas\\HttpHandlerRunner\\' => 26,
+            'Laminas\\Diactoros\\' => 18,
+        ),
         'J' => 
         array (
             'JsonSchema\\' => 11,
             'Jasny\\Twig\\' => 11,
-            'JakubOnderka\\PhpConsoleHighlighter\\' => 35,
-            'JakubOnderka\\PhpConsoleColor\\' => 29,
         ),
         'D' => 
         array (
@@ -133,14 +141,6 @@ class ComposerStaticInitf417b255115e95e575fa7b0043c917ae
             1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
             2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
         ),
-        'Zend\\HttpHandlerRunner\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/zendframework/zend-httphandlerrunner/src',
-        ),
-        'Zend\\Diactoros\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/zendframework/zend-diactoros/src',
-        ),
         'XdgBaseDir\\' => 
         array (
             0 => __DIR__ . '/..' . '/dnoegel/php-xdg-base-dir/src',
@@ -152,6 +152,10 @@ class ComposerStaticInitf417b255115e95e575fa7b0043c917ae
         'Webmozart\\Assert\\' => 
         array (
             0 => __DIR__ . '/..' . '/webmozart/assert/src',
+        ),
+        'Twig\\Extra\\Markdown\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/twig/markdown-extra/src',
         ),
         'Twig\\' => 
         array (
@@ -172,10 +176,6 @@ class ComposerStaticInitf417b255115e95e575fa7b0043c917ae
         'Symfony\\Contracts\\Service\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/service-contracts',
-        ),
-        'Symfony\\Component\\Yaml\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/yaml',
         ),
         'Symfony\\Component\\VarDumper\\' => 
         array (
@@ -267,6 +267,18 @@ class ComposerStaticInitf417b255115e95e575fa7b0043c917ae
         array (
             0 => __DIR__ . '/..' . '/m1/env/src',
         ),
+        'Laminas\\ZendFrameworkBridge\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laminas/laminas-zendframework-bridge/src',
+        ),
+        'Laminas\\HttpHandlerRunner\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laminas/laminas-httphandlerrunner/src',
+        ),
+        'Laminas\\Diactoros\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laminas/laminas-diactoros/src',
+        ),
         'JsonSchema\\' => 
         array (
             0 => __DIR__ . '/..' . '/justinrainbow/json-schema/src/JsonSchema',
@@ -274,14 +286,6 @@ class ComposerStaticInitf417b255115e95e575fa7b0043c917ae
         'Jasny\\Twig\\' => 
         array (
             0 => __DIR__ . '/..' . '/jasny/twig-extensions/src',
-        ),
-        'JakubOnderka\\PhpConsoleHighlighter\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/jakub-onderka/php-console-highlighter/src',
-        ),
-        'JakubOnderka\\PhpConsoleColor\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/jakub-onderka/php-console-color/src',
         ),
         'Doctrine\\Instantiator\\' => 
         array (
@@ -357,10 +361,6 @@ class ComposerStaticInitf417b255115e95e575fa7b0043c917ae
         ),
     );
 
-    public static $fallbackDirsPsr4 = array (
-        0 => __DIR__ . '/..' . '/asm89/twig-cache-extension/lib',
-    );
-
     public static $prefixesPsr0 = array (
         'j' => 
         array (
@@ -370,25 +370,11 @@ class ComposerStaticInitf417b255115e95e575fa7b0043c917ae
                 1 => __DIR__ . '/..' . '/josegonzalez/dotenv/tests',
             ),
         ),
-        'T' => 
-        array (
-            'Twig_' => 
-            array (
-                0 => __DIR__ . '/..' . '/twig/twig/lib',
-            ),
-        ),
         'D' => 
         array (
             'Detection' => 
             array (
                 0 => __DIR__ . '/..' . '/mobiledetect/mobiledetectlib/namespaced',
-            ),
-        ),
-        'A' => 
-        array (
-            'Aptoma' => 
-            array (
-                0 => __DIR__ . '/..' . '/aptoma/twig-markdown/src',
             ),
         ),
     );
@@ -608,6 +594,7 @@ class ComposerStaticInitf417b255115e95e575fa7b0043c917ae
         'PHPUnit\\Util\\TestDox\\XmlResultPrinter' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/TestDox/XmlResultPrinter.php',
         'PHPUnit\\Util\\TextTestListRenderer' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/TextTestListRenderer.php',
         'PHPUnit\\Util\\Type' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Type.php',
+        'PHPUnit\\Util\\VersionComparisonOperator' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/VersionComparisonOperator.php',
         'PHPUnit\\Util\\XdebugFilterScriptGenerator' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/XdebugFilterScriptGenerator.php',
         'PHPUnit\\Util\\Xml' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Xml.php',
         'PHPUnit\\Util\\XmlTestListRenderer' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/XmlTestListRenderer.php',
@@ -982,7 +969,6 @@ class ComposerStaticInitf417b255115e95e575fa7b0043c917ae
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInitf417b255115e95e575fa7b0043c917ae::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInitf417b255115e95e575fa7b0043c917ae::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr4 = ComposerStaticInitf417b255115e95e575fa7b0043c917ae::$fallbackDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInitf417b255115e95e575fa7b0043c917ae::$prefixesPsr0;
             $loader->classMap = ComposerStaticInitf417b255115e95e575fa7b0043c917ae::$classMap;
 

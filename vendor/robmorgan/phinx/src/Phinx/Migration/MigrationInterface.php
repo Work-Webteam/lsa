@@ -34,6 +34,11 @@ interface MigrationInterface
     const DOWN = 'down';
 
     /**
+     * @var string
+     */
+    const INIT = 'init';
+
+    /**
      * Sets the database adapter.
      *
      * @param \Phinx\Db\Adapter\AdapterInterface $adapter Database Adapter
@@ -98,7 +103,7 @@ interface MigrationInterface
     /**
      * Sets the migration version number.
      *
-     * @param float $version Version
+     * @param int $version Version
      *
      * @return \Phinx\Migration\MigrationInterface
      */
@@ -107,7 +112,7 @@ interface MigrationInterface
     /**
      * Gets the migration version number.
      *
-     * @return float
+     * @return int
      */
     public function getVersion();
 
@@ -140,9 +145,13 @@ interface MigrationInterface
     /**
      * Executes a SQL statement and returns the result as an array.
      *
+     * To improve IDE auto-completion possibility, you can overwrite the query method
+     * phpDoc in your (typically custom abstract parent) migration class, where you can set
+     * the return type by the adapter in your current use.
+     *
      * @param string $sql SQL
      *
-     * @return array
+     * @return mixed
      */
     public function query($sql);
 

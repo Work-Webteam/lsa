@@ -16,6 +16,7 @@ declare(strict_types=1);
  */
 namespace Cake\Database;
 
+use Cake\Core\App;
 use Cake\Database\Exception\MissingConnectionException;
 use Cake\Database\Schema\BaseSchema;
 use Cake\Database\Schema\TableSchema;
@@ -31,6 +32,11 @@ use PDOException;
  */
 abstract class Driver implements DriverInterface
 {
+    /**
+     * @var int|null Maximum alias length or null if no limit
+     */
+    protected const MAX_ALIAS_LENGTH = null;
+
     /**
      * Instance of PDO.
      *
@@ -90,12 +96,23 @@ abstract class Driver implements DriverInterface
      */
     protected function _connect(string $dsn, array $config): bool
     {
-        $connection = new PDO(
-            $dsn,
-            $config['username'] ?: null,
-            $config['password'] ?: null,
-            $config['flags']
-        );
+        try {
+            $connection = new PDO(
+                $dsn,
+                $config['username'] ?: null,
+                $config['password'] ?: null,
+                $config['flags']
+            );
+        } catch (PDOException $e) {
+            throw new MissingConnectionException(
+                [
+                    'driver' => App::shortName(static::class, 'Database/Driver'),
+                    'reason' => $e->getMessage(),
+                ],
+                null,
+                $e
+            );
+        }
         $this->setConnection($connection);
 
         return true;
@@ -123,7 +140,10 @@ abstract class Driver implements DriverInterface
     public function getConnection()
     {
         if ($this->_connection === null) {
-            throw new MissingConnectionException(['reason' => 'Unknown']);
+            throw new MissingConnectionException([
+                'driver' => App::shortName(static::class, 'Database/Driver'),
+                'reason' => 'Unknown',
+            ]);
         }
 
         return $this->_connection;
@@ -408,11 +428,22 @@ abstract class Driver implements DriverInterface
     {
         $className = TableSchema::class;
         if (isset($this->_config['tableSchema'])) {
+            /** @var class-string<\Cake\Database\Schema\TableSchema> $className */
             $className = $this->_config['tableSchema'];
         }
 
-        /** @var \Cake\Database\Schema\TableSchema */
         return new $className($table, $columns);
+    }
+
+    /**
+     * Returns the maximum alias length allowed.
+     * This can be different than the maximum identifier length for columns.
+     *
+     * @return int|null Maximum alias length or null if no limit
+     */
+    public function getMaxAliasLength(): ?int
+    {
+        return static::MAX_ALIAS_LENGTH;
     }
 
     /**

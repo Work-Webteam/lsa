@@ -18,6 +18,8 @@ namespace Cake\Database\Driver;
 
 use Cake\Database\Dialect\PostgresDialectTrait;
 use Cake\Database\Driver;
+use Cake\Database\PostgresCompiler;
+use Cake\Database\QueryCompiler;
 use PDO;
 
 /**
@@ -26,6 +28,11 @@ use PDO;
 class Postgres extends Driver
 {
     use PostgresDialectTrait;
+
+    /**
+     * @var int|null Maximum alias length or null if no limit
+     */
+    protected const MAX_ALIAS_LENGTH = 63;
 
     /**
      * Base configuration settings for Postgres driver
@@ -130,5 +137,15 @@ class Postgres extends Driver
     public function supportsDynamicConstraints(): bool
     {
         return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return \Cake\Database\PostgresCompiler
+     */
+    public function newCompiler(): QueryCompiler
+    {
+        return new PostgresCompiler();
     }
 }

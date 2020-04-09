@@ -82,17 +82,17 @@ abstract class BaseApplication implements
         ?EventManagerInterface $eventManager = null,
         ?ControllerFactoryInterface $controllerFactory = null
     ) {
-        $this->configDir = $configDir;
+        $this->configDir = rtrim($configDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         $this->plugins = Plugin::getCollection();
         $this->_eventManager = $eventManager ?: EventManager::instance();
         $this->controllerFactory = $controllerFactory;
     }
 
     /**
-     * @param \Cake\Http\MiddlewareQueue $middleware The middleware queue to set in your App Class
+     * @param \Cake\Http\MiddlewareQueue $middlewareQueue The middleware queue to set in your App Class
      * @return \Cake\Http\MiddlewareQueue
      */
-    abstract public function middleware(MiddlewareQueue $middleware): MiddlewareQueue;
+    abstract public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue;
 
     /**
      * @inheritDoc
@@ -136,7 +136,7 @@ abstract class BaseApplication implements
      */
     public function bootstrap(): void
     {
-        require_once $this->configDir . '/bootstrap.php';
+        require_once $this->configDir . 'bootstrap.php';
     }
 
     /**
@@ -161,7 +161,7 @@ abstract class BaseApplication implements
     {
         // Only load routes if the router is empty
         if (!Router::routes()) {
-            require $this->configDir . '/routes.php';
+            require $this->configDir . 'routes.php';
         }
     }
 
@@ -210,7 +210,7 @@ abstract class BaseApplication implements
      * - Create the controller that will handle this request.
      * - Invoke the controller.
      *
-     * @param \Cake\Http\ServerRequest $request The request
+     * @param \Psr\Http\Message\ServerRequestInterface $request The request
      * @return \Psr\Http\Message\ResponseInterface
      */
     public function handle(

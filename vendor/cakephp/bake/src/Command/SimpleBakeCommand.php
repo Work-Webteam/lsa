@@ -71,12 +71,12 @@ abstract class SimpleBakeCommand extends BakeCommand
      *
      * @param \Cake\Console\Arguments $args The command arguments.
      * @param \Cake\Console\ConsoleIo $io The console io
-     * @return null|int The exit code or null for success
+     * @return int|null The exit code or null for success
      */
     public function execute(Arguments $args, ConsoleIo $io): ?int
     {
         $this->extractCommonProperties($args);
-        $name = $args->getArgument('name');
+        $name = $args->getArgumentAt(0);
         if (empty($name)) {
             $io->err('You must provide a name to bake a ' . $this->name());
             $this->abort();
@@ -107,7 +107,7 @@ abstract class SimpleBakeCommand extends BakeCommand
         $contents = $renderer->generate($this->template());
 
         $filename = $this->getPath($args) . $this->fileName($name);
-        $io->createFile($filename, $contents);
+        $io->createFile($filename, $contents, (bool)$args->getOption('force'));
 
         $emptyFile = $this->getPath($args) . '.gitkeep';
         $this->deleteEmptyFile($emptyFile, $io);

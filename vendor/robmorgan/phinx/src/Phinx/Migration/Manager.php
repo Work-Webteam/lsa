@@ -44,27 +44,17 @@ class Manager
     /**
      * @var array
      */
-    protected $environments;
+    protected $environments = [];
 
     /**
-     * @var array
+     * @var array|null
      */
     protected $migrations;
 
     /**
-     * @var array
+     * @var array|null
      */
     protected $seeds;
-
-    /**
-     * @var int
-     */
-    const EXIT_STATUS_DOWN = 3;
-
-    /**
-     * @var int
-     */
-    const EXIT_STATUS_MISSING = 2;
 
     /**
      * @param \Phinx\Config\ConfigInterface $config Configuration Object
@@ -86,7 +76,7 @@ class Manager
      *
      * @throws \RuntimeException
      *
-     * @return int 0 if all migrations are up, or an error code
+     * @return array array indicating if there are any missing or down migrations
      */
     public function printStatus($environment, $format = null)
     {
@@ -134,6 +124,7 @@ class Manager
             $hasMissingMigration = !empty($missingVersions);
 
             // get the migrations sorted in the same way as the versions
+            /** @var \Phinx\Migration\AbstractMigration[] $sortedMigrations */
             $sortedMigrations = [];
 
             foreach ($versions as $versionCreationTime => $version) {
@@ -242,13 +233,10 @@ class Manager
             }
         }
 
-        if ($hasMissingMigration) {
-            return self::EXIT_STATUS_MISSING;
-        } elseif ($hasDownMigration) {
-            return self::EXIT_STATUS_DOWN;
-        } else {
-            return 0;
-        }
+        return [
+            'hasMissingMigration' => $hasMissingMigration,
+            'hasDownMigration' => $hasDownMigration,
+        ];
     }
 
     /**
@@ -610,6 +598,7 @@ class Manager
         // create an environment instance and cache it
         $envOptions = $this->getConfig()->getEnvironment($name);
         $envOptions['version_order'] = $this->getConfig()->getVersionOrder();
+        $envOptions['data_domain'] = $this->getConfig()->getDataDomain();
 
         $environment = new Environment($name, $envOptions);
         $this->environments[$name] = $environment;
@@ -970,7 +959,7 @@ class Manager
     }
 
     /**
-     * Toggles the breakpoint for a specific version.
+     * Updates the breakpoint for a specific version.
      *
      * @param string $environment The required environment
      * @param int|null $version The version of the target migration
@@ -994,7 +983,7 @@ class Manager
             $version = $lastVersion['version'];
         }
 
-        if ($version != 0 && !isset($migrations[$version])) {
+        if ($version != 0 && (!isset($versions[$version]) || !isset($migrations[$version]))) {
             $this->output->writeln(sprintf(
                 '<comment>warning</comment> %s is not a valid version',
                 $version

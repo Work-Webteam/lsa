@@ -22,6 +22,7 @@ use Cake\Event\EventListenerInterface;
 use Countable;
 use IteratorAggregate;
 use RuntimeException;
+use Traversable;
 
 /**
  * Acts as a registry/factory for objects.
@@ -164,7 +165,7 @@ abstract class ObjectRegistry implements Countable, IteratorAggregate
      *
      * @param string $class The class to resolve.
      * @return string|null The resolved name or null for failure.
-     * @psalm-return class-string
+     * @psalm-return class-string|null
      */
     abstract protected function _resolveClassName(string $class): ?string;
 
@@ -315,7 +316,7 @@ abstract class ObjectRegistry implements Countable, IteratorAggregate
     public function reset()
     {
         foreach (array_keys($this->_loaded) as $name) {
-            $this->unload($name);
+            $this->unload((string)$name);
         }
 
         return $this;
@@ -375,10 +376,10 @@ abstract class ObjectRegistry implements Countable, IteratorAggregate
     /**
      * Returns an array iterator.
      *
-     * @return \ArrayIterator
-     * @psalm-return \ArrayIterator<string, TObject>
+     * @return \Traversable
+     * @psalm-return \Traversable<string, TObject>
      */
-    public function getIterator(): ArrayIterator
+    public function getIterator(): Traversable
     {
         return new ArrayIterator($this->_loaded);
     }

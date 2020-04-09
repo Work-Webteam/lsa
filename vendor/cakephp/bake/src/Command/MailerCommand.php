@@ -18,7 +18,6 @@ namespace Bake\Command;
 
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
-use Cake\Utility\Inflector;
 
 /**
  * Mailer code generator.
@@ -33,7 +32,7 @@ class MailerCommand extends SimpleBakeCommand
     public $pathFragment = 'Mailer/';
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function name(): string
     {
@@ -41,7 +40,7 @@ class MailerCommand extends SimpleBakeCommand
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function fileName(string $name): string
     {
@@ -49,7 +48,7 @@ class MailerCommand extends SimpleBakeCommand
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function template(): string
     {
@@ -66,25 +65,6 @@ class MailerCommand extends SimpleBakeCommand
      */
     public function bake(string $name, Arguments $args, ConsoleIo $io): void
     {
-        $this->bakeLayouts($name, $args, $io);
-
         parent::bake($name, $args, $io);
-    }
-
-    /**
-     * Bake empty layout files for html/text emails.
-     *
-     * @param string $name The name of the mailer layouts are needed for.
-     * @param \Cake\Console\Arguments $args The console arguments
-     * @param \Cake\Console\ConsoleIo $io The console io
-     * @return void
-     */
-    protected function bakeLayouts(string $name, Arguments $args, ConsoleIo $io): void
-    {
-        foreach (['html', 'text'] as $type) {
-            $pathFragment = implode(DS, ['layout', 'email', $type, Inflector::underscore($name) . '.php']);
-            $path = $this->getTemplatePath($args) . $pathFragment;
-            $io->createFile($path, '');
-        }
     }
 }

@@ -278,7 +278,7 @@ class RemoteFilesystem
         if (isset($options['github-token'])) {
             // only add the access_token if it is actually a github URL (in case we were redirected to S3)
             if (preg_match('{^https?://([a-z0-9-]+\.)*github\.com/}', $fileUrl)) {
-                $fileUrl .= (false === strpos($fileUrl, '?') ? '?' : '&') . 'access_token='.$options['github-token'];
+                $options['http']['header'][] = 'Authorization: token '.$options['github-token'];
             }
             unset($options['github-token']);
         }
@@ -690,7 +690,7 @@ class RemoteFilesystem
             $message = "\n".'Could not fetch '.$this->fileUrl.', enter your ' . $this->originUrl . ' credentials ' .($httpStatus === 401 ? 'to access private repos' : 'to go over the API rate limit');
             $gitLabUtil = new GitLab($this->io, $this->config, null);
 
-            if ($this->io->hasAuthentication($this->originUrl) && ($auth = $this->io->getAuthentication($this->originUrl)) && in_array($auth['password'], array('gitlab-ci-token', 'private-token'), true)) {
+            if ($this->io->hasAuthentication($this->originUrl) && ($auth = $this->io->getAuthentication($this->originUrl)) && in_array($auth['password'], array('gitlab-ci-token', 'private-token', 'oauth2'), true)) {
                 throw new TransportException("Invalid credentials for '" . $this->fileUrl . "', aborting.", $httpStatus);
             }
 
@@ -817,7 +817,9 @@ class RemoteFilesystem
         if ($this->io->hasAuthentication($originUrl)) {
             $authenticationDisplayMessage = null;
             $auth = $this->io->getAuthentication($originUrl);
-            if ('github.com' === $originUrl && 'x-oauth-basic' === $auth['password']) {
+            if ($auth['password'] === 'bearer') {
+                $headers[] = 'Authorization: Bearer '.$auth['username'];
+            } elseif ('github.com' === $originUrl && 'x-oauth-basic' === $auth['password']) {
                 $options['github-token'] = $auth['username'];
                 $authenticationDisplayMessage = 'Using GitHub token authentication';
             } elseif ($this->config && in_array($originUrl, $this->config->get('gitlab-domains'), true)) {

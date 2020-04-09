@@ -274,7 +274,7 @@ class PaginatorHelper extends Helper
     /**
      * Generate an active/inactive link for next/prev methods.
      *
-     * @param string|bool $text The enabled text for the link.
+     * @param string|false $text The enabled text for the link.
      * @param bool $enabled Whether or not the enabled/disabled version should be created.
      * @param array $options An array of options from the calling method.
      * @param array $templates An array of templates with the 'active' and 'disabled' keys.
@@ -1072,7 +1072,7 @@ class PaginatorHelper extends Helper
         } elseif ($params['page'] > 1 && is_string($first)) {
             $first = $options['escape'] ? h($first) : $first;
             $out .= $this->templater()->format('first', [
-                'url' => $this->generateUrl(['page' => 1], $options['model']),
+                'url' => $this->generateUrl(['page' => 1], $options['model'], $options['url']),
                 'text' => $first,
             ]);
         }
@@ -1132,7 +1132,7 @@ class PaginatorHelper extends Helper
         } elseif ($params['page'] < $params['pageCount'] && is_string($last)) {
             $last = $options['escape'] ? h($last) : $last;
             $out .= $this->templater()->format('last', [
-                'url' => $this->generateUrl(['page' => $params['pageCount']], $options['model']),
+                'url' => $this->generateUrl(['page' => $params['pageCount']], $options['model'], $options['url']),
                 'text' => $last,
             ]);
         }

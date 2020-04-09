@@ -44,11 +44,13 @@ Configuration
     // Allow e.g. http://foo.bar.dev or http://my-shop.local domains locally
     Configure::write('DebugKit.safeTld', ['dev', 'local', 'example']);
 
-* ``DebugKit.forceEnable`` - Force DebugKit to display. Careful with this, it is usually 
+* ``DebugKit.forceEnable`` - Force DebugKit to display. Careful with this, it is usually
   safer to simply whitelist your local TLDs. Example usage::
 
     // Before loading DebugKit
     Configure::write('DebugKit.forceEnable', true);
+
+* ``DebugKit.ignoreAuthorization`` - Set to true to ignore Cake Authorization plugin for DebugKit requests. Disabled by default.
 
 Database Configuration
 ----------------------
@@ -56,7 +58,7 @@ Database Configuration
 By default DebugKit will store panel data into a SQLite database in your
 application's ``tmp`` directory. If you cannot install pdo_sqlite, you can
 configure DebugKit to use a different database by defining a ``debug_kit``
-connection in your **config/app.php** file. For example::
+connection in the ``Datasources`` variable in your **config/app.php** file. For example::
 
     /**
      * The debug_kit connection stores DebugKit meta-data.
@@ -77,7 +79,7 @@ connection in your **config/app.php** file. For example::
         //'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
     ],
 
-You can safely remove the **tmp/debug_kit.sqlite** file at any point. 
+You can safely remove the **tmp/debug_kit.sqlite** file at any point.
 DebugKit will regenerate it when necessary.
 
 Toolbar Usage

@@ -25,13 +25,14 @@ use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Core\Exception\Exception;
 use Cake\Core\Plugin;
-use Cake\Filesystem\Folder;
+use Cake\Filesystem\Filesystem;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest as Request;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use ReflectionClass;
+use UnexpectedValueException;
 
 /**
  * Command class for generating test files.
@@ -81,6 +82,15 @@ class TestCommand extends BakeCommand
     ];
 
     /**
+     * Blacklisted methods for controller test cases.
+     *
+     * @var string[]
+     */
+    protected $blacklistedMethods = [
+        'initialize',
+    ];
+
+    /**
      * Internal list of fixtures that have been added so far.
      *
      * @var string[]
@@ -92,7 +102,7 @@ class TestCommand extends BakeCommand
      *
      * @param \Cake\Console\Arguments $args The command arguments.
      * @param \Cake\Console\ConsoleIo $io The console io
-     * @return null|int The exit code or null for success
+     * @return int|null The exit code or null for success
      */
     public function execute(Arguments $args, ConsoleIo $io): ?int
     {
@@ -204,12 +214,15 @@ class TestCommand extends BakeCommand
         if ($this->plugin) {
             $base = Plugin::classPath($this->plugin);
         }
+
         $path = $base . str_replace('\\', DS, $namespace);
-        $folder = new Folder($path);
-        [, $files] = $folder->read();
-        foreach ($files as $file) {
-            $classes[] = str_replace('.php', '', $file);
+        $files = (new Filesystem())->find($path);
+        foreach ($files as $fileObj) {
+            if ($fileObj->isFile()) {
+                $classes[] = substr($fileObj->getFileName(), 0, -4);
+            }
         }
+        sort($classes);
 
         return $classes;
     }
@@ -290,7 +303,7 @@ class TestCommand extends BakeCommand
         $filename = $this->testCaseFileName($type, $fullClassName);
         $emptyFile = dirname($filename) . DS . '.gitkeep';
         $this->deleteEmptyFile($emptyFile, $io);
-        if ($io->createFile($filename, $out)) {
+        if ($io->createFile($filename, $out, $args->getOption('force'))) {
             return $out;
         }
 
@@ -412,7 +425,7 @@ class TestCommand extends BakeCommand
             if ($method->getDeclaringClass()->getName() !== $className) {
                 continue;
             }
-            if (!$method->isPublic()) {
+            if (!$method->isPublic() || in_array($method->getName(), $this->blacklistedMethods, true)) {
                 continue;
             }
             $out[] = $method->getName();
@@ -476,7 +489,14 @@ class TestCommand extends BakeCommand
      */
     protected function _processController(Controller $subject): void
     {
-        $models = [$subject->loadModel()->getAlias()];
+        try {
+            $model = $subject->loadModel();
+        } catch (UnexpectedValueException $exception) {
+            // No fixtures needed or possible
+            return;
+        }
+
+        $models = [$model->getAlias()];
         foreach ($models as $model) {
             [, $model] = pluginSplit($model);
             $this->_processModel($subject->{$model});

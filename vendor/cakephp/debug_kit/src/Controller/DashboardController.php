@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -12,31 +14,24 @@
  */
 namespace DebugKit\Controller;
 
-use Cake\Controller\Controller;
-use Cake\Core\Configure;
 use Cake\Event\EventInterface;
-use Cake\Http\Exception\NotFoundException;
 
 /**
  * Dashboard and common DebugKit backend.
  *
  * @property \DebugKit\Model\Table\RequestsTable $Requests
  */
-class DashboardController extends Controller
+class DashboardController extends DebugKitController
 {
     /**
      * Before filter handler.
      *
      * @param \Cake\Event\EventInterface $event The event.
      * @return void
-     * @throws \Cake\Http\Exception\NotFoundException
      */
     public function beforeFilter(EventInterface $event)
     {
-        // TODO add config override.
-        if (!Configure::read('debug')) {
-            throw new NotFoundException('Not available without debug mode on.');
-        }
+        parent::beforeFilter($event);
 
         $this->viewBuilder()->setLayout('dashboard');
     }

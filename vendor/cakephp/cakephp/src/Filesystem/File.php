@@ -143,10 +143,10 @@ class File
     /**
      * Return the contents of this file as a string.
      *
-     * @param string|bool $bytes where to start
+     * @param string|false $bytes where to start
      * @param string $mode A `fread` compatible mode.
      * @param bool $force If true then the file will be re-opened even if its already opened, otherwise it won't
-     * @return string|bool string on success, false on failure
+     * @return string|false String on success, false on failure
      */
     public function read($bytes = false, string $mode = 'rb', bool $force = false)
     {
@@ -278,10 +278,8 @@ class File
      */
     public function delete(): bool
     {
-        if (is_resource($this->handle)) {
-            fclose($this->handle);
-            $this->handle = null;
-        }
+        $this->close();
+        $this->handle = null;
         if ($this->exists()) {
             return unlink($this->path);
         }
@@ -416,7 +414,7 @@ class File
         }
 
         $size = $this->size();
-        if ($size && $size < ($maxsize * 1024) * 1024) {
+        if ($size && $size < $maxsize * 1024 * 1024) {
             return md5_file($this->path);
         }
 

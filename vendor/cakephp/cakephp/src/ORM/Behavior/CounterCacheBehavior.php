@@ -21,7 +21,7 @@ use Cake\Datasource\EntityInterface;
 use Cake\Event\EventInterface;
 use Cake\ORM\Association;
 use Cake\ORM\Behavior;
-use RuntimeException;
+use Closure;
 
 /**
  * CounterCache behavior
@@ -219,11 +219,19 @@ class CounterCacheBehavior extends Behavior
         array $settings
     ): void {
         $foreignKeys = (array)$assoc->getForeignKey();
-        $primaryKeys = (array)$assoc->getBindingKey();
         $countConditions = $entity->extract($foreignKeys);
-        $updateConditions = array_combine($primaryKeys, $countConditions);
-        $countOriginalConditions = $entity->extractOriginalChanged($foreignKeys);
 
+        foreach ($countConditions as $field => $value) {
+            if ($value === null) {
+                $countConditions[$field . ' IS'] = $value;
+                unset($countConditions[$field]);
+            }
+        }
+
+        $primaryKeys = (array)$assoc->getBindingKey();
+        $updateConditions = array_combine($primaryKeys, $countConditions);
+
+        $countOriginalConditions = $entity->extractOriginalChanged($foreignKeys);
         if ($countOriginalConditions !== []) {
             $updateOriginalConditions = array_combine($primaryKeys, $countOriginalConditions);
         }
@@ -241,23 +249,19 @@ class CounterCacheBehavior extends Behavior
                 continue;
             }
 
-            if (is_callable($config)) {
-                if (is_string($config)) {
-                    throw new RuntimeException('You must not use a string as callable.');
+            if ($this->_shouldUpdateCount($updateConditions)) {
+                if ($config instanceof Closure) {
+                    $count = $config($event, $entity, $this->_table, false);
+                } else {
+                    $count = $this->_getCount($config, $countConditions);
                 }
-                $count = $config($event, $entity, $this->_table, false);
-            } else {
-                $count = $this->_getCount($config, $countConditions);
-            }
-            if ($count !== false) {
-                $assoc->getTarget()->updateAll([$field => $count], $updateConditions);
+                if ($count !== false) {
+                    $assoc->getTarget()->updateAll([$field => $count], $updateConditions);
+                }
             }
 
-            if (isset($updateOriginalConditions)) {
-                if (is_callable($config)) {
-                    if (is_string($config)) {
-                        throw new RuntimeException('You must not use a string as callable.');
-                    }
+            if (isset($updateOriginalConditions) && $this->_shouldUpdateCount($updateOriginalConditions)) {
+                if ($config instanceof Closure) {
                     $count = $config($event, $entity, $this->_table, true);
                 } else {
                     $count = $this->_getCount($config, $countOriginalConditions);
@@ -267,6 +271,20 @@ class CounterCacheBehavior extends Behavior
                 }
             }
         }
+    }
+
+    /**
+     * Checks if the count should be updated given a set of conditions.
+     *
+     * @param array $conditions Conditions to update count.
+     *
+     * @return bool True if the count update should happen, false otherwise.
+     */
+    protected function _shouldUpdateCount(array $conditions)
+    {
+        return !empty(array_filter($conditions, function ($value) {
+            return $value !== null;
+        }));
     }
 
     /**

@@ -114,6 +114,7 @@ class Log
      * An array mapping url schemes to fully qualified Log engine class names
      *
      * @var string[]
+     * @psalm-var array<string, class-string>
      */
     protected static $_dsnClassMap = [
         'console' => Engine\ConsoleLog::class,
@@ -196,8 +197,8 @@ class Log
             if (isset($properties['engine'])) {
                 $properties['className'] = $properties['engine'];
             }
-            if (!static::$_registry->has($name)) {
-                static::$_registry->load($name, $properties);
+            if (!static::$_registry->has((string)$name)) {
+                static::$_registry->load((string)$name, $properties);
             }
         }
     }
@@ -341,7 +342,7 @@ class Log
      *
      * @param int|string $level The severity level of the message being written.
      *    The value must be an integer or string matching a known level.
-     * @param mixed $message Message content to log
+     * @param string $message Message content to log
      * @param string|array $context Additional data to be used for logging the message.
      *  The special `scope` key can be passed to be used for further filtering of the
      *  log engines to be used. If a string or a numerically index array is passed, it
@@ -350,7 +351,7 @@ class Log
      * @return bool Success
      * @throws \InvalidArgumentException If invalid level is passed.
      */
-    public static function write($level, $message, $context = []): bool
+    public static function write($level, string $message, $context = []): bool
     {
         static::_init();
         if (is_int($level) && in_array($level, static::$_levelMap, true)) {
@@ -358,7 +359,8 @@ class Log
         }
 
         if (!in_array($level, static::$_levels, true)) {
-            throw new InvalidArgumentException(sprintf('Invalid log level "%s"', $level));
+            /** @psalm-suppress PossiblyFalseArgument */
+            throw new InvalidArgumentException(sprintf('Invalid log level `%s`', $level));
         }
 
         $logged = false;

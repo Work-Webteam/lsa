@@ -23,12 +23,14 @@ use Closure;
 /**
  * Interface for database driver.
  *
+ * @method int|null getMaxAliasLength() Returns the maximum alias length allowed.
  */
 interface DriverInterface
 {
     /**
      * Establishes a connection to the database server.
      *
+     * @throws \Cake\Database\Exception\MissingConnectionException If database connection could not be established.
      * @return bool True on success, false on failure.
      */
     public function connect(): bool;

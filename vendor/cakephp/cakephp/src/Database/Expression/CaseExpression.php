@@ -167,7 +167,7 @@ class CaseExpression implements ExpressionInterface
      * @param string|null $type Type of value
      * @return void
      */
-    public function elseValue($value = null, $type = null): void
+    public function elseValue($value = null, ?string $type = null): void
     {
         if (is_array($value)) {
             end($value);
@@ -175,7 +175,6 @@ class CaseExpression implements ExpressionInterface
         }
 
         if ($value !== null && !$value instanceof ExpressionInterface) {
-            /** @var string $type */
             $value = $this->_castToExpression($value, $type);
         }
 

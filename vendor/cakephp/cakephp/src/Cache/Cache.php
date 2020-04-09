@@ -72,6 +72,7 @@ class Cache
      * class names.
      *
      * @var string[]
+     * @psalm-var array<string, class-string>
      */
     protected static $_dsnClassMap = [
         'array' => Engine\ArrayEngine::class,
@@ -505,7 +506,7 @@ class Cache
      */
     public static function groupConfigs(?string $group = null): array
     {
-        foreach (array_keys(static::$_config) as $config) {
+        foreach (static::configured() as $config) {
             static::pool($config);
         }
         if ($group === null) {

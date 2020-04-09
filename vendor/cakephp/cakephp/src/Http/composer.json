@@ -27,11 +27,12 @@
         "cakephp/core": "^4.0",
         "cakephp/event": "^4.0",
         "cakephp/utility": "^4.0",
+        "composer/ca-bundle": "^1.2",
         "psr/http-client": "^1.0",
         "psr/http-server-handler": "^1.0",
         "psr/http-server-middleware": "^1.0",
-        "zendframework/zend-diactoros": "^2.1",
-        "zendframework/zend-httphandlerrunner": "^1.0"
+        "laminas/laminas-diactoros": "^2.1",
+        "laminas/laminas-httphandlerrunner": "^1.0"
     },
     "provide": {
         "psr/http-client-implementation": "^1.0"

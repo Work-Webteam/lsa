@@ -96,6 +96,7 @@ class HelperRegistry extends ObjectRegistry implements EventDispatcherInterface
             return $this->_loaded[$name];
         }
         if (isset($this->{$name})) {
+            /** @psalm-suppress InvalidReturnStatement */
             return $this->_loaded[$name];
         }
 
@@ -109,7 +110,7 @@ class HelperRegistry extends ObjectRegistry implements EventDispatcherInterface
      *
      * @param string $class Partial classname to resolve.
      * @return string|null Either the correct class name or null.
-     * @psalm-return class-string
+     * @psalm-return class-string|null
      */
     protected function _resolveClassName(string $class): ?string
     {

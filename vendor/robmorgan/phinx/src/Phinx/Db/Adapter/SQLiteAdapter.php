@@ -28,7 +28,7 @@ use RuntimeException;
  * @author Rob Morgan <robbym@gmail.com>
  * @author Richard McIntyre <richard.mackstars@gmail.com>
  */
-class SQLiteAdapter extends PdoAdapter implements AdapterInterface
+class SQLiteAdapter extends PdoAdapter
 {
     // list of supported Phinx column types with their SQL equivalents
     // some types have an affinity appended to ensure they do not receive NUMERIC affinity
@@ -133,7 +133,6 @@ class SQLiteAdapter extends PdoAdapter implements AdapterInterface
                 // @codeCoverageIgnoreEnd
             }
 
-            $db = null;
             $options = $this->getOptions();
 
             // use a memory database if the option was specified
@@ -143,16 +142,15 @@ class SQLiteAdapter extends PdoAdapter implements AdapterInterface
                 $dsn = 'sqlite:' . $options['name'] . $this->suffix;
             }
 
-            try {
-                $db = new PDO($dsn);
-            } catch (PDOException $exception) {
-                throw new InvalidArgumentException(sprintf(
-                    'There was a problem connecting to the database: %s',
-                    $exception->getMessage()
-                ));
+            $driverOptions = [];
+
+            // use custom data fetch mode
+            if (!empty($options['fetch_mode'])) {
+                $driverOptions[PDO::ATTR_DEFAULT_FETCH_MODE] = constant('\PDO::FETCH_' . strtoupper($options['fetch_mode']));
             }
 
-            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $db = $this->createPdoConnection($dsn, null, null, $driverOptions);
+
             $this->setConnection($db);
         }
     }
@@ -169,7 +167,7 @@ class SQLiteAdapter extends PdoAdapter implements AdapterInterface
         }
         //don't "fix" the file extension if it is blank, some people
         //might want a SQLITE db file with absolutely no extension.
-        if (strlen($this->suffix) && substr($this->suffix, 0, 1) !== '.') {
+        if ($this->suffix !== '' && strpos($this->suffix, '.') !== 0) {
             $this->suffix = '.' . $this->suffix;
         }
 
@@ -257,7 +255,7 @@ class SQLiteAdapter extends PdoAdapter implements AdapterInterface
         }
 
         if ($quoted) {
-            $result['schema'] = strlen($result['schema']) ? $this->quoteColumnName($result['schema']) . '.' : '';
+            $result['schema'] = $result['schema'] !== '' ? $this->quoteColumnName($result['schema']) . '.' : '';
             $result['table'] = $this->quoteColumnName($result['table']);
         }
 
@@ -316,7 +314,7 @@ class SQLiteAdapter extends PdoAdapter implements AdapterInterface
                 $master = sprintf('%s.%s', $this->quoteColumnName($schema), 'sqlite_master');
             }
             try {
-                $rows = $this->fetchAll(sprintf('SELECT name FROM %s WHERE type=\'table\' AND lower(name) = %s', $master, $this->quoteString($table)));
+                $rows = $this->fetchAll(sprintf("SELECT name FROM %s WHERE type='table' AND lower(name) = %s", $master, $this->quoteString($table)));
             } catch (PDOException $e) {
                 // an exception can occur if the schema part of the table refers to a database which is not attached
                 break;
@@ -432,7 +430,7 @@ class SQLiteAdapter extends PdoAdapter implements AdapterInterface
         if (!empty($newColumns)) {
             if (!is_string($newColumns)) {
                 throw new InvalidArgumentException(sprintf(
-                    "Invalid value for primary key: %s",
+                    'Invalid value for primary key: %s',
                     json_encode($newColumns)
                 ));
             }
@@ -675,14 +673,30 @@ PCRE_PATTERN;
      */
     protected function getAddColumnInstructions(Table $table, Column $column)
     {
-        $alter = sprintf(
-            'ALTER TABLE %s ADD COLUMN %s %s',
-            $this->quoteTableName($table->getName()),
-            $this->quoteColumnName($column->getName()),
-            $this->getColumnSqlDefinition($column)
-        );
+        $tableName = $table->getName();
 
-        return new AlterInstructions([], [$alter]);
+        $instructions = $this->beginAlterByCopyTable($tableName);
+
+        $instructions->addPostStep(function ($state) use ($column) {
+            $sql = $state['createSQL'];
+            $sql = preg_replace(
+                "/\)$/",
+                sprintf(', %s %s$1)', $this->quoteColumnName($column->getName()), $this->getColumnSqlDefinition($column)),
+                $state['createSQL'],
+                1
+            );
+            $this->execute($sql);
+
+            return $state;
+        });
+
+        $instructions->addPostStep(function ($state) use ($tableName) {
+            $newState = $this->calculateNewTableColumns($tableName, false, false);
+
+            return $newState + $state;
+        });
+
+        return $this->copyAndDropTmpTable($instructions, $tableName);
     }
 
     /**
@@ -694,7 +708,7 @@ PCRE_PATTERN;
      */
     protected function getDeclaringSql($tableName)
     {
-        $rows = $this->fetchAll('select * from sqlite_master where `type` = \'table\'');
+        $rows = $this->fetchAll("SELECT * FROM sqlite_master WHERE `type` = 'table'");
 
         $sql = '';
         foreach ($rows as $table) {
@@ -765,7 +779,7 @@ PCRE_PATTERN;
      * of altering a table
      *
      * @param string $tableName The table to modify
-     * @param string $columnName The column name that is about to change
+     * @param string|false $columnName The column name that is about to change
      * @param string|false $newColumnName Optionally the new name for the column
      *
      * @throws \InvalidArgumentException
@@ -800,7 +814,7 @@ PCRE_PATTERN;
         $selectColumns = array_map([$this, 'quoteColumnName'], $selectColumns);
         $writeColumns = array_map([$this, 'quoteColumnName'], $writeColumns);
 
-        if (!$found) {
+        if ($columnName && !$found) {
             throw new InvalidArgumentException(sprintf(
                 'The specified column doesn\'t exist: ' . $columnName
             ));
@@ -833,7 +847,7 @@ PCRE_PATTERN;
             // Just remove all characters before first "(" and build them again
             $createSQL = preg_replace(
                 "/^CREATE TABLE .* \(/Ui",
-                "",
+                '',
                 $createSQL
             );
 
@@ -917,7 +931,7 @@ PCRE_PATTERN;
         $instructions->addPostStep(function ($state) use ($columnName) {
             $sql = preg_replace(
                 sprintf("/%s\s%s.*(,\s(?!')|\)$)/U", preg_quote($this->quoteColumnName($columnName)), preg_quote($state['columnType'])),
-                "",
+                '',
                 $state['createSQL']
             );
 
@@ -1460,7 +1474,7 @@ PCRE_PATTERN;
 
         $default = $column->getDefault();
 
-        $def .= (!$column->isIdentity() && ($column->isNull() || $default === null)) ? ' NULL' : ' NOT NULL';
+        $def .= $column->isNull() ? ' NULL' : ' NOT NULL';
         $def .= $this->getDefaultValueDefinition($default, $column->getType());
         $def .= $column->isIdentity() ? ' PRIMARY KEY AUTOINCREMENT' : '';
 

@@ -22,8 +22,9 @@ declare(strict_types=1);
 
 namespace {{ namespace }}\Controller{{ prefix }};
 
-{% if prefix %}
-use {{ namespace }}\Controller\AppController;
+{% if plugin or prefix %}
+use {{ baseNamespace }}\Controller\AppController;
+
 {% endif %}
 /**
  * {{ name }} Controller

@@ -623,7 +623,6 @@ class QueryExpression implements ExpressionInterface, Countable
         if (is_string($c)) {
             return false;
         }
-        /** @psalm-suppress RedundantCondition */
         if (is_object($c) && is_callable($c)) {
             return true;
         }
@@ -699,8 +698,6 @@ class QueryExpression implements ExpressionInterface, Countable
             }
 
             if ($numericKey && $isArray || $isOperator) {
-                /** @var \Cake\Database\Expression\QueryExpression $this->_conditions[] */
-                // phpcs:ignore
                 $this->_conditions[] = new static($c, $typeMap, $numericKey ? 'AND' : $k);
                 continue;
             }

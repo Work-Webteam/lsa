@@ -58,10 +58,10 @@ use Cake\Utility\Hash;
 use Cake\Utility\Security;
 use Cake\Utility\Text;
 use Exception;
+use Laminas\Diactoros\Uri;
 use LogicException;
 use PHPUnit\Framework\Error\Error as PhpUnitError;
 use Throwable;
-use Zend\Diactoros\Uri;
 
 /**
  * A trait intended to make integration tests of your controllers easier.
@@ -551,7 +551,7 @@ trait IntegrationTestTrait
                 $this->_viewName = $viewFile;
             }
             if ($this->_retainFlashMessages) {
-                /** @var array|null $this->_flashMessages */
+                /** @psalm-suppress PossiblyInvalidPropertyAssignmentValue */
                 $this->_flashMessages = $controller->getRequest()->getSession()->read('Flash');
             }
         });
@@ -660,12 +660,12 @@ trait IntegrationTestTrait
                 return preg_replace('/(\.\d+)+$/', '', $field);
             }, array_keys(Hash::flatten($fields)));
 
-            $formProtector = new FormProtector($url, 'cli', ['unlockedFields' => $this->_unlockedFields]);
+            $formProtector = new FormProtector(['unlockedFields' => $this->_unlockedFields]);
             foreach ($keys as $field) {
                 /** @psalm-suppress PossiblyNullArgument */
                 $formProtector->addField($field);
             }
-            $tokenData = $formProtector->buildTokenData();
+            $tokenData = $formProtector->buildTokenData($url, 'cli');
 
             $data['_Token'] = $tokenData;
             $data['_Token']['debug'] = 'FormProtector debug data would be added here';

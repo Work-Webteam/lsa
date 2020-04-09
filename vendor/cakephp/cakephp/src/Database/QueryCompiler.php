@@ -86,6 +86,13 @@ class QueryCompiler
     protected $_orderedUnion = true;
 
     /**
+     * Indicate whether aliases in SELECT clause need to be always quoted.
+     *
+     * @var bool
+     */
+    protected $_quotedSelectAliases = false;
+
+    /**
      * Returns the SQL representation of the provided query after generating
      * the placeholders for the bound values using the provided generator
      *
@@ -127,29 +134,26 @@ class QueryCompiler
      */
     protected function _sqlCompiler(string &$sql, Query $query, ValueBinder $generator): Closure
     {
-        return function ($parts, $name) use (&$sql, $query, $generator): ?string {
+        return function ($part, $partName) use (&$sql, $query, $generator) {
             if (
-                !isset($parts) ||
-                (
-                    (
-                        is_array($parts) ||
-                        $parts instanceof Countable
-                    ) &&
-                    !count($parts)
-                )
+                $part === null ||
+                (is_array($part) && empty($part)) ||
+                ($part instanceof Countable && count($part) === 0)
             ) {
-                return null;
-            }
-            if ($parts instanceof ExpressionInterface) {
-                $parts = [$parts->sql($generator)];
-            }
-            if (isset($this->_templates[$name])) {
-                $parts = $this->_stringifyExpressions((array)$parts, $generator);
-
-                return $sql .= sprintf($this->_templates[$name], implode(', ', $parts));
+                return;
             }
 
-            return $sql .= $this->{'_build' . ucfirst($name) . 'Part'}($parts, $query, $generator);
+            if ($part instanceof ExpressionInterface) {
+                $part = [$part->sql($generator)];
+            }
+            if (isset($this->_templates[$partName])) {
+                $part = $this->_stringifyExpressions((array)$part, $generator);
+                $sql .= sprintf($this->_templates[$partName], implode(', ', $part));
+
+                return;
+            }
+
+            $sql .= $this->{'_build' . $partName . 'Part'}($part, $query, $generator);
         };
     }
 
@@ -166,7 +170,6 @@ class QueryCompiler
      */
     protected function _buildSelectPart(array $parts, Query $query, ValueBinder $generator): string
     {
-        $driver = $query->getConnection()->getDriver();
         $select = 'SELECT%s %s%s';
         if ($this->_orderedUnion && $query->clause('union')) {
             $select = '(SELECT%s %s%s';
@@ -174,11 +177,18 @@ class QueryCompiler
         $distinct = $query->clause('distinct');
         $modifiers = $this->_buildModifierPart($query->clause('modifier'), $query, $generator);
 
+        $driver = $query->getConnection()->getDriver();
+        $quoteIdentifiers = $driver->isAutoQuotingEnabled() || $this->_quotedSelectAliases;
         $normalized = [];
         $parts = $this->_stringifyExpressions($parts, $generator);
         foreach ($parts as $k => $p) {
             if (!is_numeric($k)) {
-                $p = $p . ' AS ' . $driver->quoteIdentifier($k);
+                $p = $p . ' AS ';
+                if ($quoteIdentifiers) {
+                    $p .= $driver->quoteIdentifier($k);
+                } else {
+                    $p .= $k;
+                }
             }
             $normalized[] = $p;
         }

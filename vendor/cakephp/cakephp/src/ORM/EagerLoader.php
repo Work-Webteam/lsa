@@ -254,6 +254,7 @@ class EagerLoader
         $containments = [];
         $pointer =& $containments;
         $opts = ['matching' => true] + $options;
+        /** @psalm-suppress InvalidArrayOffset */
         unset($opts['negateMatch']);
 
         foreach ($assocs as $name) {
@@ -636,6 +637,11 @@ class EagerLoader
         $driver = $query->getConnection()->getDriver();
         [$collected, $statement] = $this->_collectKeys($external, $query, $statement);
 
+        // No records found, skip trying to attach associations.
+        if (empty($collected) && $statement->count() === 0) {
+            return $statement;
+        }
+
         foreach ($external as $meta) {
             $contain = $meta->associations();
             $instance = $meta->instance();
@@ -644,8 +650,23 @@ class EagerLoader
             $path = $meta->aliasPath();
 
             $requiresKeys = $instance->requiresKeys($config);
-            if ($requiresKeys && empty($collected[$path][$alias])) {
-                continue;
+            if ($requiresKeys) {
+                // If the path or alias has no key the required association load will fail.
+                // Nested paths are not subject to this condition because they could
+                // be attached to joined associations.
+                if (
+                    strpos($path, '.') === false &&
+                    (!array_key_exists($path, $collected) || !array_key_exists($alias, $collected[$path]))
+                ) {
+                    $message = "Unable to load `{$path}` association. Ensure foreign key in `{$alias}` is selected.";
+                    throw new InvalidArgumentException($message);
+                }
+
+                // If the association foreign keys are missing skip loading
+                // as the association could be optional.
+                if (empty($collected[$path][$alias])) {
+                    continue;
+                }
             }
 
             $keys = $collected[$path][$alias] ?? null;
@@ -786,7 +807,6 @@ class EagerLoader
             }
             $collectKeys[$meta->aliasPath()] = [$alias, $pkFields, count($pkFields) === 1];
         }
-
         if (empty($collectKeys)) {
             return [[], $statement];
         }
@@ -809,15 +829,22 @@ class EagerLoader
     protected function _groupKeys(BufferedStatement $statement, array $collectKeys): array
     {
         $keys = [];
-        while ($result = $statement->fetch('assoc')) {
+        foreach (($statement->fetchAll('assoc') ?: []) as $result) {
             foreach ($collectKeys as $nestKey => $parts) {
-                // Missed joins will have null in the results.
-                if ($parts[2] === true && !isset($result[$parts[1][0]])) {
-                    continue;
-                }
                 if ($parts[2] === true) {
-                    $value = $result[$parts[1][0]];
-                    $keys[$nestKey][$parts[0]][$value] = $value;
+                    // Missed joins will have null in the results.
+                    if (!array_key_exists($parts[1][0], $result)) {
+                        continue;
+                    }
+                    // Assign empty array to avoid not found association when optional.
+                    if (!isset($result[$parts[1][0]])) {
+                        if (!isset($keys[$nestKey][$parts[0]])) {
+                            $keys[$nestKey][$parts[0]] = [];
+                        }
+                    } else {
+                        $value = $result[$parts[1][0]];
+                        $keys[$nestKey][$parts[0]][$value] = $value;
+                    }
                     continue;
                 }
 
@@ -829,7 +856,6 @@ class EagerLoader
                 $keys[$nestKey][$parts[0]][implode(';', $collected)] = $collected;
             }
         }
-
         $statement->rewind();
 
         return $keys;

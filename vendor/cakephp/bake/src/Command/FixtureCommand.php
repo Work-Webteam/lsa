@@ -95,7 +95,7 @@ class FixtureCommand extends BakeCommand
      *
      * @param \Cake\Console\Arguments $args The command arguments.
      * @param \Cake\Console\ConsoleIo $io The console io
-     * @return null|int The exit code or null for success
+     * @return int|null The exit code or null for success
      */
     public function execute(Arguments $args, ConsoleIo $io): ?int
     {
@@ -103,6 +103,7 @@ class FixtureCommand extends BakeCommand
         $name = $args->getArgument('name') ?? '';
         $name = $this->_getName($name);
 
+        /** @var \Cake\Database\Connection $connection */
         $connection = ConnectionManager::get($this->connection);
         $scanner = new TableScanner($connection);
         if (empty($name)) {
@@ -236,7 +237,7 @@ class FixtureCommand extends BakeCommand
         $content = $renderer->generate('tests/fixture');
 
         $io->out("\n" . sprintf('Baking test fixture for %s...', $model), 1, ConsoleIo::QUIET);
-        $io->createFile($path . $filename, $content);
+        $io->createFile($path . $filename, $content, $args->getOption('force'));
         $emptyFile = $path . '.gitkeep';
         $this->deleteEmptyFile($emptyFile, $io);
     }
@@ -360,6 +361,7 @@ class FixtureCommand extends BakeCommand
                         }
                         break;
                     case 'timestamp':
+                    case 'timestampfractional':
                         $insert = time();
                         break;
                     case 'datetime':
