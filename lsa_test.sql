@@ -13,6 +13,7 @@ DROP TABLE IF EXISTS awards;
 DROP TABLE IF EXISTS milestones;
 DROP TABLE IF EXISTS diet;
 DROP TABLE IF EXISTS ceremonies;
+DROP TABLE IF EXISTS registration_periods;
 
 
 CREATE TABLE milestones (
@@ -77,7 +78,14 @@ CREATE TABLE pecsf_charities (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
-DROP TABLE IF EXISTS ceremonies;
+CREATE TABLE registration_periods (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    award_year INT,
+    open_registration DATETIME,
+    close_registration DATETIME
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
 
 CREATE TABLE ceremonies (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -5139,6 +5147,8 @@ INSERT INTO `awards` (`id`, `name`, `milestone_id`, `description`, `image`, `opt
 INSERT INTO `awards` (`id`, `name`, `milestone_id`, `description`, `image`, `options`, `personalized`, `active`) VALUES(23, 'Crystal Pitcher and Glass Set', 6, 'Chesley, lead free crystal, 50 oz. water pitcher. Comes with four matching high ball glasses, 13 oz.\r\nWeight: 9 lbs.', 'crystal-pitcher-glass-set.jpg', '[]', 0, 1);
 INSERT INTO `awards` (`id`, `name`, `milestone_id`, `description`, `image`, `options`, `personalized`, `active`) VALUES(24, 'Citizen® Axiom Eco-Drive Watch (mens)', 6, 'Black dial with black leather strap. Has date feature and is splash resistant. Comes in stainless steel case.\r\nSize of face: 40 mm diameter', 'citizen-watch.jpg', '[]', 0, 1);
 INSERT INTO `awards` (`id`, `name`, `milestone_id`, `description`, `image`, `options`, `personalized`, `active`) VALUES(25, 'Bulova® \"Yarmouth\" Clock', 6, 'Bulova wall clock with thermometer and hygrometer. Comes in a beautiful walnut finish and has an engraved plate, “In recognition of fifty years of service.”\r\nSize: 17 ¼ \"H x 10 ¾” W x 3“ D', 'bulova-clock-yarmouth.jpg', '[]', 0, 1);
+
+INSERT INTO `registration_periods` (`id`, `award_year`, `open_registration`, `close_registration`) VALUES(1, 2020, '2020-02-01 00:00:00', '2020-03-31 23:59:59');
 
 
 INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(1, 2019, 1, '2019-10-10 19:30:00', NULL, '[]');

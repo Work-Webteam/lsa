@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Cake\I18n\FrozenDate;
 use Cake\Core\Configure;
+use Cake\Error\Debugger;
 
 class CeremoniesController extends AppController
 {
@@ -46,7 +47,9 @@ class CeremoniesController extends AppController
             $this->redirect('/');
         }
         $ceremony = $this->Ceremonies->newEmptyEntity();
+        $this->Flash->success('add pre post');
         if ($this->request->is('post')) {
+            $this->Flash->success(__('add post'));
             $ceremony = $this->Ceremonies->patchEntity($ceremony, $this->request->getData());
             $ceremony->award_year = date("Y");
             $ceremony->date = $this->request->getData('ceremony_date') . " " . $this->request->getData('ceremony_time');
@@ -98,6 +101,7 @@ class CeremoniesController extends AppController
     }
 
     public function addattending($id) {
+
         if (!$this->checkAuthorization(array(
             Configure::read('Role.admin'),
             Configure::read('Role.lsa_admin'),
@@ -106,7 +110,8 @@ class CeremoniesController extends AppController
             $this->redirect('/');
         }
         $ceremony = $this->Ceremonies->findById($id)->firstOrFail();
-        if ($this->request->is('post')) {
+
+        if ($this->request->is(['post', 'put'])) {
             $ministry_id = $this->request->getData('ministry_id');
             if (!empty($ministry_id)) {
                 $new = array(
@@ -119,8 +124,8 @@ class CeremoniesController extends AppController
                 $ceremony->attending = json_encode($attending);
             }
             if ($this->Ceremonies->save($ceremony)) {
-                $this->Flash->success(__('Option has been saved.'));
-                return $this->redirect(['action' => 'view/'.$award->id]);
+                $this->Flash->success(__('Ceremony Attendee has been saved.'));
+                return $this->redirect(['action' => 'view/'.$ceremony->id]);
             }
             $this->Flash->error(__('Unable to add option.'));
         }

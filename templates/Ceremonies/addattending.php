@@ -1,14 +1,14 @@
 <div class="container" id="app">
-<h1>Add Attending Criteria</h1>
+<h1>Add Attendees</h1>
 
 <?php
 
-    echo $this->Form->create($ceremony, ['@submit' => 'processForm']);
+    echo $this->Form->create($ceremony); //, ['@submit' => 'processForm']);
 
     echo $this->Form->control('ministry_id', ['options' => $ministries, 'empty' => '- select ministry -']);
 
     foreach ($milestones as $key => $milestone) {
-        echo $this->Form->control('milestone-' . $key, ['type' => 'checkbox', 'label' => $milestone, 'value' => 1]);
+        echo $this->Form->control('milestone-' . $key, ['type' => 'checkbox', 'label' => $milestone, 'value' => 1, 'checked' => true]);
     }
 
 
@@ -91,7 +91,7 @@
                     this.msgErrors += '</ul>';
                     e.preventDefault();
                 } else {
-                    this.msgErrors = 'everything is cool';
+                    // this.msgErrors = 'everything is cool';
                 }
 
 

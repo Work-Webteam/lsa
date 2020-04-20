@@ -16,21 +16,22 @@
     <?php foreach ($attending as $key => $item): ?>
         <tr>
             <td valign="top">
-                <?= $option['ministry'] ?>
+                <?= $item['ministry'] ?>
+            </td>
+
+            <td valign="top">
+                <?= $item['city']['id'] ? $item['city']['id'] :'n/a' ?>
             </td>
             <td valign="top">
-                <?= $option['milestone'] ?>
+                <?= $item['city']['type'] ? $item['city']['id'] :'n/a' ?>
             </td>
             <td valign="top">
-                <?= $option['city'] ?>
-            </td>
-            <td valign="top">
-                <?= $this->Html->link('Edit',['action' => 'editattending', $award->id, $key], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
+                <?= $this->Html->link('Edit',['action' => 'editattending', $ceremony->id, $key], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>
             <td valign="top">
                 <?= $this->Form->postLink(
                     'Delete',
-                    ['action' => 'deleteattending', $award->id, $key],
+                    ['action' => 'deleteattending', $ceremony->id, $key],
                     ['confirm' => 'Are you sure?', 'class' => 'btn btn-primary', 'role' => 'button'])
                 ?>
             </td>
