@@ -114,10 +114,14 @@ class CeremoniesController extends AppController
         if ($this->request->is(['post', 'put'])) {
             $ministry_id = $this->request->getData('ministry_id');
             if (!empty($ministry_id)) {
+                $type = "";
+                if ($this->request->getData('city_id')) {
+                    $type = $this->request->getData('city_type');
+                }
                 $new = array(
                     'ministry' => $this->request->getData('ministry_id'),
-                    'milestone' => $this->request->getData('milestone_id'),
-                    'city' => array('id' => $this->request->getData('city_id'), 'type' => $this->request->getData('city_type'))
+                    'milestone' => array($this->request->getData('milestone_id')),
+                    'city' => array('id' => $this->request->getData('city_id'), 'type' => $type)
                 );
                 $attending = json_decode($ceremony->attending, true);
                 $attending[] = $new;

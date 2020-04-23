@@ -20,10 +20,10 @@
             </td>
 
             <td valign="top">
-                <?= $item['city']['id'] ? $item['city']['id'] :'n/a' ?>
+                <?= $item['city']['id'] ? $item['city']['id'] : 'n/a' ?>
             </td>
             <td valign="top">
-                <?= $item['city']['type'] ? $item['city']['id'] :'n/a' ?>
+                <?= $item['city']['type'] == 0 ? 'exclude' : 'include' ?>
             </td>
             <td valign="top">
                 <?= $this->Html->link('Edit',['action' => 'editattending', $ceremony->id, $key], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
