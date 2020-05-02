@@ -1,8 +1,8 @@
 <div class="container" id="app">
-<h1>Add Attendees</h1>
+<h1>Edit Attendee</h1>
 
 <?php
-
+echo dump($attending);
     echo $this->Form->create($ceremony); //, ['@submit' => 'processForm']);
 
     echo $this->Form->control('ministry_id', ['options' => $ministries, 'empty' => '- select ministry -']);

@@ -272,7 +272,12 @@
             <div class="row" id="declaration" v-if="informationConfirmed">
                 <div class="col-sm-10">
                     <h5>Declaration and Notice of Collection, Consent and Authorize</h5>
-                    <p class="collectionStatement">I declare, to the best of my knowledge and consistent with the Long Service Awards eligibility guidelines (which I have reviewed) that as of December 31, 2019, I will have worked for the BC Public Service for 25, 30, 35, 40, 45 or 50 years and I am therefore eligible for a Long Service Award. By providing my personal information, I am allowing the BC Public Service Agency to use and disclose this information for the planning and delivery of the Long Service Award recognition events. This personal information is required to process your application for the Long Service Awards and is collected in accordance with section 26(c) of the Freedom of Information and Protection of Privacy Act (FOIPPA). Questions about the collection or use of this information can be directed to EmployeeNews@gov.bc.ca, 1st floor- 563 Superior Street, Victoria BC, V8V 0C5</p>
+                    <p class="collectionStatement">I declare, to the best of my knowledge and consistent with the Long Service Awards eligibility guidelines (which I have reviewed) that as of
+                        December 31, 2021, I will have worked for the BC Public Service for 25, 30, 35, 40, 45 or 50 years and I am therefore eligible for a Long Service Award. By providing my
+                        personal information, I am allowing the BC Public Service Agency to use and disclose this information for the planning and delivery of the Long Service Award recognition events.
+                        This personal information is required to process your application for the Long Service Awards and is collected in accordance with section 26(c) of the Freedom of Information and
+                        Protection of Privacy Act (FOIPPA).
+                        Questions about the collection, use or disclosure of this information, can be directed to: LongServiceAwards@gov.bc.ca, 1st Floor, 563 Superior Street, Victoria BC, V8V 0C5.</p>
                     <div class="form-check">
                         <input class="form-check-input" id="agreedToDeclaration" type="checkbox" value="true">
                         <label class="form-check-label" for="agreedToDeclaration">I agree to the above declaration and its terms</label>
