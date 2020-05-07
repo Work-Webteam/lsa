@@ -2,20 +2,21 @@
 <h1>Edit Attendee</h1>
 
 <?php
-echo dump($attending);
+//echo dump($attending);
     echo $this->Form->create($ceremony); //, ['@submit' => 'processForm']);
 
-    echo $this->Form->control('ministry_id', ['options' => $ministries, 'empty' => '- select ministry -']);
+    echo $this->Form->control('ministry_id', ['options' => $ministries, 'empty' => '- select ministry -', 'value' => $attending['ministry']]);
 
     foreach ($milestones as $key => $milestone) {
-        echo $this->Form->control('milestone-' . $milestone->id, ['type' => 'checkbox', 'label' => $milestone->name, 'value' => 1, 'checked' => true]);
+        $selected =  in_array($milestone->id, $attending['milestone']);
+        echo $this->Form->control('milestone-' . $milestone->id, ['type' => 'checkbox', 'label' => $milestone->name, 'value' => 1, 'checked' => $selected]);
     }
 
 
 
 //    echo $this->Form->select('city_id', $cities, ['label' => 'City']);
-    echo $this->Form->control('city_id', ['options' => $cities, 'empty' => '- all cities -', 'onChange' => 'app.citySelected(this.value)']);
-    echo $this->Form->control('city_type', ['options' => [0 => 'include', 1 => 'exclude'], 'label' => '']);
+    echo $this->Form->control('city_id', ['options' => $cities, 'empty' => '- all cities -', 'value' => $attending['city']['id'], 'onChange' => 'app.citySelected(this.value)']);
+    echo $this->Form->control('city_type', ['options' => [0 => 'exclude', 1 => 'include'], 'value' => $attending['city']['type'], 'label' => '']);
 
 ?>
 
@@ -59,12 +60,14 @@ echo dump($attending);
         data: {
             ministry: '',
             milestone: '',
-            city: '',
+            city: <?php echo empty($attending['city']['id']) ? "0" : $attending['city']['id']; ?>,
             msgErrors: '',
         },
 
         mounted() {
-            $('#city-type').hide()
+            if (this.city == "") {
+                $('#city-type').hide();
+            }
         },
 
 
@@ -93,8 +96,6 @@ echo dump($attending);
                 } else {
                     // this.msgErrors = 'everything is cool';
                 }
-
-
                 e.preventDefault();
             },
 

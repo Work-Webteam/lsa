@@ -15,7 +15,7 @@
 
 //    echo $this->Form->select('city_id', $cities, ['label' => 'City']);
     echo $this->Form->control('city_id', ['options' => $cities, 'empty' => '- all cities -', 'onChange' => 'app.citySelected(this.value)']);
-    echo $this->Form->control('city_type', ['options' => [0 => 'include', 1 => 'exclude'], 'label' => '']);
+    echo $this->Form->control('city_type', ['options' => [0 => 'exclude', 1 => 'include'], 'label' => '']);
 
 ?>
 

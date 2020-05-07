@@ -68,7 +68,7 @@ class AppController extends Controller
 //
 //        $_SERVER['HTTP_SM_USER'] = 'asmith';
 //        $_SERVER['HTTP_SMGOV_USERGUID'] = 'C68FF67FB334907A25DB8B07767CC1FC';   // protocol
-
+//
 //        $_SERVER['HTTP_SM_USER'] = 'rsharples';
 //        $_SERVER['HTTP_SMGOV_USERGUID'] = '3BC010F8C876571F3D29DB46012A326B';   // recipient
 //

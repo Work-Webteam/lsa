@@ -167,7 +167,7 @@ class RegistrationsController extends AppController
                 // Send email here
                 $mailer = new Mailer('default');
 
-                $message = "Congratulations, you have sucessfully registed for your Long Service Award.";
+                $message = "Congratulations, you have sucessfully registered for your Long Service Award.";
                 $mailer->setFrom(['longserviceaward@gov.bc.ca' => 'Long Service Awards'])
                     ->setTo($registration->preferred_email)
                     ->setSubject('Long Service Award Registration Completed')
@@ -344,8 +344,8 @@ class RegistrationsController extends AppController
 
         $query = $this->Registrations->RegistrationPeriods->find('all')
             ->where([
-                'Registrationperiods.open_registration <=' => date('Y-m-d H:i:s'),
-                'Registrationperiods.close_registration >=' => date('Y-m-d H:i:s')
+                'RegistrationPeriods.open_registration <=' => date('Y-m-d H:i:s'),
+                'RegistrationPeriods.close_registration >=' => date('Y-m-d H:i:s')
             ]);
         $registrationperiods = $query->first();
 
@@ -457,6 +457,56 @@ class RegistrationsController extends AppController
             'count' => $registrations->func()->count('*')]);
         $registrations->order(['count' => 'DESC', 'Ministries.name' => 'ASC']);
         $this->set(compact('registrations'));
+    }
+
+
+
+    public function milestonesummary() {
+        if (!$this->checkAuthorization(array(
+            Configure::read('Role.admin'),
+            Configure::read('Role.lsa_admin'),
+            Configure::read('Role.protocol')))) {
+            $this->Flash->error(__('You are not authorized to view this page.'));
+            $this->redirect('/');
+        }
+
+        $conditions = array();
+        $conditions['Registrations.award_year ='] = date('Y');
+
+        // if Supervisor role only list registrations they created
+        $milestones = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+            'contain' => [
+                'Ministries',
+                'Milestones',
+            ],
+            'group' => ['Registrations.milestone_id']
+        ]);
+        $milestones->select([
+            'Milestones.name',
+            'count' => $milestones->func()->count('*')]);
+        $milestones->order(['Milestones.name' => 'ASC']);
+        $this->set(compact('milestones'));
+
+
+        // if Supervisor role only list registrations they created
+        $ministries = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+            'contain' => [
+                'Ministries',
+                'Milestones',
+            ],
+            'group' => ['Registrations.ministry_id', 'Registrations.milestone_id']
+        ]);
+        $ministries->select([
+            'Ministries.name',
+            'Milestones.name',
+            'count' => $milestones->func()->count('*')]);
+        $ministries->order(['Ministries.name' => 'ASC', 'Milestones.name' => 'ASC']);
+        $this->set(compact('ministries'));
+
+
+
     }
 
 

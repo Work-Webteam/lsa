@@ -32,6 +32,17 @@
             columns: [
                 { data: "first_name", title: "First Name" },
                 { data: "last_name", title: "Last Name" },
+                { data: "id", orderable: false, render: function( data, type, row, meta) {
+                        if (edit) {
+                            // link = '<a href="/registrations/view/' + data + '">view</a> | <a href="/registrations/edit/' + data + '">edit</a>';
+                            link = '<a class="btn btn-primary" href="/registrations/edit/' + data + '">edit</a>';
+                        }
+                        else {
+                            link = '<a class="btn btn-primary" href="/registrations/view/' + data + '">view</a>';
+                        }
+                        return link;
+                    }
+                },
                 { data: "ministry.name", title: "Ministry" },
                 { data: "branch", title: "Branch" },
                 { data: "award_year", title: "Award Year"},
@@ -44,17 +55,6 @@
                 { data: "preferred_email", title: "Work Email", visible: false },
                 { data: "alternate_email", title: "Personal Email", visible: false },
                 { data: "supervisor_email", title: "Supervisor Email", visible: false },
-                { data: "id", orderable: false, render: function( data, type, row, meta) {
-                        if (edit) {
-                            // link = '<a href="/registrations/view/' + data + '">view</a> | <a href="/registrations/edit/' + data + '">edit</a>';
-                            link = '<a href="/registrations/edit/' + data + '">edit</a>';
-                        }
-                        else {
-                            link = '<a href="/registrations/view/' + data + '">view</a>';
-                        }
-                        return link;
-                    }
-                },
                 { data: "award_instructions", title: "Award Instructions", visible: false, orderable: false },
                 { data: "award_received", title: "Award Received", visible: true, orderable: false },
                 { data: "engraving_sent", title: "Engraving Sent", visible: true, orderable: false },
@@ -114,6 +114,8 @@
         btns += '<button class="btn btn-info" onClick="summaryAward()">Award Summary</button>';
         btns += '&nbsp;';
         btns += '<button class="btn btn-info" onClick="summaryMinistry()">Ministry Summary</button>';
+        btns += '&nbsp;';
+        btns += '<button class="btn btn-info" onClick="summaryMilestone()">Milestone Summary</button>';
         btns += '</div>';
 
         $("div.toolbar").html(btns);
@@ -152,4 +154,7 @@
         location.href = "/registrations/ministrysummary";
     }
 
+    function summaryMilestone() {
+        location.href = "/registrations/milestonesummary";
+    }
 </script>
