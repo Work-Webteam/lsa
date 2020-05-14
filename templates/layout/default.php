@@ -24,7 +24,7 @@
 <body>
     <nav class="top-nav">
         <div class="top-nav-title">
-            <a href="/registrations"><span><img src="/img/lsa_logo.png" class="lsa-logo"></span></a>
+            <a href="/"><span><img src="/img/lsa_logo.png" class="lsa-logo"></span></a>
         </div>
         <div class="top-nav-links">
             <?php

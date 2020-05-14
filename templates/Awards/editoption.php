@@ -4,6 +4,7 @@ echo $this->Form->create();
 
 echo $this->Form->select('type', ['choice' => 'Multiple Choice', 'text' => 'Text'], ['default' => $type, 'disabled' => true]);
 echo $this->Form->control('name', ['label' => 'Option', 'default' => $name]);
+echo $this->Form->control('maxlength', ['label' => 'Maximum Characters (0 = unlimited)', 'default' => $maxlength]);
 
 echo $this->Form->button(__('Save Option'), ['class' => 'btn btn-primary']);
 echo '&nbsp;';

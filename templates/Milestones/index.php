@@ -6,6 +6,7 @@
     <tr>
         <?= $isadmin ? "<th>Id</th>" : "" ?>
         <th>Milestone</th>
+        <th>Personalized</th>
         <th>Donation Amount</th>
         <th colspan = 2>Operations</th>
     </tr>
@@ -17,6 +18,9 @@
             <?= $isadmin ? "<td>" . $milestone->id . "</td>" : "" ?>
             <td>
                 <?= $this->Html->link($milestone->name, ['action' => 'view', $milestone->id]) ?>
+            </td>
+            <td>
+                <?= $milestone->personalized ? 'yes' : '' ?>
             </td>
             <td>
                 <?= $milestone->donation ?>

@@ -14,5 +14,6 @@ class CeremoniesTable extends Table
         $this->hasOne('Ministries');
         $this->hasOne('Milestones');
         $this->hasOne('Cities');
+
     }
 }

@@ -24,7 +24,9 @@
                 <?= date("D Y-M-d g:ia", strtotime($ceremony->date)) ?>
             </td>
 
-
+            <td>
+                <?= $this->Html->link('IDs', ['controller' => 'Registrations', 'action' => 'editpresentationids', $ceremony->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
+            </td>
             <td>
                 <?= $this->Html->link('View', ['action' => 'view', $ceremony->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>

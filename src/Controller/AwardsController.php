@@ -134,12 +134,17 @@ class AwardsController extends AppController
         if ($this->request->is('post')) {
             $name = $this->request->getData('name');
             $type = $this->request->getData('type');
+            $max = $this->request->getData('maxlength');
             if (!empty($name)) {
+
                 $new = array(
                     'name' => $name,
                     'type' => empty($type) ? 'choice' : $type,
-                    'values' => array()
+                    'values' => array(),
                 );
+                if ($type == "text") {
+                    $new['maxlength'] = $max;
+                }
                $options = json_decode($award->options, true);
                $options[] = $new;
                $award->options = json_encode($options);
@@ -165,18 +170,26 @@ class AwardsController extends AppController
 
         if ($this->request->is('post')) {
             $options[$option_id]['name'] = $this->request->getData('name');
+            if ($options[$option_id]['type'] == "text") {
+                $options[$option_id]['maxlength'] = $this->request->getData('maxlength');
+            }
             $award->options = json_encode($options);
 
             if ($this->Awards->save($award)) {
                 $this->Flash->success(__('Option has been saved.'));
-                return $this->redirect(['action' => 'view/'.$award->id]);
+                return $this->redirect(['action' => 'view/' . $award->id]);
             }
             $this->Flash->error(__('Unable to add option.'));
         }
         $name = $options[$option_id]['name'];
         $type = $options[$option_id]['type'];
+        $maxlength = 0;
+        if ($type == "text") {
+            $maxlength = $options[$option_id]['maxlength'];
+        }
         $this->set('name', $name);
         $this->set('type', $type);
+        $this->set('maxlength', $maxlength);
         $this->set('award', $award);
     }
 

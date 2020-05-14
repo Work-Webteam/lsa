@@ -9,8 +9,10 @@
 
 <table>
     <tr>
-        <th colspan = 3>Attending</th>
-        <th colspan = 2>Operations</th>
+        <th colspan = 1>Ministry</th>
+        <th>Milestones</th>
+        <th colspan="2">City</th>
+        <th colspan="2">Operations</th>
     </tr>
 
     <?php foreach ($attending as $key => $item): ?>

@@ -162,7 +162,8 @@ class CeremoniesController extends AppController
                 $new = array(
                     'ministry' => $this->request->getData('ministry_id'),
                     'milestone' => $list,
-                    'city' => array('id' => $this->request->getData('city_id'), 'type' => $type)
+                    'city' => array('id' => $this->request->getData('city_id'), 'type' => $type),
+                    'processed' => false,
                 );
                 $attending = json_decode($ceremony->attending, true);
                 $attending[] = $new;
@@ -224,12 +225,14 @@ class CeremoniesController extends AppController
                         $list[] = $milestone->id;
                     }
                 }
+                $attending = json_decode($ceremony->attending, true);
                 $update = array(
                     'ministry' => $this->request->getData('ministry_id'),
                     'milestone' => $list,
-                    'city' => array('id' => $this->request->getData('city_id'), 'type' => $type)
+                    'city' => array('id' => $this->request->getData('city_id'), 'type' => $type),
+                    'processed' => isset($attending[$key]['processed']) ? $attending[$key]['processed'] : false,
                 );
-                $attending = json_decode($ceremony->attending, true);
+
                 $attending[$key] = $update;
                 $ceremony->attending = json_encode($attending);
             }
@@ -265,20 +268,16 @@ class CeremoniesController extends AppController
 
         public function deleteattending($id, $key)
     {
-        if (!$this->checkAuthorization(array(Configure::read('Role.admin'), Configure::read('Role.lsa_admin')))) {
+        if (!$this->checkAuthorization(array(
+            Configure::read('Role.admin'),
+            Configure::read('Role.lsa_admin'),
+            Configure::read('Role.protocol')))) {
             $this->Flash->error(__('You are not authorized to administer Ceremonies.'));
             $this->redirect('/');
         }
         $this->request->allowMethod(['post', 'delete']);
 
         $ceremony = $this->Ceremonies->findById($id)->firstOrFail();
-
-//    if ($this->Ceremonies->delete($ceremony)) {
-//        $this->Flash->success(__('Ceremony night {0} has been deleted.', $ceremony->night));
-//        return $this->redirect(['action' => 'index']);
-//    }
-//        dump($id);
-//        dump($key);
 
         $attending = json_decode($ceremony->attending, true);
         unset($attending[$key]);
@@ -290,6 +289,7 @@ class CeremoniesController extends AppController
 
         return $this->redirect(['action' => 'view', $ceremony->id]);
     }
+
 
 
 }

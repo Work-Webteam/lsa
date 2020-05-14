@@ -18,12 +18,18 @@
                 echo $this->Form->hidden('pecsf_amount1', ['value' => 0]);
                 echo $this->Form->hidden('pecsf_charity2_id', ['value' => '0']);
                 echo $this->Form->hidden('pecsf_amount2', ['value' => 0]);
+                echo $this->Form->hidden('pecsf_name', ['value' => '']);
             ?>
         </div>
     </transition>
 
     <transition name="fade">
         <div class="form-group" v-if="milestoneKnown">
+            <div v-if="milestonePersonalized">
+                <?php
+                    echo $this->Form->control('certificate_name', ['label' => 'Name on Certificate']);
+                ?>
+            </div>
             <?php
                 echo $this->Form->label("Registered last year but didn't attend ceremony?");
                 echo $this->Form->button('Yes', ['type' => 'button', 'onclick' => 'app.buttonMissedCeremony(1)', 'class' => 'btn btn-primary']);
@@ -336,7 +342,8 @@
                 <div class="modal-body">
                     <fieldset id="formDonationOptions">
                         <?php
-                        echo $this->Form->control('selectedRegion', ['options' => $regions, 'empty' => '- select region -', 'onChange' => 'app.regionSelected()']);
+                            echo $this->Form->control('donorName', ['label' => 'Donor Name']);
+                            echo $this->Form->control('selectedRegion', ['options' => $regions, 'empty' => '- select region -', 'onChange' => 'app.regionSelected()']);
                         ?>
 
                         <div id="donation-type" v-if="inputDonationType">
@@ -438,6 +445,7 @@
             retirementDate: '',
             yearsOfService: 0,
             milestoneKnown: false,
+            milestonePersonalized: false,
             milestone: '',
 
             employeeID: '',
@@ -551,6 +559,16 @@
                 }
             },
 
+            getMilestone: function (select_id) {
+                milestone = 0;
+                for (var i = 0; i < milestones.length; i++) {
+                    if (milestones[i].id == select_id) {
+                        milestone = milestones[i];
+                    }
+                }
+                return milestone;
+            },
+
             getAward: function (select_id) {
                 award = 0;
                 for (var i = 0; i < awards.length; i++) {
@@ -661,6 +679,9 @@
 
                 $('input[name=pecsf_donation]').val(1);
 
+
+                $('input[name=pecsf_name]').val($('input[name=donorName').val());
+
                 this.awardOptions = [];
                 $('#donation-type').css("border-color", clrDefault);
                 if ($("input:radio[name ='selectDonationType']:checked").val() == 0) {
@@ -752,6 +773,7 @@
 
                 this.awardOptions = [];
                 for (i = 0; i < options.length; i++) {
+                    console.log(options[i]);
                     if (options[i].type == "choice") {
                         var sel = document.getElementById("award-option-"+i);
                         if (sel.selectedIndex == 0) {
@@ -764,7 +786,12 @@
                     if (options[i].type == "text") {
                         var field = document.getElementById("award-option-"+i);
                         if (field.value) {
-                            this.awardOptions.push(options[i].name + ": " + field.value);
+                            if (field.value.length <= options[i].maxlength) {
+                               this.awardOptions.push(options[i].name + ": " + field.value);
+                            }
+                            else {
+                               errors.push(options[i].name + " may not contain more than " + options[i].maxlength + " characters.");
+                            }
                         }
                         else {
                             errors.push(options[i].name + " is required");
@@ -820,7 +847,11 @@
                 this.currentAwardIndex = 0;
                 this.updateAwardDisplay(this.currentAwardIndex);
 
-                // this.availableAwards = awardDisplay;
+                var record = this.getMilestone(milestone);
+                this.milestonePersonalized = record.personalized;
+                if (record.personalized) {
+                    $('input[name=certificate_name]').val("");
+                }
             },
 
             showPreviousAward: function() {

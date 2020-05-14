@@ -18,6 +18,7 @@ DROP TABLE IF EXISTS registration_periods;
 CREATE TABLE milestones (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
+    personalized BOOLEAN DEFAULT false,
     donation DECIMAL(19,4) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -136,6 +137,7 @@ CREATE TABLE registrations (
     pecsf_charity2_id INT,
     pecsf_amount2 DECIMAL(19,4) NOT NULL DEFAULT 0,
     pecsf_cheque_date DATE,
+    pecsf_name VARCHAR(255),
 
     retiring_this_year BOOLEAN DEFAULT false,
     retirement_date DATE,
@@ -223,12 +225,12 @@ CREATE TABLE registrations (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
-INSERT INTO `milestones` (`id`,`name`, `donation`) VALUES (1,'25 Years', 75);
-INSERT INTO `milestones` (`id`,`name`, `donation`) VALUES (2,'30 Years', 150);
-INSERT INTO `milestones` (`id`,`name`, `donation`) VALUES (3,'35 Years', 300);
-INSERT INTO `milestones` (`id`,`name`, `donation`) VALUES (4,'40 Years', 400);
-INSERT INTO `milestones` (`id`,`name`, `donation`) VALUES (5,'45 Years', 450);
-INSERT INTO `milestones` (`id`,`name`, `donation`) VALUES (6,'50 Years', 500);
+INSERT INTO `milestones` (`id`,`name`, `personalized`, `donation`) VALUES (1,'25 Years', 1, 75);
+INSERT INTO `milestones` (`id`,`name`, `personalized`, `donation`) VALUES (2,'30 Years', 0, 150);
+INSERT INTO `milestones` (`id`,`name`, `personalized`, `donation`) VALUES (3,'35 Years', 0, 300);
+INSERT INTO `milestones` (`id`,`name`, `personalized`, `donation`) VALUES (4,'40 Years', 0, 400);
+INSERT INTO `milestones` (`id`,`name`, `personalized`, `donation`) VALUES (5,'45 Years', 0, 450);
+INSERT INTO `milestones` (`id`,`name`, `personalized`, `donation`) VALUES (6,'50 Years', 0, 500);
 
 INSERT INTO `roles` (`id`, `name`) VALUES(1, 'Administrator');
 INSERT INTO `roles` (`id`, `name`) VALUES(2, 'LSA Admin');

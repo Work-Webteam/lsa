@@ -168,10 +168,10 @@ class RegistrationsController extends AppController
                 $mailer = new Mailer('default');
 
                 $message = "Congratulations, you have sucessfully registered for your Long Service Award.";
-                $mailer->setFrom(['longserviceaward@gov.bc.ca' => 'Long Service Awards'])
-                    ->setTo($registration->preferred_email)
-                    ->setSubject('Long Service Award Registration Completed')
-                    ->deliver($message);
+//                $mailer->setFrom(['longserviceaward@gov.bc.ca' => 'Long Service Awards'])
+//                    ->setTo($registration->preferred_email)
+//                    ->setSubject('Long Service Award Registration Completed')
+//                    ->deliver($message);
 
 
                 return $this->redirect(['action' => 'completed', $registration->id]);
@@ -539,6 +539,42 @@ class RegistrationsController extends AppController
 
 
 
+    public function editpresentationids($id)
+    {
+        if (!$this->checkAuthorization(array(
+            Configure::read('Role.admin'),
+            Configure::read('Role.lsa_admin'),
+            Configure::read('Role.protocol')))) {
+            $this->Flash->error(__('You are not authorized to administer Ceremonies.'));
+            $this->redirect('/');
+        }
+
+        $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
+        $this->set(compact('isadmin'));
+
+
+        $conditions = array();
+        $conditions['Registrations.ceremony_id ='] = $id;
+
+        $recipients = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+            'order' => ['Registrations.last_name' => 'ASC'],
+        ]);
+
+
+        if ($this->request->is(['post', 'put'])) {
+            foreach ($recipients as $key => $recipient) {
+                $recipient->presentation_number = $this->request->getData('Registrations.'.$key. '.presentation_number');
+                $this->Registrations->save($recipient);
+            }
+            $this->Flash->success(__('Presentation numbers have been updated.'));
+            return $this->redirect(['controller' => 'Ceremonies', 'action' => 'index']);
+        }
+
+
+        $this->set('recipients', $recipients);
+
+    }
 
 }
 

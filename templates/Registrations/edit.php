@@ -12,6 +12,7 @@
     echo $this->Form->hidden('pecsf_amount1', ['v-model' => 'pecsfAmount1']);
     echo $this->Form->hidden('pecsf_charity2_id', ['v-model' => 'pecsfCharityId2']);
     echo $this->Form->hidden('pecsf_amount2', ['v-model' => 'pecsfAmount2']);
+    echo $this->Form->hidden('pecsf_name', ['v-model' => 'selectedName']);
     ?>
 
     <tabs>
@@ -202,7 +203,8 @@
                 <div class="modal-body">
                     <fieldset id="formDonationOptions">
                         <?php
-                        echo $this->Form->control('selectedRegion', ['options' => $regions, 'empty' => '- select region -', 'onChange' => 'app.regionSelected()']);
+                            echo $this->Form->control('selectedName', ['label' => 'Donor Name', 'v-model' => 'selectedName']);
+                            echo $this->Form->control('selectedRegion', ['options' => $regions, 'empty' => '- select region -', 'onChange' => 'app.regionSelected()']);
                         ?>
 
                         <div id="donation-type" v-if="inputDonationType">
@@ -341,6 +343,7 @@
             selectedRegion: <?php echo $registration->pecsf_region_id ? $registration->pecsf_region_id : 0; ?>,
             selectedCharity1: <?php echo $registration->pecsf_charity1_id ? $registration->pecsf_charity1_id : 0; ?>,
             selectedCharity2: <?php echo $registration->pecsf_charity2_id ? $registration->pecsf_charity2_id : 0; ?>,
+            selectedName: '<?php echo $registration->pecsf_name ? $registration->pecsf_name : ""; ?>',
             selectedOptions: [],
 
             pecsfDonation: <?php echo $registration->pecsf_donation ? 1 : 0; ?>,
@@ -352,6 +355,7 @@
             pecsfCharity2:  <?php echo $registration->pecsf_second_charity ? 1 : 0; ?>,
             pecsfCharityId2: <?php echo $registration->pecsf_charity2_id ? $registration->pecsf_charity2_id : 0; ?>,
             pecsfAmount2: <?php echo $registration->pecsf_amount2; ?>,
+            pecsfName: '<?php echo $registration->pecsf_name; ?>',
 
             currentAwards: [],
             currentAwardIndex: 0,
