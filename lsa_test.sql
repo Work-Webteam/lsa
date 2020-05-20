@@ -5156,7 +5156,7 @@ INSERT INTO `registration_periods` (`id`, `award_year`, `open_registration`, `cl
 INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(1, 2019, 1, '2019-10-10 19:30:00', NULL, '[]');
 INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(2, 2019, 2, '2019-10-11 19:30:00', NULL, '[]');
 INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(3, 2019, 3, '2019-10-12 19:30:00', NULL, '[]');
-INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(4, 2020, 1, '2021-02-05 19:30:00', NULL, '[]');
+INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(4, 2020, 1, '2021-02-05 19:30:00', NULL, '[{\"ministry\":\"2\",\"milestone\":[3,4],\"city\":{\"id\":\"\",\"type\":\"\"},\"processed\":false},{\"ministry\":\"11\",\"milestone\":[1,2,3,4,5,6],\"city\":{\"id\":\"2063\",\"type\":\"1\"},\"processed\":false}]');
 INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(5, 2020, 2, '2021-02-06 19:30:00', NULL, '[]');
 INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(6, 2020, 3, '2021-02-11 19:30:00', NULL, '[]');
 INSERT INTO `ceremonies` (`id`, `award_year`, `night`, `date`, `notes`, `attending`) VALUES(7, 2020, 4, '2021-02-12 19:30:00', NULL, '[]');

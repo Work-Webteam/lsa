@@ -25,6 +25,9 @@
             </td>
 
             <td>
+                <?= $this->Html->link('Attending', ['controller' => 'Registrations', 'action' => 'attendingrecipients', $ceremony->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
+            </td>
+            <td>
                 <?= $this->Html->link('IDs', ['controller' => 'Registrations', 'action' => 'editpresentationids', $ceremony->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>
             <td>

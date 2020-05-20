@@ -290,6 +290,5 @@ class CeremoniesController extends AppController
         return $this->redirect(['action' => 'view', $ceremony->id]);
     }
 
-
-
 }
+

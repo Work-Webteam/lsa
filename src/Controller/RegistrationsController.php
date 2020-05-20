@@ -576,6 +576,84 @@ class RegistrationsController extends AppController
 
     }
 
+
+    public function attendingrecipients($id) {
+        if (!$this->checkAuthorization(array(
+            Configure::read('Role.admin'),
+            Configure::read('Role.lsa_admin'),
+            Configure::read('Role.protocol')))) {
+            $this->Flash->error(__('You are not authorized to administer Ceremonies.'));
+            $this->redirect('/');
+        }
+
+        $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
+        $this->set(compact('isadmin'));
+
+        $conditions = array();
+        $conditions['Registrations.ceremony_id ='] = $id;
+
+        $recipients = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+            'order' => ['Registrations.last_name' => 'ASC'],
+        ]);
+
+        $this->set('ceremony_id', $id);
+        $this->set('recipients', $recipients);
+    }
+
+    public function assignrecipients($id) {
+
+        if (!$this->checkAuthorization(array(
+            Configure::read('Role.admin'),
+            Configure::read('Role.lsa_admin'),
+            Configure::read('Role.protocol')))) {
+            $this->Flash->error(__('You are not authorized to administer Ceremonies.'));
+            $this->redirect('/');
+        }
+
+        $ceremony = $this->Registrations->Ceremonies->findById($id)->firstOrFail();
+
+        $attending = json_decode($ceremony->attending, true);
+//        debug($attending);
+        foreach ($attending as $key => $item) {
+            debug($item);
+            // find registrants who match this criteria
+
+            $conditions = array();
+            $conditions['Registrations.award_year ='] = date('Y');
+            $conditions['Registrations.ministry_id ='] = $item['ministry'];
+            $conditions['Registrations.milestone_id IN'] = $item['milestone'];
+
+            if (!empty($item['city']['id'])) {
+                if ($item['city']['type'] == true) {
+                    $conditions['Registrations.home_city_id ='] = $item['city']['id'];
+                }
+                else {
+                    $conditions['Registrations.home_city_id <>'] = $item['city']['id'];
+                }
+            }
+
+            $registrations = $this->Registrations->find('all', [
+                'conditions' => $conditions,
+            ]);
+
+            foreach ($registrations as $registration) {
+                $registration->ceremony_id = $id;
+                $this->Registrations->save($registration);
+            }
+
+            // update processed status
+            $attending[$key]['processed'] = true;
+        }
+
+        // save updated ceremony
+        $ceremony->attending = json_encode($attending);
+        $this->Registrations->Ceremonies->save($ceremony);
+
+        $this->Flash->error(__('Assign Recipients - ' . $id));
+        return $this->redirect($this->referer());
+    }
+
 }
 
 
