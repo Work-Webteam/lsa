@@ -39,6 +39,7 @@
                     echo '<a href="/cities">Cities</a>';
                     echo '<a href="/ministries">Ministries</a>';
                     echo '<a href="/diet">Diet</a>';
+                    echo '<a href="/accessibility">Accessibility</a>';
                     echo '<a href="/registrationperiods">Reg.Periods</a>';
                     echo ' |  <a href="/userroles">Access</a>';
                 }

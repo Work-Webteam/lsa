@@ -280,7 +280,7 @@ class RegistrationsController extends AppController
                 $this->Flash->success(__('Registration has been updated.'));
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('Unable to add registration.'));
+            $this->Flash->error(__('Unable to update registration.'));
 
         }
 
@@ -570,10 +570,7 @@ class RegistrationsController extends AppController
             $this->Flash->success(__('Presentation numbers have been updated.'));
             return $this->redirect(['controller' => 'Ceremonies', 'action' => 'index']);
         }
-
-
         $this->set('recipients', $recipients);
-
     }
 
 
@@ -652,6 +649,85 @@ class RegistrationsController extends AppController
 
         $this->Flash->error(__('Assign Recipients - ' . $id));
         return $this->redirect($this->referer());
+    }
+
+
+
+
+    public function rsvp($id)
+    {
+        $registration = $this->Registrations->find('all', [
+            'conditions' => array(
+                'Registrations.id' => $id
+            ),
+            'contain' => [
+                'Milestones',
+                'Ministries',
+                'Awards',
+                'OfficeCity',
+                'HomeCity',
+                'SupervisorCity',
+                'Ceremonies'
+            ],
+        ])->first();
+        if (!$registration) {
+            $this->Flash->error(__('Registration not found.'));
+            $this->redirect('/');
+        }
+
+        if ($this->request->is(['post', 'put'])) {
+            $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
+
+            if ($this->Registrations->save($registration)) {
+                $this->Flash->success(__('Registration has been updated.'));
+                return $this->redirect('/');
+            }
+            $this->Flash->error(__('Unable to update registration.'));
+
+        }
+
+
+        if ($registration->ceremony_id) {
+            $ceremony = $this->Registrations->Ceremonies->findById($registration->ceremony_id)->firstOrFail();
+            if ($ceremony) {
+                $this->set('ceremony', $ceremony);
+            } else {
+                $this->Flash->error(__('No ceremony date has been set for ' . $registration->first_name . " " . $registration->last_name . '.'));
+                $this->redirect('/');
+            }
+        }
+        else {
+            $this->Flash->error(__('No ceremony date has been set for ' . $registration->first_name . " " . $registration->last_name . '.'));
+            $this->redirect('/');
+        }
+
+        $diet = $this->Registrations->Diet->find('list');
+        $this->set('diet', $diet);
+
+        $accessibility = $this->Registrations->Accessibility->find('list');
+        $this->set('accessibility', $accessibility);
+
+
+        $this->set('registration', $registration);
+
+        $isadmin = true;
+
+        $query = $this->Registrations->RegistrationPeriods->find('all')
+            ->where([
+                'RegistrationPeriods.open_registration <=' => date('Y-m-d H:i:s'),
+                'RegistrationPeriods.close_registration >=' => date('Y-m-d H:i:s')
+            ]);
+        $registrationperiods = $query->first();
+
+        if (!$this->checkGUID($registration->user_guid)) {
+           $this->Flash->error(__('You are not authorized to complete this RSVP.'));
+           $this->redirect('/');
+         }
+
+        //
+        $this->set('isadmin', $isadmin);
+
+
     }
 
 }

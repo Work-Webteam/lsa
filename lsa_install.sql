@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS cities;
 DROP TABLE IF EXISTS awards;
 DROP TABLE IF EXISTS milestones;
 DROP TABLE IF EXISTS diet;
+DROP TABLE IF EXISTS accessibility;
 DROP TABLE IF EXISTS ceremonies;
 DROP TABLE IF EXISTS registration_periods;
 
@@ -40,6 +41,11 @@ CREATE TABLE diet (
     name VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+
+CREATE TABLE accessibility (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE roles (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -151,10 +157,14 @@ CREATE TABLE registrations (
 
     invite_sent DATETIME,
     attending BOOLEAN,
+    guest BOOLEAN,
+
     ceremony_id INT,
 
-    accessibility_requirements_recipient BOOLEAN,
-    accessibility_requirements_guest BOOLEAN,
+    accessibility_recipient BOOLEAN,
+    accessibility_guest BOOLEAN,
+    accessibility_requirements_recipient TEXT,
+    accessibility_requirements_guest TEXT,
     accessibility_recipient_notes TEXT,
     accessibility_guest_notes TEXT,
     accessibility_admin_notes TEXT,
@@ -168,12 +178,13 @@ CREATE TABLE registrations (
     recipient_speaker BOOLEAN,
     reserved_seating BOOLEAN,
 
-    recipient_diet_id INT,
-    recipient_diet_other VARCHAR(255),
+    recipient_diet BOOLEAN,
+    recipient_diet_selections TEXT,
+    recipient_diet_other TEXT,
 
-    guest BOOLEAN,
-    guest_diet_id INT,
-    guest_diet_other VARCHAR(255),
+    guest_diet BOOLEAN,
+    guest_diet_selections TEXT,
+    guest_diet_other TEXT,
 
     office_careof VARCHAR(255),
     office_address VARCHAR(255),
@@ -216,8 +227,6 @@ CREATE TABLE registrations (
     FOREIGN KEY ministry_key (ministry_id) REFERENCES ministries(id),
     FOREIGN KEY alternate_ministry_key (alternate_ministry_id) REFERENCES ministries(id),
     FOREIGN KEY ceremony_key (ceremony_id) REFERENCES ceremonies(id),
-    FOREIGN KEY recipient_diet_key (recipient_diet_id) REFERENCES diet(id),
-    FOREIGN KEY guest_diet_key (guest_diet_id) REFERENCES diet(id),
     FOREIGN KEY office_city_key (office_city_id) REFERENCES cities(id),
     FOREIGN KEY supervisor_city_key (supervisor_city_id) REFERENCES cities(id),
     FOREIGN KEY home_city_key (office_city_id) REFERENCES cities(id)

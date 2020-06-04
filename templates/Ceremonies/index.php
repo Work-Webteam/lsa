@@ -31,7 +31,7 @@
                 <?= $this->Html->link('IDs', ['controller' => 'Registrations', 'action' => 'editpresentationids', $ceremony->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>
             <td>
-                <?= $this->Html->link('View', ['action' => 'view', $ceremony->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
+                <?= $this->Html->link('Criteria', ['action' => 'view', $ceremony->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>
             <td>
                 <?= $this->Html->link('Edit', ['action' => 'edit', $ceremony->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
