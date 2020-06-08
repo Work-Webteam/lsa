@@ -3,15 +3,18 @@
     <h1><?= $registration->first_name . " " . $registration->last_name ?></h1>
 
     <?php
-    echo $this->Form->create($registration, ['@submit' => 'processForm', 'horizontal' => true]);
+        echo $this->Form->create($registration, ['@submit' => 'processForm', 'horizontal' => true]);
 
-    echo $this->Form->hidden('attending', ['v-model' => 'recipientAttending']);
-    echo $this->Form->hidden('guest', ['v-model' => 'recipientGuest']);
-    echo $this->Form->hidden('accessibility_recipient', ['v-model' => 'recipientAccessibilityRecipient']);
-    echo $this->Form->hidden('accessibility_guest', ['v-model' => 'recipientAccessibilityGuest']);
-    echo $this->Form->hidden('recipient_diet', ['v-model' => 'recipientDietaryRecipient']);
-    echo $this->Form->hidden('guest_diet', ['v-model' => 'recipientDietaryGuest']);
-
+        echo $this->Form->hidden('attending', ['v-model' => 'recipientAttending']);
+        echo $this->Form->hidden('guest', ['v-model' => 'recipientGuest']);
+        echo $this->Form->hidden('accessibility_recipient', ['v-model' => 'recipientAccessibilityRecipient']);
+        echo $this->Form->hidden('accessibility_guest', ['v-model' => 'recipientAccessibilityGuest']);
+        echo $this->Form->hidden('recipient_diet', ['v-model' => 'recipientDietaryRecipient']);
+        echo $this->Form->hidden('guest_diet', ['v-model' => 'recipientDietaryGuest']);
+        echo $this->Form->hidden('accessibility_requirements_recipient');
+        echo $this->Form->hidden('accessibility_requirements_guest');
+        echo $this->Form->hidden('dietary_requirements_recipient');
+        echo $this->Form->hidden('dietary_requirements_guest');
     ?>
 
 
@@ -63,22 +66,18 @@
     ?>
 
     <div id="recipient-accessibility" v-if="recipientAccessibilityRecipient">
-        <Strong>I require:</Strong>
-<!--        --><?php
-////            echo $this->Form->select('accessibilityRecipient', $accessibility, ['multiple' => true]);
-////        echo $this->Form->checkbox($accessibility, ['hiddenField' => false]);
-//        ?>
-<!--        --><?php //foreach ($accessibility as $item): ?>
-<!---->
-<!--        --><?php
-////            debug($item);
-//            echo $this->Form->checkbox($item, ['label' => 'test.1', 'name' => $item, 'hiddenField' => false]);
-//
-//            ?>
-<!---->
-<!--        --><?php //endforeach; ?>
+        <div><Strong>I require:</Strong></div>
+
         <?php
-        echo $this->Form->select('accessibilityGuest', $accessibility, []);
+            foreach ($accessibility as $item):
+                echo '<div>';
+                echo '<label for="accessR-' . $item->id . '">';
+                echo '<input type="checkbox" id="accessR-' . $item->id . '" value=' . $item->id . ' v-model="accessRecipientSelections">';
+                echo '&nbsp;&nbsp;' . $item->name . '</label>';
+                echo '</div>';
+            endforeach;
+
+            echo $this->Form->control('accessibility_recipient_notes', ['type' => 'textarea', 'rows' => '6', 'cols' => '50']);
         ?>
 
     </div>
@@ -86,7 +85,15 @@
     <div id="guest-accessibility" v-if="recipientAccessibilityGuest">
         <Strong>My guest requires:</Strong>
         <?php
-            echo $this->Form->select('accessibilityGuest', $accessibility, []);
+            foreach ($accessibility as $item):
+                echo '<div>';
+                echo '<label for="accessG-' . $item->id . '">';
+                echo '<input type="checkbox" id="accessG-' . $item->id . '" value=' . $item->id . ' v-model="accessGuestSelections">';
+                echo '&nbsp;&nbsp;' . $item->name . '</label>';
+                echo '</div>';
+            endforeach;
+
+            echo $this->Form->control('accessibility_guest_notes', ['type' => 'textarea', 'rows' => '6', 'cols' => '50']);
         ?>
     </div>
 
@@ -110,14 +117,30 @@
     <div id="guest-dietary" v-if="recipientDietaryRecipient">
         <Strong>I require food options that are: [multi-select]:</Strong>
         <?php
-        echo $this->Form->select('accessibilityGuest', $diet, []);
+            foreach ($diet as $item):
+                echo '<div>';
+                echo '<label for="dietR-' . $item->id . '">';
+                echo '<input type="checkbox" id="dietR-' . $item->id . '" value=' . $item->id . ' v-model="dietRecipientSelections">';
+                echo '&nbsp;&nbsp;' . $item->name . '</label>';
+                echo '</div>';
+            endforeach;
+
+            echo $this->Form->control('dietary_recipient_other', ['type' => 'textarea', 'rows' => '6', 'cols' => '50']);
         ?>
     </div>
 
     <div id="guest-dietary" v-if="recipientDietaryGuest">
         <Strong>My guest requires food options that are: [multi-select]</Strong>
         <?php
-        echo $this->Form->select('accessibilityGuest', $diet, []);
+            foreach ($diet as $item):
+                echo '<div>';
+                echo '<label for="dietG-' . $item->id . '">';
+                echo '<input type="checkbox" id="dietG-' . $item->id . '" value=' . $item->id . ' v-model="dietGuestSelections">';
+                echo '&nbsp;&nbsp;' . $item->name . '</label>';
+                echo '</div>';
+            endforeach;
+
+            echo $this->Form->control('dietary_guest_other', ['type' => 'textarea', 'rows' => '6', 'cols' => '50']);
         ?>
     </div>
 
@@ -165,21 +188,46 @@
 
         data: {
 
-            recipientAttending: null,
-            recipientGuest: null,
-            recipientAccessibilityRecipient: false,
-            recipientAccessibilityGuest: false,
-            recipientDietaryRecipient: false,
-            recipientDietaryGuest: false,
+            recipientAttending: <?php echo $registration->attending ? $registration->attending : 0; ?>,
+            recipientGuest: <?php echo $registration->guest ? $registration->guest : 0; ?>,
+            recipientAccessibilityRecipient: <?php echo $registration->accessibility_recipient ? $registration->accessibility_recipient : 0; ?>,
+            recipientAccessibilityGuest: <?php echo $registration->accessibility_guest ? $registration->accessibility_guest : 0; ?>,
+            recipientDietaryRecipient: <?php echo $registration->recipient_diet ? $registration->recipient_diet : 0; ?>,
+            recipientDietaryGuest: <?php echo $registration->guest_diet ? $registration->guest_diet : 0; ?>,
             currentAttending: null,
+
+            accessibilityRecipient: null,
+            accessibilityGuest: null,
+            dietRecipient: null,
+            dietGuest: null,
+
+            accessRecipientSelections: <?php echo $registration->accessibility_requirements_recipient; ?>,
+            accessGuestSelections: <?php echo $registration->accessibility_requirements_guest; ?>,
+            dietRecipientSelections: <?php echo $registration->dietary_requirements_recipient; ?>,
+            dietGuestSelections: <?php echo $registration->dietary_requirements_guest; ?>,
 
             errorsOptions: '',
 
         },
 
+        mounted() {
 
+            if (this.recipientAttending && this.recipientGuest) {
+                this.buttonAttendingWith(2);
+            }
+            else if (this.recipientAttending && !this.recipientGuest) {
+                this.buttonAttendingWith(1);
+            }
+            else {
+                this.buttonAttendingWith(0);
+            }
+
+            this.setAccessibilityButtons();
+            this.setDietaryButtons();
+        },
 
         methods: {
+
 
             processForm: function(e) {
                 console.log('processForm');
@@ -196,6 +244,17 @@
                     this.recipientAttending = false;
                     this.recipientGuest = false;
                 }
+
+                console.log(this.accessRecipientSelections);
+                console.log(this.accessGuestSelections);
+                console.log(this.dietRecipientSelections);
+                console.log(this.dietGuestSelections);
+
+                $('input[name=accessibility_requirements_recipient]').val(JSON.stringify(this.accessRecipientSelections));
+                $('input[name=accessibility_requirements_guest]').val(JSON.stringify(this.accessGuestSelections));
+                $('input[name=dietary_requirements_recipient]').val(JSON.stringify(this.dietRecipientSelections));
+                $('input[name=dietary_requirements_guest]').val(JSON.stringify(this.dietGuestSelections));
+
                 console.log(this.recipientAttending);
                 console.log(this.recipientGuest);
 
@@ -215,84 +274,106 @@
                     $("#btn-attend-" + id).removeClass('btn-secondary').addClass('btn-primary');
                     this.currentAttending = id;
                 }
-                // console.log(id);
             },
 
             buttonAccessibility: function (id) {
 
-                // console.log("buttonAccessibility: " + id);
-
                 if (id == 2) {
                     this.recipientAccessibilityRecipient = !this.recipientAccessibilityRecipient;
-                    if (this.recipientAccessibilityRecipient) {
-                        $("#btn-access-" + id).removeClass('btn-secondary').addClass('btn-primary');
-                        $("#btn-access-" + 0).removeClass('btn-primary').addClass('btn-secondary');
-                    }
-                    else {
-                        $("#btn-access-" + id).removeClass('btn-primary').addClass('btn-secondary');
-                    }
                 }
                 else if (id == 1) {
                     this.recipientAccessibilityGuest = !this.recipientAccessibilityGuest;
-                    if (this.recipientAccessibilityGuest) {
-                        $("#btn-access-" + id).removeClass('btn-secondary').addClass('btn-primary');
-                        $("#btn-access-" + 0).removeClass('btn-primary').addClass('btn-secondary');
-                    }
-                    else {
-                        $("#btn-access-" + id).removeClass('btn-primary').addClass('btn-secondary');
-                    }
                 }
                 else {
                     this.recipientAccessibilityRecipient = false;
                     this.recipientAccessibilityGuest = false;
-                    $("#btn-access-" + 1).removeClass('btn-primary').addClass('btn-secondary');
-                    $("#btn-access-" + 2).removeClass('btn-primary').addClass('btn-secondary');
-                    $("#btn-access-" + 0).removeClass('btn-secondary').addClass('btn-primary');
                 }
-
-                // console.log(id);
+                this.setAccessibilityButtons();
             },
+
+            setAccessibilityButtons() {
+                if (this.recipientAccessibilityRecipient) {
+                    $("#btn-access-2").removeClass('btn-secondary').addClass('btn-primary');
+                    $("#btn-access-0").removeClass('btn-primary').addClass('btn-secondary');
+                }
+                else {
+                    $("#btn-access-2").removeClass('btn-primary').addClass('btn-secondary');
+                }
+                if (this.recipientAccessibilityGuest) {
+                    $("#btn-access-1").removeClass('btn-secondary').addClass('btn-primary');
+                    $("#btn-access-0").removeClass('btn-primary').addClass('btn-secondary');
+                }
+                else {
+                    $("#btn-access-1").removeClass('btn-primary').addClass('btn-secondary');
+                }
+                if (!this.recipientAccessibilityRecipient && !this.recipientAccessibilityGuest) {
+                    $("#btn-access-2").removeClass('btn-primary').addClass('btn-secondary');
+                    $("#btn-access-1").removeClass('btn-primary').addClass('btn-secondary');
+                    $("#btn-access-0").removeClass('btn-secondary').addClass('btn-primary');
+                }
+            },
+
 
             buttonDietary: function (id) {
 
-                // console.log("buttonDietary: " + id);
-
                 if (id == 2) {
                     this.recipientDietaryRecipient = !this.recipientDietaryRecipient;
-                    if (this.recipientDietaryRecipient) {
-                        $("#btn-dietary-" + id).removeClass('btn-secondary').addClass('btn-primary');
-                        $("#btn-dietary-0").removeClass('btn-primary').addClass('btn-secondary');
-                    }
-                    else {
-                        $("#btn-dietary-" + id).removeClass('btn-primary').addClass('btn-secondary');
-                        if (!this.recipientDietaryRecipient && !this.recipientDietaryGuest) {
-                            $("#btn-dietary-0").removeClass('btn-secondary').addClass('btn-primary');
-                        }
-                    }
+                    // if (this.recipientDietaryRecipient) {
+                    //     $("#btn-dietary-" + id).removeClass('btn-secondary').addClass('btn-primary');
+                    //     $("#btn-dietary-0").removeClass('btn-primary').addClass('btn-secondary');
+                    // }
+                    // else {
+                    //     $("#btn-dietary-" + id).removeClass('btn-primary').addClass('btn-secondary');
+                    //     if (!this.recipientDietaryRecipient && !this.recipientDietaryGuest) {
+                    //         $("#btn-dietary-0").removeClass('btn-secondary').addClass('btn-primary');
+                    //     }
+                    // }
                 }
                 else if (id == 1) {
                     this.recipientDietaryGuest = !this.recipientDietaryGuest;
-                    if (this.recipientDietaryGuest) {
-                        $("#btn-dietary-" + id).removeClass('btn-secondary').addClass('btn-primary');
-                        $("#btn-dietary-0").removeClass('btn-primary').addClass('btn-secondary');
-                    }
-                    else {
-                        $("#btn-dietary-" + id).removeClass('btn-primary').addClass('btn-secondary');
-                        if (!this.recipientDietaryRecipient && !this.recipientDietaryGuest) {
-                            $("#btn-dietary-0").removeClass('btn-secondary').addClass('btn-primary');
-                        }
-                    }
+                    // if (this.recipientDietaryGuest) {
+                    //     $("#btn-dietary-" + id).removeClass('btn-secondary').addClass('btn-primary');
+                    //     $("#btn-dietary-0").removeClass('btn-primary').addClass('btn-secondary');
+                    // }
+                    // else {
+                    //     $("#btn-dietary-" + id).removeClass('btn-primary').addClass('btn-secondary');
+                    //     if (!this.recipientDietaryRecipient && !this.recipientDietaryGuest) {
+                    //         $("#btn-dietary-0").removeClass('btn-secondary').addClass('btn-primary');
+                    //     }
+                    // }
                 }
                 else {
                     this.recipientDietaryRecipient = false;
                     this.recipientDietaryGuest = false;
-                    $("#btn-dietary-" + 1).removeClass('btn-primary').addClass('btn-secondary');
-                    $("#btn-dietary-" + 2).removeClass('btn-primary').addClass('btn-secondary');
-                    $("#btn-dietary-" + 0).removeClass('btn-secondary').addClass('btn-primary');
+                    // $("#btn-dietary-" + 1).removeClass('btn-primary').addClass('btn-secondary');
+                    // $("#btn-dietary-" + 2).removeClass('btn-primary').addClass('btn-secondary');
+                    // $("#btn-dietary-" + 0).removeClass('btn-secondary').addClass('btn-primary');
                 }
-
+                this.setDietaryButtons();
                 // console.log(id);
             },
+
+            setDietaryButtons() {
+                if (this.recipientDietaryRecipient) {
+                    $("#btn-dietary-2").removeClass('btn-secondary').addClass('btn-primary');
+                    $("#btn-dietary-0").removeClass('btn-primary').addClass('btn-secondary');
+                }
+                else {
+                    $("#btn-dietary-2").removeClass('btn-primary').addClass('btn-secondary');
+                }
+                if (this.recipientDietaryGuest) {
+                    $("#btn-dietary-1").removeClass('btn-secondary').addClass('btn-primary');
+                    $("#btn-dietary-0").removeClass('btn-primary').addClass('btn-secondary');
+                }
+                else {
+                    $("#btn-dietary-1").removeClass('btn-primary').addClass('btn-secondary');
+                }
+                if (!this.recipientDietaryRecipient && !this.recipientDietaryGuest) {
+                    $("#btn-dietary-2").removeClass('btn-primary').addClass('btn-secondary');
+                    $("#btn-dietary-1").removeClass('btn-primary').addClass('btn-secondary');
+                    $("#btn-dietary-0").removeClass('btn-secondary').addClass('btn-primary');
+                }
+            }
 
     }
 

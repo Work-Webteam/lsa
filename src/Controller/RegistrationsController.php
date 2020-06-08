@@ -158,6 +158,12 @@ class RegistrationsController extends AppController
             $registration->supervisor_province = "BC";
             $registration->retirement_date = $this->request->getData('date');
             $registration->retroactive = false;
+
+            $registration->accessibility_requirements_recipient = "[]";
+            $registration->accessibility_requirements_guest = "[]";
+            $registration->recipient_diet_selections = "[]";
+            $registration->guest_diet_selections = "[]";
+
             if (empty($registration->award_options)) {
                 $registration->award_options = '[]';
             }
@@ -647,7 +653,7 @@ class RegistrationsController extends AppController
         $ceremony->attending = json_encode($attending);
         $this->Registrations->Ceremonies->save($ceremony);
 
-        $this->Flash->error(__('Assign Recipients - ' . $id));
+        $this->Flash->success(__('Assign Recipients - ' . $id));
         return $this->redirect($this->referer());
     }
 
@@ -678,6 +684,27 @@ class RegistrationsController extends AppController
         if ($this->request->is(['post', 'put'])) {
             $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
 
+
+            if (!$registration->accessibility_recipient) {
+                $registration->accessibility_recipient_notes = "";
+                $registration->accessibility_requirements_recipient = "[]";
+            }
+            debug($registration->accessibility_requirements_recipient);
+
+            if (!$registration->accessibility_guest) {
+                $registration->accessibility_guest_notes = "";
+                $registration->accessibility_requirements_guest = "[]";
+            }
+
+            if (!$registration->recipient_diet) {
+                $registration->dietary_recipient_other = "";
+                $registration->dietary_requirements_recipient = "[]";
+            }
+            if (!$registration->guest_diet) {
+                $registration->dietary_guest_other = "";
+                $registration->dietary_requirements_guest = "[]";
+            }
+
             if ($this->Registrations->save($registration)) {
                 $this->Flash->success(__('Registration has been updated.'));
                 return $this->redirect('/');
@@ -701,10 +728,10 @@ class RegistrationsController extends AppController
             $this->redirect('/');
         }
 
-        $diet = $this->Registrations->Diet->find('list');
+        $diet = $this->Registrations->Diet->find('all');
         $this->set('diet', $diet);
 
-        $accessibility = $this->Registrations->Accessibility->find('list');
+        $accessibility = $this->Registrations->Accessibility->find('all');
         $this->set('accessibility', $accessibility);
 
 
