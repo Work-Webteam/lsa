@@ -261,6 +261,8 @@
                 console.log(this.recipientAccessibilityRecipient);
                 console.log(this.recipientAccessibilityGuest);
 
+                console.log(this.recipientDietaryRecipient);
+                console.log(this.recipientDietaryGuest);
             },
 
             buttonAttendingWith: function (id) {
@@ -318,39 +320,15 @@
 
                 if (id == 2) {
                     this.recipientDietaryRecipient = !this.recipientDietaryRecipient;
-                    // if (this.recipientDietaryRecipient) {
-                    //     $("#btn-dietary-" + id).removeClass('btn-secondary').addClass('btn-primary');
-                    //     $("#btn-dietary-0").removeClass('btn-primary').addClass('btn-secondary');
-                    // }
-                    // else {
-                    //     $("#btn-dietary-" + id).removeClass('btn-primary').addClass('btn-secondary');
-                    //     if (!this.recipientDietaryRecipient && !this.recipientDietaryGuest) {
-                    //         $("#btn-dietary-0").removeClass('btn-secondary').addClass('btn-primary');
-                    //     }
-                    // }
                 }
                 else if (id == 1) {
                     this.recipientDietaryGuest = !this.recipientDietaryGuest;
-                    // if (this.recipientDietaryGuest) {
-                    //     $("#btn-dietary-" + id).removeClass('btn-secondary').addClass('btn-primary');
-                    //     $("#btn-dietary-0").removeClass('btn-primary').addClass('btn-secondary');
-                    // }
-                    // else {
-                    //     $("#btn-dietary-" + id).removeClass('btn-primary').addClass('btn-secondary');
-                    //     if (!this.recipientDietaryRecipient && !this.recipientDietaryGuest) {
-                    //         $("#btn-dietary-0").removeClass('btn-secondary').addClass('btn-primary');
-                    //     }
-                    // }
                 }
                 else {
                     this.recipientDietaryRecipient = false;
                     this.recipientDietaryGuest = false;
-                    // $("#btn-dietary-" + 1).removeClass('btn-primary').addClass('btn-secondary');
-                    // $("#btn-dietary-" + 2).removeClass('btn-primary').addClass('btn-secondary');
-                    // $("#btn-dietary-" + 0).removeClass('btn-secondary').addClass('btn-primary');
                 }
                 this.setDietaryButtons();
-                // console.log(id);
             },
 
             setDietaryButtons() {

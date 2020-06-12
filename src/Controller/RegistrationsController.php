@@ -24,7 +24,9 @@ class RegistrationsController extends AppController
         $registrationperiods = $query->first();
 
         $conditions = array();
-        $conditions['Registrations.award_year ='] = date('Y');
+//        $conditions['Registrations.award_year ='] = date('Y');
+        $conditions['Registrations.created >='] = date('Y-01-01 00:00:00');
+        $conditions['Registrations.created <='] = date('Y-12-31 23:59:59');
 
         $edit = true;
         $toolbar = true;

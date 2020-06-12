@@ -16,10 +16,7 @@
                 <?= $recipient->last_name . ", " . $recipient->first_name ?>
             </td>
             <td>
-                <?= $recipient->milestone_id ?>
-            </td>
-            <td>
-               <?= $recipient->presenation_number ?>
+               <?= $recipient->presentation_number ?>
             </td>
         </tr>
     <?php endforeach; ?>

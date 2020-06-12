@@ -30,8 +30,8 @@
         $('#lsa-registrations').DataTable( {
             data: registrations,
             columns: [
-                { data: "first_name", title: "First Name" },
                 { data: "last_name", title: "Last Name" },
+                { data: "first_name", title: "First Name" },
                 { data: "id", orderable: false, render: function( data, type, row, meta) {
                         if (edit) {
                             // link = '<a href="/registrations/view/' + data + '">view</a> | <a href="/registrations/edit/' + data + '">edit</a>';
@@ -63,6 +63,7 @@
             // stateSave: true,
             pageLength: 15,
             lengthChange: false,
+            // order: [[ 1, "asc" ]],
 
             dom: '<"toolbar">Bfrtip',
             buttons: [

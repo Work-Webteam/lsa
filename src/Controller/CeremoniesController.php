@@ -185,7 +185,8 @@ class CeremoniesController extends AppController
         $this->set('milestones', $milestones);
 
         $cities = $this->Ceremonies->Cities->find('list', [
-            'order' => ['Cities.name' => 'ASC']
+            'condition' => ['Cities.name >' => 'Van'],
+            'order' => ['Cities.name' => 'ASC'],
         ]);
         $this->set('cities', $cities);
 
@@ -256,8 +257,14 @@ class CeremoniesController extends AppController
         $this->set('milestones', $milestones);
 
         $cities = $this->Ceremonies->Cities->find('list', [
-            'order' => ['Cities.name' => 'ASC']
-        ]);
+            'order' => ['Cities.name' => 'ASC'],
+        ])
+            ->where([
+                'Cities.name IN' => ['Vancouver', 'Victoria']
+            ]);
+
+
+
         $this->set('cities', $cities);
 
 
