@@ -37,6 +37,13 @@
 
     ?>
 
+    <div id="guest-name" v-if="currentAttending == 2">
+        <?php
+            echo $this->Form->Control('guest_first_name');
+            echo $this->Form->Control('guest_last_name');
+        ?>
+    </div>
+
     <div>
         <h3>Inclusivity</h3>
         <p>
@@ -57,9 +64,9 @@
 
     <?php
 
-    echo $this->Form->button('I have accessibility requirements', ['type' => 'button', 'id' => 'btn-access-2', 'onclick' => 'app.buttonAccessibility(2)', 'class' => 'btn btn-secondary']);
+    echo $this->Form->button('I have accessibility requirements', ['type' => 'button', 'id' => 'btn-access-2', 'onclick' => 'app.buttonAccessibility(2)', 'class' => 'btn btn-secondary', 'v-if' => 'currentAttending > 0']);
     echo "&nbsp;";
-    echo $this->Form->button('My guest has accessibility requirements', ['type' => 'button', 'id' => 'btn-access-1',  'onclick' => 'app.buttonAccessibility(1)', 'class' => 'btn btn-secondary']);
+    echo $this->Form->button('My guest has accessibility requirements', ['type' => 'button', 'id' => 'btn-access-1',  'onclick' => 'app.buttonAccessibility(1)', 'class' => 'btn btn-secondary', 'v-if' => 'currentAttending == 2']);
     echo "&nbsp;";
     echo $this->Form->button("No accessibility requirements in my party", ['type' => 'button', 'id' => 'btn-access-0',  'onclick' => 'app.buttonAccessibility(0)', 'class' => 'btn btn-primary']);
 
@@ -106,9 +113,9 @@
 
     <?php
 
-    echo $this->Form->button('I have dietary requirements', ['type' => 'button', 'id' => 'btn-dietary-2', 'onclick' => 'app.buttonDietary(2)', 'class' => 'btn btn-secondary']);
+    echo $this->Form->button('I have dietary requirements', ['type' => 'button', 'id' => 'btn-dietary-2', 'onclick' => 'app.buttonDietary(2)', 'class' => 'btn btn-secondary', 'v-if' => 'currentAttending > 0']);
     echo "&nbsp;";
-    echo $this->Form->button('My guest has dietary requirements', ['type' => 'button', 'id' => 'btn-dietary-1',  'onclick' => 'app.buttonDietary(1)', 'class' => 'btn btn-secondary']);
+    echo $this->Form->button('My guest has dietary requirements', ['type' => 'button', 'id' => 'btn-dietary-1',  'onclick' => 'app.buttonDietary(1)', 'class' => 'btn btn-secondary', 'v-if' => 'currentAttending == 2']);
     echo "&nbsp;";
     echo $this->Form->button("No dietary requirements in my party", ['type' => 'button', 'id' => 'btn-dietary-0',  'onclick' => 'app.buttonDietary(0)', 'class' => 'btn btn-primary']);
 
@@ -182,6 +189,8 @@
     var clrError = "#ff0000";
     var clrDefault = "#d1d1d1";
 
+    var listAccessibility=<?php echo json_encode($accessibility); ?>;
+    var listDiet=<?php echo json_encode($diet); ?>;
 
     var app = new Vue({
         el: '#app',
@@ -224,6 +233,9 @@
 
             this.setAccessibilityButtons();
             this.setDietaryButtons();
+
+            // console.log(listAccessibility);
+            // console.log(listDiet);
         },
 
         methods: {
@@ -231,6 +243,22 @@
 
             processForm: function(e) {
                 console.log('processForm');
+
+                errors = this.checkRSVP();
+                console.log(errors);
+
+                if (errors.length > 0) {
+                    this.errorsOptions = '<ul>';
+                    for (var i = 0; i < errors.length; i++) {
+                        this.errorsOptions += '<li>' + errors[i] + '</li>';
+                    }
+                    this.errorsOptions += '</ul>';
+                    e.preventDefault();
+                }
+                else {
+                    this.errorsOptions = '';
+                }
+
 
                 if (this.currentAttending == 2) {
                     this.recipientAttending = true;
@@ -245,25 +273,118 @@
                     this.recipientGuest = false;
                 }
 
-                console.log(this.accessRecipientSelections);
-                console.log(this.accessGuestSelections);
-                console.log(this.dietRecipientSelections);
-                console.log(this.dietGuestSelections);
+                // console.log(this.accessRecipientSelections);
+                // console.log(this.accessGuestSelections);
+                // console.log(this.dietRecipientSelections);
+                // console.log(this.dietGuestSelections);
 
                 $('input[name=accessibility_requirements_recipient]').val(JSON.stringify(this.accessRecipientSelections));
                 $('input[name=accessibility_requirements_guest]').val(JSON.stringify(this.accessGuestSelections));
                 $('input[name=dietary_requirements_recipient]').val(JSON.stringify(this.dietRecipientSelections));
                 $('input[name=dietary_requirements_guest]').val(JSON.stringify(this.dietGuestSelections));
 
-                console.log(this.recipientAttending);
-                console.log(this.recipientGuest);
+                // console.log(this.recipientAttending);
+                // console.log(this.recipientGuest);
+                //
+                // console.log(this.recipientAccessibilityRecipient);
+                // console.log(this.recipientAccessibilityGuest);
+                //
+                // console.log(this.recipientDietaryRecipient);
+                // console.log(this.recipientDietaryGuest);
 
-                console.log(this.recipientAccessibilityRecipient);
-                console.log(this.recipientAccessibilityGuest);
 
-                console.log(this.recipientDietaryRecipient);
-                console.log(this.recipientDietaryGuest);
+
+
             },
+
+
+            checkRSVP: function() {
+
+                var errors = [];
+
+                if (this.currentAttending == 2) {
+                    if ($('#guest-first-name').val().length == 0) {
+                        $('#guest-first-name').css("border-color", clrError);
+                        errors.push('Guest first name is required');
+                    } else {
+                        $('#guest-first-name').css("border-color", clrDefault);
+                    }
+
+                    if ($('#guest-last-name').val().length == 0) {
+                        $('#guest-last-name').css("border-color", clrError);
+                        errors.push('Guest last name is required');
+                    } else {
+                        $('#guest-last-name').css("border-color", clrDefault);
+                    }
+                }
+
+                if (this.recipientAccessibilityRecipient) {
+                    entered = false;
+                    for (var i = 0; i < listAccessibility.length; i++) {
+                        console.log($('#accessR-' + listAccessibility[i].id).prop("checked") );
+                        if ($('#accessR-' + listAccessibility[i].id).prop("checked") ) {
+                            entered = true;
+                        }
+                    }
+                    if ($('#accessibility-recipient-notes').val().length > 0) {
+                        entered = true;
+                    }
+                    if (!entered) {
+                        errors.push('Your accessibility info is required');
+                    }
+                }
+
+                if (this.recipientAccessibilityGuest) {
+                    entered = false;
+                    for (var i = 0; i < listAccessibility.length; i++) {
+                        console.log($('#accessG-' + listAccessibility[i].id).prop("checked") );
+                        if ($('#accessG-' + listAccessibility[i].id).prop("checked") ) {
+                            entered = true;
+                        }
+                    }
+                    if ($('#accessibility-guest-notes').val().length > 0) {
+                        entered = true;
+                    }
+                    if (!entered) {
+                        errors.push("Your guest's accessibility info is required");
+                    }
+                }
+
+                if (this.recipientDietaryRecipient) {
+                    entered = false;
+                    for (var i = 0; i < listDiet.length; i++) {
+                        console.log($('#dietR-' + listDiet[i].id).prop("checked") );
+                        if ($('#dietR-' + listDiet[i].id).prop("checked") ) {
+                            entered = true;
+                        }
+                    }
+                    if ($('#dietary-recipient-other').val().length > 0) {
+                        entered = true;
+                    }
+                    if (!entered) {
+                        errors.push("Your dietary requirements info is required");
+                    }
+                }
+
+                if (this.recipientDietaryGuest) {
+                    entered = false;
+                    for (var i = 0; i < listDiet.length; i++) {
+                        console.log($('#dietG-' + listDiet[i].id).prop("checked") );
+                        if ($('#dietG-' + listDiet[i].id).prop("checked") ) {
+                            entered = true;
+                        }
+                    }
+                    if ($('#dietary-guest-other').val().length > 0) {
+                        entered = true;
+                    }
+                    if (!entered) {
+                        errors.push("Your guest's dietary requirements info is required");
+                    }
+                }
+
+                return errors;
+            },
+
 
             buttonAttendingWith: function (id) {
 

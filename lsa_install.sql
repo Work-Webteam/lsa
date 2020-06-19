@@ -182,6 +182,9 @@ CREATE TABLE registrations (
     dietary_requirements_recipient TEXT,
     dietary_recipient_other TEXT,
 
+    guest_first_name VARCHAR(255),
+    guest_last_name VARCHAR(255),
+
     guest_diet BOOLEAN,
     dietary_requirements_guest TEXT,
     dietary_guest_other TEXT,

@@ -512,9 +512,6 @@ class RegistrationsController extends AppController
             'count' => $milestones->func()->count('*')]);
         $ministries->order(['Ministries.name' => 'ASC', 'Milestones.name' => 'ASC']);
         $this->set(compact('ministries'));
-
-
-
     }
 
 
@@ -603,6 +600,10 @@ class RegistrationsController extends AppController
         ]);
 
         $this->set('ceremony_id', $id);
+
+        $ceremony = $this->Registrations->Ceremonies->findById($id)->firstOrFail();
+        $this->set('ceremony', $ceremony);
+
         $this->set('recipients', $recipients);
     }
 
@@ -686,12 +687,15 @@ class RegistrationsController extends AppController
         if ($this->request->is(['post', 'put'])) {
             $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
 
+            if (!$registration->guest) {
+                $registration->guest_first_name = "";
+                $registration->guest_last_name = "";
+            }
 
             if (!$registration->accessibility_recipient) {
                 $registration->accessibility_recipient_notes = "";
                 $registration->accessibility_requirements_recipient = "[]";
             }
-            debug($registration->accessibility_requirements_recipient);
 
             if (!$registration->accessibility_guest) {
                 $registration->accessibility_guest_notes = "";
@@ -757,6 +761,152 @@ class RegistrationsController extends AppController
         $this->set('isadmin', $isadmin);
 
 
+    }
+
+
+    public function ceremonysummary($id) {
+
+        if (!$this->checkAuthorization(array(
+            Configure::read('Role.admin'),
+            Configure::read('Role.lsa_admin'),
+            Configure::read('Role.protocol')))) {
+            $this->Flash->error(__('You are not authorized to view this page.'));
+            $this->redirect('/');
+        }
+
+
+
+        $conditions = array();
+        $conditions['Registrations.ceremony_id ='] = $id;
+
+        $recipients = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+            'order' => ['Registrations.last_name' => 'ASC'],
+        ]);
+
+        $this->set('ceremony_id', $id);
+
+        $ceremony = $this->Registrations->Ceremonies->findById($id)->firstOrFail();
+        $this->set('ceremony', $ceremony);
+
+        $this->set('recipients', $recipients);
+
+//        debug('count: ' . count($recipients));
+
+        $diet = $this->Registrations->Diet->find('all');
+        $this->set('diet', $diet);
+
+        $accessibility = $this->Registrations->Accessibility->find('all');
+        $this->set('accessibility', $accessibility);
+
+        // now we gonna figure out the totals.
+        $totals = new \stdClass();
+        $totals->recipients = 0;
+        $totals->guests = 0;
+        $totals->access = 0;
+        $totals->diet = 0;
+        $totals->access_notes = [];
+        $totals->diet_notes = [];
+        $totals->diet_requirements = [];
+
+        foreach ($accessibility as $key => $value) {
+            $totals->access_requirements[$value->id] = $value;
+            $totals->access_requirements[$value->id]-> total = 0;
+        }
+
+        foreach ($diet as $key => $value) {
+          $totals->diet_requirements[$value->id] = $value;
+          $totals->diet_requirements[$value->id]-> total = 0;
+        }
+
+//        debug($totals->diet_requirements);
+
+        foreach ($recipients as $key => $recipient) {
+            if ($recipient->attending) {
+                $totals->recipients++;
+            }
+            if ($recipient->guest) {
+                $totals->guests++;
+            }
+            if ($recipient->accessibility_recipient) {
+                $totals->access++;
+            }
+            if ($recipient->accessibility_guest) {
+                $totals->access++;
+            }
+            if ($recipient->recipient_diet) {
+                $totals->diet++;
+            }
+            if ($recipient->guest_diet) {
+                $totals->diet++;
+            }
+
+            $requirements = json_decode($recipient->accessibility_requirements_recipient, true);
+            foreach ($requirements as $id) {
+                $totals->access_requirements[$id]->total++;
+            }
+            $requirements = json_decode($recipient->accessibility_requirements_guest, true);
+            foreach ($requirements as $id) {
+                $totals->access_requirements[$id]->total++;
+            }
+
+            $requirements = json_decode($recipient->dietary_requirements_recipient, true);
+            foreach ($requirements as $id) {
+                $totals->diet_requirements[$id]->total++;
+            }
+            $requirements = json_decode($recipient->dietary_requirements_guest, true);
+            foreach ($requirements as $id) {
+                $totals->diet_requirements[$id]->total++;
+            }
+
+
+            if (isset($recipient->accessibility_recipient_notes) && !empty($recipient->accessibility_recipient_notes)) {
+                $totals->access_notes[] = $recipient->accessibility_recipient_notes;
+            }
+            if (isset($recipient->accessibility_guest_notes) && !empty($recipient->accessibility_guest_notes)) {
+                $totals->access_notes[] = $recipient->accessibility_guest_notes;
+            }
+            if (isset($recipient->dietary_recipient_other) && !empty($recipient->dietary_recipient_other)) {
+                $totals->diet_notes[] = $recipient->dietary_recipient_other;
+            }
+            if (isset($recipient->dietary_guest_other) && !empty($recipient->dietary_guest_other)) {
+                $totals->diet_notes[] = $recipient->dietary_guest_other;
+            }
+
+        }
+
+        $this->set('totals', $totals);
+
+        // if Supervisor role only list registrations they created
+        $milestones = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+            'contain' => [
+                'Ministries',
+                'Milestones',
+            ],
+        ]);
+        $milestones->select([
+            'Milestones.name',
+            'count' => $milestones->func()->count('*')]);
+        $milestones->order(['Milestones.name' => 'ASC']);
+        $this->set(compact('milestones'));
+
+
+//        // if Supervisor role only list registrations they created
+//        $ministries = $this->Registrations->find('all', [
+//            'conditions' => $conditions,
+//            'contain' => [
+//                'Ministries',
+//                'Milestones',
+//            ],
+//            'group' => ['Registrations.ministry_id', 'Registrations.milestone_id']
+//        ]);
+//        $ministries->select([
+//            'Ministries.name',
+//            'Milestones.name',
+//            'count' => $milestones->func()->count('*')]);
+//        $ministries->order(['Ministries.name' => 'ASC', 'Milestones.name' => 'ASC']);
+//        $this->set(compact('ministries'));
     }
 
 }
