@@ -2,10 +2,16 @@
 <h1>Edit Attendee</h1>
 
 <?php
-//echo dump($attending);
-    echo $this->Form->create($ceremony); //, ['@submit' => 'processForm']);
+
+    echo $this->Form->create($ceremony, ['@submit' => 'processForm']);
 
     echo $this->Form->control('ministry_id', ['options' => $ministries, 'empty' => '- select ministry -', 'value' => $attending['ministry']]);
+
+?>
+
+    <label>Milestones</label>
+
+<?php
 
     foreach ($milestones as $key => $milestone) {
         $selected =  in_array($milestone->id, $attending['milestone']);
@@ -18,7 +24,18 @@
     echo $this->Form->control('city_id', ['options' => $cities, 'empty' => '- all cities -', 'value' => $attending['city']['id'], 'onChange' => 'app.citySelected(this.value)']);
     echo $this->Form->control('city_type', ['options' => [0 => 'exclude', 1 => 'include'], 'value' => $attending['city']['type'], 'label' => '']);
 
+    echo $this->Form->control('name_filter', ['type' => 'checkbox', 'onChange' => 'app.nameSelected()', 'checked' => !empty($attending['name']['start'])]);
 ?>
+
+
+    <div id="name-filter" v-if="nameFilter">
+
+<?php
+    echo $this->Form->control('name_start', ['value' => isset($attending['name']['start']) ? $attending['name']['start'] : ""]);
+    echo $this->Form->control('name_end', ['value' => isset($attending['name']['end']) ? $attending['name']['end'] : ""]);
+?>
+
+    </div>
 
                 <div id="pop-up-errors">
                         <span v-html="msgErrors" class="lsa-errors-container">
@@ -53,6 +70,7 @@
 
     var clrError = "#ff0000";
     var clrDefault = "#d1d1d1";
+    var milestones = <?php echo json_encode($milestones); ?>;
 
     var app = new Vue({
         el: '#app',
@@ -62,6 +80,7 @@
             milestone: '',
             city: <?php echo empty($attending['city']['id']) ? "0" : $attending['city']['id']; ?>,
             msgErrors: '',
+            nameFilter: <?php echo empty($attending['name']['start']) ? 0 : 1; ?>,
         },
 
         mounted() {
@@ -76,15 +95,36 @@
             processForm: function (e) {
                 errors = [];
 
-                console.log(errors);
-
                 if ($('#ministry-id').val().length == 0) {
+                    console.log('no value?');
                     $('#ministry-id').css("border-color", clrError);
                     errors.push('Ministry is required');
                 }
                 else {
+                    console.log('we got a value');
                     $('#ministry-id').css("border-color", clrDefault);
                 }
+
+                checked = false;
+                for (var i = 0; i < milestones.length; i++) {
+                    if ($('#milestone-' + milestones[i].id).prop("checked") ) {
+                        checked = true;
+                    }
+                }
+                if (!checked) {
+                    errors.push('At least one milestone required');
+                }
+
+
+                if ($('#name-filter').prop("checked")) {
+                    if ($('#name-start').val().length == 0) {
+                        errors.push('Start letter required');
+                    }
+                    if ($('#name-end').val().length == 0) {
+                        errors.push('End letter required');
+                    }
+                }
+
 
                 if (errors.length > 0) {
                     this.msgErrors = '<ul>';
@@ -94,22 +134,22 @@
                     this.msgErrors += '</ul>';
                     e.preventDefault();
                 } else {
-                    // this.msgErrors = 'everything is cool';
+                    this.msgErrors = '';
                 }
-                e.preventDefault();
             },
 
 
             citySelected: function (id) {
-                console.log("citySelected");
-                console.log(id);
-
                 if (id !== '') {
                     $('#city-type').show();
                 } else {
                     $('#city-type').hide();
                 }
-            }
+            },
+
+            nameSelected: function() {
+                this.nameFilter = !this.nameFilter;
+            },
 
         }
     });

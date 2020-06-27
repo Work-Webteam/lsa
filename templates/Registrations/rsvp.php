@@ -20,7 +20,7 @@
 
     <center>
         <h1>RSVP</h1>
-        <h4>For the <?= $registration->award_year ?> Long Service Awards</h4>
+        <h4>For the <?= $registration->registration_year ?> Long Service Awards</h4>
         <h4><?= date("F j", strtotime($ceremony->date)) . " at " . date("g:ia", strtotime($ceremony->date)) ?></h4>
         <h4>at Government House</h4>
         <h4>1401 Rockland Ave, Victoria</h4>
@@ -273,24 +273,11 @@
                     this.recipientGuest = false;
                 }
 
-                // console.log(this.accessRecipientSelections);
-                // console.log(this.accessGuestSelections);
-                // console.log(this.dietRecipientSelections);
-                // console.log(this.dietGuestSelections);
-
                 $('input[name=accessibility_requirements_recipient]').val(JSON.stringify(this.accessRecipientSelections));
                 $('input[name=accessibility_requirements_guest]').val(JSON.stringify(this.accessGuestSelections));
                 $('input[name=dietary_requirements_recipient]').val(JSON.stringify(this.dietRecipientSelections));
                 $('input[name=dietary_requirements_guest]').val(JSON.stringify(this.dietGuestSelections));
 
-                // console.log(this.recipientAttending);
-                // console.log(this.recipientGuest);
-                //
-                // console.log(this.recipientAccessibilityRecipient);
-                // console.log(this.recipientAccessibilityGuest);
-                //
-                // console.log(this.recipientDietaryRecipient);
-                // console.log(this.recipientDietaryGuest);
 
 
 

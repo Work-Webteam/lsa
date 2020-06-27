@@ -3,7 +3,7 @@
 
 <?php
 
-    echo $this->Form->create($ceremony); //, ['@submit' => 'processForm']);
+    echo $this->Form->create($ceremony, ['@submit' => 'processForm']);
 
     echo $this->Form->control('ministry_id', ['options' => $ministries, 'empty' => '- select ministry -']);
 
@@ -12,12 +12,21 @@
     }
 
 
-
-//    echo $this->Form->select('city_id', $cities, ['label' => 'City']);
     echo $this->Form->control('city_id', ['options' => $cities, 'empty' => '- all cities -', 'onChange' => 'app.citySelected(this.value)']);
     echo $this->Form->control('city_type', ['options' => [0 => 'exclude', 1 => 'include'], 'label' => '']);
 
+    echo $this->Form->control('name_filter', ['type' => 'checkbox', 'onChange' => 'app.nameSelected()']);
 ?>
+
+
+    <div id="name-filter" v-if="nameFilter">
+
+        <?php
+        echo $this->Form->control('name_start');
+        echo $this->Form->control('name_end');
+        ?>
+
+    </div>
 
                 <div id="pop-up-errors">
                         <span v-html="msgErrors" class="lsa-errors-container">
@@ -52,6 +61,7 @@
 
     var clrError = "#ff0000";
     var clrDefault = "#d1d1d1";
+    var milestones = <?php echo json_encode($milestones); ?>;
 
     var app = new Vue({
         el: '#app',
@@ -61,10 +71,12 @@
             milestone: '',
             city: '',
             msgErrors: '',
+            nameFilter: false,
         },
 
         mounted() {
             $('#city-type').hide()
+
         },
 
 
@@ -73,14 +85,32 @@
             processForm: function (e) {
                 errors = [];
 
-                console.log(errors);
-
                 if ($('#ministry-id').val().length == 0) {
                     $('#ministry-id').css("border-color", clrError);
                     errors.push('Ministry is required');
                 }
                 else {
                     $('#ministry-id').css("border-color", clrDefault);
+                }
+
+                checked = false;
+                for (var i = 0; i < milestones.length; i++) {
+                    if ($('#milestone-' + milestones[i].id).prop("checked") ) {
+                        checked = true;
+                    }
+                }
+                if (!checked) {
+                    errors.push('At least one milestone required');
+                }
+
+
+                if ($('#name-filter').prop("checked")) {
+                    if ($('#name-start').val().length == 0) {
+                        errors.push('Start letter required');
+                    }
+                    if ($('#name-end').val().length == 0) {
+                        errors.push('End letter required');
+                    }
                 }
 
                 if (errors.length > 0) {
@@ -94,8 +124,6 @@
                     // this.msgErrors = 'everything is cool';
                 }
 
-
-                e.preventDefault();
             },
 
 
@@ -108,7 +136,12 @@
                 } else {
                     $('#city-type').hide();
                 }
-            }
+            },
+
+
+            nameSelected: function() {
+                this.nameFilter = !this.nameFilter;
+            },
 
         }
     });

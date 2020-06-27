@@ -1,7 +1,7 @@
 <h1>Edit Ceremony</h1>
 <?php
 echo $this->Form->create($registrationperiod);
-echo $this->Form->control('award_year');
+echo $this->Form->control('registration_year');
 echo $this->Form->control('open_date', ['type' => 'date', 'value' => $registrationperiod->open_registration]);
 echo $this->Form->hidden('open_time', ['value' => '00:00:00']);
 echo $this->Form->control('close_date', ['type' => 'date', 'value' => $registrationperiod->close_registration]);

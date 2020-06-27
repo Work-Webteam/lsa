@@ -16,7 +16,7 @@ class CeremoniesController extends AppController
         }
         $this->loadComponent('Paginator');
         $ceremonies = $this->Paginator->paginate($this->Ceremonies->find('all', [
-            'conditions' => ['Ceremonies.award_year =' => date('Y')],
+            'conditions' => ['Ceremonies.registration_year =' => date('Y')],
         ]));
 
         $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
@@ -45,8 +45,13 @@ class CeremoniesController extends AppController
 
             $attending[$key]['city_name'] = '';
             if (!empty($item['city']['id'])) {
-                $city = $this->Ceremonies->Cities->findById($item['city']['id'])->firstOrFail();
-                $attending[$key]['city_name'] = $city->name;
+                if ($item['city']['id'] <> -1) {
+                    $city = $this->Ceremonies->Cities->findById($item['city']['id'])->firstOrFail();
+                    $attending[$key]['city_name'] = $city->name;
+                }
+                else {
+                    $attending[$key]['city_name'] = "Vancouver/Victoria";
+                }
             }
             $attending[$key]['ministry_name'] = $ministry->name;
 
@@ -82,7 +87,7 @@ class CeremoniesController extends AppController
         if ($this->request->is('post')) {
             $this->Flash->success(__('add post'));
             $ceremony = $this->Ceremonies->patchEntity($ceremony, $this->request->getData());
-            $ceremony->award_year = date("Y");
+            $ceremony->registration_year = date("Y");
             $ceremony->date = $this->request->getData('ceremony_date') . " " . $this->request->getData('ceremony_time');
             $ceremony->attending = json_encode(array());
             if ($this->Ceremonies->save($ceremony)) {
@@ -91,7 +96,7 @@ class CeremoniesController extends AppController
             }
             $this->Flash->error(__('Unable to add your ceremony.'));
         }
-        $ceremony->award_year = date("Y");
+        $ceremony->registration_year = date("Y");
         $this->set('ceremony', $ceremony);
     }
 
@@ -159,14 +164,21 @@ class CeremoniesController extends AppController
                         $list[] = $milestone->id;
                     }
                 }
+                $names = array();
+                if ($this->request->getData('name_filter')) {
+                    $names = array('start' => strtoupper($this->request->getData('name_start')), 'end' => strtoupper($this->request->getData('name_end')));
+                }
+
                 $new = array(
                     'ministry' => $this->request->getData('ministry_id'),
                     'milestone' => $list,
                     'city' => array('id' => $this->request->getData('city_id'), 'type' => $type),
+                    'name' => $names,
                     'processed' => false,
                 );
                 $attending = json_decode($ceremony->attending, true);
                 $attending[] = $new;
+                debug($attending);
                 $ceremony->attending = json_encode($attending);
             }
             if ($this->Ceremonies->save($ceremony)) {
@@ -185,10 +197,18 @@ class CeremoniesController extends AppController
         $this->set('milestones', $milestones);
 
         $cities = $this->Ceremonies->Cities->find('list', [
-            'condition' => ['Cities.name >' => 'Van'],
             'order' => ['Cities.name' => 'ASC'],
-        ]);
-        $this->set('cities', $cities);
+        ])
+            ->where([
+                'Cities.name IN' => ['Vancouver', 'Victoria']
+            ]);
+
+        $temp = array();
+        foreach($cities as $key => $city) {
+            $temp[$key] = $city;
+        }
+        $temp[-1] = "Vancouver/Victoria";
+        $this->set('cities', $temp);
 
 
         $this->set('ceremony', $ceremony);
@@ -226,11 +246,17 @@ class CeremoniesController extends AppController
                         $list[] = $milestone->id;
                     }
                 }
+                $names = array();
+                if ($this->request->getData('name_filter')) {
+                   $names = array('start' => strtoupper($this->request->getData('name_start')), 'end' => strtoupper($this->request->getData('name_end')));
+                }
+
                 $attending = json_decode($ceremony->attending, true);
                 $update = array(
                     'ministry' => $this->request->getData('ministry_id'),
                     'milestone' => $list,
                     'city' => array('id' => $this->request->getData('city_id'), 'type' => $type),
+                    'name' => $names,
                     'processed' => isset($attending[$key]['processed']) ? $attending[$key]['processed'] : false,
                 );
 
@@ -248,6 +274,7 @@ class CeremoniesController extends AppController
         $attending = json_decode($ceremony->attending, true);
         $this->set('attending', $attending[$key]);
 
+
         $ministries = $this->Ceremonies->Ministries->find('list', [
             'order' => ['Ministries.name' => 'ASC']
         ]);
@@ -263,9 +290,13 @@ class CeremoniesController extends AppController
                 'Cities.name IN' => ['Vancouver', 'Victoria']
             ]);
 
+        $temp = array();
+        foreach($cities as $key => $city) {
+            $temp[$key] = $city;
+        }
+        $temp[-1] = "Vancouver/Victoria";
 
-
-        $this->set('cities', $cities);
+        $this->set('cities', $temp);
 
 
         $this->set('ceremony', $ceremony);

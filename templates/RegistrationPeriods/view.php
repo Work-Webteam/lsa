@@ -1,4 +1,4 @@
-<h1><?= h($period->award_year) ?></h1>
+<h1><?= h($period->registration_year) ?></h1>
 <p><?= h("Open: " . $period->open_registration) ?></p>
 <p><?= h("Close: " . $period->close_registration) ?></p>
 <p>

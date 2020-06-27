@@ -10,55 +10,34 @@
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
 
-<h1>Registrations</h1>
-    <div class="datatable-container">
-        <?= $this->Flash->render() ?>
-        <table id="lsa-registrations" class="display lsa-datatable" style="font-size: 12px; width:100%">
+<h1>Ceremony Night</h1>
+<h2>Ceremony Accessibility Requirements Summary</h2>
 
-        </table>
-    </div>
+<div class="datatable-container">
+    <?= $this->Flash->render() ?>
+    <table id="ceremony-accessibility" class="display ceremony-datatable" style="font-size: 12px; width:100%">
+
+    </table>
+</div>
+
 
 <script>
-    var registrations=<?php echo json_encode($registrations); ?>;
-    var edit=<?php echo json_encode($edit); ?>;
-    var toolbar=<?php echo json_encode($toolbar); ?>;
+    var registrations=<?php echo json_encode($recipients); ?>;
+    var edit = true;
+    var toolbar = true;
 
     $(document).ready(function() {
 
         console.log(registrations);
 
-        $('#lsa-registrations').DataTable( {
+        $('#ceremony-accessibility').DataTable( {
             data: registrations,
             columns: [
                 { data: "last_name", title: "Last Name" },
                 { data: "first_name", title: "First Name" },
-                { data: "id", orderable: false, render: function( data, type, row, meta) {
-                        if (edit) {
-                            // link = '<a href="/registrations/view/' + data + '">view</a> | <a href="/registrations/edit/' + data + '">edit</a>';
-                            link = '<a class="btn btn-primary" href="/registrations/edit/' + data + '">edit</a>';
-                        }
-                        else {
-                            link = '<a class="btn btn-primary" href="/registrations/view/' + data + '">view</a>';
-                        }
-                        return link;
-                    }
-                },
-                { data: "ministry.name", title: "Ministry" },
-                { data: "branch", title: "Branch" },
-                { data: "registration_year", title: "Registration Year"},
-                { data: "milestone.name", title: "Year of Service" },
-                { data: "award.name", title: "Award", defaultContent: "PECSF Donation" },
-                { data: "office_city.name", title: "Office City", visible: true },
-                { data: "home_city.name", title: "Home City", visible: true },
-                { data: "supervisor_city.name", title: "Supervisor City", visible: true },
-                { data: "retroactive", title: "Retroactive", visible: true, orderable: false },
-                { data: "preferred_email", title: "Work Email", visible: false },
-                { data: "alternate_email", title: "Personal Email", visible: false },
-                { data: "supervisor_email", title: "Supervisor Email", visible: false },
-                { data: "award_instructions", title: "Award Instructions", visible: false, orderable: false },
-                { data: "award_received", title: "Award Received", visible: true, orderable: false },
-                { data: "engraving_sent", title: "Engraving Sent", visible: true, orderable: false },
-                { data: "survey_participation", title: "LSA Consent", visible: true, orderable: false },
+                { data: "ceremony_id", title: "CeremonyID" },
+                { data: "accessibility_requirements_recipient"},
+
             ],
             // stateSave: true,
             pageLength: 15,
@@ -76,16 +55,16 @@
             },
 
             initComplete: function () {
-                $('<tr id="select-filters">').appendTo( '#lsa-registrations thead' );
+                $('<tr id="select-filters">').appendTo( '#ceremony-accessibility thead' );
                 this.api().columns().every( function () {
                     var column = this;
                     if (column.visible()) {
-                        $('<td id="data-column-' + column.index() + '"></td>').appendTo('#lsa-registrations thead');
+                        $('<td id="data-column-' + column.index() + '"></td>').appendTo('#ceremony-accessibility thead');
                     }
                 });
-                $('</tr>').appendTo( '#lsa-registrations thead' );
+                $('</tr>').appendTo( '#ceremony-accessibility thead' );
 
-                this.api().columns([2,3,5,6,7,8,9,10,16,17,18]).every( function () {
+                this.api().columns([0]).every( function () {
 
                     var column = this;
                     var select = $('<select id="column-' + column.index() + '"><option value=""></option></select><br>')
@@ -134,28 +113,18 @@
 
     function resetFilters() {
 
-      var table = $('#lsa-registrations').DataTable();
+        var table = $('#ceremony-accessibility').DataTable();
 
-      table.columns().every( function () {
-          var column = this;
-          $('#column-' + column.index()).prop("selectedIndex", 0);
-      });
-      table.search('').columns().search('').draw();
+        table.columns().every( function () {
+            var column = this;
+            $('#column-' + column.index()).prop("selectedIndex", 0);
+        });
+        table.search('').columns().search('').draw();
     }
 
     function dataExport() {
         console.log('dataExport');
     }
 
-    function summaryAward() {
-        location.href = "/registrations/awardsummary";
-    }
-
-    function summaryMinistry() {
-        location.href = "/registrations/ministrysummary";
-    }
-
-    function summaryMilestone() {
-        location.href = "/registrations/milestonesummary";
-    }
 </script>
+

@@ -1,11 +1,11 @@
 
 <h1>Ceremonies</h1>
-<p>NOTE: Only ceremony dates for the current award year are displayed.</p>
+<p>NOTE: Only ceremony dates for the current registration year are displayed.</p>
 <?= $this->Html->link('Add Ceremony', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 <table>
     <tr>
         <?= $isadmin ? "<th>Id</th>" : "" ?>
-        <th>Award Year</th>
+        <th>Registration Year</th>
         <th>Ceremony Night</th>
         <th>Date</th>
         <th colspan = 3>Operations</th>
@@ -15,7 +15,7 @@
         <tr>
             <?= $isadmin ? "<td>" . $ceremony->id . "</td>" : "" ?>
             <td>
-                <?= $ceremony->award_year ?>
+                <?= $ceremony->registration_year ?>
             </td>
             <td>
                 <?= $this->Html->link($ceremony->night, ['action' => 'view', $ceremony->id]) ?>

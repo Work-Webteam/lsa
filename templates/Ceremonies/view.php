@@ -12,6 +12,7 @@
         <th colspan = 1>Ministry</th>
         <th>Milestones</th>
         <th colspan="2">City</th>
+        <th>Name</th>
         <th colspan="2">Operations</th>
     </tr>
 
@@ -28,6 +29,9 @@
             </td>
             <td valign="top">
                 <?= $item['city']['id'] ? $item['city']['type'] == 0 ? 'exclude' : 'include' : "" ?>
+            </td>
+            <td>
+                <?= isset($item['name']['start']) ? $item['name']['start'] ? $item['name']['start'] . " - " . $item['name']['end'] : "" : "" ?>
             </td>
             <td valign="top">
                 <?= $this->Html->link('Edit',['action' => 'editattending', $ceremony->id, $key], ['class' => 'btn btn-primary', 'role' => 'button']) ?>

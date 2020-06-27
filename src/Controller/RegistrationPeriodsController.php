@@ -45,7 +45,7 @@ class RegistrationPeriodsController extends AppController
         $registrationperiod = $this->Registrationperiods->newEmptyEntity();
         if ($this->request->is('post')) {
             $registrationperiod = $this->Registrationperiods->patchEntity($registrationperiod, $this->request->getData());
-            $registrationperiod->award_year = $this->request->getData('award_year');
+            $registrationperiod->registration_year = $this->request->getData('registration_year');
             $registrationperiod->open_registration = $this->request->getData('open_date') . " " . $this->request->getData('open_time');
             $registrationperiod->close_registration = $this->request->getData('close_date') . " " . $this->request->getData('close_time');
             if ($this->Registrationperiods->save($registrationperiod)) {
@@ -66,7 +66,7 @@ class RegistrationPeriodsController extends AppController
         $registrationperiod = $this->Registrationperiods->findById($id)->firstOrFail();
         if ($this->request->is(['post', 'put'])) {
             $this->Registrationperiods->patchEntity($registrationperiod, $this->request->getData());
-            $registrationperiod->award_year = $this->request->getData('award_year');
+            $registrationperiod->registration_year = $this->request->getData('registration_year');
             $registrationperiod->open_registration = $this->request->getData('open_date') . " " . $this->request->getData('open_time');
             $registrationperiod->close_registration = $this->request->getData('close_date') . " " . $this->request->getData('close_time');
             if ($this->Registrationperiods->save($registrationperiod)) {
@@ -90,7 +90,7 @@ class RegistrationPeriodsController extends AppController
 
         $registrationperiod = $this->Registrationperiods->findById($id)->firstOrFail();
         if ($this->Registrationperiods->delete($registrationperiod)) {
-            $this->Flash->success(__('Registration period {0} has been deleted.', $registrationperiod->award_year));
+            $this->Flash->success(__('Registration period {0} has been deleted.', $registrationperiod->registration_year));
             return $this->redirect(['action' => 'index']);
         }
     }

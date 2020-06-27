@@ -95,7 +95,7 @@
 
     <h4>Award</h4>
     <div>
-        <?= h('Award Year: ' . h($registration->award_year)) ?>
+        <?= h('Registration Year: ' . h($registration->registration_year)) ?>
     </div>
     <div>
         <?php

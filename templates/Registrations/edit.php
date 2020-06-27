@@ -58,7 +58,7 @@
         <?php
 
         if ($isadmin) {
-            echo $this->Form->control('award_year', ['label' => 'Award Year']);
+            echo $this->Form->control('registration_year', ['label' => 'Registration Year']);
             echo $this->Form->control('award_received', ['type' => 'checkbox']);
             echo $this->Form->control('engraving_sent', ['type' => 'checkbox']);
             echo $this->Form->control('certificate_name');

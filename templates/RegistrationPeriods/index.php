@@ -5,7 +5,7 @@
 <table>
     <tr>
         <?= $isadmin ? "<th>Id</th>" : "" ?>
-        <th>Award Year</th>
+        <th>Registration Year</th>
         <th>Open Date</th>
         <th>Close Date</th>
         <th colspan = 2>Operations</th>
@@ -15,7 +15,7 @@
         <tr>
             <?= $isadmin ? "<td>" . $period->id . "</td>" : "" ?>
             <td>
-                <?= $this->Html->link($period->award_year, ['action' => 'view', $period->id]) ?>
+                <?= $this->Html->link($period->registration_year, ['action' => 'view', $period->id]) ?>
             </td>
             <td>
                 <?= date("D Y-M-d g:ia", strtotime($period->open_registration)) ?>
