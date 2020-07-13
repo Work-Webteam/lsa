@@ -54,103 +54,106 @@
         <p>Check the Venue Accessibility[LINK] page for specific locations or contact [EMAIL] with questions</p>
     </div>
 
-    <div>
-        <h3>Accessibility Requirements</h3>
-        <p>To ensure you and your guest can enjoy the festivities, please share you accessibility requirements with us.</p>
-        <BR>
-        <p>If you'd like a preview of accessible facilities at Government House including ramps, elevators and washroom facilities, vist the
-        Venue Accessibility[LINK] page. If you have quetions or wish to connect wiht a member of the Long Service Awards team directly, contact [EMAIL].</p>
-    </div>
-
-    <?php
-
-    echo $this->Form->button('I have accessibility requirements', ['type' => 'button', 'id' => 'btn-access-2', 'onclick' => 'app.buttonAccessibility(2)', 'class' => 'btn btn-secondary', 'v-if' => 'currentAttending > 0']);
-    echo "&nbsp;";
-    echo $this->Form->button('My guest has accessibility requirements', ['type' => 'button', 'id' => 'btn-access-1',  'onclick' => 'app.buttonAccessibility(1)', 'class' => 'btn btn-secondary', 'v-if' => 'currentAttending == 2']);
-    echo "&nbsp;";
-    echo $this->Form->button("No accessibility requirements in my party", ['type' => 'button', 'id' => 'btn-access-0',  'onclick' => 'app.buttonAccessibility(0)', 'class' => 'btn btn-primary']);
-
-    ?>
-
-    <div id="recipient-accessibility" v-if="recipientAccessibilityRecipient">
-        <div><Strong>I require:</Strong></div>
+    <div id="attending-requirements" v-if="currentAttending > 0">
+        <div>
+            <h3>Accessibility Requirements</h3>
+            <p>To ensure you and your guest can enjoy the festivities, please share you accessibility requirements with us.</p>
+            <BR>
+            <p>If you'd like a preview of accessible facilities at Government House including ramps, elevators and washroom facilities, vist the
+            Venue Accessibility[LINK] page. If you have quetions or wish to connect wiht a member of the Long Service Awards team directly, contact [EMAIL].</p>
+        </div>
 
         <?php
-            foreach ($accessibility as $item):
-                echo '<div>';
-                echo '<label for="accessR-' . $item->id . '">';
-                echo '<input type="checkbox" id="accessR-' . $item->id . '" value=' . $item->id . ' v-model="accessRecipientSelections">';
-                echo '&nbsp;&nbsp;' . $item->name . '</label>';
-                echo '</div>';
-            endforeach;
 
-            echo $this->Form->control('accessibility_recipient_notes', ['type' => 'textarea', 'rows' => '6', 'cols' => '50']);
+        echo $this->Form->button('I have accessibility requirements', ['type' => 'button', 'id' => 'btn-access-2', 'onclick' => 'app.buttonAccessibility(2)', 'class' => 'btn btn-secondary', 'v-if' => 'currentAttending > 0']);
+        echo "&nbsp;";
+        echo $this->Form->button('My guest has accessibility requirements', ['type' => 'button', 'id' => 'btn-access-1',  'onclick' => 'app.buttonAccessibility(1)', 'class' => 'btn btn-secondary', 'v-if' => 'currentAttending == 2']);
+        echo "&nbsp;";
+        echo $this->Form->button("No accessibility requirements in my party", ['type' => 'button', 'id' => 'btn-access-0',  'onclick' => 'app.buttonAccessibility(0)', 'class' => 'btn btn-primary']);
+
         ?>
 
-    </div>
+        <div id="recipient-accessibility" v-if="recipientAccessibilityRecipient">
+            <div><Strong>I require:</Strong></div>
 
-    <div id="guest-accessibility" v-if="recipientAccessibilityGuest">
-        <Strong>My guest requires:</Strong>
+            <?php
+                foreach ($accessibility as $item):
+                    echo '<div>';
+                    echo '<label for="accessR-' . $item->id . '">';
+                    echo '<input type="checkbox" id="accessR-' . $item->id . '" value=' . $item->id . ' v-model="accessRecipientSelections">';
+                    echo '&nbsp;&nbsp;' . $item->name . '</label>';
+                    echo '</div>';
+                endforeach;
+
+                echo $this->Form->control('accessibility_recipient_notes', ['type' => 'textarea', 'rows' => '6', 'cols' => '50']);
+            ?>
+
+        </div>
+
+
+        <div id="guest-accessibility" v-if="recipientAccessibilityGuest">
+            <Strong>My guest requires:</Strong>
+            <?php
+                foreach ($accessibility as $item):
+                    echo '<div>';
+                    echo '<label for="accessG-' . $item->id . '">';
+                    echo '<input type="checkbox" id="accessG-' . $item->id . '" value=' . $item->id . ' v-model="accessGuestSelections">';
+                    echo '&nbsp;&nbsp;' . $item->name . '</label>';
+                    echo '</div>';
+                endforeach;
+
+                echo $this->Form->control('accessibility_guest_notes', ['type' => 'textarea', 'rows' => '6', 'cols' => '50']);
+            ?>
+        </div>
+
+        <div>
+            <h3>Dietary Requirements</h3>
+            <p>
+                To ensure we have menu options that will accommodate your dietary restrictions and allergies, please indicate your requirements.
+            </p>
+        </div>
+
         <?php
-            foreach ($accessibility as $item):
-                echo '<div>';
-                echo '<label for="accessG-' . $item->id . '">';
-                echo '<input type="checkbox" id="accessG-' . $item->id . '" value=' . $item->id . ' v-model="accessGuestSelections">';
-                echo '&nbsp;&nbsp;' . $item->name . '</label>';
-                echo '</div>';
-            endforeach;
 
-            echo $this->Form->control('accessibility_guest_notes', ['type' => 'textarea', 'rows' => '6', 'cols' => '50']);
+        echo $this->Form->button('I have dietary requirements', ['type' => 'button', 'id' => 'btn-dietary-2', 'onclick' => 'app.buttonDietary(2)', 'class' => 'btn btn-secondary', 'v-if' => 'currentAttending > 0']);
+        echo "&nbsp;";
+        echo $this->Form->button('My guest has dietary requirements', ['type' => 'button', 'id' => 'btn-dietary-1',  'onclick' => 'app.buttonDietary(1)', 'class' => 'btn btn-secondary', 'v-if' => 'currentAttending == 2']);
+        echo "&nbsp;";
+        echo $this->Form->button("No dietary requirements in my party", ['type' => 'button', 'id' => 'btn-dietary-0',  'onclick' => 'app.buttonDietary(0)', 'class' => 'btn btn-primary']);
+
         ?>
+
+        <div id="guest-dietary" v-if="recipientDietaryRecipient">
+            <Strong>I require food options that are: [multi-select]:</Strong>
+            <?php
+                foreach ($diet as $item):
+                    echo '<div>';
+                    echo '<label for="dietR-' . $item->id . '">';
+                    echo '<input type="checkbox" id="dietR-' . $item->id . '" value=' . $item->id . ' v-model="dietRecipientSelections">';
+                    echo '&nbsp;&nbsp;' . $item->name . '</label>';
+                    echo '</div>';
+                endforeach;
+
+                echo $this->Form->control('dietary_recipient_other', ['type' => 'textarea', 'rows' => '6', 'cols' => '50']);
+            ?>
+        </div>
+
+        <div id="guest-dietary" v-if="recipientDietaryGuest">
+            <Strong>My guest requires food options that are: [multi-select]</Strong>
+            <?php
+                foreach ($diet as $item):
+                    echo '<div>';
+                    echo '<label for="dietG-' . $item->id . '">';
+                    echo '<input type="checkbox" id="dietG-' . $item->id . '" value=' . $item->id . ' v-model="dietGuestSelections">';
+                    echo '&nbsp;&nbsp;' . $item->name . '</label>';
+                    echo '</div>';
+                endforeach;
+
+                echo $this->Form->control('dietary_guest_other', ['type' => 'textarea', 'rows' => '6', 'cols' => '50']);
+            ?>
+        </div>
+
     </div>
-
-    <div>
-        <h3>Dietary Requirements</h3>
-        <p>
-            To ensure we have menu options that will accommodate your dietary restrictions and allergies, please indicate your requirements.
-        </p>
-    </div>
-
-    <?php
-
-    echo $this->Form->button('I have dietary requirements', ['type' => 'button', 'id' => 'btn-dietary-2', 'onclick' => 'app.buttonDietary(2)', 'class' => 'btn btn-secondary', 'v-if' => 'currentAttending > 0']);
-    echo "&nbsp;";
-    echo $this->Form->button('My guest has dietary requirements', ['type' => 'button', 'id' => 'btn-dietary-1',  'onclick' => 'app.buttonDietary(1)', 'class' => 'btn btn-secondary', 'v-if' => 'currentAttending == 2']);
-    echo "&nbsp;";
-    echo $this->Form->button("No dietary requirements in my party", ['type' => 'button', 'id' => 'btn-dietary-0',  'onclick' => 'app.buttonDietary(0)', 'class' => 'btn btn-primary']);
-
-    ?>
-
-    <div id="guest-dietary" v-if="recipientDietaryRecipient">
-        <Strong>I require food options that are: [multi-select]:</Strong>
-        <?php
-            foreach ($diet as $item):
-                echo '<div>';
-                echo '<label for="dietR-' . $item->id . '">';
-                echo '<input type="checkbox" id="dietR-' . $item->id . '" value=' . $item->id . ' v-model="dietRecipientSelections">';
-                echo '&nbsp;&nbsp;' . $item->name . '</label>';
-                echo '</div>';
-            endforeach;
-
-            echo $this->Form->control('dietary_recipient_other', ['type' => 'textarea', 'rows' => '6', 'cols' => '50']);
-        ?>
-    </div>
-
-    <div id="guest-dietary" v-if="recipientDietaryGuest">
-        <Strong>My guest requires food options that are: [multi-select]</Strong>
-        <?php
-            foreach ($diet as $item):
-                echo '<div>';
-                echo '<label for="dietG-' . $item->id . '">';
-                echo '<input type="checkbox" id="dietG-' . $item->id . '" value=' . $item->id . ' v-model="dietGuestSelections">';
-                echo '&nbsp;&nbsp;' . $item->name . '</label>';
-                echo '</div>';
-            endforeach;
-
-            echo $this->Form->control('dietary_guest_other', ['type' => 'textarea', 'rows' => '6', 'cols' => '50']);
-        ?>
-    </div>
-
 
     <div id="lsa-edit-errors">
         <span v-html="errorsOptions" class="lsa-errors-container">
@@ -197,13 +200,15 @@
 
         data: {
 
+            recipientResponded: <?php echo $registration->responded ? $registration->responded : 0; ?>,
             recipientAttending: <?php echo $registration->attending ? $registration->attending : 0; ?>,
             recipientGuest: <?php echo $registration->guest ? $registration->guest : 0; ?>,
+
             recipientAccessibilityRecipient: <?php echo $registration->accessibility_recipient ? $registration->accessibility_recipient : 0; ?>,
             recipientAccessibilityGuest: <?php echo $registration->accessibility_guest ? $registration->accessibility_guest : 0; ?>,
             recipientDietaryRecipient: <?php echo $registration->recipient_diet ? $registration->recipient_diet : 0; ?>,
             recipientDietaryGuest: <?php echo $registration->guest_diet ? $registration->guest_diet : 0; ?>,
-            currentAttending: null,
+            currentAttending: -1,
 
             accessibilityRecipient: null,
             accessibilityGuest: null,
@@ -227,7 +232,7 @@
             else if (this.recipientAttending && !this.recipientGuest) {
                 this.buttonAttendingWith(1);
             }
-            else {
+            else if (this.recipientResponded) {
                 this.buttonAttendingWith(0);
             }
 
@@ -288,6 +293,12 @@
             checkRSVP: function() {
 
                 var errors = [];
+
+                console.log("currentAttending: " + this.currentAttending);
+
+                if (this.currentAttending == -1) {
+                    errors.push('Please indicate if you are planning to atttend or not');
+                }
 
                 if (this.currentAttending == 2) {
                     if ($('#guest-first-name').val().length == 0) {

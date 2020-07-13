@@ -200,15 +200,16 @@ class RegistrationsController extends AppController
         $milestoneInfo = $this->Registrations->Milestones->find('all');
         $this->set('milestoneinfo', $milestoneInfo);
 
-        $awards = $this->Registrations->Awards->find('list');
+        $awards = $this->Registrations->Awards->find('list', [
+            'conditions' => ['Awards.active =' => 1],
+        ]);
         $this->set('awards', $awards);
 
-        $awardInfo = $this->Registrations->Awards->find('all');
+        $awardInfo = $this->Registrations->Awards->find('all', [
+            'conditions' => ['Awards.active =' => 1],
+        ]);
         $this->set('awardinfo', $awardInfo);
-//        debug($this->awardinfo)
-//        foreach ($this->awardInfo as $key => $value) {
-//            $this->awardInfo[$key]->description = nl2br($this->awardInfo[$key]->description);
-//        }
+
         $ministries = $this->Registrations->Ministries->find('list', [
             'order' => ['Ministries.name' => 'ASC']
         ]);
@@ -299,10 +300,14 @@ class RegistrationsController extends AppController
         $milestoneInfo = $this->Registrations->Milestones->find('all');
         $this->set('milestoneinfo', $milestoneInfo);
 
-        $awards = $this->Registrations->Awards->find('list');
+        $awards = $this->Registrations->Awards->find('list', [
+            'conditions' => ['Awards.active =' => 1],
+        ]);
         $this->set('awards', $awards);
 
-        $awardInfo = $this->Registrations->Awards->find('all');
+        $awardInfo = $this->Registrations->Awards->find('all', [
+            'conditions' => ['Awards.active =' => 1],
+        ]);
         $this->set('awardinfo', $awardInfo);
 
         $diet = $this->Registrations->Diet->find('list');
@@ -620,7 +625,7 @@ class RegistrationsController extends AppController
         $ceremony = $this->Registrations->Ceremonies->findById($id)->firstOrFail();
 
         $attending = json_decode($ceremony->attending, true);
-debug($attending);
+
         foreach ($attending as $key => $item) {
 
             // find registrants who match this criteria
@@ -721,7 +726,7 @@ debug($attending);
                 $registration->accessibility_requirements_recipient = "[]";
             }
 
-            if (!$registration->accessibility_guest) {
+            if (!$registration->accessibilityorder_guest) {
                 $registration->accessibility_guest_notes = "";
                 $registration->accessibility_requirements_guest = "[]";
             }
@@ -734,6 +739,7 @@ debug($attending);
                 $registration->dietary_guest_other = "";
                 $registration->dietary_requirements_guest = "[]";
             }
+            $registration->responded = true;
 
             if ($this->Registrations->save($registration)) {
                 $this->Flash->success(__('Registration has been updated.'));
@@ -950,6 +956,7 @@ debug($attending);
 
         $conditions = array();
         $conditions['Registrations.ceremony_id ='] = $id;
+        $conditions['Registrations.attending ='] = true;
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -968,6 +975,39 @@ debug($attending);
 //            ],
 //        ]);
 
+
+
+        $records = $this->Registrations->Accessibility->find('all');
+        $accessibility = [];
+        foreach ($records as $value) {
+            $accessibility[$value->id] = $value;
+        }
+
+        $temp = [];
+        foreach ($recipients as $key => $value) {
+            $requirements = json_decode($value->accessibility_requirements_recipient, true);
+            $value->recipient_reqs = "";
+            foreach ($requirements as $requirement) {
+                if (!empty($value->recipient_reqs)) {
+                    $value->recipient_reqs .= ", ";
+                }
+                $value->recipient_reqs .= $accessibility[$requirement]->name;
+            }
+
+            $requirements = json_decode($value->accessibility_requirements_guest, true);
+            $value->guest_reqs = "";
+            foreach ($requirements as $requirement) {
+                if (!empty($value->guest_reqs)) {
+                    $value->guest_reqs .= ", ";
+                }
+                $value->guest_reqs .= $accessibility[$requirement]->name;
+            }
+            $temp[$key] = $value;
+        }
+
+        $recipients = $temp;
+
+//        $this->set($recipients);
         $this->set(compact('recipients'));
 
 
@@ -978,6 +1018,284 @@ debug($attending);
 
 
     }
+
+
+    public function ceremonydiet($id)
+    {
+
+        if (!$this->checkAuthorization(array(
+            Configure::read('Role.admin'),
+            Configure::read('Role.lsa_admin'),
+            Configure::read('Role.protocol')))) {
+            $this->Flash->error(__('You are not authorized to view this page.'));
+            $this->redirect('/');
+        }
+
+
+        $conditions = array();
+        $conditions['Registrations.ceremony_id ='] = $id;
+        $conditions['Registrations.attending ='] = true;
+
+        $recipients = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+            'order' => ['Registrations.last_name' => 'ASC'],
+        ]);
+
+//        $registrations = $this->Registrations->find('all', [
+//            'conditions' => $conditions,
+//            'contain' => [
+//                'Milestones',
+//                'Ministries',
+//                'Awards',
+//                'OfficeCity',
+//                'HomeCity',
+//                'SupervisorCity'
+//            ],
+//        ]);
+
+
+
+        $records = $this->Registrations->Diet->find('all');
+        $diet = [];
+        foreach ($records as $value) {
+            $diet[$value->id] = $value;
+        }
+
+//        debug($accessibility);
+
+        $temp = [];
+        foreach ($recipients as $key => $value) {
+            $requirements = json_decode($value->dietary_requirements_recipient, true);
+            $value->recipient_reqs = "";
+            foreach ($requirements as $requirement) {
+                if (!empty($value->recipient_reqs)) {
+                    $value->recipient_reqs .= ", ";
+                }
+                $value->recipient_reqs .= $diet[$requirement]->name;
+            }
+
+            $requirements = json_decode($value->dietary_requirements_guest, true);
+            $value->guest_reqs = "";
+            foreach ($requirements as $requirement) {
+                if (!empty($value->guest_reqs)) {
+                    $value->guest_reqs .= ", ";
+                }
+                $value->guest_reqs .= $diet[$requirement]->name;
+            }
+            $temp[$key] = $value;
+//            debug($value);
+        }
+
+//        debug($temp);
+        $recipients = $temp;
+
+//        $this->set($recipients);
+        $this->set(compact('recipients'));
+
+
+        $this->set('ceremony_id', $id);
+
+        $ceremony = $this->Registrations->Ceremonies->findById($id)->firstOrFail();
+        $this->set('ceremony', $ceremony);
+
+
+    }
+
+
+    public function ceremonyawards($id, $attending = false)
+    {
+
+        if (!$this->checkAuthorization(array(
+            Configure::read('Role.admin'),
+            Configure::read('Role.lsa_admin'),
+            Configure::read('Role.protocol')))) {
+            $this->Flash->error(__('You are not authorized to view this page.'));
+            $this->redirect('/');
+        }
+
+        $conditions = array();
+        $conditions['Registrations.ceremony_id ='] = $id;
+        if ($attending) {
+            $conditions['Registrations.attending ='] = true;
+        }
+        else {
+            $conditions['OR'] = array (
+                'Registrations.attending IS ' => null,
+                'Registrations.attending =' => false
+            );
+        }
+
+        $recipients = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+            'order' => ['Registrations.last_name' => 'ASC'],
+            'contain' => [
+                'Milestones',
+                'Ministries',
+                'Awards',
+                'OfficeCity',
+                'HomeCity',
+                'SupervisorCity'
+            ],
+        ]);
+
+
+//        $this->set($recipients);
+        $this->set(compact('recipients'));
+
+        $this->set('attending', $attending);
+
+//        $awards = $this->Registrations->Awards->find('list');
+//        $this->set('awards', $awards);
+
+
+        $this->set('ceremony_id', $id);
+
+        $ceremony = $this->Registrations->Ceremonies->findById($id)->firstOrFail();
+        $this->set('ceremony', $ceremony);
+
+
+    }
+
+
+
+    public function ceremonyawardssummary($id, $attending = false)
+    {
+
+        if (!$this->checkAuthorization(array(
+            Configure::read('Role.admin'),
+            Configure::read('Role.lsa_admin'),
+            Configure::read('Role.protocol')))) {
+            $this->Flash->error(__('You are not authorized to view this page.'));
+            $this->redirect('/');
+        }
+
+        $conditions = array();
+        $conditions['Registrations.ceremony_id ='] = $id;
+//        $con
+//        if ($attending) {
+//            $conditions['Registrations.attending ='] = true;
+//        }
+//        else {
+//            $conditions['OR'] = array (
+//                'Registrations.attending IS ' => null,
+//                'Registrations.attending =' => false
+//            );
+//        }
+
+        $personalized = true;
+
+        $recipients = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+            'contain' => [
+                'Milestones',
+                'Ministries',
+                'Awards',
+                'OfficeCity',
+                'HomeCity',
+                'SupervisorCity'
+            ],
+        ]);
+
+        $recipients->select([
+            'count' => $recipients->func()->count('Registrations.award_id'),
+            'award_id' => 'Registrations.award_id',
+            'award_name' => 'Awards.name',
+            'award_personalized' => 'IF(Awards.id <> 0, IF(Awards.personalized, "true", "false"), "true")',
+        ])
+        ->group('award_id')
+        ->order('Awards.name ASC');
+
+
+
+//        $temp = [];
+//        foreach ($recipients as $key => $value) {
+//            $temp[] = $value;
+//        }
+//        $recipients = $temp;
+
+//        $this->set($recipients);
+        $this->set(compact('recipients'));
+
+        $this->set('attending', $attending);
+
+//        $awards = $this->Registrations->Awards->find('list');
+//        $this->set('awards', $awards);
+
+
+        $this->set('ceremony_id', $id);
+
+        $ceremony = $this->Registrations->Ceremonies->findById($id)->firstOrFail();
+        $this->set('ceremony', $ceremony);
+
+
+    }
+
+
+    public function ceremonytotals()
+    {
+        if ($this->checkAuthorization(array(Configure::read('Role.authenticated')))) {
+            $this->Flash->error(__('You are not authorized to administer Registrations.'));
+            $this->redirect('/');
+        }
+
+        $query = $this->Registrations->RegistrationPeriods->find('all')
+            ->where([
+                'RegistrationPeriods.open_registration <= ' => date('Y-m-d H:i:s'),
+                'RegistrationPeriods.close_registration >= ' => date('Y-m-d H:i:s')
+            ]);
+        $registrationperiods = $query->first();
+
+        $conditions = array();
+        $conditions['Registrations.created >='] = date('Y-01-01 00:00:00');
+        $conditions['Registrations.created <='] = date('Y-12-31 23:59:59');
+
+
+        $recipients = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+            'order' => [
+              'Registrations.ceremony_id ASC',
+              'Ministries.name ASC',
+
+            ],
+            'contain' => [
+                'Milestones',
+                'Ministries',
+                'Awards',
+                'OfficeCity',
+                'HomeCity',
+                'SupervisorCity',
+                'Ceremonies',
+            ],
+        ]);
+
+
+        $totals = [];
+        $first = true;
+        foreach ($recipients as $recipient) {
+            if ($first) {
+//                debug($recipient);
+                $first = false;
+            }
+            if (!isset($totals[$recipient->ceremony_id][$recipient->ministry_id])) {
+                $info = new \stdClass();
+                $info->ceremony = $recipient->ceremony->night;
+                $info->ministry = $recipient->ministry->name;
+                $info->total = 0;
+                $totals[$recipient->ceremony_id][$recipient->ministry_id] = $info;
+            }
+            if ($recipient->attending) {
+                $totals[$recipient->ceremony_id][$recipient->ministry_id]->total++;
+            }
+            if ($recipient->guest) {
+                $totals[$recipient->ceremony_id][$recipient->ministry_id]->total++;
+            }
+        }
+
+        debug($totals);
+        $this->set(compact('totals'));
+//        $this->set(compact('edit'));
+    }
+
 
 }
 

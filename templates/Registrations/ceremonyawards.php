@@ -11,7 +11,7 @@
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
 
 <h2>Ceremony Night <?= $ceremony->night ?> - <?= date("l M j, Y g:ia", strtotime($ceremony->date)) ?></h2>
-<h3>Ceremony Accessibility Requirements Summary</h3>
+<h3>Ceremony Awards List</h3>
 
 <div class="datatable-container">
     <?= $this->Flash->render() ?>
@@ -19,6 +19,7 @@
 
     </table>
 </div>
+
 
 <?php
 
@@ -30,89 +31,61 @@ echo $this->Form->button('Cancel', array(
 
 ?>
 
+
 <script>
     var registrations=<?php echo json_encode($recipients); ?>;
     var edit = true;
     var toolbar = true;
+    var attending=<?php echo $attending ? 1 : 0; ?>;
     var datestr="<?php echo date("Y-m", strtotime($ceremony->date)); ?>";
 
-    console.log(datestr);
+    console.log(attending);
 
     $(document).ready(function() {
 
+        for (i = 0; i < registrations.length; i++) {
+            options = JSON.parse(registrations[i].award_options)
+            registrations[i].optionsDisplay = "";
+            for (j = 0; j < options.length; j++) {
+                if (i > 0) {
+                    registrations[i].optionsDisplay += "<BR>";
+                }
+                registrations[i].optionsDisplay += "- " + options[j];
+            }
+            if (registrations[i].award_id == 0) {
+                registrations[i].award = { id: 0, name: "PECSF Donation" };
+            }
+        }
+
         console.log(registrations);
+
+        var cols;
+
+        if (attending) {
+            attendingstr = "attending";
+            cols = [
+                {data: "last_name", title: "Last Name"},
+                {data: "first_name", title: "First Name"},
+                {data: "award.name", title: "Award"},
+                {data: "optionsDisplay", title: "Options"},
+            ];
+        }
+        else {
+            attendingstr = "non-attending";
+            cols = [
+                {data: "last_name", title: "Last Name"},
+                {data: "first_name", title: "First Name"},
+                {data: "award.name", title: "Award"},
+                {data: "optionsDisplay", title: "Options"},
+                {data: "supervisor_last_name", title: "Supervisor Last Name"},
+                {data: "supervisor_first_name", title: "Supervisor First Name"},
+                {data: "supervisor_email", title: "Supervisor Email"},
+            ];
+        }
 
         $('#ceremony-accessibility').DataTable( {
             data: registrations,
-            columns: [
-                { data: "last_name", title: "Last Name" },
-                { data: "first_name", title: "First Name" },
-                // { data: "attending", title: "Attending",
-                //   render: function (data, type, row) {
-                //       if (type === 'display' || type === 'filter' ) {
-                //           if (data == true) {
-                //               return "Yes";
-                //           }
-                //           if (data == false) {
-                //               return "No";
-                //           }
-                //       }
-                //       return data;
-                //   }
-                // },
-                // { data: "guest", title: "Guest",
-                //   render: function (data, type, row) {
-                //       if (type === 'display' || type === 'filter' ) {
-                //           console.log(data);
-                //          if (data == true) {
-                //             return "Yes";
-                //          }
-                //          if (data == false) {
-                //             return "No";
-                //          }
-                //       }
-                //       return data;
-                //  }
-                // },
-
-                { data: "accessibility_recipient", title: "Requirements",
-                  render: function (data, type, row) {
-                      if (type === 'display' || type === 'filter' ) {
-                          if (data == true) {
-                              return "Yes";
-                          }
-                          if (data == false) {
-                              return "No";
-                          }
-                      }
-                      return data;
-                  }
-                },
-
-
-
-                { data: "guest_last_name", title: "Last Name" },
-                { data: "guest_first_name", title: "First Name" },
-                { data: "accessibility_guest", title: "Requirements",
-                  render: function (data, type, row) {
-                      if (type === 'display' || type === 'filter' ) {
-                          if (data == true) {
-                             return "Yes";
-                          }
-                         if (data == false) {
-                             return "No";
-                          }
-                      }
-                      return data;
-                  }
-                },
-
-                { data: "recipient_reqs", visible: false},
-                { data: "guest_reqs", visible: false},
-                { data: "accessibility_recipient_notes", visible: false},
-                { data: "accessibility_guest_notes", visible: false},
-
-            ],
+            columns: cols,
             // stateSave: true,
             pageLength: 15,
             lengthChange: false,
@@ -124,14 +97,14 @@ echo $this->Form->button('Cancel', array(
                     extend: 'csv',
                     text: 'Export to CSV',
                     filename: function () {
-                        return datestr + '-ceremony-accessibility-requirements';
+                        return datestr + '-award-summary-' + attendingstr;
                     },
                 },
                 {
                     extend: 'excel',
                     text: 'Export to Excel',
                     filename: function () {
-                        return datestr + '-ceremony-accessibility-requirements';
+                        return datestr + '-award-summary-' + attendingstr;
                     },
                 }
             ],
@@ -189,3 +162,4 @@ echo $this->Form->button('Cancel', array(
     }
 
 </script>
+

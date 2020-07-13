@@ -14,7 +14,9 @@ class MinistriesController extends AppController
             $this->redirect('/');
         }
         $this->loadComponent('Paginator');
-        $ministries = $this->Paginator->paginate($this->Ministries->find());
+        $ministries = $this->Paginator->paginate($this->Ministries->find('all', [
+            'order' => ['Ministries.name' => 'ASC'],
+        ]));
 
         $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
         $this->set(compact('isadmin'));

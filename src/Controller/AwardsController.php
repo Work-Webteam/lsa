@@ -14,7 +14,9 @@ class AwardsController extends AppController
         }
         $this->loadComponent('Paginator');
         $awards = $this->Paginator->paginate($this->Awards->find('all', [
-            'contain' => ['Milestones']
+            'conditions' => ['Awards.active =' => 1],
+            'contain' => ['Milestones'],
+            'order' => ['Milestones.name' => 'ASC', 'Awards.name' => 'ASC'],
         ]));
 
 

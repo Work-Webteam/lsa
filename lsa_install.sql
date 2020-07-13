@@ -129,6 +129,9 @@ CREATE TABLE registrations (
     award_id INT,
     award_options TEXT,
     award_instructions TEXT,
+
+    service_pin BOOLEAN DEFAULT false,
+
     registration_year INT,
     qualifying_year INT,
     award_received BOOLEAN DEFAULT false,
@@ -157,8 +160,11 @@ CREATE TABLE registrations (
     alternate_ministry_id INT,
 
     invite_sent DATETIME,
-    attending BOOLEAN,
-    guest BOOLEAN,
+
+    responded BOOLEAN DEFAULT false,
+    attending BOOLEAN DEFAULT false,
+    guest BOOLEAN DEFAULT false,
+    noshow BOOLEAN DEFAULT false,
 
     ceremony_id INT,
 

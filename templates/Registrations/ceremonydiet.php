@@ -11,7 +11,7 @@
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
 
 <h2>Ceremony Night <?= $ceremony->night ?> - <?= date("l M j, Y g:ia", strtotime($ceremony->date)) ?></h2>
-<h3>Ceremony Accessibility Requirements Summary</h3>
+<h3>Ceremony Dietary Requirements Summary</h3>
 
 <div class="datatable-container">
     <?= $this->Flash->render() ?>
@@ -19,6 +19,7 @@
 
     </table>
 </div>
+
 
 <?php
 
@@ -30,13 +31,13 @@ echo $this->Form->button('Cancel', array(
 
 ?>
 
+
 <script>
     var registrations=<?php echo json_encode($recipients); ?>;
     var edit = true;
     var toolbar = true;
     var datestr="<?php echo date("Y-m", strtotime($ceremony->date)); ?>";
 
-    console.log(datestr);
 
     $(document).ready(function() {
 
@@ -75,7 +76,7 @@ echo $this->Form->button('Cancel', array(
                 //  }
                 // },
 
-                { data: "accessibility_recipient", title: "Requirements",
+                { data: "recipient_diet", title: "Requirements",
                   render: function (data, type, row) {
                       if (type === 'display' || type === 'filter' ) {
                           if (data == true) {
@@ -93,7 +94,7 @@ echo $this->Form->button('Cancel', array(
 
                 { data: "guest_last_name", title: "Last Name" },
                 { data: "guest_first_name", title: "First Name" },
-                { data: "accessibility_guest", title: "Requirements",
+                { data: "guest_diet", title: "Requirements",
                   render: function (data, type, row) {
                       if (type === 'display' || type === 'filter' ) {
                           if (data == true) {
@@ -109,8 +110,8 @@ echo $this->Form->button('Cancel', array(
 
                 { data: "recipient_reqs", visible: false},
                 { data: "guest_reqs", visible: false},
-                { data: "accessibility_recipient_notes", visible: false},
-                { data: "accessibility_guest_notes", visible: false},
+                { data: "dietary_recipient_other", visible: false},
+                { data: "dietary_guest_other", visible: false},
 
             ],
             // stateSave: true,
@@ -124,14 +125,14 @@ echo $this->Form->button('Cancel', array(
                     extend: 'csv',
                     text: 'Export to CSV',
                     filename: function () {
-                        return datestr + '-ceremony-accessibility-requirements';
+                        return datestr + '-ceremony-diet-requirements';
                     },
                 },
                 {
                     extend: 'excel',
                     text: 'Export to Excel',
                     filename: function () {
-                        return datestr + '-ceremony-accessibility-requirements';
+                        return datestr + '-ceremony-diet-requirements';
                     },
                 }
             ],
@@ -189,3 +190,4 @@ echo $this->Form->button('Cancel', array(
     }
 
 </script>
+
