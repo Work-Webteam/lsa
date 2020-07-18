@@ -22,37 +22,57 @@
     <?php include 'header.php'; ?>
 </head>
 <body>
-    <nav class="top-nav">
-        <div class="top-nav-title">
-            <a href="/"><span><img src="/img/lsa_logo.png" class="lsa-logo"></span></a>
-        </div>
-        <div class="top-nav-links">
-            <?php
-                $session = $this->getRequest()->getSession();
-                if ($session->read('user.role') <> 0) {
-                    echo '<a href="/registrations">Admin</a>';
-                }
-                if (in_array($session->read('user.role'), array(1,2))) {
-                    echo '<a href="/ceremonies">Ceremonies</a>';
-                    echo '<a href="/awards">Awards</a>';
-                    echo '<a href="/milestones">Milestones</a>';
-                    echo '<a href="/cities">Cities</a>';
-                    echo '<a href="/ministries">Ministries</a>';
-                    echo '<a href="/diet">Diet</a>';
-                    echo '<a href="/accessibility">Accessibility</a>';
-                    echo '<a href="/registrationperiods">Reg.Periods</a>';
-                    echo ' |  <a href="/userroles">Access</a>';
-                }
-                if ($session->read('user.role') == 1) {
-                    echo ' | <a href="/pecsfregions">Regions</a>';
-                    echo ' <a href="/pecsfcharities">Charities</a>';
-                    echo ' <a href="/roles">Roles</a>';
-                }
-            ?>
+
+<nav class="top-nav navbar navbar-expand-lg navbar-dark">
+    <!-- Brand -->
+    <a href="/"><span><img src="/img/lsa_logo.png" class="navbar-brand lsa-logo"></span></a>
+
+    <!-- Links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link lsa-nav-link" href="/registrations">Registrations</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/ceremonies">Ceremonies</a>
+        </li>
+        <!-- Dropdown -->
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                Reports
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="/registrations/reportawards">Awards</a>
+                <a class="dropdown-item" href="/registrations/reportawardtotalsceremony">Award Totals - by Ceremony</a>
+                <a class="dropdown-item" href="/registrations/reportawardtotalsmilestone">Award Totals - by Milestone</a>
+                <a class="dropdown-item" href="/registrations/reportcertificatesmilestone">Certificates - Milestone</a>
+                <a class="dropdown-item" href="/registrations/reportcertificatespecsf">Certificates - PECSF Donation</a>
+                <a class="dropdown-item" href="/registrations/reportwatches">Watch Report</a>
+                <a class="dropdown-item" href="/registrations/reportlsaprogram">LSA Program Data</a>
+            </div>
+        </li>
+
+        <!-- Dropdown -->
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                Maintenance
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="/registrationperiods">Registration Periods</a>
+                <a class="dropdown-item" href="/awards">Awards</a>
+                <a class="dropdown-item" href="/milestones">Milestones</a>
+                <a class="dropdown-item" href="/ministries">Ministries</a>
+                <a class="dropdown-item" href="/diet">Diet</a>
+                <a class="dropdown-item" href="/accessibility">Accessibility</a>
+                <a class="dropdown-item" href="/cities">Cities</a>
+                <a class="dropdown-item" href="/pecsfregions">Regions</a>
+                <a class="dropdown-item" href="/pecsfcharities">Charities</a>
+                <a class="dropdown-item" href="/userroles">Admin Access</a>
+            </div>
+        </li>
 
 
-        </div>
-    </nav>
+    </ul>
+</nav>
     <main class="main">
         <div class="container">
             <?= $this->Flash->render() ?>

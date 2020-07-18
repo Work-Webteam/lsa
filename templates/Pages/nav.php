@@ -1,23 +1,43 @@
-<nav class="top-nav">
+<nav class="top-nav  navbar navbar-expand-lg navbar-dark">
 
-    <div class="top-nav-title">
-        <a href="/"><span><img src="/img/lsa_logo.png" class="lsa-logo"></span></a>
-    </div>
+    <!-- Brand -->
+    <a href="/"><span><img src="/img/lsa_logo.png" class="navbar-brand lsa-logo"></span></a>
 
-    <div class="top-nav-links">
+    <!-- Links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link lsa-nav-link" href="/eligibility">Eligibility</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/register">Register</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/ceremony">Ceremony</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/travel">Travel</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/Volunteer">Volunteer</a>
+        </li>
         <?php
-        $session = $this->getRequest()->getSession();
+            $session = $this->getRequest()->getSession();
 
-        echo '<a href="/eligibility">Eligibility</a>';
-        echo '<a href="/register">Register</a>';
-        echo '<a href="/ceremony">Ceremony</a>';
-        echo '<a href="/travel">Travel</a>';
-        echo '<a href="/volunteer">Volunteer</a>';
-        if ($session->read('user.role') <> 0) {
-            echo '<a href="/registrations">Admin</a>';
-        }
+            if ($session->read('user.role') <> 0) {
+        ?>
+            <li class="nav-item">
+                <a class="nav-link" href="/registrations">Admin</a>
+            </li>
+
+        <?php
+            }
         ?>
 
-    </div>
+
+    </ul>
+
+
+
+
 
 </nav>

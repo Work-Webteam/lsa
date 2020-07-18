@@ -24,9 +24,7 @@ class RegistrationsController extends AppController
         $registrationperiods = $query->first();
 
         $conditions = array();
-//        $conditions['Registrations.registration_year ='] = date('Y');
-        $conditions['Registrations.created >='] = date('Y-01-01 00:00:00');
-        $conditions['Registrations.created <='] = date('Y-12-31 23:59:59');
+        $conditions['Registrations.registration_year ='] = date('Y');
 
         $edit = true;
         $toolbar = true;
@@ -523,7 +521,6 @@ class RegistrationsController extends AppController
     public function test()
     {
         $conditions = array();
-//        $conditions['Registrations.created >='] = date('Y');
         $conditions['Registrations.registration_year ='] = date('Y');
 
         // if Ministry Contact only list registrations from their ministry
@@ -774,13 +771,6 @@ class RegistrationsController extends AppController
         $this->set('registration', $registration);
 
         $isadmin = true;
-
-        $query = $this->Registrations->RegistrationPeriods->find('all')
-            ->where([
-                'RegistrationPeriods.open_registration <=' => date('Y-m-d H:i:s'),
-                'RegistrationPeriods.close_registration >=' => date('Y-m-d H:i:s')
-            ]);
-        $registrationperiods = $query->first();
 
         if (!$this->checkGUID($registration->user_guid)) {
            $this->Flash->error(__('You are not authorized to complete this RSVP.'));
@@ -1238,17 +1228,8 @@ class RegistrationsController extends AppController
             $this->redirect('/');
         }
 
-        $query = $this->Registrations->RegistrationPeriods->find('all')
-            ->where([
-                'RegistrationPeriods.open_registration <= ' => date('Y-m-d H:i:s'),
-                'RegistrationPeriods.close_registration >= ' => date('Y-m-d H:i:s')
-            ]);
-        $registrationperiods = $query->first();
-
         $conditions = array();
-        $conditions['Registrations.created >='] = date('Y-01-01 00:00:00');
-        $conditions['Registrations.created <='] = date('Y-12-31 23:59:59');
-
+        $conditions['Registrations.registration_year ='] = date('Y');
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -1296,6 +1277,364 @@ class RegistrationsController extends AppController
 //        $this->set(compact('edit'));
     }
 
+
+
+
+    public function reportawards()
+    {
+
+        if (!$this->checkAuthorization(array(
+            Configure::read('Role.admin'),
+            Configure::read('Role.lsa_admin'),
+            Configure::read('Role.protocol')))) {
+            $this->Flash->error(__('You are not authorized to view this page.'));
+            $this->redirect('/');
+        }
+
+        $conditions = array();
+        $conditions['Registrations.registration_year ='] = date('Y');
+
+        $recipients = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+            'contain' => [
+                'Milestones',
+                'Ministries',
+                'Awards',
+                'OfficeCity',
+                'HomeCity',
+                'SupervisorCity',
+                'Ceremonies',
+            ],
+        ]);
+
+        $year = date('Y');
+        $this->set(compact('year'));
+
+        $this->set(compact('recipients'));
+
+    }
+
+
+    public function reportwatches()
+    {
+
+        if (!$this->checkAuthorization(array(
+            Configure::read('Role.admin'),
+            Configure::read('Role.lsa_admin'),
+            Configure::read('Role.protocol')))) {
+            $this->Flash->error(__('You are not authorized to view this page.'));
+            $this->redirect('/');
+        }
+
+
+        $award_id = 9;
+
+        $conditions = array();
+        $conditions['Registrations.registration_year ='] = date('Y');
+        $conditions['Registrations.award_id ='] = $award_id;
+
+        $recipients = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+            'contain' => [
+                'Milestones',
+                'Ministries',
+                'Awards',
+                'OfficeCity',
+                'HomeCity',
+                'SupervisorCity',
+                'Ceremonies',
+            ],
+        ]);
+
+        $year = date('Y');
+        $this->set(compact('year'));
+
+        $this->set(compact('recipients'));
+
+    }
+
+    public function reportcertificatesmilestone()
+    {
+
+        if (!$this->checkAuthorization(array(
+            Configure::read('Role.admin'),
+            Configure::read('Role.lsa_admin'),
+            Configure::read('Role.protocol')))) {
+            $this->Flash->error(__('You are not authorized to view this page.'));
+            $this->redirect('/');
+        }
+
+
+        // TODO pull personalized milestone ids
+        $milestone_id = [1];
+
+        $conditions = array();
+        $conditions['Registrations.registration_year ='] = date('Y');
+        $conditions['Registrations.milestone_id IN '] = $milestone_id;
+
+
+        $recipients = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+            'contain' => [
+                'Milestones',
+                'Ministries',
+                'Awards',
+                'OfficeCity',
+                'HomeCity',
+                'SupervisorCity',
+                'Ceremonies',
+            ],
+        ]);
+
+        $year = date('Y');
+        $this->set(compact('year'));
+
+        $this->set(compact('recipients'));
+
+    }
+
+
+    public function reportcertificatespecsf()
+    {
+
+        if (!$this->checkAuthorization(array(
+            Configure::read('Role.admin'),
+            Configure::read('Role.lsa_admin'),
+            Configure::read('Role.protocol')))) {
+            $this->Flash->error(__('You are not authorized to view this page.'));
+            $this->redirect('/');
+        }
+
+
+        $award_id = 0;
+        $milestone_id = 1;
+
+        $conditions = array();
+        $conditions['Registrations.registration_year ='] = date('Y');
+        $conditions['Registrations.award_id ='] = $award_id;
+
+        $recipients = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+            'contain' => [
+                'Milestones',
+                'Ministries',
+                'Awards',
+                'OfficeCity',
+                'HomeCity',
+                'SupervisorCity',
+                'Ceremonies',
+            ],
+        ]);
+
+        $year = date('Y');
+        $this->set(compact('year'));
+
+        $this->set(compact('recipients'));
+
+    }
+
+
+    public function reportlsaprogram()
+    {
+
+        if (!$this->checkAuthorization(array(
+            Configure::read('Role.admin'),
+            Configure::read('Role.lsa_admin'),
+            Configure::read('Role.protocol')))) {
+            $this->Flash->error(__('You are not authorized to view this page.'));
+            $this->redirect('/');
+        }
+
+        $conditions = array();
+        $conditions['Registrations.registration_year ='] = date('Y');
+
+        $recipients = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+            'contain' => [
+                'Milestones',
+                'Ministries',
+                'Awards',
+                'OfficeCity',
+                'HomeCity',
+                'SupervisorCity',
+                'Ceremonies',
+            ],
+        ]);
+
+        $year = date('Y');
+        $this->set(compact('year'));
+
+        $this->set(compact('recipients'));
+
+    }
+
+
+    public function reportawardtotalsceremony()
+    {
+
+        if ($this->checkAuthorization(array(Configure::read('Role.authenticated')))) {
+            $this->Flash->error(__('You are not authorized to administer Registrations.'));
+            $this->redirect('/');
+        }
+
+        $conditions = array();
+        $conditions['Registrations.registration_year ='] = date('Y');
+
+        $recipients = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+            'contain' => [
+                'Milestones',
+                'Ministries',
+                'Awards',
+                'OfficeCity',
+                'HomeCity',
+                'SupervisorCity',
+                'Ceremonies',
+            ],
+        ]);
+
+        $year = date('Y');
+        $this->set(compact('year'));
+
+
+        $totals = [];
+
+        foreach ($recipients as $recipient) {
+            $i = $this->findInTotalsCeremony($totals, $recipient->ceremony_id, $recipient->award_id);
+            if ($i == -1) {
+                $info = new \stdClass();
+                $info->ceremony_id = $recipient->ceremony_id;
+                $info->ceremony_night = $recipient->ceremony->night;
+                $info->ceremony_date = $recipient->ceremony->date;
+                $info->award_id = $recipient->award_id;
+
+                if ($recipient->award_id > 0) {
+                    $info->award = $recipient->award->name;
+                    $info->award_options = $recipient->award_options;
+                }
+                else {
+                    $info->award = "PECSF Donation";
+                    $info->award_options = "[]";
+                }
+                $info->total = 1;
+                $info->attending = 0;
+                $info->notattending = 0;
+                if ($recipient->attending) {
+                    $info->attending++;
+                }
+                else {
+                    $info->notattending++;
+                }
+                $totals[] = $info;
+            }
+            else {
+                $totals[$i]->total++;
+                if ($recipient->attending) {
+                    $totals[$i]->attending++;
+                }
+                else {
+                    $totals[$i]->notattending++;
+                }
+            }
+        }
+        $recipients = $totals;
+        $this->set(compact('recipients'));
+    }
+
+
+    public function findInTotalsCeremony($array, $ceremony_id, $award_id) {
+        $i = -1;
+        foreach ($array as $key => $item) {
+            if ($item->ceremony_id == $ceremony_id && $item->award_id == $award_id) {
+                $i = $key;
+            }
+        }
+        return $i;
+    }
+
+
+    public function reportawardtotalsmilestone()
+    {
+
+        if ($this->checkAuthorization(array(Configure::read('Role.authenticated')))) {
+            $this->Flash->error(__('You are not authorized to administer Registrations.'));
+            $this->redirect('/');
+        }
+
+        $conditions = array();
+        $conditions['Registrations.registration_year ='] = date('Y');
+
+
+        $recipients = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+            'contain' => [
+                'Milestones',
+                'Ministries',
+                'Awards',
+                'OfficeCity',
+                'HomeCity',
+                'SupervisorCity',
+                'Ceremonies',
+            ],
+        ]);
+
+        $year = date('Y');
+        $this->set(compact('year'));
+
+
+        $totals = [];
+        foreach ($recipients as $recipient) {
+            $i = $this->findInTotalsMilestone($totals, $recipient->milestone_id, $recipient->award_id);
+            if ($i == -1) {
+                $info = new \stdClass();
+                $info->milestone_id = $recipient->milestone_id;
+                $info->milestone = $recipient->milestone->name;
+                $info->award_id = $recipient->award_id;
+
+                if ($recipient->award_id > 0) {
+                    $info->award = $recipient->award->name;
+                    $info->award_options = $recipient->award_options;
+                }
+                else {
+                    $info->award = "PECSF Donation";
+                    $info->award_options = "[]";
+                }
+                $info->total = 1;
+                $info->attending = 0;
+                $info->notattending = 0;
+                if ($recipient->attending) {
+                    $info->attending++;
+                }
+                else {
+                    $info->notattending++;
+                }
+                $totals[] = $info;
+            }
+            else {
+                $totals[$i]->total++;
+                if ($recipient->attending) {
+                    $totals[$i]->attending++;
+                }
+                else {
+                    $totals[$i]->notattending++;
+                }
+            }
+        }
+        $recipients = $totals;
+        $this->set(compact('recipients'));
+
+    }
+
+
+    public function findInTotalsMilestone($array, $milestone_id, $award_id) {
+        $i = -1;
+        foreach ($array as $key => $item) {
+            if ($item->milestone_id == $milestone_id && $item->award_id == $award_id) {
+                $i = $key;
+            }
+        }
+        return $i;
+    }
 
 }
 
