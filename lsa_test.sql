@@ -1,5 +1,7 @@
 USE lsa;
 
+DROP TABLE IF EXISTS log;
+
 DROP TABLE IF EXISTS registrations;
 
 DROP TABLE IF EXISTS user_roles;
@@ -89,6 +91,7 @@ CREATE TABLE pecsf_charities (
 CREATE TABLE registration_periods (
     id INT AUTO_INCREMENT PRIMARY KEY,
     registration_year INT,
+    qualifying_years VARCHAR(255) NOT NULL,
     open_registration DATETIME,
     close_registration DATETIME
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -246,6 +249,21 @@ CREATE TABLE registrations (
     FOREIGN KEY office_city_key (office_city_id) REFERENCES cities(id),
     FOREIGN KEY supervisor_city_key (supervisor_city_id) REFERENCES cities(id),
     FOREIGN KEY home_city_key (office_city_id) REFERENCES cities(id)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+CREATE TABLE log (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_idir VARCHAR(16),
+    user_guid VARCHAR(128),
+    timestamp DATETIME,
+    registration_id INT,
+    type VARCHAR(16),
+    operation VARCHAR(16),
+    description VARCHAR(255),
+
+    FOREIGN KEY registration_key (registration_id) REFERENCES registrations(id)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -5181,8 +5199,7 @@ INSERT INTO `awards` (`id`, `name`, `milestone_id`, `description`, `image`, `opt
 INSERT INTO `awards` (`id`, `name`, `milestone_id`, `description`, `image`, `options`, `personalized`, `active`) VALUES(24, 'Citizen® Axiom Eco-Drive Watch (mens)', 6, 'Black dial with black leather strap. Has date feature and is splash resistant. Comes in stainless steel case.\r\nSize of face: 40 mm diameter', 'citizen-watch.jpg', '[]', 0, 1);
 INSERT INTO `awards` (`id`, `name`, `milestone_id`, `description`, `image`, `options`, `personalized`, `active`) VALUES(25, 'Bulova® \"Yarmouth\" Clock', 6, 'Bulova wall clock with thermometer and hygrometer. Comes in a beautiful walnut finish and has an engraved plate, “In recognition of fifty years of service.”\r\nSize: 17 ¼ \"H x 10 ¾” W x 3“ D', 'bulova-clock-yarmouth.jpg', '[]', 0, 1);
 
-INSERT INTO `registration_periods` (`id`, `registration_year`, `open_registration`, `close_registration`) VALUES(1, 2020, '2020-02-01 00:00:00', '2020-07-31 23:59:59');
-
+INSERT INTO `registration_periods` (`id`, `registration_year`, `qualifying_years`, `open_registration`, `close_registration`) VALUES(1, 2020, '2019,2020,2021', '2020-02-01 00:00:00', '2020-07-31 23:59:59');
 
 INSERT INTO `ceremonies` (`id`, `registration_year`, `night`, `date`, `notes`, `attending`) VALUES(1, 2019, 1, '2019-10-10 19:30:00', NULL, '[]');
 INSERT INTO `ceremonies` (`id`, `registration_year`, `night`, `date`, `notes`, `attending`) VALUES(2, 2019, 2, '2019-10-11 19:30:00', NULL, '[]');

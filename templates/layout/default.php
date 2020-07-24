@@ -48,9 +48,14 @@
                 <a class="dropdown-item" href="/registrations/reportcertificatespecsf">Certificates - PECSF Donation</a>
                 <a class="dropdown-item" href="/registrations/reportwatches">Watch Report</a>
                 <a class="dropdown-item" href="/registrations/reportlsaprogram">LSA Program Data</a>
+                <a class="dropdown-item" href="/registrations/awardsummary">Award Summary</a>
+                <a class="dropdown-item" href="/registrations/ministrysummary">Ministry Summary</a>
+                <a class="dropdown-item" href="/registrations/milestonesummary">Milestone Summary</a>
             </div>
         </li>
-
+        <li class="nav-item">
+            <a class="nav-link" href="/registrations/archive">Archive</a>
+        </li>
         <!-- Dropdown -->
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
@@ -66,7 +71,9 @@
                 <a class="dropdown-item" href="/cities">Cities</a>
                 <a class="dropdown-item" href="/pecsfregions">Regions</a>
                 <a class="dropdown-item" href="/pecsfcharities">Charities</a>
+                <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="/userroles">Admin Access</a>
+                <a class="dropdown-item" href="/log">Log</a>
             </div>
         </li>
 

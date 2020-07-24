@@ -7,6 +7,7 @@ echo $this->Form->hidden('pecsf_amount2', ['value' => 0]);
 
 
 echo $this->Form->control('registration_year');
+echo $this->Form->control('qualifying_years');
 echo $this->Form->control('open_date', ['type' => 'date', 'value' => date('Y-m-d')]);
 echo $this->Form->hidden('open_time', ['type' => 'time', 'value' => '00:00:00']);
 echo $this->Form->control('close_date', ['type' => 'date', 'value' => date('Y-m-d')]);

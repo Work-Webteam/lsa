@@ -6,6 +6,7 @@
     <tr>
         <?= $isadmin ? "<th>Id</th>" : "" ?>
         <th>Registration Year</th>
+        <th>Award Years</th>
         <th>Open Date</th>
         <th>Close Date</th>
         <th colspan = 2>Operations</th>
@@ -16,6 +17,9 @@
             <?= $isadmin ? "<td>" . $period->id . "</td>" : "" ?>
             <td>
                 <?= $this->Html->link($period->registration_year, ['action' => 'view', $period->id]) ?>
+            </td>
+            <td>
+                <?= $period->qualifying_years ?>
             </td>
             <td>
                 <?= date("D Y-M-d g:ia", strtotime($period->open_registration)) ?>

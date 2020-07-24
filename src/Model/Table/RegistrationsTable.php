@@ -38,6 +38,9 @@ class RegistrationsTable extends Table
             ->setForeignKey('id')
             ->setBindingKey('ceremony_id');
         $this->hasOne('RegistrationPeriods');
+        $this->hasMany('Log')
+            ->setForeignKey('registration_id')
+            ->setBindingKey('id');
     }
 
 

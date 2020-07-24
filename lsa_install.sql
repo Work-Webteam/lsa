@@ -1,5 +1,7 @@
 USE lsa;
 
+DROP TABLE IF EXISTS log;
+
 DROP TABLE IF EXISTS registrations;
 
 DROP TABLE IF EXISTS user_roles;
@@ -85,6 +87,7 @@ CREATE TABLE pecsf_charities (
 CREATE TABLE registration_periods (
     id INT AUTO_INCREMENT PRIMARY KEY,
     registration_year INT,
+    qualifying_years VARCHAR(255) NOT NULL,
     open_registration DATETIME,
     close_registration DATETIME
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -240,6 +243,21 @@ CREATE TABLE registrations (
     FOREIGN KEY office_city_key (office_city_id) REFERENCES cities(id),
     FOREIGN KEY supervisor_city_key (supervisor_city_id) REFERENCES cities(id),
     FOREIGN KEY home_city_key (office_city_id) REFERENCES cities(id)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+CREATE TABLE log (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_idir VARCHAR(16),
+    user_guid VARCHAR(128),
+    timestamp DATETIME,
+    registration_id INT,
+    type VARCHAR(16),
+    operation VARCHAR(16),
+    description VARCHAR(255),
+
+    FOREIGN KEY registration_key (registration_id) REFERENCES registrations(id)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

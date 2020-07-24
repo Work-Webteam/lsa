@@ -15,7 +15,7 @@
 
 <div class="datatable-container">
     <?= $this->Flash->render() ?>
-    <table id="ceremony-accessibility" class="display ceremony-datatable" style="font-size: 12px; width:100%">
+    <table id="data-table" class="display ceremony-datatable" style="font-size: 12px; width:100%">
 
     </table>
 </div>
@@ -67,7 +67,7 @@ echo $this->Form->button('Cancel', array(
             ];
 
 
-        $('#ceremony-accessibility').DataTable( {
+        $('#data-table').DataTable( {
             data: recipients,
             columns: cols,
             order: [[ 0, "asc" ]],
@@ -135,7 +135,7 @@ echo $this->Form->button('Cancel', array(
 
     function resetFilters() {
 
-        var table = $('#ceremony-accessibility').DataTable();
+        var table = $('#data-table').DataTable();
 
         table.columns().every( function () {
             var column = this;

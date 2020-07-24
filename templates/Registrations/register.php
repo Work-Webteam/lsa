@@ -31,6 +31,9 @@
                 ?>
             </div>
             <?php
+                echo $this->Form->control('qualifying_year', ['type' => 'select', 'label' => 'Award Year', 'options' => $award_years, 'empty' => '- select Award Year -']);
+            ?>
+            <?php
                 echo $this->Form->label("Registered last year but didn't attend ceremony?");
                 echo $this->Form->button('Yes', ['type' => 'button', 'onclick' => 'app.buttonMissedCeremony(1)', 'class' => 'btn btn-primary']);
                 echo "&nbsp;";

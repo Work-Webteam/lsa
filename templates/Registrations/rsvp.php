@@ -47,29 +47,34 @@
     <div>
         <h3>Inclusivity</h3>
         <p>
-            The Long Service awards ceremonies are welcoming and accessbile events.
+            The Long Service awards ceremonies are welcoming and accessible events.
         </p>
         <br>
-        <p>Government House has gender-neutral washroom facitilites.</p>
+        <p>Government House has gender-neutral washroom facilities.</p>
         <p>Check the Venue Accessibility[LINK] page for specific locations or contact [EMAIL] with questions</p>
     </div>
 
-    <div id="attending-requirements" v-if="currentAttending > 0">
+
+
+    <div id="attending-requirements" >
+
+
+
         <div>
             <h3>Accessibility Requirements</h3>
             <p>To ensure you and your guest can enjoy the festivities, please share you accessibility requirements with us.</p>
             <BR>
-            <p>If you'd like a preview of accessible facilities at Government House including ramps, elevators and washroom facilities, vist the
-            Venue Accessibility[LINK] page. If you have quetions or wish to connect wiht a member of the Long Service Awards team directly, contact [EMAIL].</p>
+            <p>If you'd like a preview of accessible facilities at Government House including ramps, elevators and washroom facilities, visit the
+            Venue Accessibility[LINK] page. If you have questions or wish to connect with a member of the Long Service Awards team directly, contact [EMAIL].</p>
         </div>
 
         <?php
 
-        echo $this->Form->button('I have accessibility requirements', ['type' => 'button', 'id' => 'btn-access-2', 'onclick' => 'app.buttonAccessibility(2)', 'class' => 'btn btn-secondary', 'v-if' => 'currentAttending > 0']);
+        echo $this->Form->button('I have accessibility requirements', ['type' => 'button', 'id' => 'btn-access-2', 'onclick' => 'app.buttonAccessibility(2)', 'v-if' => 'recipientAttending', 'v-bind:class' => "[recipientAccessibilityRecipient ? 'btn-primary' : 'btn-secondary', 'btn']"]);
         echo "&nbsp;";
-        echo $this->Form->button('My guest has accessibility requirements', ['type' => 'button', 'id' => 'btn-access-1',  'onclick' => 'app.buttonAccessibility(1)', 'class' => 'btn btn-secondary', 'v-if' => 'currentAttending == 2']);
+        echo $this->Form->button('My guest has accessibility requirements', ['type' => 'button', 'id' => 'btn-access-1',  'onclick' => 'app.buttonAccessibility(1)', 'v-if' => 'recipientGuest', 'v-bind:class' => "[recipientAccessibilityGuest ? 'btn-primary' : 'btn-secondary', 'btn']"]);
         echo "&nbsp;";
-        echo $this->Form->button("No accessibility requirements in my party", ['type' => 'button', 'id' => 'btn-access-0',  'onclick' => 'app.buttonAccessibility(0)', 'class' => 'btn btn-primary']);
+        echo $this->Form->button("No accessibility requirements in my party", ['type' => 'button', 'id' => 'btn-access-0',  'onclick' => 'app.buttonAccessibility(0)', 'v-bind:class' => "btnAccessClass"]);
 
         ?>
 
@@ -115,11 +120,11 @@
 
         <?php
 
-        echo $this->Form->button('I have dietary requirements', ['type' => 'button', 'id' => 'btn-dietary-2', 'onclick' => 'app.buttonDietary(2)', 'class' => 'btn btn-secondary', 'v-if' => 'currentAttending > 0']);
+        echo $this->Form->button('I have dietary requirements', ['type' => 'button', 'id' => 'btn-dietary-2', 'onclick' => 'app.buttonDietary(2)','v-if' => 'recipientAttending', 'v-bind:class' => "[recipientDietaryRecipient ? 'btn-primary' : 'btn-secondary', 'btn']"]);
         echo "&nbsp;";
-        echo $this->Form->button('My guest has dietary requirements', ['type' => 'button', 'id' => 'btn-dietary-1',  'onclick' => 'app.buttonDietary(1)', 'class' => 'btn btn-secondary', 'v-if' => 'currentAttending == 2']);
+        echo $this->Form->button('My guest has dietary requirements', ['type' => 'button', 'id' => 'btn-dietary-1',  'onclick' => 'app.buttonDietary(1)', 'v-if' => 'recipientGuest', 'v-bind:class' => "[recipientDietaryGuest ? 'btn-primary' : 'btn-secondary', 'btn']"]);
         echo "&nbsp;";
-        echo $this->Form->button("No dietary requirements in my party", ['type' => 'button', 'id' => 'btn-dietary-0',  'onclick' => 'app.buttonDietary(0)', 'class' => 'btn btn-primary']);
+        echo $this->Form->button("No dietary requirements in my party", ['type' => 'button', 'id' => 'btn-dietary-0',  'onclick' => 'app.buttonDietary(0)', 'v-bind:class' => "btnDietClass"]);
 
         ?>
 
@@ -225,7 +230,7 @@
         },
 
         mounted() {
-
+            window.addEventListener('load', () => {
             if (this.recipientAttending && this.recipientGuest) {
                 this.buttonAttendingWith(2);
             }
@@ -235,19 +240,40 @@
             else if (this.recipientResponded) {
                 this.buttonAttendingWith(0);
             }
+            })
+        },
 
-            this.setAccessibilityButtons();
-            this.setDietaryButtons();
+        computed: {
 
-            // console.log(listAccessibility);
-            // console.log(listDiet);
+            btnAccessClass: function () {
+                var btnClass;
+
+                if (this.recipientAccessibilityRecipient || this.recipientAccessibilityGuest) {
+                    btnClass = "btn-secondary";
+                }
+                else {
+                    btnClass = "btn-primary";
+                }
+                return btnClass + " btn";
+            },
+
+            btnDietClass: function () {
+                var btnClass;
+
+                if (this.recipientDietaryRecipient || this.recipientDietaryGuest) {
+                    btnClass = "btn-secondary";
+                }
+                else {
+                    btnClass = "btn-primary";
+                }
+                return btnClass + " btn";
+            }
         },
 
         methods: {
 
 
             processForm: function(e) {
-                console.log('processForm');
 
                 errors = this.checkRSVP();
                 console.log(errors);
@@ -294,8 +320,6 @@
 
                 var errors = [];
 
-                console.log("currentAttending: " + this.currentAttending);
-
                 if (this.currentAttending == -1) {
                     errors.push('Please indicate if you are planning to atttend or not');
                 }
@@ -319,7 +343,6 @@
                 if (this.recipientAccessibilityRecipient) {
                     entered = false;
                     for (var i = 0; i < listAccessibility.length; i++) {
-                        console.log($('#accessR-' + listAccessibility[i].id).prop("checked") );
                         if ($('#accessR-' + listAccessibility[i].id).prop("checked") ) {
                             entered = true;
                         }
@@ -335,7 +358,6 @@
                 if (this.recipientAccessibilityGuest) {
                     entered = false;
                     for (var i = 0; i < listAccessibility.length; i++) {
-                        console.log($('#accessG-' + listAccessibility[i].id).prop("checked") );
                         if ($('#accessG-' + listAccessibility[i].id).prop("checked") ) {
                             entered = true;
                         }
@@ -351,7 +373,6 @@
                 if (this.recipientDietaryRecipient) {
                     entered = false;
                     for (var i = 0; i < listDiet.length; i++) {
-                        console.log($('#dietR-' + listDiet[i].id).prop("checked") );
                         if ($('#dietR-' + listDiet[i].id).prop("checked") ) {
                             entered = true;
                         }
@@ -367,7 +388,6 @@
                 if (this.recipientDietaryGuest) {
                     entered = false;
                     for (var i = 0; i < listDiet.length; i++) {
-                        console.log($('#dietG-' + listDiet[i].id).prop("checked") );
                         if ($('#dietG-' + listDiet[i].id).prop("checked") ) {
                             entered = true;
                         }
@@ -385,8 +405,6 @@
 
 
             buttonAttendingWith: function (id) {
-
-                console.log("buttonAttendingWith: " + id);
 
                 if (this.currentAttending != id) {
                     if (this.currentAttending !== null) {
@@ -409,29 +427,6 @@
                     this.recipientAccessibilityRecipient = false;
                     this.recipientAccessibilityGuest = false;
                 }
-                this.setAccessibilityButtons();
-            },
-
-            setAccessibilityButtons() {
-                if (this.recipientAccessibilityRecipient) {
-                    $("#btn-access-2").removeClass('btn-secondary').addClass('btn-primary');
-                    $("#btn-access-0").removeClass('btn-primary').addClass('btn-secondary');
-                }
-                else {
-                    $("#btn-access-2").removeClass('btn-primary').addClass('btn-secondary');
-                }
-                if (this.recipientAccessibilityGuest) {
-                    $("#btn-access-1").removeClass('btn-secondary').addClass('btn-primary');
-                    $("#btn-access-0").removeClass('btn-primary').addClass('btn-secondary');
-                }
-                else {
-                    $("#btn-access-1").removeClass('btn-primary').addClass('btn-secondary');
-                }
-                if (!this.recipientAccessibilityRecipient && !this.recipientAccessibilityGuest) {
-                    $("#btn-access-2").removeClass('btn-primary').addClass('btn-secondary');
-                    $("#btn-access-1").removeClass('btn-primary').addClass('btn-secondary');
-                    $("#btn-access-0").removeClass('btn-secondary').addClass('btn-primary');
-                }
             },
 
 
@@ -447,31 +442,7 @@
                     this.recipientDietaryRecipient = false;
                     this.recipientDietaryGuest = false;
                 }
-                this.setDietaryButtons();
             },
-
-            setDietaryButtons() {
-                if (this.recipientDietaryRecipient) {
-                    $("#btn-dietary-2").removeClass('btn-secondary').addClass('btn-primary');
-                    $("#btn-dietary-0").removeClass('btn-primary').addClass('btn-secondary');
-                }
-                else {
-                    $("#btn-dietary-2").removeClass('btn-primary').addClass('btn-secondary');
-                }
-                if (this.recipientDietaryGuest) {
-                    $("#btn-dietary-1").removeClass('btn-secondary').addClass('btn-primary');
-                    $("#btn-dietary-0").removeClass('btn-primary').addClass('btn-secondary');
-                }
-                else {
-                    $("#btn-dietary-1").removeClass('btn-primary').addClass('btn-secondary');
-                }
-                if (!this.recipientDietaryRecipient && !this.recipientDietaryGuest) {
-                    $("#btn-dietary-2").removeClass('btn-primary').addClass('btn-secondary');
-                    $("#btn-dietary-1").removeClass('btn-primary').addClass('btn-secondary');
-                    $("#btn-dietary-0").removeClass('btn-secondary').addClass('btn-primary');
-                }
-            }
-
     }
 
    });

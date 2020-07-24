@@ -27,3 +27,8 @@
 #lsa-registrations th {
     border-bottom: 0px;
 }
+
+
+#dateFilter {
+    width: 50%;
+}

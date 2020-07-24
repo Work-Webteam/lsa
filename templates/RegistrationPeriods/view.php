@@ -1,4 +1,5 @@
 <h1><?= h($period->registration_year) ?></h1>
+<p><?= $period->qualifying_years ?></p>
 <p><?= h("Open: " . $period->open_registration) ?></p>
 <p><?= h("Close: " . $period->close_registration) ?></p>
 <p>

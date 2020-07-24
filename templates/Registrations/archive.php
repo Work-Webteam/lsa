@@ -10,13 +10,16 @@
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
 
-<h1>Registrations</h1>
+<h1>Registration Archive</h1>
+
+
     <div class="datatable-container">
         <?= $this->Flash->render() ?>
         <table id="lsa-registrations" class="display lsa-datatable" style="font-size: 12px; width:100%">
 
         </table>
     </div>
+
 
 <script>
     var registrations=<?php echo json_encode($registrations); ?>;
@@ -30,6 +33,7 @@
         $('#lsa-registrations').DataTable( {
             data: registrations,
             columns: [
+                { data: "registration_year", title: "Registration Year", orderData: [0, 1, 2]},
                 { data: "last_name", title: "Last Name" },
                 { data: "first_name", title: "First Name" },
                 { data: "id", orderable: false, render: function( data, type, row, meta) {
@@ -67,7 +71,20 @@
 
             dom: '<"toolbar">Bfrtip',
             buttons: [
-                'csv', 'excel'
+                {
+                    extend: 'csv',
+                    text: 'Export to CSV',
+                    filename: function () {
+                        return 'Archive-' + dateStr();
+                    },
+                },
+                {
+                    extend: 'excel',
+                    text: 'Export to Excel',
+                    filename: function () {
+                        return 'Archive-' + dateStr();
+                    },
+                }
             ],
 
             language: {
@@ -85,7 +102,7 @@
                 });
                 $('</tr>').appendTo( '#lsa-registrations thead' );
 
-                this.api().columns([2,3,5,6,7,8,9,10,16,17,18]).every( function () {
+                this.api().columns([4,6,7,8,9,10,11,17,18,19]).every( function () {
 
                     var column = this;
                     var select = $('<select id="column-' + column.index() + '"><option value=""></option></select><br>')
@@ -157,5 +174,17 @@
 
     function summaryMilestone() {
         location.href = "/registrations/milestonesummary";
+    }
+
+    function dateStr() {
+        var d = new Date();
+
+        var month = d.getMonth()+1;
+        var day = d.getDate();
+
+        var output = d.getFullYear() + '-' +
+            (month<10 ? '0' : '') + month + '-' +
+            (day<10 ? '0' : '') + day;
+        return output
     }
 </script>

@@ -98,6 +98,9 @@
         <?= h('Registration Year: ' . h($registration->registration_year)) ?>
     </div>
     <div>
+        <?= h('Award Year: ' . h($registration->qualifying_year)) ?>
+    </div>
+    <div>
         <?php
             if (is_null($registration->award)) {
                 $award = new stdClass;

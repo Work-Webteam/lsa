@@ -49,7 +49,7 @@ class AppController extends Controller
 
 
 
-        $_SERVER['HTTP_SM_USER'] = 'rjkuyvenh';
+        $_SERVER['HTTP_SM_USER'] = 'rkuyvenh';
         $_SERVER['HTTP_SMGOV_USEREMAIL'] = 'Raymond.Kuyvenhoven@gov.bc.ca';
         $_SERVER['HTTP_SMGOV_USERDISPLAYNAME'] = 'Kuyvenhoven, Raymond PSA:EX';
         $_SERVER['HTTP_SMGOV_USERGUID'] = '60DCD2AF73FB44AE9345F11B71CD3495';   // admin
@@ -57,8 +57,6 @@ class AppController extends Controller
 //        $_SERVER['HTTP_SMGOV_USERGUID'] = '9ECC7D7FD8EE840932B9D21721251737';   // lsa admin
 
 //        $_SERVER['HTTP_SMGOV_USERGUID'] = '8A5BD27856273A99C6D5AF1FCDDBCB99';   // award procurement
-
-
 
 //        $_SERVER['HTTP_SM_USER'] = 'jadams';
 //        $_SERVER['HTTP_SMGOV_USERGUID'] = '26B243BA60AE8F60B4BB3C81E1450423';   // ministry contact
