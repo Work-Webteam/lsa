@@ -26,6 +26,11 @@
 <?= $this->Html->link('Awards Summary', ['action' => 'ceremonyawardssummary', $ceremony_id, false], ['class' => 'btn btn-info']) ?>
 &nbsp;
 <?= $this->Html->link('Summary', ['action' => 'ceremonysummary', $ceremony_id], ['class' => 'btn btn-info']) ?>
+
+<?= $this->Html->link('Name Tags', ['action' => 'exportnametags', $ceremony_id], ['class' => 'btn btn-info']) ?>
+
+<?= $this->Html->link('Recipient Names', ['action' => 'reportrecipientsbyceremony', $ceremony_id], ['class' => 'btn btn-info']) ?>
+
 <table>
     <tr>
         <?= $isadmin ? "<th>Id</th>" : "" ?>

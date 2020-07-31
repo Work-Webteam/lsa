@@ -14,7 +14,7 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
-<h2>Award Totals</h2>
+<h2>Export Recipients - <?php echo date("Y"); ?></h2>
 
 
 <div class="datatable-container">
@@ -29,7 +29,7 @@
 
 echo $this->Form->button('Cancel', array(
     'type' => 'button',
-    'onclick' => 'location.href=\'/registrations\'',
+    'onclick' => 'location.href=\'/registrations/\'',
     'class' => 'btn btn-secondary',
 ));
 
@@ -37,48 +37,30 @@ echo $this->Form->button('Cancel', array(
 
 
 <script>
-    var recipients=<?php echo json_encode($recipients); ?>;
+    var ministries=<?php echo json_encode($ministries); ?>;
     var edit = true;
     var toolbar = true;
-    var attending = true;
-    var year =<?php echo $year; ?>;
+    var datestr="<?php echo date("Y"); ?>";
+
+    console.log(datestr);
+    console.log(ministries);
 
     $(document).ready(function() {
 
-        console.log("year: " + year);
-
-        for (i = 0; i < recipients.length; i++) {
-            options = JSON.parse(recipients[i].award_options)
-            recipients[i].optionsDisplay = "";
-            for (j = 0; j < options.length; j++) {
-                if (i > 0) {
-                    recipients[i].optionsDisplay += "<BR>";
-                }
-                recipients[i].optionsDisplay += "- " + options[j];
-            }
-            if (recipients[i].award_id == 0) {
-                recipients[i].award = { id: 0, name: "PECSF Donation" };
-            }
-        }
-
-        console.log(recipients);
-
-        var cols;
-            cols = [
-                {data: "ceremony.night", title: "Ceremony", orderData: [0, 1, 4], orderSequence: ["asc"] },
-                {data: "ministry.name", title: "Ministry", orderable: false },
-                {data: "last_name", title: "Last Name", orderable: false },
-                {data: "first_name", title: "First Name", orderable: false },
-                {data: "presentation_number", title: "Presentation ID", orderData: [0, 4], orderSequence: ["asc"] },
-                {data: "award.name", title: "Award", orderable: false },
-                {data: "optionsDisplay", title: "Options", orderable: false },
-            ];
-
+        console.log(ministries);
 
 
         $('#ceremony-accessibility').DataTable( {
-            data: recipients,
-            columns: cols,
+            data: ministries,
+            columns: [
+                {data: "ceremony_id", title: "Ceremony ID"},
+                {data: "ministry_id", title: "Ministry ID"},
+                {data: "ministry.name_shortform", title: "Ministry", orderable: false},
+
+
+
+
+            ],
             // stateSave: true,
             pageLength: 15,
             lengthChange: false,
@@ -90,14 +72,14 @@ echo $this->Form->button('Cancel', array(
                     extend: 'csv',
                     text: 'Export to CSV',
                     filename: function () {
-                        return year + '-Awards';
+                        return datestr + '-nametag';
                     },
                 },
                 {
                     extend: 'excel',
                     text: 'Export to Excel',
                     filename: function () {
-                        return year + '-Awards';
+                        return datestr + '-nametag';
                     },
                 }
             ],
@@ -114,28 +96,7 @@ echo $this->Form->button('Cancel', array(
 
         } );
 
-        // btns = '<div>';
-        // btns += '<button class="btn btn-primary" onClick="resetFilters()">Reset Filters</button>';
-        // btns += '</div><div>';
-        // // btns += '<button class="btn btn-info" onClick="dataExport()">Export</button>';
-        // // btns += '&nbsp;';
-        // btns += '<button class="btn btn-info" onClick="summaryAward()">Award Summary</button>';
-        // btns += '&nbsp;';
-        // btns += '<button class="btn btn-info" onClick="summaryMinistry()">Ministry Summary</button>';
-        // btns += '&nbsp;';
-        // btns += '<button class="btn btn-info" onClick="summaryMilestone()">Milestone Summary</button>';
-        // btns += '</div>';
-        //
-        // $("div.toolbar").html(btns);
 
-
-        // $("table thead th").css('border-bottom', '0px');
-
-        // only show buttons for users with appropriate permissions
-        if (!toolbar) {
-            $("div.toolbar").hide();
-            $(".dt-buttons").hide();
-        }
     } );
 
 
@@ -150,9 +111,7 @@ echo $this->Form->button('Cancel', array(
         table.search('').columns().search('').draw();
     }
 
-    function dataExport() {
-        console.log('dataExport');
-    }
+
 
 </script>
 

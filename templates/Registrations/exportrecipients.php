@@ -14,8 +14,8 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
-<h2>Ceremony Night <?= $ceremony->night ?> - <?= date("l M j, Y g:ia", strtotime($ceremony->date)) ?></h2>
-<h3>Ceremony Awards List</h3>
+<h2>Export Recipients - <?php echo date("Y"); ?></h2>
+
 
 <div class="datatable-container">
     <?= $this->Flash->render() ?>
@@ -29,7 +29,7 @@
 
 echo $this->Form->button('Cancel', array(
     'type' => 'button',
-    'onclick' => 'location.href=\'/registrations/attendingrecipients/' . $ceremony_id . '\'',
+    'onclick' => 'location.href=\'/registrations/\'',
     'class' => 'btn btn-secondary',
 ));
 
@@ -40,10 +40,10 @@ echo $this->Form->button('Cancel', array(
     var registrations=<?php echo json_encode($recipients); ?>;
     var edit = true;
     var toolbar = true;
-    var attending=<?php echo $attending ? 1 : 0; ?>;
-    var datestr="<?php echo date("Y-m", strtotime($ceremony->date)); ?>";
+    var datestr="<?php echo date("Y"); ?>";
 
-    console.log(attending);
+    console.log(datestr);
+    console.log(registrations);
 
     $(document).ready(function() {
 
@@ -57,39 +57,61 @@ echo $this->Form->button('Cancel', array(
                 registrations[i].optionsDisplay += "- " + options[j];
             }
             if (registrations[i].award_id == 0) {
-                registrations[i].award = { id: 0, name: "PECSF Donation" };
+                if (registrations[i].pecsf_donation) {
+                    registrations[i].award = {id: 0, name: "PECSF Donation", abbreviation: "PESCF"};
+                    registrations[i].award_name = registrations[i].award.name;
+                }
+                else {
+                    registrations[i].award = {id: 0, name: "", abbreviation: ""};
+                    registrations[i].award_name = registrations[i].qualifying_year + " Recipient - award received";
+                }
             }
+            else {
+                registrations[i].award_name = registrations[i].award.name;
+            }
+            if (registrations[i].responded) {
+                if (registrations[i].attending) {
+                    registrations[i].attend_status = "Attending";
+                }
+                else {
+                    registrations[i].attend_status = "Not Attending";
+                }
+            }
+            else {
+                registrations[i].attend_status = "No Response";
+            }
+
         }
 
-        console.log(registrations);
+        // console.log(registrations);
 
-        var cols;
-
-        if (attending) {
-            attendingstr = "attending";
-            cols = [
-                {data: "last_name", title: "Last Name"},
-                {data: "first_name", title: "First Name"},
-                {data: "award.name", title: "Award"},
-                {data: "optionsDisplay", title: "Options"},
-            ];
-        }
-        else {
-            attendingstr = "non-attending";
-            cols = [
-                {data: "last_name", title: "Last Name"},
-                {data: "first_name", title: "First Name"},
-                {data: "award.name", title: "Award"},
-                {data: "optionsDisplay", title: "Options"},
-                {data: "supervisor_last_name", title: "Supervisor Last Name"},
-                {data: "supervisor_first_name", title: "Supervisor First Name"},
-                {data: "supervisor_email", title: "Supervisor Email"},
-            ];
-        }
 
         $('#ceremony-accessibility').DataTable( {
             data: registrations,
-            columns: cols,
+            columns: [
+                {data: "last_name", title: "Last Name", orderData: [0, 1], orderSequence: ["asc"]},
+                {data: "first_name", title: "First Name", orderable: false},
+                {data: "milestone.years", title: "Milestone", orderable: false},
+                {data: "office_city.name", title: "City", orderable: false},
+                { data: "ceremony.date", title: "Ceremony Date", orderable: false, render: function( data, type, row, meta) {
+                        const months = ["Jan", "Feb", "Mar","Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                        var d = new Date(data);
+                        var formatted_date = "n/a";
+
+                        if (!isNaN(d.getTime())) {
+                            formatted_date = months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear()
+                        }
+
+                        return formatted_date;
+                    } },
+                {data: "attend_status", title: "Attending", orderable: false},
+                {data: "ministry.name_shortform", title: "Ministry", orderable: false},
+                {data: "award_name", title: "Award", orderable: false},
+                {data: "admin_notes", title: "Notes", orderable: false},
+
+
+
+            ],
             // stateSave: true,
             pageLength: 15,
             lengthChange: false,
@@ -101,14 +123,14 @@ echo $this->Form->button('Cancel', array(
                     extend: 'csv',
                     text: 'Export to CSV',
                     filename: function () {
-                        return datestr + '-award-summary-' + attendingstr;
+                        return datestr + '-nametag';
                     },
                 },
                 {
                     extend: 'excel',
                     text: 'Export to Excel',
                     filename: function () {
-                        return datestr + '-award-summary-' + attendingstr;
+                        return datestr + '-nametag';
                     },
                 }
             ],
@@ -125,28 +147,7 @@ echo $this->Form->button('Cancel', array(
 
         } );
 
-        // btns = '<div>';
-        // btns += '<button class="btn btn-primary" onClick="resetFilters()">Reset Filters</button>';
-        // btns += '</div><div>';
-        // // btns += '<button class="btn btn-info" onClick="dataExport()">Export</button>';
-        // // btns += '&nbsp;';
-        // btns += '<button class="btn btn-info" onClick="summaryAward()">Award Summary</button>';
-        // btns += '&nbsp;';
-        // btns += '<button class="btn btn-info" onClick="summaryMinistry()">Ministry Summary</button>';
-        // btns += '&nbsp;';
-        // btns += '<button class="btn btn-info" onClick="summaryMilestone()">Milestone Summary</button>';
-        // btns += '</div>';
-        //
-        // $("div.toolbar").html(btns);
 
-
-        // $("table thead th").css('border-bottom', '0px');
-
-        // only show buttons for users with appropriate permissions
-        if (!toolbar) {
-            $("div.toolbar").hide();
-            $(".dt-buttons").hide();
-        }
     } );
 
 
@@ -161,9 +162,7 @@ echo $this->Form->button('Cancel', array(
         table.search('').columns().search('').draw();
     }
 
-    function dataExport() {
-        console.log('dataExport');
-    }
+
 
 </script>
 

@@ -14,7 +14,7 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
-<h2>Milestone Certificate Report</h2>
+<h2>Recipient Names by Night - <?= date("l M j, Y g:ia", strtotime($ceremony->date)) ?></h2>
 
 
 <div class="datatable-container">
@@ -29,7 +29,7 @@
 
 echo $this->Form->button('Cancel', array(
     'type' => 'button',
-    'onclick' => 'location.href=\'/registrations\'',
+    'onclick' => 'location.href=\'/registrations/\'',
     'class' => 'btn btn-secondary',
 ));
 
@@ -37,86 +37,56 @@ echo $this->Form->button('Cancel', array(
 
 
 <script>
-    var recipients=<?php echo json_encode($recipients); ?>;
+    var registrations=<?php echo json_encode($recipients); ?>;
     var edit = true;
     var toolbar = true;
-    var attending = true;
-    var year =<?php echo $year; ?>;
+    var datestr="<?php echo date("Y-M-d", strtotime($ceremony->date)); ?>";
+
+    console.log(datestr);
+    console.log(registrations);
 
     $(document).ready(function() {
 
-        console.log("year: " + year);
 
-        for (i = 0; i < recipients.length; i++) {
-            options = JSON.parse(recipients[i].award_options)
-            recipients[i].optionsDisplay = "";
-            for (j = 0; j < options.length; j++) {
-                if (i > 0) {
-                    recipients[i].optionsDisplay += "<BR>";
-                }
-                recipients[i].optionsDisplay += "- " + options[j];
-            }
-            if (recipients[i].award_id == 0) {
-                recipients[i].award = { id: 0, name: "PECSF Donation" };
-            }
-        }
-
-        console.log(recipients);
-
-        var cols;
-
-        cols = [
-            { data: "ceremony.date", visible: false },
-            { data: "ceremony.night", title: "Ceremony", orderable: false},
-            { data: "ceremony.date", title: "Ceremony", orderable: false, orderData: [0, 7, 3, 6], render: function( data, type, row, meta) {
-                    const months = ["Jan", "Feb", "Mar","Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                    var d = new Date(data);
-
-                    let formatted_date = months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear()
-                    console.log(formatted_date)
-
-                    return formatted_date;
-                } },
-
-            { data: "ministry.name", title: "Ministry", orderable: false},
-            { data: "last_name", title: "Last Name", orderable: false},
-            { data: "first_name", title: "First Name", orderable: false},
-            { data: "presentation_number", title: "Presentation ID", orderable: false},
-            { data: "attending", title: "Attending", orderable: false, render: function (data, type, row, meta) {
-                    if (data) {
-                        return "Attending";
-                    } else {
-                        return "Not Attending";
-                    }
-                }
-            },
-            { data: "milestone.name", title: "Milestone", visible: true},
-        ];
+        // console.log(registrations);
 
 
         $('#ceremony-accessibility').DataTable( {
-            data: recipients,
-            columns: cols,
-            order: [[ 2, "asc" ]],
-            // stateSave: true,
+            data: registrations,
+            columns: [
+                {data: "milestone.years", title: "Years of Service", orderable: false},
+                {data: "first_name", title: "First Name", orderData: [3, 2, 1], orderSequence: ["asc"], orderable: false},
+                {data: "last_name", title: "Last Name", orderable: false},
+                {data: "ministry.name_shortform", title: "Ministry", orderable: false},
+                {data: "office_city.name", title: "City", orderable: false},
+
+
+            ],
+            bFilter: false,
             pageLength: 15,
             lengthChange: false,
-
-
+            order: [[ 1, "asc" ], [2, 'asc'], [3, 'asc']],
             dom: '<"toolbar">Bfrtip',
             buttons: [
                 {
                     extend: 'csv',
                     text: 'Export to CSV',
                     filename: function () {
-                        return year + '-CertificatesMilestone';
+                        return datestr + '-recipients-by-night';
                     },
                 },
                 {
                     extend: 'excel',
                     text: 'Export to Excel',
                     filename: function () {
-                        return year + '-CertificatesMilestone';
+                        return datestr + '-recipients-by-night';
+                    },
+                },
+                {
+                    extend: 'pdf',
+                    text: 'Export to PDF',
+                    filename: function () {
+                        return datestr + '-recipients-by-night';
                     },
                 }
             ],
@@ -133,6 +103,7 @@ echo $this->Form->button('Cancel', array(
 
         } );
 
+
     } );
 
 
@@ -147,9 +118,7 @@ echo $this->Form->button('Cancel', array(
         table.search('').columns().search('').draw();
     }
 
-    function dataExport() {
-        console.log('dataExport');
-    }
+
 
 </script>
 

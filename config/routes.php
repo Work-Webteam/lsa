@@ -70,6 +70,26 @@ $routes->scope('/', function (RouteBuilder $builder) {
     $builder->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
 
     $builder->connect('/register', ['controller' => 'Registrations', 'action' => 'register']);
+    $builder->connect('/rsvp/{id}', ['controller' => 'Registrations', 'action' => 'rsvp'])
+        ->setPass(['id'])
+        // Define a pattern that `id` must match.
+        ->setPatterns([
+            'id' => '[0-9]+',
+        ]);
+
+
+
+
+
+//    $routes->connect(
+//        '/blog/{id}-{slug}', // E.g. /blog/3-CakePHP_Rocks
+//        ['controller' => 'Blogs', 'action' => 'view']
+//    )
+//    ->setPass(['id', 'slug'])
+//        // Define a pattern that `id` must match.
+//        ->setPatterns([
+//            'id' => '[0-9]+',
+//        ]);
 
     $builder->connect('/ceremony', ['controller' => 'Pages', 'action' => 'display', 'ceremony']);
     $builder->connect('/eligibility', ['controller' => 'Pages', 'action' => 'display', 'eligibility']);

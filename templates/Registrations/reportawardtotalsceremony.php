@@ -8,17 +8,17 @@
 <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
 
 <h2>Award Totals by Ceremony</h2>
 
 <p id="date_filter">
-    <span id="date-label-from" class="date-label">From: </span><input class="date_range_filter date" type="text" id="datepicker_from" />
+    <span id="date-label-from" class="date-label">Changes Since: </span><input class="date_range_filter date" type="text" id="datepicker_from" />
 
 </p>
 
@@ -80,8 +80,8 @@ echo $this->Form->button('Cancel', array(
                 { data: "total", title: "Total", orderable: false },
                 { data: "attending", title: "Total Attending", orderable: false },
                 { data: "notattending", title: "Total Not Attending", orderable: false},
-                { data: "lastupdate", title: "Last Update", orderable: false},
-                { data: "lastupdate", title: "", orderable: false, render: function (data, type, row, meta) {
+                // { data: "lastupdate", title: "Last Update", orderable: false},
+                { data: "lastupdate", title: "Changes", orderable: false, render: function (data, type, row, meta) {
 
                         indicator = "";
                         if (fromDate) {
@@ -135,19 +135,21 @@ echo $this->Form->button('Cancel', array(
         } );
 
         $("#datepicker_from").datepicker({
-            showOn: "button",
-            buttonImage: "images/calendar.gif",
-            buttonImageOnly: false,
+            // showOn: "button",
+            // buttonImage: "/img/icons/calendar.png",
+            // buttonImageOnly: false,
             "onSelect": function(date) {
+                console.log("here");
                 fromDate = new Date(date).toISOString();
                 dTable.rows().invalidate().draw();
             }
         }).keyup(function() {
             fromDate = new Date(this.value).toISOString();
             dTable.rows().invalidate().draw();
-        });
+        }).next(".ui-datepicker-trigger").addClass("btn-light");
 
     } );
+
 
 
 

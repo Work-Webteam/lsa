@@ -4,7 +4,7 @@
 echo $this->Form->create($ministry);
 // Hard code the user for now.
 echo $this->Form->control('name');
-
+echo $this->Form->control('name_shortform', ['label' => 'Short Form Name']);
 echo $this->Form->button(__('Save Ministry'), [
     'class' => 'btn btn-primary'
 ]);

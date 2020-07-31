@@ -51,6 +51,8 @@
                 <a class="dropdown-item" href="/registrations/awardsummary">Award Summary</a>
                 <a class="dropdown-item" href="/registrations/ministrysummary">Ministry Summary</a>
                 <a class="dropdown-item" href="/registrations/milestonesummary">Milestone Summary</a>
+                <a class="dropdown-item" href="/registrations/exportrecipients">Export Recipients</a>
+                <a class="dropdown-item" href="/registrations/exportspecialrequirements">Special Requirements</a>
             </div>
         </li>
         <li class="nav-item">

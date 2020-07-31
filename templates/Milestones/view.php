@@ -1,5 +1,7 @@
 <h1><?= h($milestone->name) ?></h1>
 
+<p><?= h("Years: " . $milestone->years) ?></p>
+
 <p><?= h("Donation Amount: " . $milestone->donation) ?></p>
 
 <p>

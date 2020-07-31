@@ -24,7 +24,7 @@
         <h4><?= date("F j", strtotime($ceremony->date)) . " at " . date("g:ia", strtotime($ceremony->date)) ?></h4>
         <h4>at Government House</h4>
         <h4>1401 Rockland Ave, Victoria</h4>
-        <h2>Kindly respond by [DATE]</h2>
+        <h2>Kindly respond by <?= date("F j", strtotime($regperiod->close_rsvp)) ?></h2>
     </center>
 
     <?php
@@ -412,6 +412,19 @@
                     }
                     $("#btn-attend-" + id).removeClass('btn-secondary').addClass('btn-primary');
                     this.currentAttending = id;
+
+                    if (this.currentAttending == 2) {
+                        this.recipientAttending = true;
+                        this.recipientGuest = true;
+                    }
+                    else if (this.currentAttending == 1) {
+                        this.recipientAttending = true;
+                        this.recipientGuest = false;
+                    }
+                    else {
+                        this.recipientAttending = false;
+                        this.recipientGuest = false;
+                    }
                 }
             },
 

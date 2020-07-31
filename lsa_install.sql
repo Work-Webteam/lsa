@@ -21,6 +21,7 @@ DROP TABLE IF EXISTS registration_periods;
 CREATE TABLE milestones (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
+    years VARCHAR(16) NOT NULL,
     personalized BOOLEAN DEFAULT false,
     donation DECIMAL(19,4) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -34,7 +35,8 @@ CREATE TABLE cities (
 
 CREATE TABLE ministries (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
+    name VARCHAR(255) NOT NULL,
+    name_shortform VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
@@ -89,7 +91,8 @@ CREATE TABLE registration_periods (
     registration_year INT,
     qualifying_years VARCHAR(255) NOT NULL,
     open_registration DATETIME,
-    close_registration DATETIME
+    close_registration DATETIME,
+    close_rsvp DATETIME
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
@@ -106,6 +109,7 @@ CREATE TABLE ceremonies (
 CREATE TABLE awards (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
+    abbreviation VARCHAR(32) NOT NULL,
     milestone_id INT,
     description TEXT,
     image VARCHAR(255),
@@ -262,12 +266,12 @@ CREATE TABLE log (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
-INSERT INTO `milestones` (`id`,`name`, `personalized`, `donation`) VALUES (1,'25 Years', 1, 75);
-INSERT INTO `milestones` (`id`,`name`, `personalized`, `donation`) VALUES (2,'30 Years', 0, 150);
-INSERT INTO `milestones` (`id`,`name`, `personalized`, `donation`) VALUES (3,'35 Years', 0, 300);
-INSERT INTO `milestones` (`id`,`name`, `personalized`, `donation`) VALUES (4,'40 Years', 0, 400);
-INSERT INTO `milestones` (`id`,`name`, `personalized`, `donation`) VALUES (5,'45 Years', 0, 450);
-INSERT INTO `milestones` (`id`,`name`, `personalized`, `donation`) VALUES (6,'50 Years', 0, 500);
+INSERT INTO `milestones` (`id`, `name`, `years`, `personalized`, `donation`) VALUES(1, '25 Years', '25', 1, '75.0000');
+INSERT INTO `milestones` (`id`, `name`, `years`, `personalized`, `donation`) VALUES(2, '30 Years', '30', 0, '150.0000');
+INSERT INTO `milestones` (`id`, `name`, `years`, `personalized`, `donation`) VALUES(3, '35 Years', '35', 0, '300.0000');
+INSERT INTO `milestones` (`id`, `name`, `years`, `personalized`, `donation`) VALUES(4, '40 Years', '40', 0, '400.0000');
+INSERT INTO `milestones` (`id`, `name`, `years`, `personalized`, `donation`) VALUES(5, '45 Years', '45', 0, '450.0000');
+INSERT INTO `milestones` (`id`, `name`, `years`, `personalized`, `donation`) VALUES(6, '50 Years', '50', 0, '500.0000');
 
 INSERT INTO `roles` (`id`, `name`) VALUES(1, 'Administrator');
 INSERT INTO `roles` (`id`, `name`) VALUES(2, 'LSA Admin');
@@ -291,25 +295,26 @@ INSERT INTO `diet` (`name`) VALUES ('No Shellfish');
 INSERT INTO `diet` (`name`) VALUES ('Vegetarian');
 INSERT INTO `diet` (`name`) VALUES ('Vegan');
 
-INSERT INTO `ministries` (`name`) VALUES ('Finance');
-INSERT INTO `ministries` (`name`) VALUES ('Transportation & Infrastructure');
-INSERT INTO `ministries` (`name`) VALUES ('Citizens Services');
-INSERT INTO `ministries` (`name`) VALUES ('Agriculture');
-INSERT INTO `ministries` (`name`) VALUES ('Attorney General');
-INSERT INTO `ministries` (`name`) VALUES ('Advanced Education, Skills & Training');
-INSERT INTO `ministries` (`name`) VALUES ('Education');
-INSERT INTO `ministries` (`name`) VALUES ('Energy, Mines & Petroleum Resources');
-INSERT INTO `ministries` (`name`) VALUES ('Environment & Climate Change Strategy');
-INSERT INTO `ministries` (`name`) VALUES ('Forests, Lands, Natural Resource Operations & Rural Development');
-INSERT INTO `ministries` (`name`) VALUES ('Health');
-INSERT INTO `ministries` (`name`) VALUES ('Indigenous Relations & Reconciliation');
-INSERT INTO `ministries` (`name`) VALUES ('Jobs, Trade & Technology');
-INSERT INTO `ministries` (`name`) VALUES ('Labour');
-INSERT INTO `ministries` (`name`) VALUES ('Mental Health & Addictions');
-INSERT INTO `ministries` (`name`) VALUES ('Municipal Affairs & Housing');
-INSERT INTO `ministries` (`name`) VALUES ('Public Safety & Solicitor General & Emergency B.C.');
-INSERT INTO `ministries` (`name`) VALUES ('Social Development & Poverty Reduction');
-INSERT INTO `ministries` (`name`) VALUES ('Tourism, Arts & Culture');
+
+INSERT INTO `ministries` (`id`, `name`, `name_shortform`) VALUES(1, 'Ministry of Finance', 'Finance');
+INSERT INTO `ministries` (`id`, `name`, `name_shortform`) VALUES(2, 'Ministry of Transportation & Infrastructure', 'Transportation & Infrastructure');
+INSERT INTO `ministries` (`id`, `name`, `name_shortform`) VALUES(3, 'Ministry of Citizens Services', 'Citizens Services');
+INSERT INTO `ministries` (`id`, `name`, `name_shortform`) VALUES(4, 'Ministry of Agriculture', 'Agriculture');
+INSERT INTO `ministries` (`id`, `name`, `name_shortform`) VALUES(5, 'Ministry of the Attorney General', 'Attorney General');
+INSERT INTO `ministries` (`id`, `name`, `name_shortform`) VALUES(6, 'Ministry of Advanced Education, Skills & Training', 'Advanced Education, Skills & Training');
+INSERT INTO `ministries` (`id`, `name`, `name_shortform`) VALUES(7, 'Ministry of Education', 'Education');
+INSERT INTO `ministries` (`id`, `name`, `name_shortform`) VALUES(8, 'Ministry of Energy, Mines & Petroleum Resources', 'Energy, Mines & Petroleum Resources');
+INSERT INTO `ministries` (`id`, `name`, `name_shortform`) VALUES(9, 'Ministry of Environment & Climate Change Strategy', 'Energy, Mines & Petroleum Resources');
+INSERT INTO `ministries` (`id`, `name`, `name_shortform`) VALUES(10, 'Ministry of Forests, Lands, Natural Resource Operations & Rural Development', 'Forests, Lands, Natural Resource Operations & Rural Development');
+INSERT INTO `ministries` (`id`, `name`, `name_shortform`) VALUES(11, 'Ministry of Health', 'Health');
+INSERT INTO `ministries` (`id`, `name`, `name_shortform`) VALUES(12, 'Ministry of Indigenous Relations & Reconciliation', 'Indigenous Relations & Reconciliation');
+INSERT INTO `ministries` (`id`, `name`, `name_shortform`) VALUES(13, 'Ministry of Jobs, Trade & Technology', 'Jobs, Trade & Technology');
+INSERT INTO `ministries` (`id`, `name`, `name_shortform`) VALUES(14, 'Ministry of Labour', 'Labour');
+INSERT INTO `ministries` (`id`, `name`, `name_shortform`) VALUES(15, 'Ministry of Mental Health & Addictions', 'Mental Health & Addictions');
+INSERT INTO `ministries` (`id`, `name`, `name_shortform`) VALUES(16, 'Ministry of Municipal Affairs & Housing', 'Municipal Affairs & Housing');
+INSERT INTO `ministries` (`id`, `name`, `name_shortform`) VALUES(17, 'Ministry of Public Safety & Solicitor General & Emergency B.C.', 'Public Safety & Solicitor General & Emergency B.C.');
+INSERT INTO `ministries` (`id`, `name`, `name_shortform`) VALUES(18, 'Ministry of Social Development & Poverty Reduction', 'Social Development & Poverty Reduction');
+INSERT INTO `ministries` (`id`, `name`, `name_shortform`) VALUES(19, 'Ministry of Tourism, Arts & Culture', 'Tourism, Arts & Culture');
 
 
 INSERT INTO `cities` (`name`) VALUES ("'Ksan");

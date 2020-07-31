@@ -2,6 +2,7 @@
 <?php
 echo $this->Form->create($milestone);
 echo $this->Form->control('name');
+echo $this->Form->control('years');
 echo $this->Form->control('personalized');
 echo $this->Form->control('donation');
 

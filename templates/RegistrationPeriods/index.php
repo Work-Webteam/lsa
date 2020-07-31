@@ -9,6 +9,7 @@
         <th>Award Years</th>
         <th>Open Date</th>
         <th>Close Date</th>
+        <th>RSVP Close Date</th>
         <th colspan = 2>Operations</th>
     </tr>
 
@@ -22,10 +23,13 @@
                 <?= $period->qualifying_years ?>
             </td>
             <td>
-                <?= date("D Y-M-d g:ia", strtotime($period->open_registration)) ?>
+                <?= date("D Y-M-d", strtotime($period->open_registration)) ?>
             </td>
             <td>
-                <?= date("D Y-M-d g:ia", strtotime($period->close_registration)) ?>
+                <?= date("D Y-M-d", strtotime($period->close_registration)) ?>
+            </td>
+            <td>
+                <?= date("D Y-M-d", strtotime($period->close_rsvp)) ?>
             </td>
             <td>
                 <?= $this->Html->link('Edit', ['action' => 'edit', $period->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
