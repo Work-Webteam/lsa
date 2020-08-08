@@ -80,6 +80,7 @@ echo $this->Form->button('Cancel', array(
             else {
                 registrations[i].attend_status = "No Response";
             }
+            registrations[i].combined_name = registrations[i].last_name + ", " + registrations[i].first_name;
 
         }
 
@@ -89,8 +90,9 @@ echo $this->Form->button('Cancel', array(
         $('#ceremony-accessibility').DataTable( {
             data: registrations,
             columns: [
-                {data: "last_name", title: "Last Name", orderData: [0, 1], orderSequence: ["asc"]},
-                {data: "first_name", title: "First Name", orderable: false},
+                // {data: "last_name", title: "Last Name", orderData: [0, 1], orderSequence: ["asc"]},
+                // {data: "first_name", title: "First Name", orderable: false},
+                {data: "combined_name", title: "Name", orderData: [0], orderSequence: ["asc"]},
                 {data: "milestone.years", title: "Milestone", orderable: false},
                 {data: "office_city.name", title: "City", orderable: false},
                 { data: "ceremony.date", title: "Ceremony Date", orderable: false, render: function( data, type, row, meta) {

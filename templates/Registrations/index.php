@@ -1,14 +1,18 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"/>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css"/>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 <?= $this->Html->css('lsa-datatables.css') ?>
 
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
 <h1>Registrations</h1>
     <div class="datatable-container">
@@ -22,6 +26,7 @@
     var registrations=<?php echo json_encode($registrations); ?>;
     var edit=<?php echo json_encode($edit); ?>;
     var toolbar=<?php echo json_encode($toolbar); ?>;
+    var datestr="<?php echo date("Y"); ?>";
 
     $(document).ready(function() {
 
@@ -67,7 +72,20 @@
 
             dom: '<"toolbar">Bfrtip',
             buttons: [
-                'csv', 'excel'
+                {
+                    extend: 'csv',
+                    text: 'Export to CSV',
+                    filename: function () {
+                        return datestr + '-registrations';
+                    },
+                },
+                {
+                    extend: 'excel',
+                    text: 'Export to Excel',
+                    filename: function () {
+                        return datestr + '-registrations';
+                    },
+                }
             ],
 
             language: {

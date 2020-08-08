@@ -14,8 +14,8 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
-<h2>Recipient Names by Night - <?= date("l M j, Y g:ia", strtotime($ceremony->date)) ?></h2>
-
+<h2>Ceremony Night <?= $ceremony->night ?> - <?= date("l M j, Y g:ia", strtotime($ceremony->date)) ?></h2>
+<h3>Name Tag Export</h3>
 
 <div class="datatable-container">
     <?= $this->Flash->render() ?>
@@ -29,7 +29,7 @@
 
 echo $this->Form->button('Cancel', array(
     'type' => 'button',
-    'onclick' => 'location.href=\'/registrations/\'',
+    'onclick' => 'location.href=\'/registrations/attendingrecipients/' . $ceremony_id . '\'',
     'class' => 'btn btn-secondary',
 ));
 
@@ -37,56 +37,46 @@ echo $this->Form->button('Cancel', array(
 
 
 <script>
-    var registrations=<?php echo json_encode($recipients); ?>;
+    var attendees=<?php echo json_encode($attendees); ?>;
     var edit = true;
     var toolbar = true;
     var datestr="<?php echo date("Y-M-d", strtotime($ceremony->date)); ?>";
 
     console.log(datestr);
-    console.log(registrations);
 
     $(document).ready(function() {
 
 
-        // console.log(registrations);
+        console.log(attendees);
 
 
         $('#ceremony-accessibility').DataTable( {
-            data: registrations,
+            data: attendees,
             columns: [
-                {data: "milestone.years", title: "Years of Service", orderable: false},
-                {data: "first_name", title: "First Name", orderData: [3, 2, 1], orderSequence: ["asc"], orderable: false},
-                {data: "last_name", title: "Last Name", orderable: false},
-                {data: "ministry.name_shortform", title: "Ministry", orderable: false},
-                {data: "office_city.name", title: "Office City", orderable: false},
-
-
+                {data: "first_name", title: "First Name", orderable: false},
+                {data: "last_name", title: "Last Name", orderData: [1, 0], orderSequence: ["asc"]},
+                {data: "nametag_pre", title: "Pre Name Text", orderable: false},
+                {data: "nametag_post", title: "Post Name Text", orderable: false},
             ],
-            bFilter: false,
+            // stateSave: true,
             pageLength: 15,
             lengthChange: false,
-            order: [[ 1, "asc" ], [2, 'asc'], [3, 'asc']],
+            order: [[ 1, "asc" ]],
+
             dom: '<"toolbar">Bfrtip',
             buttons: [
                 {
                     extend: 'csv',
                     text: 'Export to CSV',
                     filename: function () {
-                        return datestr + '-recipients-by-night';
+                        return datestr + '-executivebadges';
                     },
                 },
                 {
                     extend: 'excel',
                     text: 'Export to Excel',
                     filename: function () {
-                        return datestr + '-recipients-by-night';
-                    },
-                },
-                {
-                    extend: 'pdf',
-                    text: 'Export to PDF',
-                    filename: function () {
-                        return datestr + '-recipients-by-night';
+                        return datestr + '-executivebadges';
                     },
                 }
             ],
@@ -104,19 +94,12 @@ echo $this->Form->button('Cancel', array(
         } );
 
 
+        if (!toolbar) {
+            $("div.toolbar").hide();
+            $(".dt-buttons").hide();
+        }
     } );
 
-
-    function resetFilters() {
-
-        var table = $('#ceremony-accessibility').DataTable();
-
-        table.columns().every( function () {
-            var column = this;
-            $('#column-' + column.index()).prop("selectedIndex", 0);
-        });
-        table.search('').columns().search('').draw();
-    }
 
 
 

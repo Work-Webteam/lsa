@@ -27,7 +27,11 @@
 &nbsp;
 <?= $this->Html->link('Summary', ['action' => 'ceremonysummary', $ceremony_id], ['class' => 'btn btn-info']) ?>
 
-<?= $this->Html->link('Name Tags', ['action' => 'exportnametags', $ceremony_id], ['class' => 'btn btn-info']) ?>
+<?= $this->Html->link('Name Badges', ['action' => 'exportnamebadges', $ceremony_id], ['class' => 'btn btn-info']) ?>
+
+<?= $this->Html->link('Executive Name Badges', ['action' => 'exportexecutivebadges', $ceremony_id], ['class' => 'btn btn-info']) ?>
+
+<?= $this->Html->link('Placecards', ['action' => 'exportplacecards', $ceremony_id], ['class' => 'btn btn-info']) ?>
 
 <?= $this->Html->link('Recipient Names', ['action' => 'reportrecipientsbyceremony', $ceremony_id], ['class' => 'btn btn-info']) ?>
 

@@ -130,6 +130,9 @@ CREATE TABLE registrations (
     created DATETIME,
     modified DATETIME,
 
+    recipient BOOLEAN default false,
+    vip BOOLEAN DEFAULT false,
+
     user_idir VARCHAR(16),
     user_guid VARCHAR(128),
 
@@ -243,6 +246,9 @@ CREATE TABLE registrations (
     photo_frame_range INT,
     photo_order INT,
     photo_sent DATETIME,
+
+    nametag_pre VARCHAR(255),
+    nametag_post VARCHAR(255),
 
     survey_participation BOOLEAN DEFAULT false,
 

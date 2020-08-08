@@ -15,7 +15,7 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
 <h2>Ceremony Night <?= $ceremony->night ?> - <?= date("l M j, Y g:ia", strtotime($ceremony->date)) ?></h2>
-<h3>Name Tag Export</h3>
+<h3>Name Badge Export</h3>
 
 <div class="datatable-container">
     <?= $this->Flash->render() ?>
@@ -85,14 +85,14 @@ echo $this->Form->button('Cancel', array(
                     extend: 'csv',
                     text: 'Export to CSV',
                     filename: function () {
-                        return datestr + '-nametag';
+                        return datestr + '-namebadges';
                     },
                 },
                 {
                     extend: 'excel',
                     text: 'Export to Excel',
                     filename: function () {
-                        return datestr + '-nametag';
+                        return datestr + '-namebadges';
                     },
                 }
             ],

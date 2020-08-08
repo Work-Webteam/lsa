@@ -26,6 +26,7 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
+        $conditions['Registrations.recipient ='] = true;
 
         $edit = true;
         $toolbar = true;
@@ -74,6 +75,7 @@ class RegistrationsController extends AppController
         }
 
         $conditions = array();
+        $conditions['Registrations.recipient ='] = true;
 
         $edit = false;
         $toolbar = true;
@@ -168,9 +170,9 @@ class RegistrationsController extends AppController
             ]);
         $registrationperiods = $query->first();
 
-        if (!$registrationperiods) {
+        if (empty($registrationperiods)) {
             $this->Flash->error(__('Long Service Awards are not currently open for registration.'));
-            $this->redirect('/');
+            return $this->redirect('/');
         }
 
         $list = explode(",", $registrationperiods->qualifying_years);
@@ -193,6 +195,10 @@ class RegistrationsController extends AppController
 
             $registration->created = time();
             $registration->modified = time();
+
+            $registration->recipient = true;
+            $registration->vip = false;
+
             $registration->registration_year = date("Y");
             $registration->office_province = "BC";
             $registration->home_province = "BC";
@@ -322,6 +328,12 @@ class RegistrationsController extends AppController
             $registration->photo_sent = $this->request->getData('photo_sent');
             if (empty($registration->photo_sent)) {
                 $registration->photo_sent = NULL;
+            }
+            if ($registration->accessibility_requirements_recipient == 0) {
+                $registration->accessibility_requirements_recipient = "[]";
+            }
+            if ($registration->accessibility_requirements_guest == 0) {
+                $registration->accessibility_requirements_guest = "[]";
             }
             if ($this->Registrations->save($registration)) {
                 $this->Flash->success(__('Registration has been updated.'));
@@ -466,6 +478,7 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
+        $conditions['Registrations.recipient ='] = true;
 
         // if Supervisor role only list registrations they created
         $registrations = $this->Registrations->find('all', [
@@ -494,6 +507,7 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
+        $conditions['Registrations.recipient ='] = true;
 
         // if Supervisor role only list registrations they created
         $registrations = $this->Registrations->find('all', [
@@ -523,6 +537,7 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
+        $conditions['Registrations.recipient ='] = true;
 
         // if Supervisor role only list registrations they created
         $milestones = $this->Registrations->find('all', [
@@ -562,6 +577,7 @@ class RegistrationsController extends AppController
     {
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
+        $conditions['Registrations.recipient ='] = true;
 
         // if Ministry Contact only list registrations from their ministry
         if ($this->checkAuthorization(Configure::read('Role.ministry_contact'))) {
@@ -602,6 +618,7 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.ceremony_id ='] = $id;
+        $conditions['Registrations.recipient ='] = true;
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -635,6 +652,7 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.ceremony_id ='] = $id;
+        $conditions['Registrations.recipient ='] = true;
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -669,6 +687,7 @@ class RegistrationsController extends AppController
 
             $conditions = array();
             $conditions['Registrations.registration_year ='] = date('Y');
+            $conditions['Registrations.recipient ='] = true;
             $conditions['Registrations.ministry_id ='] = $item['ministry'];
             $conditions['Registrations.milestone_id IN'] = $item['milestone'];
 
@@ -923,6 +942,7 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.ceremony_id ='] = $id;
+        $conditions['Registrations.recipient ='] = true;
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -982,7 +1002,6 @@ class RegistrationsController extends AppController
             if ($recipient->guest_diet) {
                 $totals->diet++;
             }
-
             $requirements = json_decode($recipient->accessibility_requirements_recipient, true);
             foreach ($requirements as $id) {
                 $totals->access_requirements[$id]->total++;
@@ -1183,6 +1202,7 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.ceremony_id ='] = $id;
+        $conditions['Registrations.recipient ='] = true;
         if ($attending) {
             $conditions['Registrations.attending ='] = true;
         }
@@ -1236,6 +1256,7 @@ class RegistrationsController extends AppController
         }
 
         $conditions = array();
+        $conditions['Registrations.recipient ='] = true;
         $conditions['Registrations.ceremony_id ='] = $id;
 
         $recipients = $this->Registrations->find('all', [
@@ -1282,6 +1303,7 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
+        $conditions['Registrations.recipient ='] = true;
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -1342,6 +1364,7 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
+        $conditions['Registrations.recipient ='] = true;
         $conditions['Registrations.ceremony_id >'] = 0;
 
         $recipients = $this->Registrations->find('all', [
@@ -1381,6 +1404,7 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
+        $conditions['Registrations.recipient ='] = true;
         $conditions['Registrations.award_id ='] = $award_id;
 
         $recipients = $this->Registrations->find('all', [
@@ -1429,6 +1453,7 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
+        $conditions['Registrations.recipient ='] = true;
         $conditions['Registrations.milestone_id IN '] = $milestone_id;
 
 
@@ -1470,6 +1495,7 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
+        $conditions['Registrations.recipient ='] = true;
         $conditions['Registrations.award_id ='] = $award_id;
 
         $recipients = $this->Registrations->find('all', [
@@ -1506,6 +1532,7 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
+        $conditions['Registrations.recipient ='] = true;
         $conditions['Registrations.ceremony_id >'] = 0;
 
         $recipients = $this->Registrations->find('all', [
@@ -1539,6 +1566,7 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
+        $conditions['Registrations.recipient ='] = true;
         $conditions['Registrations.ceremony_id >'] = 0;
 
         $recipients = $this->Registrations->find('all', [
@@ -1639,7 +1667,7 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
-
+        $conditions['Registrations.recipient ='] = true;
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -1702,7 +1730,7 @@ class RegistrationsController extends AppController
     }
 
 
-    public function exportnametags($id, $attending = true)
+    public function exportnamebadges($id, $attending = true)
     {
 
         if (!$this->checkAuthorization(array(
@@ -1715,6 +1743,7 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.ceremony_id ='] = $id;
+        $conditions['Registrations.recipient ='] = true;
         if ($attending) {
             $conditions['Registrations.attending ='] = true;
         }
@@ -1750,6 +1779,146 @@ class RegistrationsController extends AppController
     }
 
 
+    public function exportexecutivebadges($id, $attending = true)
+    {
+
+        if (!$this->checkAuthorization(array(
+            Configure::read('Role.admin'),
+            Configure::read('Role.lsa_admin'),
+            Configure::read('Role.protocol')))) {
+            $this->Flash->error(__('You are not authorized to view this page.'));
+            $this->redirect('/');
+        }
+
+        $conditions = array();
+        $conditions['Registrations.ceremony_id ='] = $id;
+        $conditions['Registrations.vip ='] = true;
+//        if ($attending) {
+//            $conditions['Registrations.attending ='] = true;
+//        }
+//        else {
+//            $conditions['Registrations.responded ='] = true;
+//            $conditions['Registrations.attending ='] = false;
+//        }
+
+        $recipients = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+            'order' => ['Registrations.last_name' => 'ASC'],
+            'contain' => [
+                'Milestones',
+                'Ministries',
+                'Awards',
+                'OfficeCity',
+                'HomeCity',
+                'SupervisorCity'
+            ],
+        ]);
+
+
+        $attendees = [];
+        foreach ($recipients as $recipient) {
+            $person = new \stdClass();
+            $person->first_name = $recipient->first_name;
+            $person->last_name = $recipient->last_name;
+            $person->nametag_pre = $recipient->nametag_pre;
+            $person->nametag_post = $recipient->nametag_post;
+            $attendees[] = $person;
+            if ($recipient->guest) {
+                $person = new \stdClass();
+                $person->first_name = $recipient->guest_first_name;
+                $person->last_name = $recipient->guest_last_name;
+                $person->nametag_pre = "";
+                $person->nametag_post = "Guest of " . $recipient->first_name . " " . $recipient->last_name;
+                $attendees[] = $person;
+            }
+        }
+
+        $this->set(compact('attendees'));
+
+
+        $this->set('ceremony_id', $id);
+
+        $ceremony = $this->Registrations->Ceremonies->findById($id)->firstOrFail();
+        $this->set('ceremony', $ceremony);
+
+
+    }
+
+
+    public function exportplacecards($id, $attending = true)
+    {
+
+        if (!$this->checkAuthorization(array(
+            Configure::read('Role.admin'),
+            Configure::read('Role.lsa_admin'),
+            Configure::read('Role.protocol')))) {
+            $this->Flash->error(__('You are not authorized to view this page.'));
+            $this->redirect('/');
+        }
+
+        $conditions = array();
+        $conditions['Registrations.ceremony_id ='] = $id;
+        $conditions['Registrations.vip ='] = true;
+//        $conditions = array();
+//        $conditions['Registrations.attending ='] = true;
+//        $conditions["or"] = ["Registrations.accessibility_recipient =" => true, "Registrations.accessibility_guest =" => true, "Registrations.recipient_diet =" => true, "Registrations.guest_diet =" => true];
+
+//        if ($attending) {
+//            $conditions['Registrations.attending ='] = true;
+//        }
+//        else {
+//            $conditions['Registrations.responded ='] = true;
+//            $conditions['Registrations.attending ='] = false;
+//        }
+
+        $recipients = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+            'order' => ['Registrations.last_name' => 'ASC'],
+            'contain' => [
+                'Milestones',
+                'Ministries',
+                'Awards',
+                'OfficeCity',
+                'HomeCity',
+                'SupervisorCity'
+            ],
+        ]);
+
+
+        $attendees = [];
+        foreach ($recipients as $recipient) {
+            $person = new \stdClass();
+            $person->first_name = $recipient->first_name;
+            $person->last_name = $recipient->last_name;
+            $person->nametag_pre = $recipient->nametag_pre;
+            $person->nametag_post = $recipient->nametag_post;
+            $person->ministry = $recipient->ministry->name;
+            $attendees[] = $person;
+            if ($recipient->guest) {
+                $person = new \stdClass();
+                $person->first_name = $recipient->guest_first_name;
+                $person->last_name = $recipient->guest_last_name;
+                $person->nametag_pre = "";
+                $person->nametag_post = "Guest of " . $recipient->first_name . " " . $recipient->last_name;
+                $person->ministry = $recipient->ministry->name;
+                $attendees[] = $person;
+            }
+//            debug($recipient);/
+        }
+
+        $this->set(compact('attendees'));
+
+
+        $this->set('ceremony_id', $id);
+
+        $ceremony = $this->Registrations->Ceremonies->findById($id)->firstOrFail();
+        $this->set('ceremony', $ceremony);
+
+
+    }
+
+
+
     public function exportrecipients()
     {
 
@@ -1763,6 +1932,8 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
+        $conditions['Registrations.recipient ='] = true;
+        $conditions['Registrations.ceremony_id >'] = 0;
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -1797,6 +1968,7 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.ceremony_id ='] = $id;
+        $conditions['Registrations.recipient ='] = true;
         if ($attending) {
             $conditions['Registrations.attending ='] = true;
         }
@@ -1840,6 +2012,7 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
+        $conditions['Registrations.recipient ='] = true;
         $conditions['Registrations.ceremony_id >'] = 0;
 //        $conditions
         $recipients = $this->Registrations->find('all', [
@@ -1953,50 +2126,6 @@ class RegistrationsController extends AppController
         foreach ($records as $value) {
             $diet[$value->id] = $value;
         }
-
-
-//        $temp = [];
-//        foreach ($recipients as $key => $value) {
-//            $requirements = json_decode($value->dietary_requirements_recipient, true);
-//            $value->recipient_reqs = "";
-//            foreach ($requirements as $requirement) {
-//                if (!empty($value->recipient_reqs)) {
-//                    $value->recipient_reqs .= ", ";
-//                }
-//                $value->recipient_reqs .= $diet[$requirement]->name;
-//            }
-//
-//            $requirements = json_decode($value->dietary_requirements_guest, true);
-//            $value->guest_reqs = "";
-//            foreach ($requirements as $requirement) {
-//                if (!empty($value->guest_reqs)) {
-//                    $value->guest_reqs .= ", ";
-//                }
-//                $value->guest_reqs .= $diet[$requirement]->name;
-//            }
-//
-//        $temp = [];
-//        foreach ($recipients as $key => $value) {
-//            $requirements = json_decode($value->accessibility_requirements_recipient, true);
-//            $value->recipient_reqs = "";
-//            foreach ($requirements as $requirement) {
-//                if (!empty($value->recipient_reqs)) {
-//                    $value->recipient_reqs .= ", ";
-//                }
-//                $value->recipient_reqs .= $accessibility[$requirement]->name;
-//            }
-//
-//            $requirements = json_decode($value->accessibility_requirements_guest, true);
-//            $value->guest_reqs = "";
-//            foreach ($requirements as $requirement) {
-//                if (!empty($value->guest_reqs)) {
-//                    $value->guest_reqs .= ", ";
-//                }
-//                $value->guest_reqs .= $accessibility[$requirement]->name;
-//            }
-//            $temp[$key] = $value;
-//        }
-
 
 
         $list = [];
