@@ -19,7 +19,7 @@
 
 <div class="datatable-container">
     <?= $this->Flash->render() ?>
-    <table id="ceremony-accessibility" class="display ceremony-datatable" style="font-size: 12px; width:100%">
+    <table id="data-table-1" class="display ceremony-datatable" style="font-size: 12px; width:100%">
 
     </table>
 </div>
@@ -47,38 +47,11 @@ echo $this->Form->button('Cancel', array(
 
         console.log(registrations);
 
-        $('#ceremony-accessibility').DataTable( {
+        $('#data-table-1').DataTable( {
             data: registrations,
             columns: [
                 { data: "last_name", title: "Last Name" },
                 { data: "first_name", title: "First Name" },
-                // { data: "attending", title: "Attending",
-                //   render: function (data, type, row) {
-                //       if (type === 'display' || type === 'filter' ) {
-                //           if (data == true) {
-                //               return "Yes";
-                //           }
-                //           if (data == false) {
-                //               return "No";
-                //           }
-                //       }
-                //       return data;
-                //   }
-                // },
-                // { data: "guest", title: "Guest",
-                //   render: function (data, type, row) {
-                //       if (type === 'display' || type === 'filter' ) {
-                //           console.log(data);
-                //          if (data == true) {
-                //             return "Yes";
-                //          }
-                //          if (data == false) {
-                //             return "No";
-                //          }
-                //       }
-                //       return data;
-                //  }
-                // },
 
                 { data: "recipient_diet", title: "Requirements",
                   render: function (data, type, row) {
@@ -93,7 +66,6 @@ echo $this->Form->button('Cancel', array(
                       return data;
                   }
                 },
-
 
 
                 { data: "guest_last_name", title: "Last Name" },
@@ -153,23 +125,6 @@ echo $this->Form->button('Cancel', array(
 
         } );
 
-        // btns = '<div>';
-        // btns += '<button class="btn btn-primary" onClick="resetFilters()">Reset Filters</button>';
-        // btns += '</div><div>';
-        // // btns += '<button class="btn btn-info" onClick="dataExport()">Export</button>';
-        // // btns += '&nbsp;';
-        // btns += '<button class="btn btn-info" onClick="summaryAward()">Award Summary</button>';
-        // btns += '&nbsp;';
-        // btns += '<button class="btn btn-info" onClick="summaryMinistry()">Ministry Summary</button>';
-        // btns += '&nbsp;';
-        // btns += '<button class="btn btn-info" onClick="summaryMilestone()">Milestone Summary</button>';
-        // btns += '</div>';
-        //
-        // $("div.toolbar").html(btns);
-
-
-        // $("table thead th").css('border-bottom', '0px');
-
         // only show buttons for users with appropriate permissions
         if (!toolbar) {
             $("div.toolbar").hide();
@@ -180,7 +135,7 @@ echo $this->Form->button('Cancel', array(
 
     function resetFilters() {
 
-        var table = $('#ceremony-accessibility').DataTable();
+        var table = $('#data-table-1').DataTable();
 
         table.columns().every( function () {
             var column = this;

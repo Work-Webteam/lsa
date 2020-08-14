@@ -26,7 +26,6 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
-        $conditions['Registrations.recipient ='] = true;
 
         $edit = true;
         $toolbar = true;
@@ -75,7 +74,6 @@ class RegistrationsController extends AppController
         }
 
         $conditions = array();
-        $conditions['Registrations.recipient ='] = true;
 
         $edit = false;
         $toolbar = true;
@@ -195,9 +193,6 @@ class RegistrationsController extends AppController
 
             $registration->created = time();
             $registration->modified = time();
-
-            $registration->recipient = true;
-            $registration->vip = false;
 
             $registration->registration_year = date("Y");
             $registration->office_province = "BC";
@@ -478,7 +473,6 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
-        $conditions['Registrations.recipient ='] = true;
 
         // if Supervisor role only list registrations they created
         $registrations = $this->Registrations->find('all', [
@@ -507,7 +501,6 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
-        $conditions['Registrations.recipient ='] = true;
 
         // if Supervisor role only list registrations they created
         $registrations = $this->Registrations->find('all', [
@@ -537,7 +530,6 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
-        $conditions['Registrations.recipient ='] = true;
 
         // if Supervisor role only list registrations they created
         $milestones = $this->Registrations->find('all', [
@@ -577,7 +569,6 @@ class RegistrationsController extends AppController
     {
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
-        $conditions['Registrations.recipient ='] = true;
 
         // if Ministry Contact only list registrations from their ministry
         if ($this->checkAuthorization(Configure::read('Role.ministry_contact'))) {
@@ -618,7 +609,6 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.ceremony_id ='] = $id;
-        $conditions['Registrations.recipient ='] = true;
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -652,7 +642,6 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.ceremony_id ='] = $id;
-        $conditions['Registrations.recipient ='] = true;
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -687,7 +676,6 @@ class RegistrationsController extends AppController
 
             $conditions = array();
             $conditions['Registrations.registration_year ='] = date('Y');
-            $conditions['Registrations.recipient ='] = true;
             $conditions['Registrations.ministry_id ='] = $item['ministry'];
             $conditions['Registrations.milestone_id IN'] = $item['milestone'];
 
@@ -942,7 +930,6 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.ceremony_id ='] = $id;
-        $conditions['Registrations.recipient ='] = true;
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -1202,7 +1189,6 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.ceremony_id ='] = $id;
-        $conditions['Registrations.recipient ='] = true;
         if ($attending) {
             $conditions['Registrations.attending ='] = true;
         }
@@ -1256,7 +1242,6 @@ class RegistrationsController extends AppController
         }
 
         $conditions = array();
-        $conditions['Registrations.recipient ='] = true;
         $conditions['Registrations.ceremony_id ='] = $id;
 
         $recipients = $this->Registrations->find('all', [
@@ -1303,7 +1288,6 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
-        $conditions['Registrations.recipient ='] = true;
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -1364,7 +1348,6 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
-        $conditions['Registrations.recipient ='] = true;
         $conditions['Registrations.ceremony_id >'] = 0;
 
         $recipients = $this->Registrations->find('all', [
@@ -1404,7 +1387,6 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
-        $conditions['Registrations.recipient ='] = true;
         $conditions['Registrations.award_id ='] = $award_id;
 
         $recipients = $this->Registrations->find('all', [
@@ -1453,7 +1435,6 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
-        $conditions['Registrations.recipient ='] = true;
         $conditions['Registrations.milestone_id IN '] = $milestone_id;
 
 
@@ -1495,7 +1476,6 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
-        $conditions['Registrations.recipient ='] = true;
         $conditions['Registrations.award_id ='] = $award_id;
 
         $recipients = $this->Registrations->find('all', [
@@ -1532,7 +1512,6 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
-        $conditions['Registrations.recipient ='] = true;
         $conditions['Registrations.ceremony_id >'] = 0;
 
         $recipients = $this->Registrations->find('all', [
@@ -1566,7 +1545,6 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
-        $conditions['Registrations.recipient ='] = true;
         $conditions['Registrations.ceremony_id >'] = 0;
 
         $recipients = $this->Registrations->find('all', [
@@ -1667,7 +1645,6 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
-        $conditions['Registrations.recipient ='] = true;
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -1743,7 +1720,6 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.ceremony_id ='] = $id;
-        $conditions['Registrations.recipient ='] = true;
         if ($attending) {
             $conditions['Registrations.attending ='] = true;
         }
@@ -1932,7 +1908,6 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
-        $conditions['Registrations.recipient ='] = true;
         $conditions['Registrations.ceremony_id >'] = 0;
 
         $recipients = $this->Registrations->find('all', [
@@ -1968,7 +1943,6 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.ceremony_id ='] = $id;
-        $conditions['Registrations.recipient ='] = true;
         if ($attending) {
             $conditions['Registrations.attending ='] = true;
         }
@@ -2012,7 +1986,6 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
-        $conditions['Registrations.recipient ='] = true;
         $conditions['Registrations.ceremony_id >'] = 0;
 //        $conditions
         $recipients = $this->Registrations->find('all', [
@@ -2030,7 +2003,7 @@ class RegistrationsController extends AppController
 
         $ministries = [];
         foreach ($recipients as $recipient) {
-            $i = $this->findInMinistries($ministries, $recipient->ministry_id, $recipient->ceremony_id);
+            $i = $this->findCeremonyMinistriy($ministries, $recipient->ceremony_id, $recipient->ministry_id);
             if ($i == -1) {
                 $info = new \stdClass();
                 $info->ceremony_id = $recipient->ceremony_id;
@@ -2046,7 +2019,7 @@ class RegistrationsController extends AppController
                 $info->no_show_recipients = 0;
                 $info->no_show_total = 0;
                 $ministries[] = $info;
-                $i = $this->findInMinistries($ministries, $recipient->ministry_id, $recipient->ceremony_id);
+                $i = $this->findCeremonyMinistry($ministries, $recipient->ceremony_id, $recipient->ministry_id);
             }
             if ($recipient->responded) {
                 if ($recipient->attending) {
@@ -2194,6 +2167,133 @@ class RegistrationsController extends AppController
     }
 
 
+    public function reportministryrecipients()
+    {
+
+        if (!$this->checkAuthorization(array(
+            Configure::read('Role.admin'),
+            Configure::read('Role.lsa_admin'),
+            Configure::read('Role.protocol')))) {
+            $this->Flash->error(__('You are not authorized to view this page.'));
+            $this->redirect('/');
+        }
+
+        $conditions = array();
+        $conditions['Registrations.registration_year ='] = date('Y');
+        $conditions['Registrations.ceremony_id >'] = 0;
+
+        $recipients = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+            'order' => ['Registrations.last_name' => 'ASC'],
+            'contain' => [
+                'Milestones',
+                'Ministries',
+                'Awards',
+                'OfficeCity',
+                'HomeCity',
+                'SupervisorCity',
+                'Ceremonies',
+            ],
+        ]);
+
+
+        $this->set(compact('recipients'));
+
+    }
+
+    public function reportpivot($attending = 0)
+    {
+
+
+        if (!$this->checkAuthorization(array(
+            Configure::read('Role.admin'),
+            Configure::read('Role.lsa_admin'),
+            Configure::read('Role.protocol')))) {
+            $this->Flash->error(__('You are not authorized to view this page.'));
+            $this->redirect('/');
+        }
+
+        $query = $this->Registrations->RegistrationPeriods->find('all')
+            ->where([
+                'RegistrationPeriods.open_registration <= ' => date('Y-m-d H:i:s'),
+                'RegistrationPeriods.close_registration >= ' => date('Y-m-d H:i:s')
+            ]);
+        $registrationperiod = $query->first();
+
+        $years = explode(",", $registrationperiod->qualifying_years);
+
+        $milestones = $this->Registrations->Milestones->find('all');
+
+
+        $conditions = array();
+        $conditions['Registrations.registration_year ='] = date('Y');
+        $conditions['Registrations.ceremony_id >'] = 0;
+        if ($attending == 1) {
+            $conditions['Registrations.attending'] = 1;
+            $title = "Attendees Only";
+        }
+        else {
+            $title = "All Recipients";
+        }
+
+        $recipients = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+            'order' => ['Registrations.last_name' => 'ASC'],
+            'contain' => [
+                'Ceremonies',
+                'Milestones',
+                'Ministries',
+                'Awards',
+                'OfficeCity',
+                'HomeCity',
+                'SupervisorCity'
+            ],
+        ]);
+
+
+
+        $results = [];
+        foreach ($recipients as $recipient) {
+            $i = $this->findCeremonyMinistry($results, $recipient->ceremony_id, $recipient->ministry_id);
+            if ($i == -1) {
+                $info = new \stdClass();
+                $info->ceremony_id = $recipient->ceremony_id;
+                $info->ministry_id = $recipient->ministry_id;
+                $info->ceremony = $recipient->ceremony;
+                $info->ministry = $recipient->ministry;
+                $info->milestone = $recipient->milestone;
+                $info->total = 0;
+
+                $info->years = array();
+                foreach ($years as $year) {
+                    foreach ($milestones as $milestone) {
+                        $info->years[$year][$milestone->years] = 0;
+                    }
+                    $info->years[$year]['Total'] = 0;
+                }
+
+                $results[] = $info;
+                $i = $this->findCeremonyMinistry($results, $recipient->ceremony_id, $recipient->ministry_id);
+            }
+            $results[$i]->years[$recipient->qualifying_year][$recipient->milestone->years]++;
+            $results[$i]->years[$recipient->qualifying_year]['Total']++;
+            $results[$i]->total++;
+        }
+
+
+        $this->set(compact('results'));
+
+        $this->set(compact('title'));
+
+        $this->set(compact('years'));
+        $this->set(compact('milestones'));
+        $this->set(compact('registrationperiod'));
+
+        $this->set(compact('recipients'));
+
+    }
+
+
     public function findInTotalsMilestone($array, $milestone_id, $award_id) {
         $i = -1;
         foreach ($array as $key => $item) {
@@ -2204,7 +2304,7 @@ class RegistrationsController extends AppController
         return $i;
     }
 
-    public function findInMinistries($array, $ministry_id, $ceremony_id) {
+    public function findCeremonyMinistry($array, $ceremony_id, $ministry_id) {
         $x = -1;
         foreach ($array as $key => $item) {
             if ($item->ministry_id == $ministry_id && $item->ceremony_id == $ceremony_id) {

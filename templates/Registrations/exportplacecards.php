@@ -19,7 +19,7 @@
 
 <div class="datatable-container">
     <?= $this->Flash->render() ?>
-    <table id="ceremony-accessibility" class="display ceremony-datatable" style="font-size: 12px; width:100%">
+    <table id="data-table-1" class="display ceremony-datatable" style="font-size: 12px; width:100%">
 
     </table>
 </div>
@@ -50,7 +50,7 @@ echo $this->Form->button('Cancel', array(
         console.log(attendees);
 
 
-        $('#ceremony-accessibility').DataTable( {
+        $('#data-table-1').DataTable( {
             data: attendees,
             columns: [
                 {data: "first_name", title: "First Name", orderable: false},
@@ -69,14 +69,14 @@ echo $this->Form->button('Cancel', array(
                     extend: 'csv',
                     text: 'Export to CSV',
                     filename: function () {
-                        return datestr + '-executivebadges';
+                        return datestr + '-placecards';
                     },
                 },
                 {
                     extend: 'excel',
                     text: 'Export to Excel',
                     filename: function () {
-                        return datestr + '-executivebadges';
+                        return datestr + '-placecards';
                     },
                 }
             ],

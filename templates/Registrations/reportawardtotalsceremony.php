@@ -24,7 +24,7 @@
 
 <div class="datatable-container">
     <?= $this->Flash->render() ?>
-    <table id="data-table" class="display ceremony-datatable" style="font-size: 12px; width:100%">
+    <table id="data-table-1" class="display ceremony-datatable" style="font-size: 12px; width:100%">
 
     </table>
 </div>
@@ -94,7 +94,7 @@ echo $this->Form->button('Cancel', array(
             ];
 
 
-        var dTable = $('#data-table').DataTable( {
+        var dTable = $('#data-table-1').DataTable( {
             data: recipients,
             columns: cols,
             // order: [[ 1, "asc" ]],

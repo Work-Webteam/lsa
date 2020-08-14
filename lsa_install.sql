@@ -125,9 +125,6 @@ CREATE TABLE registrations (
     created DATETIME,
     modified DATETIME,
 
-    recipient BOOLEAN default false,
-    vip BOOLEAN DEFAULT false,
-
     user_idir VARCHAR(16),
     user_guid VARCHAR(128),
 
@@ -241,9 +238,6 @@ CREATE TABLE registrations (
     photo_order INT,
     photo_sent DATETIME,
 
-    nametag_pre VARCHAR(255),
-    nametag_post VARCHAR(255),
-
     survey_participation BOOLEAN DEFAULT false,
 
     FOREIGN KEY milestone_key (milestone_id) REFERENCES milestones(id),
@@ -253,6 +247,56 @@ CREATE TABLE registrations (
     FOREIGN KEY office_city_key (office_city_id) REFERENCES cities(id),
     FOREIGN KEY supervisor_city_key (supervisor_city_id) REFERENCES cities(id),
     FOREIGN KEY home_city_key (office_city_id) REFERENCES cities(id)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+CREATE TABLE vip (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    created DATETIME,
+    modified DATETIME,
+
+    user_idir VARCHAR(16),
+    user_guid VARCHAR(128),
+
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
+    prefix VARCHAR(255),
+    title VARCHAR(255),
+
+    address_street VARCHAR(255),
+    address_po_box VARCHAR(255),
+    city_id INT,
+    province VARCHAR(2),
+    postal_code VARCHAR(10),
+    phone VARCHAR(15),
+    mobile_phone VARCHAR(15),
+    fax_phone VARCHAR(15),
+    email VARCHAR(255),
+
+    contact_first_name VARCHAR(255),
+    contact_last_name VARCHAR(255),
+    contact_prefix VARCHAR(255),
+    contact_title VARCHAR(255),
+    contact_phone VARCHAR(15),
+    contact_fax VARCHAR(15),
+    contact_email VARCHAR(255),
+
+    attending BOOLEAN,
+    attending_designate BOOLEAN,
+    invitation_sent BOOLEAN,
+    total_attending INT,
+    parking_required BOOLEAN,
+    parking_spots_required INT,
+    guest_first_name VARCHAR(255),
+    guest_last_name VARCHAR(255),
+    guest_prefix VARCHAR(255),
+    guest_title VARCHAR(255),
+
+    notes TEXT,
+
+--     FOREIGN KEY ceremony_key (ceremony_id) REFERENCES ceremonies(id),
+    FOREIGN KEY city_key (city_id) REFERENCES cities(id),
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

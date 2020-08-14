@@ -53,6 +53,10 @@
                 <a class="dropdown-item" href="/registrations/milestonesummary">Milestone Summary</a>
                 <a class="dropdown-item" href="/registrations/exportrecipients">Export Recipients</a>
                 <a class="dropdown-item" href="/registrations/exportspecialrequirements">Special Requirements</a>
+                <a class="dropdown-item" href="/registrations/reportministryrsvp">RSVP Summary</a>
+                <a class="dropdown-item" href="/registrations/reportministryrecipients">Ministry Recipients</a>
+                <a class="dropdown-item" href="/registrations/reportpivot/0">Pivot - All Recipients</a>
+                <a class="dropdown-item" href="/registrations/reportpivot/1">Pivot - Attending Only</a>
             </div>
         </li>
         <li class="nav-item">

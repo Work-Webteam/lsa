@@ -18,7 +18,7 @@
 
 <div class="datatable-container">
     <?= $this->Flash->render() ?>
-    <table id="ceremony-accessibility" class="display ceremony-datatable" style="font-size: 12px; width:100%">
+    <table id="data-table-1" class="display ceremony-datatable" style="font-size: 12px; width:100%">
 
     </table>
 </div>
@@ -91,7 +91,7 @@ echo $this->Form->button('Cancel', array(
         ];
 
 
-        $('#ceremony-accessibility').DataTable( {
+        $('#data-table-1').DataTable( {
             data: recipients,
             columns: cols,
             order: [[ 2, "asc" ]],
@@ -130,23 +130,6 @@ echo $this->Form->button('Cancel', array(
 
         } );
 
-        // btns = '<div>';
-        // btns += '<button class="btn btn-primary" onClick="resetFilters()">Reset Filters</button>';
-        // btns += '</div><div>';
-        // // btns += '<button class="btn btn-info" onClick="dataExport()">Export</button>';
-        // // btns += '&nbsp;';
-        // btns += '<button class="btn btn-info" onClick="summaryAward()">Award Summary</button>';
-        // btns += '&nbsp;';
-        // btns += '<button class="btn btn-info" onClick="summaryMinistry()">Ministry Summary</button>';
-        // btns += '&nbsp;';
-        // btns += '<button class="btn btn-info" onClick="summaryMilestone()">Milestone Summary</button>';
-        // btns += '</div>';
-        //
-        // $("div.toolbar").html(btns);
-
-
-        // $("table thead th").css('border-bottom', '0px');
-
         // only show buttons for users with appropriate permissions
         if (!toolbar) {
             $("div.toolbar").hide();
@@ -157,7 +140,7 @@ echo $this->Form->button('Cancel', array(
 
     function resetFilters() {
 
-        var table = $('#ceremony-accessibility').DataTable();
+        var table = $('#data-table-1').DataTable();
 
         table.columns().every( function () {
             var column = this;

@@ -28,7 +28,7 @@
 </div>
 <div class="datatable-container">
     <?= $this->Flash->render() ?>
-    <table id="ceremony-accessibility" class="display ceremony-datatable" style="font-size: 12px; width:100%">
+    <table id="data-table-1" class="display ceremony-datatable" style="font-size: 12px; width:100%">
 
     </table>
 </div>
@@ -81,7 +81,7 @@ echo $this->Form->button('Cancel', array(
             ];
 
 
-        $('#ceremony-accessibility').DataTable( {
+        $('#data-table-1').DataTable( {
             data: registrations,
             columns: cols,
             // stateSave: true,
@@ -119,23 +119,6 @@ echo $this->Form->button('Cancel', array(
 
         } );
 
-        // btns = '<div>';
-        // btns += '<button class="btn btn-primary" onClick="resetFilters()">Reset Filters</button>';
-        // btns += '</div><div>';
-        // // btns += '<button class="btn btn-info" onClick="dataExport()">Export</button>';
-        // // btns += '&nbsp;';
-        // btns += '<button class="btn btn-info" onClick="summaryAward()">Award Summary</button>';
-        // btns += '&nbsp;';
-        // btns += '<button class="btn btn-info" onClick="summaryMinistry()">Ministry Summary</button>';
-        // btns += '&nbsp;';
-        // btns += '<button class="btn btn-info" onClick="summaryMilestone()">Milestone Summary</button>';
-        // btns += '</div>';
-        //
-        // $("div.toolbar").html(btns);
-
-
-        // $("table thead th").css('border-bottom', '0px');
-
         // only show buttons for users with appropriate permissions
         if (!toolbar) {
             $("div.toolbar").hide();
@@ -143,8 +126,8 @@ echo $this->Form->button('Cancel', array(
         }
 
 
-        $('#ceremony-accessibility').DataTable().columns(0).search('false');
-        $('#ceremony-accessibility').DataTable().draw();
+        $('#data-table-1').DataTable().columns(0).search('false');
+        $('#data-table-1').DataTable().draw();
 
     } );
 
@@ -155,20 +138,20 @@ echo $this->Form->button('Cancel', array(
 
 
     function updateFilter(personalized) {
-        var table = $('#ceremony-accessibility').DataTable();
+        var table = $('#data-table-1').DataTable();
 
         if (personalized) {
             console.log("personalized - YES");
-            $('#ceremony-accessibility').DataTable().columns(0).search('true');
-            $('#ceremony-accessibility').DataTable().draw();
+            $('#data-table-1').DataTable().columns(0).search('true');
+            $('#data-table-1').DataTable().draw();
             $("#button-on").removeClass('btn-secondary').addClass('btn-primary');
             $("#button-off").removeClass('btn-primary').addClass('btn-secondary');
             personalizedStatus = "personalized";
         }
         else {
             console.log("personalized - NO");
-            $('#ceremony-accessibility').DataTable().columns(0).search('false');
-            $('#ceremony-accessibility').DataTable().draw();
+            $('#data-table-1').DataTable().columns(0).search('false');
+            $('#data-table-1').DataTable().draw();
             $("#button-off").removeClass('btn-secondary').addClass('btn-primary');
             $("#button-on").removeClass('btn-primary').addClass('btn-secondary');
             personalizedStatus = "non-personalized";
