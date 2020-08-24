@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS registrations;
 DROP TABLE IF EXISTS user_roles;
 DROP TABLE IF EXISTS roles;
 
+DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS ministries;
 DROP TABLE IF EXISTS pecsf_charities;
 DROP TABLE IF EXISTS pecsf_regions;
@@ -53,13 +54,16 @@ CREATE TABLE accessibility (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
-CREATE TABLE roles (
+CREATE TABLE categories (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
-
+CREATE TABLE roles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE user_roles (
 	id INT AUTO_INCREMENT PRIMARY KEY,

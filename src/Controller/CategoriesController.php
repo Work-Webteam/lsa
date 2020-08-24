@@ -4,86 +4,86 @@ namespace App\Controller;
 
 use Cake\Core\Configure;
 
-class CitiesController extends AppController
+class CategoriesController extends AppController
 {
 
     public function index()
     {
         if (!$this->checkAuthorization(array(Configure::read('Role.admin'), Configure::read('Role.lsa_admin')))) {
-            $this->Flash->error(__('You are not authorized to administer Cities.'));
+            $this->Flash->error(__('You are not authorized to administer Categories.'));
             $this->redirect('/');
         }
         $this->loadComponent('Paginator');
 
-        $cities = $this->Paginator->paginate($this->Cities->find());
+        $categories = $this->Paginator->paginate($this->Categories->find());
 
         $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
         $this->set(compact('isadmin'));
-        $this->set(compact('cities'));
+        $this->set(compact('categories'));
     }
 
     public function view($id = null)
     {
         if (!$this->checkAuthorization(array(Configure::read('Role.admin'), Configure::read('Role.lsa_admin')))) {
-            $this->Flash->error(__('You are not authorized to administer Cities.'));
+            $this->Flash->error(__('You are not authorized to administer Categories.'));
             $this->redirect('/');
         }
-        $city = $this->Cities->findById($id)->firstOrFail();
+        $categories = $this->Categories->findById($id)->firstOrFail();
 
         $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
         $this->set(compact('isadmin'));
-        $this->set(compact('city'));
+        $this->set(compact('categories'));
     }
 
     public function add()
     {
         if (!$this->checkAuthorization(array(Configure::read('Role.admin'), Configure::read('Role.lsa_admin')))) {
-            $this->Flash->error(__('You are not authorized to administer Cities.'));
+            $this->Flash->error(__('You are not authorized to administer Categories.'));
             $this->redirect('/');
         }
-        $city = $this->Cities->newEmptyEntity();
+        $category = $this->Categories->newEmptyEntity();
         if ($this->request->is('post')) {
-            $city = $this->Cities->patchEntity($city, $this->request->getData());
+            $category = $this->Categories->patchEntity($category, $this->request->getData());
 
-            if ($this->Cities->save($city)) {
-                $this->Flash->success(__('Your city has been saved.'));
+            if ($this->Categories->save($category)) {
+                $this->Flash->success(__('Your category has been saved.'));
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('Unable to add your city.'));
+            $this->Flash->error(__('Unable to add your category.'));
         }
-        $this->set('city', $city);
+        $this->set('category', $category);
     }
 
     public function edit($id)
     {
         if (!$this->checkAuthorization(array(Configure::read('Role.admin'), Configure::read('Role.lsa_admin')))) {
-            $this->Flash->error(__('You are not authorized to administer Cities.'));
+            $this->Flash->error(__('You are not authorized to administer Categories.'));
             $this->redirect('/');
         }
-        $city = $this->Cities->findById($id)->firstOrFail();
+        $category = $this->Categories->findById($id)->firstOrFail();
         if ($this->request->is(['post', 'put'])) {
-            $this->Cities->patchEntity($city, $this->request->getData());
-            if ($this->Cities->save($city)) {
-                $this->Flash->success(__('City has been updated.'));
+            $this->Categories->patchEntity($category, $this->request->getData());
+            if ($this->Categories->save($category)) {
+                $this->Flash->success(__('Category has been updated.'));
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('Unable to update city.'));
+            $this->Flash->error(__('Unable to update category.'));
         }
 
-        $this->set('city', $city);
+        $this->set('category', $category);
     }
 
     public function delete($id)
     {
         if (!$this->checkAuthorization(array(Configure::read('Role.admin'), Configure::read('Role.lsa_admin')))) {
-            $this->Flash->error(__('You are not authorized to administer Cities.'));
+            $this->Flash->error(__('You are not authorized to administer Categories.'));
             $this->redirect('/');
         }
         $this->request->allowMethod(['post', 'delete']);
 
-        $city = $this->Cities->findById($id)->firstOrFail();
-        if ($this->Cities->delete($city)) {
-            $this->Flash->success(__('{0} has been deleted.', $city->name));
+        $category = $this->Categories->findById($id)->firstOrFail();
+        if ($this->Category->delete($category)) {
+            $this->Flash->success(__('{0} has been deleted.', $category->name));
             return $this->redirect(['action' => 'index']);
         }
     }

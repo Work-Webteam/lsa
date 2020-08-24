@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS registrations;
 DROP TABLE IF EXISTS user_roles;
 DROP TABLE IF EXISTS roles;
 
+DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS ministries;
 DROP TABLE IF EXISTS pecsf_charities;
 DROP TABLE IF EXISTS pecsf_regions;
@@ -55,12 +56,16 @@ CREATE TABLE accessibility (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
-CREATE TABLE roles (
+CREATE TABLE categories (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
+CREATE TABLE roles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 CREATE TABLE user_roles (
@@ -5280,3 +5285,16 @@ INSERT INTO `log` (`id`, `user_idir`, `user_guid`, `timestamp`, `registration_id
 INSERT INTO `log` (`id`, `user_idir`, `user_guid`, `timestamp`, `registration_id`, `type`, `operation`, `description`) VALUES(10, 'rkuyvenh', '60DCD2AF73FB44AE9345F11B71CD3495', '2020-07-29 23:15:21', 26, 'RSVP', 'NEW', 'Guest YES');
 INSERT INTO `log` (`id`, `user_idir`, `user_guid`, `timestamp`, `registration_id`, `type`, `operation`, `description`) VALUES(11, 'rkuyvenh', '60DCD2AF73FB44AE9345F11B71CD3495', '2020-07-29 23:15:21', 26, 'RSVP', 'NEW', 'Accessibility NO');
 INSERT INTO `log` (`id`, `user_idir`, `user_guid`, `timestamp`, `registration_id`, `type`, `operation`, `description`) VALUES(12, 'rkuyvenh', '60DCD2AF73FB44AE9345F11B71CD3495', '2020-07-29 23:15:21', 26, 'RSVP', 'NEW', 'Diet NO');
+
+INSERT INTO `categories` (`id`, `name`) VALUES(1, 'Her Honour');
+INSERT INTO `categories` (`id`, `name`) VALUES(2, 'Official Party');
+INSERT INTO `categories` (`id`, `name`) VALUES(3, 'Premier');
+INSERT INTO `categories` (`id`, `name`) VALUES(4, 'Minister');
+INSERT INTO `categories` (`id`, `name`) VALUES(5, 'Minister of State');
+INSERT INTO `categories` (`id`, `name`) VALUES(6, 'Director of Ceremonies');
+INSERT INTO `categories` (`id`, `name`) VALUES(7, 'Deputy Minister');
+INSERT INTO `categories` (`id`, `name`) VALUES(8, 'Associate Deputy Minister');
+INSERT INTO `categories` (`id`, `name`) VALUES(9, 'Assistant Deputy Minister');
+INSERT INTO `categories` (`id`, `name`) VALUES(10, 'Executive Director');
+INSERT INTO `categories` (`id`, `name`) VALUES(11, 'Human Resource Director');
+INSERT INTO `categories` (`id`, `name`) VALUES(12, 'Long Service Awards Contact');

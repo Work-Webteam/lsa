@@ -3,10 +3,12 @@ USE lsa;
 DROP TABLE IF EXISTS log;
 
 DROP TABLE IF EXISTS registrations;
+DROP TABLE IF EXISTS vip;
 
 DROP TABLE IF EXISTS user_roles;
 DROP TABLE IF EXISTS roles;
 
+DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS ministries;
 DROP TABLE IF EXISTS pecsf_charities;
 DROP TABLE IF EXISTS pecsf_regions;
@@ -52,6 +54,11 @@ CREATE TABLE accessibility (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE roles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE categories (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -253,11 +260,21 @@ CREATE TABLE registrations (
 
 CREATE TABLE vip (
     id INT AUTO_INCREMENT PRIMARY KEY,
+
     created DATETIME,
     modified DATETIME,
 
     user_idir VARCHAR(16),
     user_guid VARCHAR(128),
+
+    year INT,
+
+    ministry_id INT,
+    ceremony_id INT,
+
+    group_no INT,
+
+    category_id INT,
 
     first_name VARCHAR(255),
     last_name VARCHAR(255),
@@ -295,8 +312,10 @@ CREATE TABLE vip (
 
     notes TEXT,
 
---     FOREIGN KEY ceremony_key (ceremony_id) REFERENCES ceremonies(id),
-    FOREIGN KEY city_key (city_id) REFERENCES cities(id),
+    FOREIGN KEY ceremony_key (ceremony_id) REFERENCES ceremonies(id),
+    FOREIGN KEY category_key (category_id) REFERENCES categories(id),
+    FOREIGN KEY ministry_key (ministry_id) REFERENCES ministries(id),
+    FOREIGN KEY city_key (city_id) REFERENCES cities(id)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

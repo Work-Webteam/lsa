@@ -2003,7 +2003,7 @@ class RegistrationsController extends AppController
 
         $ministries = [];
         foreach ($recipients as $recipient) {
-            $i = $this->findCeremonyMinistriy($ministries, $recipient->ceremony_id, $recipient->ministry_id);
+            $i = $this->findCeremonyMinistry($ministries, $recipient->ceremony_id, $recipient->ministry_id);
             if ($i == -1) {
                 $info = new \stdClass();
                 $info->ceremony_id = $recipient->ceremony_id;

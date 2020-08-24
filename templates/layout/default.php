@@ -35,6 +35,9 @@
         <li class="nav-item">
             <a class="nav-link" href="/ceremonies">Ceremonies</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/vip">VIP</a>
+        </li>
         <!-- Dropdown -->
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
@@ -74,6 +77,7 @@
                 <a class="dropdown-item" href="/ministries">Ministries</a>
                 <a class="dropdown-item" href="/diet">Diet</a>
                 <a class="dropdown-item" href="/accessibility">Accessibility</a>
+                <a class="dropdown-item" href="/categories">Categories</a>
                 <a class="dropdown-item" href="/cities">Cities</a>
                 <a class="dropdown-item" href="/pecsfregions">Regions</a>
                 <a class="dropdown-item" href="/pecsfcharities">Charities</a>
