@@ -13,8 +13,8 @@
     echo $this->Form->control('city_id', ['label' => 'City', 'options' => $cities, 'empty' => '- select city -']);
     echo $this->Form->control('postal_code');
     echo $this->Form->control('phone');
-    echo $this->Form->control('mobile_phone');
-    echo $this->Form->control('fax_phone');
+    echo $this->Form->control('mobile');
+    echo $this->Form->control('fax');
     echo $this->Form->control('email');
 
     echo $this->Form->control('contact_first_name');
@@ -24,7 +24,12 @@
     echo $this->Form->control('contact_phone');
     echo $this->Form->control('contact_fax');
 
-    echo $this->Form->control('attending');
+    echo $this->Form->control('ministry_id', ['label' => 'Ministry', 'options' => $ministries, 'empty' => '- select ministry -']);
+    echo $this->Form->control('ceremony_id', ['label' => 'Ceremony', 'options' => $ceremonies, 'empty' => '- select ceremony -']);
+    echo $this->Form->control('group');
+    echo $this->Form->control('category_id', ['label' => 'Category', 'options' => $categories, 'empty' => '- select category -']);
+
+    echo $this->Form->control('attending', ['label' => 'Attending', 'options' => $attending]);
     echo $this->Form->control('attending_designate');
     echo $this->Form->control('invitation_sent');
     echo $this->Form->control('total_attending');
@@ -128,15 +133,53 @@
                     errors.push('Postal Code is required');
                 }
                 else {
-                    $('#postal-code').css("border-color", clrDefault);
+                    if (!isPostalCode($('#postal-code').val())) {
+                        $('#email').css("border-color", clrError);
+                        errors.push('Postal Code invalid format');
+                    }
+                    else {
+                        $('#postal-code').css("border-color", clrDefault);
+                    }
                 }
 
                 if ($('#phone').val().length == 0) {
                     $('#phone').css("border-color", clrError);
-                    errors.push('Postal Code is required');
+                    errors.push('Phone is required');
                 }
                 else {
-                    $('#phone').css("border-color", clrDefault);
+                    if (!isPhone($('#phone').val())) {
+                        $('#phone').css("border-color", clrError);
+                        errors.push('Phone invalid format');
+                    }
+                    else {
+                        $('#phone').css("border-color", clrDefault);
+                    }
+                }
+
+                if ($('#mobile').val().length > 0) {
+                      if (!isPhone($('#mobile').val())) {
+                        $('#mobile').css("border-color", clrError);
+                        errors.push('Mobile invalid format');
+                    }
+                    else {
+                        $('#mobile').css("border-color", clrDefault);
+                    }
+                }
+                else {
+                    $('#mobile').css("border-color", clrDefault);
+                }
+                
+                if ($('#fax').val().length > 0) {
+                    if (!isPhone($('#fax').val())) {
+                        $('#fax').css("border-color", clrError);
+                        errors.push('Fax invalid format');
+                    }
+                    else {
+                        $('#fax').css("border-color", clrDefault);
+                    }
+                }
+                else {
+                    $('#fax').css("border-color", clrDefault);
                 }
 
                 if ($('#email').val().length == 0) {
@@ -174,28 +217,26 @@
                     errors.push('Contact Phone is required');
                 }
                 else {
-                    $('#contact-phone').css("border-color", clrDefault);
+                    if (!isPhone($('#contact-phone').val())) {
+                        $('#contact-phone').css("border-color", clrError);
+                        errors.push('Contact Phone invalid format');
+                    }
+                    else {
+                        $('#contact-phone').css("border-color", clrDefault);
+                    }
                 }
 
-                // checked = false;
-                // for (var i = 0; i < milestones.length; i++) {
-                //     if ($('#milestone-' + milestones[i].id).prop("checked") ) {
-                //         checked = true;
-                //     }
-                // }
-                // if (!checked) {
-                //     errors.push('At least one milestone required');
-                // }
-
-                //
-                // if ($('#name-filter').prop("checked")) {
-                //     if ($('#name-start').val().length == 0) {
-                //         errors.push('Start letter required');
-                //     }
-                //     if ($('#name-end').val().length == 0) {
-                //         errors.push('End letter required');
-                //     }
-                // }
+                if ($('#contact-fax').val().length > 0) {
+                    if (!isPhone($('#contact-fax').val())) {
+                        $('#contact-fax').css("border-color", clrError);
+                        errors.push('Contact Fax invalid format');
+                    } else {
+                        $('#contact-fax').css("border-color", clrDefault);
+                    }
+                }
+                else {
+                    $('#contact-fax').css("border-color", clrDefault);
+                }
 
                 if (errors.length > 0) {
                     this.msgErrors = '<ul>';

@@ -34,6 +34,7 @@
         'prevActive' => '<li class="page-item"><a href="{{url}}" class="page-link">&lt</a></li>',
         'nextActive' => '<li class="page-item"><a href="{{url}}" class="page-link">&gt</a></li>'
     ]);
+
 ?>
 <nav>
     <ul class="pagination">
@@ -50,3 +51,4 @@
     ?>
     </ul>
 </nav>
+

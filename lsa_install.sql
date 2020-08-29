@@ -287,8 +287,8 @@ CREATE TABLE vip (
     province VARCHAR(2),
     postal_code VARCHAR(10),
     phone VARCHAR(15),
-    mobile_phone VARCHAR(15),
-    fax_phone VARCHAR(15),
+    mobile VARCHAR(15),
+    fax VARCHAR(15),
     email VARCHAR(255),
 
     contact_first_name VARCHAR(255),
@@ -299,7 +299,7 @@ CREATE TABLE vip (
     contact_fax VARCHAR(15),
     contact_email VARCHAR(255),
 
-    attending BOOLEAN,
+    attending INT DEFAULT -1,
     attending_designate BOOLEAN,
     invitation_sent BOOLEAN,
     total_attending INT,

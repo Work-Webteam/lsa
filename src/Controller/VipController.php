@@ -68,6 +68,31 @@ class VipController extends AppController
             'order' => ['Cities.name' => 'ASC'],
         ]);
         $this->set('cities', $cities);
+
+
+        $ministries = $this->Vip->Ministries->find('list', [
+            'order' => ['Ministries.name' => 'ASC']
+        ]);
+        $this->set('ministries', $ministries);
+
+        $list = $this->Vip->Ceremonies->find('all', [
+            'order' => ['Ceremonies.night' => 'ASC'],
+            'conditions' => ['Ceremonies.registration_year =' => date('Y')],
+        ]);
+
+        $ceremonies = [];
+        foreach ($list as $ceremony) {
+            $ceremonies[$ceremony->id] = "Night " . $ceremony->night;
+        }
+        $this->set('ceremonies', $ceremonies);
+
+        $categories = $this->Vip->Categories->find('list', [
+            'order' => ['Categories.name' => 'ASC']
+        ]);
+        $this->set('categories', $categories);
+
+        $attending = [-1 => 'No Response', 0 => 'Not Attending', 1 => 'Attending'];
+        $this->set('attending', $attending);
     }
 
     public function edit($id)
@@ -95,6 +120,30 @@ class VipController extends AppController
             'order' => ['Cities.name' => 'ASC'],
         ]);
         $this->set('cities', $cities);
+
+        $ministries = $this->Vip->Ministries->find('list', [
+            'order' => ['Ministries.name' => 'ASC']
+        ]);
+        $this->set('ministries', $ministries);
+
+        $list = $this->Vip->Ceremonies->find('all', [
+            'order' => ['Ceremonies.night' => 'ASC'],
+            'conditions' => ['Ceremonies.registration_year =' => date('Y')],
+        ]);
+
+        $ceremonies = [];
+        foreach ($list as $ceremony) {
+            $ceremonies[$ceremony->id] = "Night " . $ceremony->night;
+        }
+        $this->set('ceremonies', $ceremonies);
+
+        $categories = $this->Vip->Categories->find('list', [
+            'order' => ['Categories.name' => 'ASC']
+        ]);
+        $this->set('categories', $categories);
+
+        $attending = [-1 => 'No Response', 0 => 'Not Attending', 1 => 'Attending'];
+        $this->set('attending', $attending);
     }
 
     public function delete($id)

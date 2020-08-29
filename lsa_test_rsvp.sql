@@ -3,6 +3,7 @@ USE lsa;
 DROP TABLE IF EXISTS log;
 
 DROP TABLE IF EXISTS registrations;
+DROP TABLE IF EXISTS vip;
 
 DROP TABLE IF EXISTS user_roles;
 DROP TABLE IF EXISTS roles;
@@ -262,6 +263,64 @@ CREATE TABLE registrations (
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+
+CREATE TABLE vip (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
+    created DATETIME,
+    modified DATETIME,
+
+    user_idir VARCHAR(16),
+    user_guid VARCHAR(128),
+
+    year INT,
+
+    ministry_id INT,
+    ceremony_id INT,
+
+    group_no INT,
+
+    category_id INT,
+
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
+    prefix VARCHAR(255),
+    title VARCHAR(255),
+
+    address_street VARCHAR(255),
+    address_po_box VARCHAR(255),
+    city_id INT,
+    province VARCHAR(2),
+    postal_code VARCHAR(10),
+    phone VARCHAR(15),
+    mobile VARCHAR(15),
+    fax VARCHAR(15),
+    email VARCHAR(255),
+
+    contact_first_name VARCHAR(255),
+    contact_last_name VARCHAR(255),
+    contact_prefix VARCHAR(255),
+    contact_title VARCHAR(255),
+    contact_phone VARCHAR(15),
+    contact_fax VARCHAR(15),
+    contact_email VARCHAR(255),
+
+    attending INT DEFAULT -1,
+    attending_designate BOOLEAN,
+    invitation_sent BOOLEAN,
+    total_attending INT,
+    parking_required BOOLEAN,
+    parking_spots_required INT,
+    guest_first_name VARCHAR(255),
+    guest_last_name VARCHAR(255),
+    guest_prefix VARCHAR(255),
+    guest_title VARCHAR(255),
+
+    notes TEXT,
+
+    FOREIGN KEY city_key (city_id) REFERENCES cities(id)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE log (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -5285,6 +5344,11 @@ INSERT INTO `log` (`id`, `user_idir`, `user_guid`, `timestamp`, `registration_id
 INSERT INTO `log` (`id`, `user_idir`, `user_guid`, `timestamp`, `registration_id`, `type`, `operation`, `description`) VALUES(10, 'rkuyvenh', '60DCD2AF73FB44AE9345F11B71CD3495', '2020-07-29 23:15:21', 26, 'RSVP', 'NEW', 'Guest YES');
 INSERT INTO `log` (`id`, `user_idir`, `user_guid`, `timestamp`, `registration_id`, `type`, `operation`, `description`) VALUES(11, 'rkuyvenh', '60DCD2AF73FB44AE9345F11B71CD3495', '2020-07-29 23:15:21', 26, 'RSVP', 'NEW', 'Accessibility NO');
 INSERT INTO `log` (`id`, `user_idir`, `user_guid`, `timestamp`, `registration_id`, `type`, `operation`, `description`) VALUES(12, 'rkuyvenh', '60DCD2AF73FB44AE9345F11B71CD3495', '2020-07-29 23:15:21', 26, 'RSVP', 'NEW', 'Diet NO');
+
+
+INSERT INTO `vip` (`id`, `created`, `modified`, `user_idir`, `user_guid`, `year`, `ministry_id`, `ceremony_id`, `group_no`, `category_id`, `first_name`, `last_name`, `prefix`, `title`, `address_street`, `address_po_box`, `city_id`, `province`, `postal_code`, `phone`, `mobile`, `fax`, `email`, `contact_first_name`, `contact_last_name`, `contact_prefix`, `contact_title`, `contact_phone`, `contact_fax`, `contact_email`, `attending`, `attending_designate`, `invitation_sent`, `total_attending`, `parking_required`, `parking_spots_required`, `guest_first_name`, `guest_last_name`, `guest_prefix`, `guest_title`, `notes`) VALUES(1, '2020-08-25 19:27:00', '2020-08-25 22:46:12', 'rkuyvenh', '60DCD2AF73FB44AE9345F11B71CD3495', 2020, 6, 7, NULL, 8, 'Sangah', 'Noona', 'Ms.', 'Minister of Arts', 'address street', '', 1997, 'BC', '923423', '234234', '', '', 'email@localhost.com', 'contact first name', 'contact last name', '', '', '250-200-2345', '', NULL, -1, 0, 0, NULL, 0, NULL, '', '', '', '', '');
+INSERT INTO `vip` (`id`, `created`, `modified`, `user_idir`, `user_guid`, `year`, `ministry_id`, `ceremony_id`, `group_no`, `category_id`, `first_name`, `last_name`, `prefix`, `title`, `address_street`, `address_po_box`, `city_id`, `province`, `postal_code`, `phone`, `mobile`, `fax`, `email`, `contact_first_name`, `contact_last_name`, `contact_prefix`, `contact_title`, `contact_phone`, `contact_fax`, `contact_email`, `attending`, `attending_designate`, `invitation_sent`, `total_attending`, `parking_required`, `parking_spots_required`, `guest_first_name`, `guest_last_name`, `guest_prefix`, `guest_title`, `notes`) VALUES(2, '2020-08-25 23:10:04', '2020-08-25 23:50:01', 'rkuyvenh', '60DCD2AF73FB44AE9345F11B71CD3495', 2020, NULL, NULL, NULL, NULL, 'Bob', 'Bedford', '', '', '123 Bob St.', '', NULL, 'BC', 'V9E 1L9', '(250) 234-4353', 'asdf', 'asdf', 'bbedford@localhost.com', 'What', 'Name', '', '', '250-555-2342sdf', 'sadf', NULL, -1, 0, 0, NULL, 0, NULL, '', '', '', '', '');
+
 
 INSERT INTO `categories` (`id`, `name`) VALUES(1, 'Her Honour');
 INSERT INTO `categories` (`id`, `name`) VALUES(2, 'Official Party');

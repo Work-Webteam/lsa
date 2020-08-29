@@ -8,14 +8,13 @@ echo $this->Form->control('last_name');
 
 echo $this->Form->control('prefix');
 echo $this->Form->control('title');
-echo $this->Form->control('address_street');
-echo $this->Form->control('address_po_box');
+echo $this->Form->control('address_street', ['label' => 'Street Address']);
+echo $this->Form->control('address_po_box', ['label' => 'PO Box']);
 echo $this->Form->control('city_id', ['label' => 'City', 'options' => $cities, 'empty' => '- select city -']);
 echo $this->Form->control('postal_code');
-
 echo $this->Form->control('phone');
-echo $this->Form->control('mobile_phone');
-echo $this->Form->control('fax_phone');
+echo $this->Form->control('mobile');
+echo $this->Form->control('fax');
 echo $this->Form->control('email');
 
 echo $this->Form->control('contact_first_name');
@@ -25,7 +24,12 @@ echo $this->Form->control('contact_title');
 echo $this->Form->control('contact_phone');
 echo $this->Form->control('contact_fax');
 
-echo $this->Form->control('attending');
+echo $this->Form->control('ministry_id', ['label' => 'Ministry', 'options' => $ministries, 'empty' => '- select ministry -']);
+echo $this->Form->control('ceremony_id', ['label' => 'Ceremony', 'options' => $ceremonies, 'empty' => '- select ceremony -']);
+echo $this->Form->control('group');
+echo $this->Form->control('category_id', ['label' => 'Category', 'options' => $categories, 'empty' => '- select category -']);
+
+echo $this->Form->control('attending', ['label' => 'Attending', 'options' => $attending]);
 echo $this->Form->control('attending_designate');
 echo $this->Form->control('invitation_sent');
 echo $this->Form->control('total_attending');
@@ -100,32 +104,138 @@ echo $this->Form->end();
                 console.log("add - processForm");
                 errors = [];
 
-                if ($('#ministry-id').val().length == 0) {
-                    $('#ministry-id').css("border-color", clrError);
-                    errors.push('Ministry is required');
+                if ($('#first-name').val().length == 0) {
+                    $('#first-name').css("border-color", clrError);
+                    errors.push('First Name is required');
                 }
                 else {
-                    $('#ministry-id').css("border-color", clrDefault);
+                    $('#first-name').css("border-color", clrDefault);
                 }
 
-                checked = false;
-                for (var i = 0; i < milestones.length; i++) {
-                    if ($('#milestone-' + milestones[i].id).prop("checked") ) {
-                        checked = true;
-                    }
+                if ($('#last-name').val().length == 0) {
+                    $('#last-name').css("border-color", clrError);
+                    errors.push('Last Name is required');
                 }
-                if (!checked) {
-                    errors.push('At least one milestone required');
+                else {
+                    $('#last-name').css("border-color", clrDefault);
                 }
 
+                if ($('#address-street').val().length == 0) {
+                    $('#address-street').css("border-color", clrError);
+                    errors.push('Street Address is required');
+                }
+                else {
+                    $('#address-street').css("border-color", clrDefault);
+                }
 
-                if ($('#name-filter').prop("checked")) {
-                    if ($('#name-start').val().length == 0) {
-                        errors.push('Start letter required');
+                if ($('#postal-code').val().length == 0) {
+                    $('#postal-code').css("border-color", clrError);
+                    errors.push('Postal Code is required');
+                }
+                else {
+                    if (!isPostalCode($('#postal-code').val())) {
+                        $('#email').css("border-color", clrError);
+                        errors.push('Postal Code invalid format');
                     }
-                    if ($('#name-end').val().length == 0) {
-                        errors.push('End letter required');
+                    else {
+                        $('#postal-code').css("border-color", clrDefault);
                     }
+                }
+
+                if ($('#phone').val().length == 0) {
+                    $('#phone').css("border-color", clrError);
+                    errors.push('Phone is required');
+                }
+                else {
+                    if (!isPhone($('#phone').val())) {
+                        $('#phone').css("border-color", clrError);
+                        errors.push('Phone invalid format');
+                    }
+                    else {
+                        $('#phone').css("border-color", clrDefault);
+                    }
+                }
+
+                if ($('#mobile').val().length > 0) {
+                    if (!isPhone($('#mobile').val())) {
+                        $('#mobile').css("border-color", clrError);
+                        errors.push('Mobile invalid format');
+                    }
+                    else {
+                        $('#mobile').css("border-color", clrDefault);
+                    }
+                }
+                else {
+                    $('#mobile').css("border-color", clrDefault);
+                }
+
+                if ($('#fax').val().length > 0) {
+                    if (!isPhone($('#fax').val())) {
+                        $('#fax').css("border-color", clrError);
+                        errors.push('Fax invalid format');
+                    }
+                    else {
+                        $('#fax').css("border-color", clrDefault);
+                    }
+                }
+                else {
+                    $('#fax').css("border-color", clrDefault);
+                }
+
+                if ($('#email').val().length == 0) {
+                    $('#email').css("border-color", clrError);
+                    errors.push('Email is required');
+                }
+                else {
+                    if (!isEmail($('#email').val())) {
+                        $('#email').css("border-color", clrError);
+                        errors.push('Email invalid format');
+                    }
+                    else {
+                        $('#email').css("border-color", clrDefault);
+                    }
+                }
+
+                if ($('#contact-first-name').val().length == 0) {
+                    $('#contact-first-name').css("border-color", clrError);
+                    errors.push('Contact First Name is required');
+                }
+                else {
+                    $('#contact-first-name').css("border-color", clrDefault);
+                }
+
+                if ($('#contact-last-name').val().length == 0) {
+                    $('#contact-last-name').css("border-color", clrError);
+                    errors.push('Contact Last Name is required');
+                }
+                else {
+                    $('#contact-last-name').css("border-color", clrDefault);
+                }
+
+                if ($('#contact-phone').val().length == 0) {
+                    $('#contact-phone').css("border-color", clrError);
+                    errors.push('Contact Phone is required');
+                }
+                else {
+                    if (!isPhone($('#contact-phone').val())) {
+                        $('#contact-phone').css("border-color", clrError);
+                        errors.push('Contact Phone invalid format');
+                    }
+                    else {
+                        $('#contact-phone').css("border-color", clrDefault);
+                    }
+                }
+
+                if ($('#contact-fax').val().length > 0) {
+                    if (!isPhone($('#contact-fax').val())) {
+                        $('#contact-fax').css("border-color", clrError);
+                        errors.push('Contact Fax invalid format');
+                    } else {
+                        $('#contact-fax').css("border-color", clrDefault);
+                    }
+                }
+                else {
+                    $('#contact-fax').css("border-color", clrDefault);
                 }
 
                 if (errors.length > 0) {
@@ -138,7 +248,6 @@ echo $this->Form->end();
                 } else {
                     // this.msgErrors = 'everything is cool';
                 }
-
             },
 
 
@@ -152,5 +261,21 @@ echo $this->Form->end();
         },
 
     });
+
+
+    function isEmail (email) {
+        var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        return regex.test(email);
+    }
+
+    function isPhone (phone) {
+        var regex = /\(([0-9]{3})\) ([0-9]{3})-([0-9]{4})/;
+        return regex.test(phone);
+    }
+
+    function isPostalCode (code) {
+        var regex = /^[ABCEGHJ-NPRSTVXY][0-9][ABCEGHJ-NPRSTV-Z] [0-9][ABCEGHJ-NPRSTV-Z][0-9]$/;
+        return regex.test(code);
+    }
 
 </script>
