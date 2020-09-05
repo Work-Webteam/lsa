@@ -14,26 +14,7 @@
 
 
 <?= $this->Html->link('Assign Recipients', ['action' => 'assignrecipients', $ceremony_id], ['class' => 'btn btn-primary']) ?>
-&nbsp;
-<?= $this->Html->link('Accessibility', ['action' => 'ceremonyaccessibility', $ceremony_id], ['class' => 'btn btn-info']) ?>
-&nbsp;
-<?= $this->Html->link('Diet', ['action' => 'ceremonydiet', $ceremony_id], ['class' => 'btn btn-info']) ?>
-&nbsp;
-<?= $this->Html->link('Awards - Attending', ['action' => 'ceremonyawards', $ceremony_id, true], ['class' => 'btn btn-info']) ?>
 
-<?= $this->Html->link('Awards - Not Attending', ['action' => 'ceremonyawards', $ceremony_id, false], ['class' => 'btn btn-info']) ?>
-
-<?= $this->Html->link('Awards Summary', ['action' => 'ceremonyawardssummary', $ceremony_id, false], ['class' => 'btn btn-info']) ?>
-&nbsp;
-<?= $this->Html->link('Summary', ['action' => 'ceremonysummary', $ceremony_id], ['class' => 'btn btn-info']) ?>
-
-<?= $this->Html->link('Name Badges', ['action' => 'exportnamebadges', $ceremony_id], ['class' => 'btn btn-info']) ?>
-
-<?= $this->Html->link('Executive Name Badges', ['action' => 'exportexecutivebadges', $ceremony_id], ['class' => 'btn btn-info']) ?>
-
-<?= $this->Html->link('Placecards', ['action' => 'exportplacecards', $ceremony_id], ['class' => 'btn btn-info']) ?>
-
-<?= $this->Html->link('Recipient Names', ['action' => 'reportrecipientsbyceremony', $ceremony_id], ['class' => 'btn btn-info']) ?>
 
 <table>
     <tr>
@@ -80,8 +61,7 @@
 
 <?php
 
-//echo $this->Form->button(__('Save Presentation Numbers'), array('class' => 'btn btn-primary'));
-//echo '&nbsp;';
+
 echo $this->Form->button('Cancel', array(
     'type' => 'button',
     'onclick' => 'location.href=\'/ceremonies\'',

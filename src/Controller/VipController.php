@@ -82,7 +82,7 @@ class VipController extends AppController
 
         $ceremonies = [];
         foreach ($list as $ceremony) {
-            $ceremonies[$ceremony->id] = "Night " . $ceremony->night;
+            $ceremonies[$ceremony->id] = "Night " . $ceremony->night . " - " . date("l, M j, Y", strtotime($ceremony->date));
         }
         $this->set('ceremonies', $ceremonies);
 
@@ -133,7 +133,7 @@ class VipController extends AppController
 
         $ceremonies = [];
         foreach ($list as $ceremony) {
-            $ceremonies[$ceremony->id] = "Night " . $ceremony->night;
+            $ceremonies[$ceremony->id] = "Night " . $ceremony->night . " - " . date("l, M j, Y", strtotime($ceremony->date));
         }
         $this->set('ceremonies', $ceremonies);
 
@@ -160,6 +160,162 @@ class VipController extends AppController
             return $this->redirect(['action' => 'index']);
         }
     }
+
+
+    public function reportceremony($id) {
+
+        if (!$this->checkAuthorization(array(
+            Configure::read('Role.admin'),
+            Configure::read('Role.lsa_admin'),
+            Configure::read('Role.protocol')))) {
+            $this->Flash->error(__('You are not authorized to view this page.'));
+            $this->redirect('/');
+        }
+
+        $conditions = array();
+        $conditions['Vip.year ='] = date('Y');
+        $conditions['Vip.ceremony_id ='] = $id;
+        $conditions['Vip.attending ='] = 1;
+
+        $vips = $this->Vip->find('all', [
+            'conditions' => $conditions,
+            'contain' => [
+                'Ministries',
+                'City',
+                'Ceremonies',
+                'Categories',
+            ],
+        ]);
+
+        $total_guests = 0;
+        $results = [];
+        foreach ($vips as $key => $vip) {
+            $results[$key] = $vip;
+            $results[$key]['vip_name'] = $vip['first_name'] . " " . $vip['last_name'];
+            $results[$key]['guest_name'] = trim($vip['guest_first_name'] . " " . $vip['guest_last_name']);
+            $total_guests++;
+            if (!empty($results[$key]['guest_name'])) {
+                $total_guests++;
+            }
+        }
+
+        $this->set(compact('results'));
+
+        $ceremony = $this->Vip->Ceremonies->findById($id)->firstOrFail();
+        $this->set('ceremony', $ceremony);
+
+        $this->set(compact('total_guests'));
+    }
+
+
+
+    public function exportbadges($id, $attending = true)
+    {
+
+        if (!$this->checkAuthorization(array(
+            Configure::read('Role.admin'),
+            Configure::read('Role.lsa_admin'),
+            Configure::read('Role.protocol')))) {
+            $this->Flash->error(__('You are not authorized to view this page.'));
+            $this->redirect('/');
+        }
+
+        $conditions = array();
+        $conditions['Vip.ceremony_id ='] = $id;
+        $conditions['Vip.attending ='] = 1;
+
+        $results = $this->Vip->find('all', [
+            'conditions' => $conditions,
+            'order' => ['Vip.last_name' => 'ASC'],
+            'contain' => [
+                'Ministries',
+                'City',
+                'Ceremonies',
+                'Categories',
+            ],
+        ]);
+
+        $attendees = [];
+        foreach ($results as $vip) {
+            $person = new \stdClass();
+            $person->first_name = $vip->first_name;
+            $person->last_name = $vip->last_name;
+            $person->nametag_pre = $vip->prefix;
+            $person->nametag_post = $vip->title;
+            $attendees[] = $person;
+            if (!empty($vip->guest_first_name) || !empty($vip->guest_last_name)) {
+                $person = new \stdClass();
+                $person->first_name = $vip->guest_first_name;
+                $person->last_name = $vip->guest_last_name;
+                $person->nametag_pre = $vip->guest_prefix;
+                $person->nametag_post = $vip->guest_title;
+                $attendees[] = $person;
+            }
+        }
+        $this->set(compact('attendees'));
+
+        $this->set('ceremony_id', $id);
+
+        $ceremony = $this->Vip->Ceremonies->findById($id)->firstOrFail();
+        $this->set('ceremony', $ceremony);
+
+
+    }
+
+
+    public function exportplacecards($id)
+    {
+
+        if (!$this->checkAuthorization(array(
+            Configure::read('Role.admin'),
+            Configure::read('Role.lsa_admin'),
+            Configure::read('Role.protocol')))) {
+            $this->Flash->error(__('You are not authorized to view this page.'));
+            $this->redirect('/');
+        }
+
+        $conditions = array();
+        $conditions['Vip.ceremony_id ='] = $id;
+        $conditions['Vip.attending ='] = 1;
+
+        $results = $this->Vip->find('all', [
+            'conditions' => $conditions,
+            'order' => ['Vip.last_name' => 'ASC'],
+            'contain' => [
+                'Ministries',
+                'City',
+                'Ceremonies',
+                'Categories',
+            ],
+        ]);
+
+
+        $attendees = [];
+        foreach ($results as $vip) {
+            $person = new \stdClass();
+            $person->first_name = $vip->first_name;
+            $person->last_name = $vip->last_name;
+            $person->nametag_pre = $vip->prefix;
+            $person->nametag_post = $vip->title;
+            $attendees[] = $person;
+            if (!empty($vip->guest_first_name) || !empty($vip->guest_last_name)) {
+                $person = new \stdClass();
+                $person->first_name = $vip->guest_first_name;
+                $person->last_name = $vip->guest_last_name;
+                $person->nametag_pre = $vip->guest_prefix;
+                $person->nametag_post = $vip->guest_title;
+                $attendees[] = $person;
+            }
+        }
+        $this->set(compact('attendees'));
+
+        $this->set('ceremony_id', $id);
+
+        $ceremony = $this->Vip->Ceremonies->findById($id)->firstOrFail();
+        $this->set('ceremony', $ceremony);
+
+    }
+
 
 }
 

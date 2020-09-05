@@ -134,7 +134,7 @@ echo $this->Form->end();
                 }
                 else {
                     if (!isPostalCode($('#postal-code').val())) {
-                        $('#email').css("border-color", clrError);
+                        $('#postal-code').css("border-color", clrError);
                         errors.push('Postal Code invalid format');
                     }
                     else {
@@ -245,8 +245,6 @@ echo $this->Form->end();
                     }
                     this.msgErrors += '</ul>';
                     e.preventDefault();
-                } else {
-                    // this.msgErrors = 'everything is cool';
                 }
             },
 

@@ -14,7 +14,7 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
-<h2>Recipient Names by Night - <?= date("l M j, Y g:ia", strtotime($ceremony->date)) ?></h2>
+<h2>VIP Report - Ceremony Night <?php echo $ceremony->night ?> - <?php echo date("l, M j, Y", strtotime($ceremony->date)); ?></h2>
 
 
 <div class="datatable-container">
@@ -22,14 +22,23 @@
     <table id="data-table-1" class="display ceremony-datatable" style="font-size: 12px; width:100%">
 
     </table>
+
+
+    <table id="data-table-2" class="display ceremony-datatable" style="font-size: 12px; width:100%">
+
+    </table>
+
 </div>
 
+<div>
+    Total Attending: <?= $total_guests; ?>
+</div>
 
 <?php
 
 echo $this->Form->button('Cancel', array(
     'type' => 'button',
-    'onclick' => 'location.href=\'/registrations/attendingrecipients/' . $ceremony_id . '\'',
+    'onclick' => 'location.href=\'/registrations/attendingrecipients/' . $ceremony->id . '\'',
     'class' => 'btn btn-secondary',
 ));
 
@@ -37,56 +46,53 @@ echo $this->Form->button('Cancel', array(
 
 
 <script>
-    var registrations=<?php echo json_encode($recipients); ?>;
+    var results=<?php echo json_encode($results); ?>;
+    var ceremony=<?php echo json_encode($ceremony); ?>;
+    var totalGuests=<?php echo json_encode($total_guests); ?>;
     var edit = true;
     var toolbar = true;
-    var datestr="<?php echo date("Y-M-d", strtotime($ceremony->date)); ?>";
+    var datestr="<?php echo date("Y"); ?>";
 
     console.log(datestr);
-    console.log(registrations);
+    console.log(results);
+    console.log(totalGuests);
 
     $(document).ready(function() {
 
 
-        // console.log(registrations);
 
+        cols = [
+
+            { data: "vip_name", title: "Name" },
+            { data: "category.name", title: "Category" },
+            { data: "ministry.name_shortform", title: "Ministry", orderData: [1,3], orderSequence: ["asc"]},
+            { data: "title", title: "Title" },
+            { data: "guest_name", title: "Guest" },
+            { data: "guest_title", title: "Title"},
+        ];
 
         $('#data-table-1').DataTable( {
-            data: registrations,
-            columns: [
-                {data: "milestone.years", title: "Years of Service", orderable: false},
-                {data: "first_name", title: "First Name", orderData: [3, 2, 1], orderSequence: ["asc"], orderable: false},
-                {data: "last_name", title: "Last Name", orderable: false},
-                {data: "ministry.name_shortform", title: "Ministry", orderable: false},
-                {data: "office_city.name", title: "Office City", orderable: false},
-
-
-            ],
-            bFilter: false,
+            data: results,
+            columns: cols,
+            // stateSave: true,
             pageLength: 15,
             lengthChange: false,
-            order: [[ 1, "asc" ], [2, 'asc'], [3, 'asc']],
+            // order: [[ 1, "asc" ]],
+
             dom: '<"toolbar">Bfrtip',
             buttons: [
                 {
                     extend: 'csv',
                     text: 'Export to CSV',
                     filename: function () {
-                        return datestr + '-recipients-by-night';
+                        return datestr + '-vip-report-night-';
                     },
                 },
                 {
                     extend: 'excel',
                     text: 'Export to Excel',
                     filename: function () {
-                        return datestr + '-recipients-by-night';
-                    },
-                },
-                {
-                    extend: 'pdf',
-                    text: 'Export to PDF',
-                    filename: function () {
-                        return datestr + '-recipients-by-night';
+                        return datestr + '-vip-report-night-';
                     },
                 }
             ],
@@ -104,19 +110,8 @@ echo $this->Form->button('Cancel', array(
         } );
 
 
+
     } );
-
-
-    function resetFilters() {
-
-        var table = $('#data-table-1').DataTable();
-
-        table.columns().every( function () {
-            var column = this;
-            $('#column-' + column.index()).prop("selectedIndex", 0);
-        });
-        table.search('').columns().search('').draw();
-    }
 
 
 

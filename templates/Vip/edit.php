@@ -134,7 +134,7 @@
                 }
                 else {
                     if (!isPostalCode($('#postal-code').val())) {
-                        $('#email').css("border-color", clrError);
+                        $('#postal-code').css("border-color", clrError);
                         errors.push('Postal Code invalid format');
                     }
                     else {
@@ -168,7 +168,7 @@
                 else {
                     $('#mobile').css("border-color", clrDefault);
                 }
-                
+
                 if ($('#fax').val().length > 0) {
                     if (!isPhone($('#fax').val())) {
                         $('#fax').css("border-color", clrError);
@@ -245,8 +245,6 @@
                     }
                     this.msgErrors += '</ul>';
                     e.preventDefault();
-                } else {
-                    // this.msgErrors = 'everything is cool';
                 }
             },
 
