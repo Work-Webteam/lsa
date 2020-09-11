@@ -110,6 +110,20 @@ echo $this->Form->button('Cancel', array(
                     } },
                 {data: "attend_status", title: "Attending", orderable: false},
                 {data: "award_name", title: "Award", orderable: false},
+                {data: "guest", title: "Guest", orderable: false},
+
+                { data: "guest", title: "Guest", orderable: false, render: function (data, type, row) {
+                    if (type === 'display' || type === 'filter' ) {
+                        if (data == true) {
+                            return "Yes";
+                        }
+                        if (data == false) {
+                            return "No";
+                        }
+                    }
+                    return data;
+                } },
+
 
 
 

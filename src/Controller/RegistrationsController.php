@@ -730,7 +730,49 @@ class RegistrationsController extends AppController
         $this->Registrations->Ceremonies->save($ceremony);
 
         $this->Flash->success(__('Assign Recipients - ' . $id));
-        return $this->redirect($this->referer());
+        return $this->redirect(['action' => 'attendingrecipients', $id]);
+    }
+
+
+
+    public function emailinvites($id) {
+
+        if (!$this->checkAuthorization(array(
+            Configure::read('Role.admin'),
+            Configure::read('Role.lsa_admin'),
+            Configure::read('Role.protocol')))) {
+            $this->Flash->error(__('You are not authorized to administer Ceremonies.'));
+            $this->redirect('/');
+        }
+
+        $ceremony = $this->Registrations->Ceremonies->findById($id)->firstOrFail();
+
+        $conditions = array();
+        $conditions['Registrations.registration_year ='] = date('Y');
+        $conditions['Registrations.ceremony_id ='] = $id;
+
+        $registrations = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+        ]);
+
+        $list = [];
+        foreach ($registrations as $registration) {
+            $list[] = $registration;
+
+            $name = $registration->first_name . " "  . $registration->last_name;
+            $date = date("F d, Y", strtotime($ceremony->date));
+
+            $pdf_file = $this->createPDF($registration->id, $name, $date);
+            $this->sendEmail($registration->id, $name, $date, $pdf_file);
+
+            $this->Flash->success(__('pdf: ' . $pdf_file));
+
+        }
+
+
+        $this->Flash->success(__('Invites Sent - ' . $id));
+
+        return $this->redirect(['action' => 'attendingrecipients', $id]);
     }
 
 
@@ -2174,6 +2216,164 @@ class RegistrationsController extends AppController
         }
         return $x;
     }
+
+    public function createPDF($reg_id, $name, $date) {
+
+        require_once(ROOT . DS . 'vendor' . DS . 'fpdf' . DS . 'fpdf.php');
+
+
+        // Create handle for new PDF document
+        $pdf = new \FPDF('P', 'pt', array(610,675));
+
+        // Will save pdfs here
+        $filepath = ROOT . DS . 'webroot' . DS . 'invites' . DS . 'Printable_Keepsake_Invitation_' . $reg_id . '.pdf';
+
+        // Make sure this doesn't already exist - if it does delete it.
+        if(file_exists($filepath)){
+            unlink($filepath);
+            // Rebuild php cache to show file is gone.
+            clearstatcache();
+        }
+
+        // Add our first page The origin is at the upper-left corner and the current position is by default set at 1 cm from the borders; the margins can be changed with SetMargins().
+        $pdf->AddPage();
+
+        // Get font ready, include in file, We could have specified italics with I, underlined with U or a regular font with an empty string (or any combination). font size specified by points
+        $pdf->SetFont("Times", 'IB', 20);
+
+        // Grab our invitation image
+        $invitation = ROOT . DS . 'webroot' . DS . 'img' . DS . 'lsa_invite.jpg';
+        // Add the image
+        $pdf->Image($invitation, 15,15, 580,0,'JPG');
+
+        // Set our mark in the proper place for the name
+        $pdf->SetY(300);
+
+        // Add name Text(float x, float y, string txt)
+        $pdf->Cell(0,0,$name,0,1,'C');
+        //$pdf->Text(250, 100, $username);
+
+        // Now set our marker to the date field5pudGr@vy1
+        //
+        $pdf->SetY(375);
+        // Add date
+        $pdf->Cell(0,0,$date,0,1,'C');
+        //$pdf->Text(60,300, $date);
+
+        // Save to file string Output([string dest [, string name [, boolean isUTF8]]])
+        $pdf->Output('F', $filepath);
+        // Should be destroyed in output, but we can crush it here just in case
+        $pdf->Close();
+
+        return $filepath;
+    }
+
+    public function sendEmail($id, $full_name, $ceremony_date, $pdf_file) {
+
+        $invite_sized = $_SERVER['HTTP_HOST'] . DS . 'webroot' . DS . 'img' . DS . 'lsa_invite.jpg';;
+
+        $rsvp_url = "/rsvp/" . $id;
+
+        // Send email here
+        $mailer = new Mailer('default');
+
+
+        $message = <<<EOT
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style>
+    /* Your Outlook-specific CSS goes here. */
+  .ExternalClass{
+    width:100%;
+  }
+
+  .ExternalClass,
+  .ExternalClass p,
+  .ExternalClass span,
+  .ExternalClass font,
+  .ExternalClass td,
+  .ExternalClass div{
+    line-height: 100%;
+    padding: 0px !important;
+  }
+
+  #outlook a{
+      display: block;
+      padding:0;
+  }
+
+  table{
+      mso-table-lspace:0pt;
+      mso-table-rspace:0pt;
+  }
+
+   img{
+        -ms-interpolation-mode:bicubic;
+    }
+
+
+    </style>
+
+</head>
+
+<body id="mimemail-body" class="atwork-mail-default" style="padding:0;">
+<p> To RSVP for your Long Service Awards ceremony, <strong>click on the invitation below.</strong></p>
+
+<p> Note: If you are unable to view the invitation below, follow the Outlook prompts to download pictures. If you still cannot access the invitation and RSVP form, or if you are retired from the public service, please email the <a href="mailto:longserviceawards@gov.bc.ca">Long Service Awards team</a> for assistance.  </p>
+
+<p> If you would like to print your invitation as a keepsake, the attached PDF version has been provided. </p>
+
+<table width="750" border="0" cellpadding="0" cellspacing="0" style = "page-break-before:always; padding:0;" >
+  <tbody>
+    <tr  style="width:720px !important; height:100% !important; max-height:100% !important; background-size:100%; padding:0 !important; vertical-align:top; float: left;">
+     <td BACKGROUND="$invite_sized" width="750" style="width:720px !important;height:100% !important; max-height:886px !important; min-height:800px !important;background-size:100%; padding:0 !important; vertical-align:top; float: left;"><a href="$rsvp_url">
+
+  <div id="main" style="padding:0 !important">
+          <table width="750" border="0" cellpadding="0" cellspacing="0" border-spacing="0">
+            <tbody>
+              <tr style="max-height:315px; padding:0 !important; vertical-align:top;float:left;">
+                <td class="outlook-box" width="750" height="315" style="max-height:315px !important; padding:0 !important; vertical-align:top;"><span style="padding:0 !important vertical-align:top; float:left;">&nbsp;</span></td>
+              </tr>
+              <tr style="max-height:60px; padding:0 !important; vertical-align:top;float:left;">
+                <td class="initial-height-box" width="750" height="60"style="max-height:60px !important;font-size: 19pt; color: #333333; text-align: center; font-family: Times, 'Times New Roman', 'serif'; font-weight: 900; padding:0 !important; vertical-align:top;float:left;"><span style="padding:0 !important"><i><b>$full_name</b></i></span></td>
+              </tr>
+              <tr style="max-height:60px; padding:0 !important; vertical-align:top;float:left;">
+                <td width="750" height="40" style="max-height:30px; padding:0 !important; vertical-align:top;float:left;"><span style="padding:0 !important">&nbsp;</span></td>
+              </tr>
+              <tr style="max-height:60px !important; font-size: 19pt; color: #333333; text-align: center; font-family: Times; font-weight: 900; padding:0 !important; vertical-align:top;float:left;">
+                <td width="750" height="60" style="max-height:60px !important; font-size: 19pt; color: #333333; text-align: center; font-family: Times, 'Times New Roman', 'serif'; font-weight: 900; padding:0 !important; vertical-align:top;float:left;"><i><b>$ceremony_date</b></i></span></td>
+              </tr>
+              <tr style="max-height:20px !important; padding:0 !important; vertical-align:top;float:left;"><span style="padding:0 !important vertical-align:top;">
+                <td width="750" height="20" style="max-height:20px !important; padding:0 !important; vertical-align:top;float:left;"><span style="padding:0 !important vertical-align:top;">&nbsp;</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+  </a>
+  </td>
+    </tr>
+  </tbody>
+</table>
+</body>
+<br />
+</html>
+EOT;
+
+
+        $mailer->setFrom(['longserviceaward@gov.bc.ca' => 'Long Service Awards'])
+            ->setTo('raymond.kuyvenhoven@gov.bc.ca')
+            ->setSubject('Your Long Service Awards Invitation')
+            ->setAttachments([
+                basename($pdf_file) => [
+                    'file' => $pdf_file,
+                    'mimetype' => 'application/pdf',
+                    'contentId' => 'my-unique-id'
+                ]
+            ])
+            ->deliver($message);
+    }
+
 }
 
 

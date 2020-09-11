@@ -14,7 +14,8 @@
 
 
 <?= $this->Html->link('Assign Recipients', ['action' => 'assignrecipients', $ceremony_id], ['class' => 'btn btn-primary']) ?>
-
+&nbsp;
+<?= $this->Html->link('Send Invites', ['action' => 'emailinvites', $ceremony_id], ['class' => 'btn btn-primary']) ?>
 
 <table>
     <tr>
