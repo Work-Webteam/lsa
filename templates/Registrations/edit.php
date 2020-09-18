@@ -13,6 +13,11 @@
     echo $this->Form->hidden('pecsf_charity2_id', ['v-model' => 'pecsfCharityId2']);
     echo $this->Form->hidden('pecsf_amount2', ['v-model' => 'pecsfAmount2']);
     echo $this->Form->hidden('pecsf_name', ['v-model' => 'selectedName']);
+
+    echo $this->Form->hidden('accessibility_requirements_recipient');
+    echo $this->Form->hidden('accessibility_requirements_guest');
+    echo $this->Form->hidden('dietary_requirements_recipient');
+    echo $this->Form->hidden('dietary_requirements_guest');
     ?>
 
     <tabs>
@@ -120,21 +125,56 @@
             echo '<tab name="Ceremony">';
             echo $this->Form->control('ceremony_id', ['label' => 'Ceremony Night', 'options' => $ceremonies, 'empty' => '- select ceremony -']);
 //                    echo $this->Form->control('ceremony_date', ['disabled' => true]);
+            echo $this->Form->control('responded');
             echo $this->Form->control('attending');
             echo $this->Form->control('guest');
+            echo $this->Form->control('noshow');
+            echo $this->Form->control('waitinglist');
             echo $this->Form->control('recipient_speaker');
             echo $this->Form->control('reserved_seating');
             echo $this->Form->control('executive_recipient');
             echo $this->Form->control('presentation_number', ['label' => 'Award Presentation #']);
             echo $this->Form->control('accessibility_requirements_recipient', ['label' => 'Recipient Accessibility Requirements', 'type' => 'checkbox']);
             echo $this->Form->control('accessibility_requirements_guest', ['label' => 'Guest Accessibility Requirements', 'type' => 'checkbox']);
+
+            foreach ($accessibility as $item):
+                echo '<div>';
+                echo '<label for="accessR-' . $item->id . '">';
+                echo '<input type="checkbox" id="accessR-' . $item->id . '" value=' . $item->id . ' v-model="accessRecipientSelections">';
+                echo '&nbsp;&nbsp;' . $item->name . '</label>';
+                echo '</div>';
+            endforeach;
             echo $this->Form->control('accessibility_recipient_notes');
+
+            foreach ($accessibility as $item):
+                echo '<div>';
+                echo '<label for="accessG-' . $item->id . '">';
+                echo '<input type="checkbox" id="accessG-' . $item->id . '" value=' . $item->id . ' v-model="accessGuestSelections">';
+                echo '&nbsp;&nbsp;' . $item->name . '</label>';
+                echo '</div>';
+            endforeach;
             echo $this->Form->control('accessibility_guest_notes');
+
             echo $this->Form->control('accessibility_admin_notes');
-            echo $this->Form->control('recipient_diet_id', ['options' => $diet, 'empty' => '- select diet -']);
-            echo $this->Form->control('recipient_diet_other');
-            echo $this->Form->control('guest_diet_id', ['options' => $diet, 'empty' => '- select diet -']);
-            echo $this->Form->control('guest_diet_other');
+
+            foreach ($diet as $item):
+                echo '<div>';
+                echo '<label for="dietR-' . $item->id . '">';
+                echo '<input type="checkbox" id="dietR-' . $item->id . '" value=' . $item->id . ' v-model="dietRecipientSelections">';
+                echo '&nbsp;&nbsp;' . $item->name . '</label>';
+                echo '</div>';
+            endforeach;
+            echo $this->Form->control('dietary_recipient_other');
+
+            foreach ($diet as $item):
+                echo '<div>';
+                echo '<label for="dietG-' . $item->id . '">';
+                echo '<input type="checkbox" id="dietG-' . $item->id . '" value=' . $item->id . ' v-model="dietGuestSelections">';
+                echo '&nbsp;&nbsp;' . $item->name . '</label>';
+                echo '</div>';
+            endforeach;
+            echo $this->Form->control('dietary_guest_other');
+
             echo '</tab>';
         }
         ?>
@@ -264,6 +304,9 @@
     var donation=<?php echo json_encode($donation); ?>;
     var options=<?php echo $registration->award_options; ?>;
 
+    var listAccessibility=<?php echo json_encode($accessibility); ?>;
+    var listDiet=<?php echo json_encode($diet); ?>;
+
     Vue.component('tabs', {
         template: `
         <div>
@@ -375,6 +418,17 @@
             donationCharity1: '',
             donationCharity2: '',
 
+            recipientAccessibilityRecipient: <?php echo $registration->accessibility_recipient ? $registration->accessibility_recipient : 0; ?>,
+            recipientAccessibilityGuest: <?php echo $registration->accessibility_guest ? $registration->accessibility_guest : 0; ?>,
+            recipientDietaryRecipient: <?php echo $registration->recipient_diet ? $registration->recipient_diet : 0; ?>,
+            recipientDietaryGuest: <?php echo $registration->guest_diet ? $registration->guest_diet : 0; ?>,
+
+            accessRecipientSelections: <?php echo $registration->accessibility_requirements_recipient; ?>,
+            accessGuestSelections: <?php echo $registration->accessibility_requirements_guest; ?>,
+            dietRecipientSelections: <?php echo $registration->dietary_requirements_recipient; ?>,
+            dietGuestSelections: <?php echo $registration->dietary_requirements_guest; ?>,
+
+
             errorsOptions: '',
 
         },
@@ -425,6 +479,11 @@ console.log(errors);
                         this.pecsfAmount2 = 0;
                     }
                 }
+
+                $('input[name=accessibility_requirements_recipient]').val(JSON.stringify(this.accessRecipientSelections));
+                $('input[name=accessibility_requirements_guest]').val(JSON.stringify(this.accessGuestSelections));
+                $('input[name=dietary_requirements_recipient]').val(JSON.stringify(this.dietRecipientSelections));
+                $('input[name=dietary_requirements_guest]').val(JSON.stringify(this.dietGuestSelections));
 
             },
 

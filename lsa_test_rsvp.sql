@@ -186,6 +186,8 @@ CREATE TABLE registrations (
     guest BOOLEAN DEFAULT false,
     noshow BOOLEAN DEFAULT false,
 
+    waitinglist BOOLEAN DEFAULT false,
+
     ceremony_id INT,
 
     accessibility_recipient BOOLEAN,

@@ -29,7 +29,7 @@
 
     <!-- Links -->
     <div class="collapse navbar-collapse" id="main_nav">
-    <ul class="navbar-nav">
+    <ul class="navbar-nav navbar-right" >
         <li class="nav-item">
             <a class="nav-link lsa-nav-link" href="/registrations">Registrations</a>
         </li>
@@ -91,6 +91,7 @@
                 <li><a class="dropdown-item" href="/registrations/reportministryrecipients">Ministry Recipients</a></li>
                 <li><a class="dropdown-item" href="/registrations/reportpivot/0">Pivot - All Recipients</a></li>
                 <li><a class="dropdown-item" href="/registrations/reportpivot/1">Pivot - Attending Only</a></li>
+                <li><a class="dropdown-item" href="/registrations/reportwaitinglist">Waiting List</a></li>
             </ul>
         </li>
         <li class="nav-item">
@@ -124,6 +125,7 @@
     </div>
 
 </nav>
+
     <main class="main">
         <div class="container">
             <?= $this->Flash->render() ?>

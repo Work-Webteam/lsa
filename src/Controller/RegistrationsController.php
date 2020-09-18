@@ -324,12 +324,7 @@ class RegistrationsController extends AppController
             if (empty($registration->photo_sent)) {
                 $registration->photo_sent = NULL;
             }
-            if ($registration->accessibility_requirements_recipient == 0) {
-                $registration->accessibility_requirements_recipient = "[]";
-            }
-            if ($registration->accessibility_requirements_guest == 0) {
-                $registration->accessibility_requirements_guest = "[]";
-            }
+
             if ($this->Registrations->save($registration)) {
                 $this->Flash->success(__('Registration has been updated.'));
                 return $this->redirect(['action' => 'index']);
@@ -355,8 +350,6 @@ class RegistrationsController extends AppController
         ]);
         $this->set('awardinfo', $awardInfo);
 
-        $diet = $this->Registrations->Diet->find('list');
-        $this->set('diet', $diet);
 
         $cities = $this->Registrations->Cities->find('list', [
             'order' => ['Cities.name' => 'ASC']
@@ -395,6 +388,14 @@ class RegistrationsController extends AppController
             'image' => Configure::read('Donation.image'),
         ];
         $this->set('donation', $donation);
+
+
+        $diet = $this->Registrations->Diet->find('all');
+        $this->set('diet', $diet);
+
+        $accessibility = $this->Registrations->Accessibility->find('all');
+        $this->set('accessibility', $accessibility);
+
 
         $this->set('registration', $registration);
 
@@ -438,6 +439,186 @@ class RegistrationsController extends AppController
                 }
             }
             $isadmin = false;
+        }
+
+        //
+        $this->set('isadmin', $isadmin);
+
+
+    }
+
+
+    public function rsvp($id)
+    {
+        // customized layout excluding top nav, etc.
+        $this->viewBuilder()->setLayout('clean');
+
+        $query = $this->Registrations->RegistrationPeriods->find('all')
+            ->where([
+                'RegistrationPeriods.registration_year =' => date('Y')
+            ]);
+        $regperiod = $query->first();
+
+        if (date('Y-m-d', strtotime($regperiod->close_rsvp)) < date('Y-m-d H:i:s')) {
+            $this->Flash->error(__('The deadline to RSVP has passed.'));
+            $this->redirect('/');
+        }
+
+
+
+
+        $registration = $this->Registrations->find('all', [
+            'conditions' => array(
+                'Registrations.id' => $id
+            ),
+            'contain' => [
+                'Milestones',
+                'Ministries',
+                'Awards',
+                'OfficeCity',
+                'HomeCity',
+                'SupervisorCity',
+                'Ceremonies'
+            ],
+        ])->first();
+        if (!$registration) {
+            $this->Flash->error(__('Registration not found.'));
+            $this->redirect('/');
+        }
+
+        if ($this->request->is(['post', 'put'])) {
+            $oldAttending = $registration->attending;
+            $oldGuest = $registration->guest;
+            $oldRecipientAccess = $registration->accessibility_recipient;
+            $oldGuestAccess = $registration->accessbility_guest;
+            $oldRecipientDiet = $registration->recipient_diet;
+            $oldGuestDiet = $registration->guest_diet;
+
+            $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
+
+            if (!$registration->responded) {
+                $operation = "NEW";
+            }
+            else {
+                $operation = "CHANGE";
+            }
+
+            if (!$registration->guest) {
+                $registration->guest_first_name = "";
+                $registration->guest_last_name = "";
+            }
+
+            if (!$registration->accessibility_recipient) {
+                $registration->accessibility_recipient_notes = "";
+                $registration->accessibility_requirements_recipient = "[]";
+            }
+
+            if (!$registration->accessibility_guest) {
+                $registration->accessibility_guest_notes = "";
+                $registration->accessibility_requirements_guest = "[]";
+            }
+
+            if (!$registration->recipient_diet) {
+                $registration->dietary_recipient_other = "";
+                $registration->dietary_requirements_recipient = "[]";
+            }
+            if (!$registration->guest_diet) {
+                $registration->dietary_guest_other = "";
+                $registration->dietary_requirements_guest = "[]";
+            }
+            $registration->responded = true;
+
+            if ($this->Registrations->save($registration)) {
+
+                if ($operation == "NEW" || $oldAttending <> $registration->attending) {
+                    $log = $this->Registrations->Log->newEmptyEntity();
+                    $session = $this->getRequest()->getSession();
+                    $log->user_idir = $session->read('user.idir');
+                    $log->user_guid = $session->read('user.guid');
+                    $log->timestamp = time();
+                    $log->registration_id = $registration->id;
+                    $log->type = "RSVP";
+                    $log->operation = $operation;
+                    $log->description = $registration->attending ? "Attending YES" : "Attending NO";
+                    if ($this->Registrations->Log->save($log)) {
+                    }
+                }
+                if ($operation == "NEW" || $oldGuest <> $registration->guest) {
+                    $log = $this->Registrations->Log->newEmptyEntity();
+                    $session = $this->getRequest()->getSession();
+                    $log->user_idir = $session->read('user.idir');
+                    $log->user_guid = $session->read('user.guid');
+                    $log->timestamp = time();
+                    $log->registration_id = $registration->id;
+                    $log->type = "RSVP";
+                    $log->operation = $operation;
+                    $log->description = $registration->guest ? "Guest YES" : "Guest NO";
+                    if ($this->Registrations->Log->save($log)) {
+                    }
+                }
+                if ($operation == "NEW" || $oldRecipientAccess <> $registration->accessibility_recipient || $oldGuestAccess <> $registration->accessibility_guest) {
+                    $log = $this->Registrations->Log->newEmptyEntity();
+                    $session = $this->getRequest()->getSession();
+                    $log->user_idir = $session->read('user.idir');
+                    $log->user_guid = $session->read('user.guid');
+                    $log->timestamp = time();
+                    $log->registration_id = $registration->id;
+                    $log->type = "RSVP";
+                    $log->operation = $operation;
+                    $log->description = ($registration->accessibility_recipient || $registration->accessibility_guest) ? "Accessibility YES" : "Accessibility NO";
+                    if ($this->Registrations->Log->save($log)) {
+                    }
+                }
+                if ($operation == "NEW" || $oldRecipientDiet <> $registration->recipient_diet || $oldGuestDiet <> $registration->guest_diet) {
+                    $log = $this->Registrations->Log->newEmptyEntity();
+                    $session = $this->getRequest()->getSession();
+                    $log->user_idir = $session->read('user.idir');
+                    $log->user_guid = $session->read('user.guid');
+                    $log->timestamp = time();
+                    $log->registration_id = $registration->id;
+                    $log->type = "RSVP";
+                    $log->operation = $operation;
+                    $log->description = ($registration->recipient_diet || $registration->guest_diet) ? "Diet YES" : "Diet NO";
+                    if ($this->Registrations->Log->save($log)) {
+                    }
+                }
+                $this->Flash->success(__('Registration has been updated.'));
+                return $this->redirect('/');
+            }
+            $this->Flash->error(__('Unable to update registration.'));
+
+        }
+
+
+        if ($registration->ceremony_id) {
+            $ceremony = $this->Registrations->Ceremonies->findById($registration->ceremony_id)->firstOrFail();
+            if ($ceremony) {
+                $this->set('ceremony', $ceremony);
+            } else {
+                $this->Flash->error(__('No ceremony date has been set for ' . $registration->first_name . " " . $registration->last_name . '.'));
+                $this->redirect('/');
+            }
+        }
+        else {
+            $this->Flash->error(__('No ceremony date has been set for ' . $registration->first_name . " " . $registration->last_name . '.'));
+            $this->redirect('/');
+        }
+
+        $diet = $this->Registrations->Diet->find('all');
+        $this->set('diet', $diet);
+
+        $accessibility = $this->Registrations->Accessibility->find('all');
+        $this->set('accessibility', $accessibility);
+
+        $this->set('regperiod', $regperiod);
+
+        $this->set('registration', $registration);
+
+        $isadmin = true;
+
+        if (!$this->checkGUID($registration->user_guid)) {
+            $this->Flash->error(__('You are not authorized to complete this RSVP.'));
+            $this->redirect('/');
         }
 
         //
@@ -642,6 +823,7 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.ceremony_id ='] = $id;
+        $conditions['Registrations.waitinglist ='] = 0;
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -750,11 +932,14 @@ class RegistrationsController extends AppController
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
         $conditions['Registrations.ceremony_id ='] = $id;
+        $conditions['Registrations.waitinglist = '] = 0;
+        $conditions[] = 'Registrations.invite_sent IS NULL';
 
         $registrations = $this->Registrations->find('all', [
             'conditions' => $conditions,
         ]);
 
+        $ctr = 0;
         $list = [];
         foreach ($registrations as $registration) {
             $list[] = $registration;
@@ -763,14 +948,26 @@ class RegistrationsController extends AppController
             $date = date("F d, Y", strtotime($ceremony->date));
 
             $pdf_file = $this->createPDF($registration->id, $name, $date);
-            $this->sendEmail($registration->id, $name, $date, $pdf_file);
+            $email = $registration->preferred_email;
+            if (Configure::read('Test.mode')) {
+                $email = Configure::read('Test.email');
+            }
+            $this->sendEmail($registration->id, $email, $name, $date, $pdf_file);
+            if (!empty($registration->alternate_email)) {
+                if (Configure::read('Test.mode')) {
+                    $email = Configure::read('Test.email');
+                }
+                $this->sendEmail($registration->id, $email, $name, $date, $pdf_file);
+            }
+            // update invite sent date here
+            $registration->invite_sent = time();
+            $this->Registrations->save($registration);
 
-            $this->Flash->success(__('pdf: ' . $pdf_file));
-
+            $ctr++;
         }
 
 
-        $this->Flash->success(__('Invites Sent - ' . $id));
+        $this->Flash->success(__('Invites Sent (' . $ctr . ')'));
 
         return $this->redirect(['action' => 'attendingrecipients', $id]);
     }
@@ -778,184 +975,6 @@ class RegistrationsController extends AppController
 
 
 
-    public function rsvp($id)
-    {
-        // customized layout excluding top nav, etc.
-        $this->viewBuilder()->setLayout('clean');
-
-        $query = $this->Registrations->RegistrationPeriods->find('all')
-            ->where([
-                'RegistrationPeriods.registration_year =' => date('Y')
-            ]);
-        $regperiod = $query->first();
-
-        if (date('Y-m-d', strtotime($regperiod->close_rsvp)) < date('Y-m-d H:i:s')) {
-            $this->Flash->error(__('The deadline to RSVP has passed.'));
-            $this->redirect('/');
-        }
-
-
-
-
-        $registration = $this->Registrations->find('all', [
-            'conditions' => array(
-                'Registrations.id' => $id
-            ),
-            'contain' => [
-                'Milestones',
-                'Ministries',
-                'Awards',
-                'OfficeCity',
-                'HomeCity',
-                'SupervisorCity',
-                'Ceremonies'
-            ],
-        ])->first();
-        if (!$registration) {
-            $this->Flash->error(__('Registration not found.'));
-            $this->redirect('/');
-        }
-
-        if ($this->request->is(['post', 'put'])) {
-            $oldAttending = $registration->attending;
-            $oldGuest = $registration->guest;
-            $oldRecipientAccess = $registration->accessibility_recipient;
-            $oldGuestAccess = $registration->accessbility_guest;
-            $oldRecipientDiet = $registration->recipient_diet;
-            $oldGuestDiet = $registration->guest_diet;
-
-            $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
-
-            if (!$registration->responded) {
-                $operation = "NEW";
-            }
-            else {
-                $operation = "CHANGE";
-            }
-
-            if (!$registration->guest) {
-                $registration->guest_first_name = "";
-                $registration->guest_last_name = "";
-            }
-
-            if (!$registration->accessibility_recipient) {
-                $registration->accessibility_recipient_notes = "";
-                $registration->accessibility_requirements_recipient = "[]";
-            }
-
-            if (!$registration->accessibility_guest) {
-                $registration->accessibility_guest_notes = "";
-                $registration->accessibility_requirements_guest = "[]";
-            }
-
-            if (!$registration->recipient_diet) {
-                $registration->dietary_recipient_other = "";
-                $registration->dietary_requirements_recipient = "[]";
-            }
-            if (!$registration->guest_diet) {
-                $registration->dietary_guest_other = "";
-                $registration->dietary_requirements_guest = "[]";
-            }
-            $registration->responded = true;
-
-            if ($this->Registrations->save($registration)) {
-
-                if ($operation == "NEW" || $oldAttending <> $registration->attending) {
-                    $log = $this->Registrations->Log->newEmptyEntity();
-                    $session = $this->getRequest()->getSession();
-                    $log->user_idir = $session->read('user.idir');
-                    $log->user_guid = $session->read('user.guid');
-                    $log->timestamp = time();
-                    $log->registration_id = $registration->id;
-                    $log->type = "RSVP";
-                    $log->operation = $operation;
-                    $log->description = $registration->attending ? "Attending YES" : "Attending NO";
-                    if ($this->Registrations->Log->save($log)) {
-                    }
-                }
-                if ($operation == "NEW" || $oldGuest <> $registration->guest) {
-                    $log = $this->Registrations->Log->newEmptyEntity();
-                    $session = $this->getRequest()->getSession();
-                    $log->user_idir = $session->read('user.idir');
-                    $log->user_guid = $session->read('user.guid');
-                    $log->timestamp = time();
-                    $log->registration_id = $registration->id;
-                    $log->type = "RSVP";
-                    $log->operation = $operation;
-                    $log->description = $registration->guest ? "Guest YES" : "Guest NO";
-                    if ($this->Registrations->Log->save($log)) {
-                    }
-                }
-                if ($operation == "NEW" || $oldRecipientAccess <> $registration->accessibility_recipient || $oldGuestAccess <> $registration->accessibility_guest) {
-                    $log = $this->Registrations->Log->newEmptyEntity();
-                    $session = $this->getRequest()->getSession();
-                    $log->user_idir = $session->read('user.idir');
-                    $log->user_guid = $session->read('user.guid');
-                    $log->timestamp = time();
-                    $log->registration_id = $registration->id;
-                    $log->type = "RSVP";
-                    $log->operation = $operation;
-                    $log->description = ($registration->accessibility_recipient || $registration->accessibility_guest) ? "Accessibility YES" : "Accessibility NO";
-                    if ($this->Registrations->Log->save($log)) {
-                    }
-                }
-                if ($operation == "NEW" || $oldRecipientDiet <> $registration->recipient_diet || $oldGuestDiet <> $registration->guest_diet) {
-                    $log = $this->Registrations->Log->newEmptyEntity();
-                    $session = $this->getRequest()->getSession();
-                    $log->user_idir = $session->read('user.idir');
-                    $log->user_guid = $session->read('user.guid');
-                    $log->timestamp = time();
-                    $log->registration_id = $registration->id;
-                    $log->type = "RSVP";
-                    $log->operation = $operation;
-                    $log->description = ($registration->recipient_diet || $registration->guest_diet) ? "Diet YES" : "Diet NO";
-                    if ($this->Registrations->Log->save($log)) {
-                    }
-                }
-                $this->Flash->success(__('Registration has been updated.'));
-                return $this->redirect('/');
-            }
-            $this->Flash->error(__('Unable to update registration.'));
-
-        }
-
-
-        if ($registration->ceremony_id) {
-            $ceremony = $this->Registrations->Ceremonies->findById($registration->ceremony_id)->firstOrFail();
-            if ($ceremony) {
-                $this->set('ceremony', $ceremony);
-            } else {
-                $this->Flash->error(__('No ceremony date has been set for ' . $registration->first_name . " " . $registration->last_name . '.'));
-                $this->redirect('/');
-            }
-        }
-        else {
-            $this->Flash->error(__('No ceremony date has been set for ' . $registration->first_name . " " . $registration->last_name . '.'));
-            $this->redirect('/');
-        }
-
-        $diet = $this->Registrations->Diet->find('all');
-        $this->set('diet', $diet);
-
-        $accessibility = $this->Registrations->Accessibility->find('all');
-        $this->set('accessibility', $accessibility);
-
-        $this->set('regperiod', $regperiod);
-
-        $this->set('registration', $registration);
-
-        $isadmin = true;
-
-        if (!$this->checkGUID($registration->user_guid)) {
-           $this->Flash->error(__('You are not authorized to complete this RSVP.'));
-           $this->redirect('/');
-         }
-
-        //
-        $this->set('isadmin', $isadmin);
-
-
-    }
 
 
     public function ceremonysummary($id) {
@@ -972,6 +991,7 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.ceremony_id ='] = $id;
+        $conditions['Registrations.waitinglist ='] = 0;
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -1101,6 +1121,7 @@ class RegistrationsController extends AppController
         $conditions = array();
         $conditions['Registrations.ceremony_id ='] = $id;
         $conditions['Registrations.attending ='] = true;
+        $conditions['Registrations.waitinglist ='] = 0;
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -1165,6 +1186,7 @@ class RegistrationsController extends AppController
         $conditions = array();
         $conditions['Registrations.ceremony_id ='] = $id;
         $conditions['Registrations.attending ='] = true;
+        $conditions['Registrations.waitinglist ='] = 0;
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -1238,6 +1260,7 @@ class RegistrationsController extends AppController
             $conditions['Registrations.attending ='] = true;
             $conditions['Registrations.attending ='] = false;
         }
+        $conditions['Registrations.waitinglist ='] = 0;
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -1285,6 +1308,7 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.ceremony_id ='] = $id;
+        $conditions['Registrations.waitinglist ='] = 0;
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -1330,6 +1354,7 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
+        $conditions['Registrations.waitinglist ='] = 0;
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -1391,6 +1416,7 @@ class RegistrationsController extends AppController
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
         $conditions['Registrations.ceremony_id >'] = 0;
+        $conditions['Registrations.waitinglist ='] = 0;
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -1555,6 +1581,7 @@ class RegistrationsController extends AppController
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
         $conditions['Registrations.ceremony_id >'] = 0;
+        $conditions['Registrations.waitinglist ='] = 0;
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -1588,6 +1615,7 @@ class RegistrationsController extends AppController
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
         $conditions['Registrations.ceremony_id >'] = 0;
+        $conditions['Registrations.waitinglist ='] = 0;
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -1762,6 +1790,7 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.ceremony_id ='] = $id;
+        $conditions['Registrations.waitinglist ='] = 0;
         if ($attending) {
             $conditions['Registrations.attending ='] = true;
         }
@@ -1812,6 +1841,7 @@ class RegistrationsController extends AppController
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
         $conditions['Registrations.ceremony_id >'] = 0;
+        $conditions['Registrations.waitinglist ='] = 0;
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -1846,6 +1876,7 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.ceremony_id ='] = $id;
+        $conditions['Registrations.waitinglist ='] = 0;
         if ($attending) {
             $conditions['Registrations.attending ='] = true;
         }
@@ -1974,6 +2005,7 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.attending ='] = true;
+        $conditions['Registrations.waitinglist ='] = 0;
         $conditions["or"] = ["Registrations.accessibility_recipient =" => true, "Registrations.accessibility_guest =" => true, "Registrations.recipient_diet =" => true, "Registrations.guest_diet =" => true];
 
         $recipients = $this->Registrations->find('all', [
@@ -2084,6 +2116,7 @@ class RegistrationsController extends AppController
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
         $conditions['Registrations.ceremony_id >'] = 0;
+        $conditions['Registrations.waitinglist ='] = 0;
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -2103,6 +2136,46 @@ class RegistrationsController extends AppController
         $this->set(compact('recipients'));
 
     }
+
+
+
+
+    public function reportwaitinglist()
+    {
+        if ($this->checkAuthorization(array(Configure::read('Role.authenticated')))) {
+            $this->Flash->error(__('You are not authorized to administer Registrations.'));
+            $this->redirect('/');
+        }
+
+        $conditions = array();
+        $conditions['Registrations.registration_year ='] = date('Y');
+        $conditions['Registrations.waitinglist ='] = 1;
+
+        $recipients = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+            'order' => [
+                'Registrations.ceremony_id ASC',
+                'Ministries.name ASC',
+
+            ],
+            'contain' => [
+                'Milestones',
+                'Ministries',
+                'Awards',
+                'OfficeCity',
+                'HomeCity',
+                'SupervisorCity',
+                'Ceremonies',
+            ],
+        ]);
+
+
+        $this->set(compact('recipients'));
+    }
+
+
+
+
 
     public function reportpivot($attending = 0)
     {
@@ -2131,6 +2204,7 @@ class RegistrationsController extends AppController
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
         $conditions['Registrations.ceremony_id >'] = 0;
+        $conditions['Registrations.waitinglist ='] = 0;
         if ($attending == 1) {
             $conditions['Registrations.attending'] = 1;
             $title = "Attendees Only";
@@ -2268,7 +2342,7 @@ class RegistrationsController extends AppController
         return $filepath;
     }
 
-    public function sendEmail($id, $full_name, $ceremony_date, $pdf_file) {
+    public function sendEmail($id, $email, $full_name, $ceremony_date, $pdf_file) {
 
         $invite_sized = $_SERVER['HTTP_HOST'] . DS . 'webroot' . DS . 'img' . DS . 'lsa_invite.jpg';;
 
@@ -2360,9 +2434,10 @@ class RegistrationsController extends AppController
 </html>
 EOT;
 
+        // send to primary and secondary email (if provided)
 
         $mailer->setFrom(['longserviceaward@gov.bc.ca' => 'Long Service Awards'])
-            ->setTo('raymond.kuyvenhoven@gov.bc.ca')
+            ->setTo($email)
             ->setSubject('Your Long Service Awards Invitation')
             ->setAttachments([
                 basename($pdf_file) => [
@@ -2372,6 +2447,7 @@ EOT;
                 ]
             ])
             ->deliver($message);
+
     }
 
 }

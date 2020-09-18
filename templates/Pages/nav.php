@@ -1,4 +1,4 @@
-<nav class="top-nav  navbar navbar-expand-lg navbar-dark">
+<nav class="top-nav navbar navbar-expand-lg navbar-dark">
 
     <!-- Brand -->
     <a href="/"><span><img src="/img/lsa_logo.png" class="navbar-brand lsa-logo"></span></a>
