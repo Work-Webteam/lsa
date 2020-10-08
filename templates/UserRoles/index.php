@@ -21,6 +21,9 @@
             <td>
                 <?= $this->Html->link('Edit', ['action' => 'edit', $userrole->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>
+            <td>
+                <?= $this->Form->postLink('Delete', ['action' => 'delete', $userrole->id], ['confirm' => 'Are you sure?','class' => 'btn btn-primary', 'role' => 'button']) ?>
+            </td>
         </tr>
     <?php endforeach; ?>
 </table>

@@ -5272,7 +5272,7 @@ INSERT INTO `awards` (`id`, `name`, `abbreviation`, `milestone_id`, `description
 INSERT INTO `awards` (`id`, `name`, `abbreviation`, `milestone_id`, `description`, `image`, `options`, `personalized`, `active`) VALUES(25, 'Bulova® \"Yarmouth\" Clock', 'Clock', 6, 'Bulova wall clock with thermometer and hygrometer. Comes in a beautiful walnut finish and has an engraved plate, “In recognition of fifty years of service.”\r\nSize: 17 ¼ \"H x 10 ¾” W x 3“ D', 'bulova-clock-yarmouth.jpg', '[]', 0, 1);
 
 
-INSERT INTO `registration_periods` (`id`, `registration_year`, `qualifying_years`, `open_registration`, `close_registration`, `close_rsvp`) VALUES(1, 2020, '2019,2020,2021', '2020-02-01 00:00:00', '2020-08-31 23:59:59', '2020-09-30 23:59:59');
+INSERT INTO `registration_periods` (`id`, `registration_year`, `qualifying_years`, `open_registration`, `close_registration`, `close_rsvp`) VALUES(1, 2020, '2019,2020,2021', '2020-02-01 00:00:00', '2020-10-31 23:59:59', '2020-11-30 23:59:59');
 
 
 INSERT INTO `user_roles` (`id`, `idir`, `guid`, `role_id`, `ministry_id`) VALUES(1, 'rkuyvenh', '60DCD2AF73FB44AE9345F11B71CD3495', 1, 0);
