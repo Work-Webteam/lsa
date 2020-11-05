@@ -30,35 +30,11 @@
     <!-- Links -->
     <div class="collapse navbar-collapse" id="main_nav">
     <ul class="navbar-nav navbar-right" >
- <!-- Dropdown -->
- <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                Recipients
-            </a>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/registrations">Recipients Dashboard</a></li>
-                <li><a class="dropdown-item" href="/registrations/milestonesummary">Total by Milestone</a></li>
-                <li><a class="dropdown-item" href="/registrations/reportministryrecipients">Total by Ministry</a></li>
-                <div class="dropdown-divider"></div>
-                <li><a class="dropdown-item" href="/registrations/exportrecipients">Export Recipients</a></li>
-                <li><a class="dropdown-item" href="/registrations/reportministryrecipients_copy">Export Recipients by Ministry</a></li>
-                <li><a class="dropdown-item" href="/registrations/reportpivot/0">Pivot - All Recipients</a></li>
-                <li><a class="dropdown-item" href="/registrations/reportpivot/1">Pivot - Attending Only</a></li>
-            </ul>
+        <li class="nav-item">
+            <a class="nav-link lsa-nav-link" href="/registrations">Registrations</a>
         </li>
-
         <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-            Ceremonies
-        </a>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/ceremonies">Ceremony Dashboard</a></li>
-                <li><a class="dropdown-item" href="/registrations/reportministryrsvp">RSVPs by Ceremony</a></li>
-                <li><a class="dropdown-item" href="/registrations/reportwaitinglist">Wait List</a></li>
-                <div class="dropdown-divider"></div>
-                <!--<li><a class="dropdown-item" href="/vip">Executives</a></li> -->
-                <li><a class="dropdown-item" href="/registrations/exportspecialrequirements">Accessibility and Dietary</a></li>
-            </ul>
+            <a class="nav-link" href="/ceremonies">Ceremonies</a>
         </li>
 
         <?php
@@ -75,6 +51,7 @@
                         <li><a class="dropdown-item" href="/registrations/ceremonydiet/<?= $ceremony_id ?>">Diet</a></li>
                         <li><a class="dropdown-item" href="/registrations/ceremonyawards/<?= $ceremony_id ?>/1">Awards - Attending</a></li>
                         <li><a class="dropdown-item" href="/registrations/ceremonyawards/<?= $ceremony_id ?>/0">Awards - Not Attending</a></li>
+                        <li><a class="dropdown-item" href="/registrations/ceremonyawardssummary/<?= $ceremony_id ?>">Awards Summary</a></li>
                         <li><a class="dropdown-item" href="/registrations/ceremonysummary/<?= $ceremony_id ?>">Summary</a></li>
                         <li><a class="dropdown-item" href="/registrations/reportrecipientsbyceremony/<?= $ceremony_id ?>">Recipient Names</a></li>
                         <li><a class="dropdown-item" href="/registrations/exportbadges/<?= $ceremony_id ?>">Recipient Name Badges</a></li>
@@ -88,52 +65,57 @@
         }
         ?>
 
+
+        <li class="nav-item">
+            <a class="nav-link" href="/vip">VIP</a>
+        </li>
         <!-- Dropdown -->
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                Awards
-            </a>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/registrations/reportawards">Awards Dashboard</a></li>
-                <li><a class="dropdown-item" href="/registrations/awardsummary">Totals by Award Type</a></li>
-                <li><a class="dropdown-item" href="/registrations/reportawardtotalsceremony">Totals by Ceremony</a></li>
-                <li><a class="dropdown-item" href="/registrations/reportawardtotalsmilestone">Totals by Milestone</a></li>
-                <li><a class="dropdown-item" href="/registrations/reportcertificatesmilestone">25 Year Certificates</a></li>
-                <li><a class="dropdown-item" href="/registrations/reportcertificatespecsf">PECSF Donation Certificates</a></li>
-                <li><a class="dropdown-item" href="/registrations/reportwatches">Watch Report</a></li>
-            </ul>
-        </li>
-
-        <!-- Dropdown -->
-        <!--<li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbardrop-reports" data-toggle="dropdown">
-                Exports
+                Reports
             </a>
             <ul class="dropdown-menu" admin-drop-2>
+                <li><a class="dropdown-item" href="/registrations/reportawards">Awards</a></li>
+                <li><a class="dropdown-item" href="/registrations/reportawardtotalsceremony">Award Totals - by Ceremony</a></li>
+                <li><a class="dropdown-item" href="/registrations/reportawardtotalsmilestone">Award Totals - by Milestone</a></li>
+                <li><a class="dropdown-item" href="/registrations/reportcertificatesmilestone">Certificates - Milestone</a></li>
+                <li><a class="dropdown-item" href="/registrations/reportcertificatespecsf">Certificates - PECSF Donation</a></li>
+                <li><a class="dropdown-item" href="/registrations/reportwatches">Watch Report</a></li>
                 <li><a class="dropdown-item" href="/registrations/reportlsaprogram">LSA Program Data</a></li>
-              
+                <li><a class="dropdown-item" href="/registrations/awardsummary">Award Summary</a></li>
+                <li><a class="dropdown-item" href="/registrations/ministrysummary">Ministry Summary</a></li>
+                <li><a class="dropdown-item" href="/registrations/milestonesummary">Milestone Summary</a></li>
+                <li><a class="dropdown-item" href="/registrations/exportrecipients">Export Recipients</a></li>
+                <li><a class="dropdown-item" href="/registrations/exportspecialrequirements">Special Requirements</a></li>
+                <li><a class="dropdown-item" href="/registrations/reportministryrsvp">RSVP Summary</a></li>
+                <li><a class="dropdown-item" href="/registrations/reportministryrecipients">Ministry Recipients</a></li>
+                <li><a class="dropdown-item" href="/registrations/reportpivot/0">Pivot - All Recipients</a></li>
+                <li><a class="dropdown-item" href="/registrations/reportpivot/1">Pivot - Attending Only</a></li>
+                <li><a class="dropdown-item" href="/registrations/reportwaitinglist">Waiting List</a></li>
             </ul>
-        </li> -->
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/registrations/archive">Archive</a>
+        </li>
         <!-- Dropdown -->
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                Settings
+                Maintenance
             </a>
             <div class="dropdown-menu">
                 <a class="dropdown-item" href="/registrationperiods">Registration Periods</a>
                 <a class="dropdown-item" href="/awards">Awards</a>
-                <a class="dropdown-item" href="/milestones">PECSF Donations</a>
+                <a class="dropdown-item" href="/milestones">Milestones</a>
                 <a class="dropdown-item" href="/ministries">Ministries</a>
                 <a class="dropdown-item" href="/diet">Diet</a>
                 <a class="dropdown-item" href="/accessibility">Accessibility</a>
-                <a class="dropdown-item" href="/categories">VIP Categories</a>
+                <a class="dropdown-item" href="/categories">Categories</a>
                 <a class="dropdown-item" href="/cities">Cities</a>
-                <a class="dropdown-item" href="/pecsfregions">PECSF Regions</a>
-                <a class="dropdown-item" href="/pecsfcharities">PECSF Charities</a>
+                <a class="dropdown-item" href="/pecsfregions">Regions</a>
+                <a class="dropdown-item" href="/pecsfcharities">Charities</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="/userroles">System Permissions</a>
-                <a class="dropdown-item" href="/registrations/archive">Archive Database</a>
-                <a class="dropdown-item" href="/log">Error Log</a>
+                <a class="dropdown-item" href="/userroles">Admin Access</a>
+                <a class="dropdown-item" href="/log">Log</a>
             </div>
         </li>
 

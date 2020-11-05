@@ -64,7 +64,7 @@ echo $this->Form->button('Cancel', array(
 
             cols = [
                 {data: "milestone", title: "Milestone", orderData: [0, 1]},
-                {data: "award", title: "Award", orderable: false},
+                {data: "award", title: "Award", orderable: true},
                 {data: "total", title: "Total", orderable: false},
                 {data: "attending", title: "Total Attending", orderable: false},
                 {data: "notattending", title: "Total Not Attending", orderable: false},

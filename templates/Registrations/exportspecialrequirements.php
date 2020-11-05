@@ -14,7 +14,7 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
-<h2>Special Requirements - <?= date("Y") ?></h2>
+<h2>Accessibility and Dietary Requirements - <?= date("Y") ?></h2>
 
 
 <div class="datatable-container">
@@ -57,7 +57,7 @@ echo $this->Form->button('Cancel', array(
                 { data: "ceremony.night", title: "Night", orderData: [0, 4, 3]},
                 { data: "ceremony.date", title: "Ceremony Date", orderable: false, render: function( data, type, row, meta) {
                         const months = ["Jan", "Feb", "Mar","Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                        const days = ["Sunday", "Monday", "Tuesday", "Wednewday", "Thursdau", "Friday", "Saturday"];
+                        const days = ["Sunday", "Monday", "Tuesday", "Wednewday", "Thursday", "Friday", "Saturday"];
                         var d = new Date(data);
 
                         let formatted_date = days[d.getDay()] + ", " + months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear()
@@ -66,7 +66,7 @@ echo $this->Form->button('Cancel', array(
                 { data: "ministry.name_shortform", title: "Ministry", orderable: false},
                 { data: "first_name", title: "First Name", orderData: [3, 2, 1], orderSequence: ["asc"], orderable: false},
                 { data: "last_name", title: "Last Name", orderable: false},
-                { data: "id", title: "ID", orderable: false},
+                //{ data: "id", title: "ID", orderable: false},
                 { data: "attending", title: "Attending Ceremony",
                     render: function (data, type, row) {
                         if (type === 'display' || type === 'filter' ) {
@@ -87,7 +87,7 @@ echo $this->Form->button('Cancel', array(
                 // { data: "home_phone", title: "Home Phone", orderable: false},
 
 
-                { data: "report_diet", title: "Diet Requirements",
+                /*{ data: "report_diet", title: "Diet Requirements",
                     render: function (data, type, row) {
                         if (type === 'display' || type === 'filter' ) {
                             if (data == true) {
@@ -99,15 +99,15 @@ echo $this->Form->button('Cancel', array(
                         }
                         return data;
                     }
-                },
+                },*/
 
-                { data: "report_recipient_diet", title: "Recipient Diet Requirements", orderable: false},
-                { data: "dietary_recipient_other", title: "Recipient Diet Notes", orderable: false},
-                { data: "report_guest_diet", title: "Guest Diet Requirements", orderable: false},
-                { data: "dietary_guest_other", title: "Guest Diet Notes", orderable: false},
+                { data: "report_recipient_diet", title: "Recipient Dietary", orderable: false},
+                { data: "dietary_recipient_other", title: "Recipient Dietary Notes", orderable: false},
+                { data: "report_guest_diet", title: "Guest Dietary", orderable: false},
+                { data: "dietary_guest_other", title: "Guest Dietary Notes", orderable: false},
 
 
-                { data: "report_access", title: "Accessibility Requirements",
+                /*{ data: "report_access", title: "Accessibility Requirements",
                     render: function (data, type, row) {
                         if (type === 'display' || type === 'filter' ) {
                             if (data == true) {
@@ -119,11 +119,11 @@ echo $this->Form->button('Cancel', array(
                         }
                         return data;
                     }
-                },
+                },*/
 
-                { data: "report_recipient_access", title: "Recipient Accessibility Requirements", orderable: false},
+                { data: "report_recipient_access", title: "Recipient Accessibility", orderable: false},
                 { data: "dietary_recipient_other", title: "Recipient Accessibility Notes", orderable: false},
-                { data: "report_guest_access", title: "Guest Accessibility Requirements", orderable: false},
+                { data: "report_guest_access", title: "Guest Accessibility", orderable: false},
                 { data: "dietary_guest_other", title: "Guest Accessibility Notes", orderable: false},
 
 

@@ -78,6 +78,7 @@ echo $this->Form->button('Cancel', array(
                     } },
                 { data: "award", title: "Award", orderable: false },
                 { data: "total", title: "Total", orderable: false },
+                //{ data: "milestone", title: "Milestone", orderable: true },
                 { data: "attending", title: "Total Attending", orderable: false },
                 { data: "notattending", title: "Total Not Attending", orderable: false},
                 // { data: "lastupdate", title: "Last Update", orderable: false},

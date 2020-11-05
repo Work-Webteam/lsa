@@ -14,8 +14,13 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
-<h2>Watch Report</h2>
 
+<h2>Award Totals by Ceremony</h2>
+
+<p id="date_filter">
+    <span id="date-label-from" class="date-label">Changes Since: </span><input class="date_range_filter date" type="text" id="datepicker_from" />
+
+</p>
 
 <div class="datatable-container">
     <?= $this->Flash->render() ?>
@@ -42,13 +47,15 @@ echo $this->Form->button('Cancel', array(
     var toolbar = true;
     var attending = true;
     var year =<?php echo $year; ?>;
+    var fromDate;
+    var indicator = "what!";
 
     $(document).ready(function() {
 
         console.log("year: " + year);
 
         for (i = 0; i < recipients.length; i++) {
-            options = JSON.parse(recipients[i].award_options)
+            options = JSON.parse(recipients[i].award_options);
             recipients[i].optionsDisplay = "";
             for (j = 0; j < options.length; j++) {
                 if (i > 0) {
@@ -56,51 +63,43 @@ echo $this->Form->button('Cancel', array(
                 }
                 recipients[i].optionsDisplay += "- " + options[j];
             }
-            if (recipients[i].award_id == 0) {
-                recipients[i].award = { id: 0, name: "PECSF Donation" };
-            }
         }
-
-        console.log(recipients);
 
         var cols;
 
-        cols = [
-            { data: "ceremony.date", visible: false },
-            { data: "ceremony.night", title: "Ceremony", orderable: false},
-            { data: "ceremony.date", title: "Ceremony", orderable: false, orderData: [0, 3, 4, 5, 6], render: function( data, type, row, meta) {
-                    const months = ["Jan", "Feb", "Mar","Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                    var d = new Date(data);
+            cols = [
+                { data: "ceremony_night", title: "Ceremony", orderData: [0, 2]},
+                { data: "ceremony_date", title: "Date", orderable: false, render: function( data, type, row, meta) {
+                        const months = ["Jan", "Feb", "Mar","Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                        var d = new Date(data);
 
-                    let formatted_date = months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear()
-                    console.log(formatted_date)
+                        let formatted_date = months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear()
+                        return formatted_date;
+                    } },
+                { data: "award", title: "Award", orderable: false },
+                { data: "total", title: "Total", orderable: false },
+                { data: "attending", title: "Total Attending", orderable: false },
+                { data: "notattending", title: "Total Not Attending", orderable: false},
+                // { data: "lastupdate", title: "Last Update", orderable: false},
+                { data: "lastupdate", title: "Changes", orderable: false, render: function (data, type, row, meta) {
 
-                    return formatted_date;
-                } },
-
-            { data: "ministry.name", title: "Ministry", orderable: false},
-            { data: "last_name", title: "Last Name", orderable: false},
-            { data: "first_name", title: "First Name", orderable: false},
-            { data: "attending", title: "Attending", orderable: false, render: function (data, type, row, meta) {
-                    if (data) {
-                        return "Attending";
-                    } else {
-                        return "Not Attending";
-                    }
-                }
-            },
-            { data: "award.name", title: "Award", orderable: false},
-            { data: "optionsDisplay", title: "Options", orderable: false},
-            { data: "engraving_sent", title: "Engraving Sent?", visible: true, orderable: true },
-        ];
+                        indicator = "";
+                        if (fromDate) {
+                            if (data > fromDate) {
+                                indicator = "CHANGES" ; // data;
+                            }
+                        }
+                    return indicator;
+                    } }
+            ];
 
 
-        $('#data-table-1').DataTable( {
+        var dTable = $('#data-table-1').DataTable( {
             data: recipients,
             columns: cols,
-            order: [[ 2, "asc" ]],
+            // order: [[ 1, "asc" ]],
             // stateSave: true,
-            pageLength: 15,
+            pageLength: 25,
             lengthChange: false,
 
 
@@ -110,14 +109,14 @@ echo $this->Form->button('Cancel', array(
                     extend: 'csv',
                     text: 'Export to CSV',
                     filename: function () {
-                        return year + '-AwardWatches';
+                        return year + '-AwardTotalsByCeremony';
                     },
                 },
                 {
                     extend: 'excel',
                     text: 'Export to Excel',
                     filename: function () {
-                        return year + '-AwardWatches';
+                        return year + '-AwardTotalsByCeremony';
                     },
                 }
             ],
@@ -128,35 +127,31 @@ echo $this->Form->button('Cancel', array(
                 searchPlaceholder: "Search..."
             },
 
+
             initComplete: function () {
             }
 
 
         } );
 
+        $("#datepicker_from").datepicker({
+            // showOn: "button",
+            // buttonImage: "/img/icons/calendar.png",
+            // buttonImageOnly: false,
+            "onSelect": function(date) {
+                console.log("here");
+                fromDate = new Date(date).toISOString();
+                dTable.rows().invalidate().draw();
+            }
+        }).keyup(function() {
+            fromDate = new Date(this.value).toISOString();
+            dTable.rows().invalidate().draw();
+        }).next(".ui-datepicker-trigger").addClass("btn-light");
 
-        // only show buttons for users with appropriate permissions
-        if (!toolbar) {
-            $("div.toolbar").hide();
-            $(".dt-buttons").hide();
-        }
     } );
 
 
-    function resetFilters() {
 
-        var table = $('#data-table-1').DataTable();
-
-        table.columns().every( function () {
-            var column = this;
-            $('#column-' + column.index()).prop("selectedIndex", 0);
-        });
-        table.search('').columns().search('').draw();
-    }
-
-    function dataExport() {
-        console.log('dataExport');
-    }
 
 </script>
 

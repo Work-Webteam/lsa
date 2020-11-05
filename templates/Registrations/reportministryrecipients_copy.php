@@ -14,7 +14,7 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
-<h2>Wait List - <?php echo date("Y"); ?></h2>
+<h2>Recipients by Ministry - <?php echo date("Y"); ?></h2>
 
 
 <div class="datatable-container">
@@ -92,9 +92,11 @@ echo $this->Form->button('Cancel', array(
             columns: [
                 // {data: "last_name", title: "Last Name", orderData: [0, 1], orderSequence: ["asc"]},
                 // {data: "first_name", title: "First Name", orderable: false},
-                { data: "ministry.name_shortform", title: "Ministry", orderData: [0], orderSequence: ["asc"]},
-                { data: "combined_name", title: "Name", orderable: false},
-                { data: "milestone.years", title: "Milestone", orderable: false},
+                {data: "ministry.name_shortform", title: "Ministry", orderData: [0], orderSequence: ["asc"]},
+                {data: "combined_name", title: "Name", orderable: false},
+                {data: "employee_id", title: "Epm ID", orderable: false, visible: false},
+                {data: "milestone.years", title: "Milestone", orderable: false},
+                {data: "office_city.name", title: "City", orderable: false},
                 { data: "ceremony.date", title: "Ceremony Date", orderable: false, render: function( data, type, row, meta) {
                         const months = ["Jan", "Feb", "Mar","Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
                         var d = new Date(data);
@@ -106,11 +108,11 @@ echo $this->Form->button('Cancel', array(
 
                         return formatted_date;
                     } },
-                // {data: "attend_status", title: "Attending", orderable: false},
+                {data: "attend_status", title: "Attending", orderable: false},
                 {data: "award_name", title: "Award", orderable: false},
+                //{data: "guest", title: "Guest", orderable: false},
 
-
-                { data: "guest", title: "Guest", orderable: false, render: function (data, type, row) {
+                { data: "guest", title: "Guest?", orderable: false, render: function (data, type, row) {
                     if (type === 'display' || type === 'filter' ) {
                         if (data == true) {
                             return "Yes";
@@ -138,14 +140,14 @@ echo $this->Form->button('Cancel', array(
                     extend: 'csv',
                     text: 'Export to CSV',
                     filename: function () {
-                        return datestr + '-waiting-list';
+                        return datestr + '-ministry-recipients';
                     },
                 },
                 {
                     extend: 'excel',
                     text: 'Export to Excel',
                     filename: function () {
-                        return datestr + '-waiting-list';
+                        return datestr + '-ministry-recipients';
                     },
                 }
             ],
