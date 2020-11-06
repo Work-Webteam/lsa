@@ -1,4 +1,4 @@
-<h1>Award Totals by Type</h1>
+<h1>Award Summary</h1>
 
 <table>
     <tr>

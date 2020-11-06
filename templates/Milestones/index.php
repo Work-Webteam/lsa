@@ -1,6 +1,6 @@
 <!-- File: templates/Milestones/index.php -->
 
-<h1>PECSF Donations</h1>
+<h1>Milestones</h1>
 <?= $this->Html->link('Add Milestone', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 <table>
     <tr>

@@ -14,7 +14,7 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
-<h2>25 Year Certificate Report</h2>
+<h2>Milestone Certificate Report</h2>
 
 
 <div class="datatable-container">
@@ -82,7 +82,7 @@ echo $this->Form->button('Cancel', array(
             { data: "last_name", title: "Last Name", orderable: false},
             { data: "first_name", title: "First Name", orderable: false},
             { data: "presentation_number", title: "Presentation ID", orderable: false},
-            { data: "attending", title: "Attending", orderable: true, render: function (data, type, row, meta) {
+            { data: "attending", title: "Attending", orderable: false, render: function (data, type, row, meta) {
                     if (data) {
                         return "Attending";
                     } else {
@@ -90,7 +90,7 @@ echo $this->Form->button('Cancel', array(
                     }
                 }
             },
-            //{ data: "milestone.name", title: "Milestone", visible: true},
+            { data: "milestone.name", title: "Milestone", visible: true},
         ];
 
 

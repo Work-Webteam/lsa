@@ -106,10 +106,10 @@ echo $this->Form->button('Cancel', array(
 
                         return formatted_date;
                     } },
-                {data: "attend_status", title: "RSVP", orderable: false},
+                {data: "attend_status", title: "Attending", orderable: false},
                 {data: "ministry.name_shortform", title: "Ministry", orderable: false},
                 {data: "award_name", title: "Award", orderable: false},
-                {data: "admin_notes", title: "Notes", orderable: false, visible: false},
+                {data: "admin_notes", title: "Notes", orderable: false},
 
 
 

@@ -1,45 +1,43 @@
 
-<h1>Ceremony Dashboard</h1>
+<h1>Ceremonies</h1>
 <p>NOTE: Only ceremony dates for the current registration year are displayed.</p>
 <?= $this->Html->link('Add Ceremony', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 <table>
     <tr>
-        <!--<?= $isadmin ? "<th>Ignore</th>" : "" ?>
-        <th>Registration Year</th>-->
+        <?= $isadmin ? "<th>Id</th>" : "" ?>
+        <th>Registration Year</th>
         <th>Ceremony Night</th>
         <th>Date</th>
-        <th colspan=1>Recipients</th>
-        <th colspan=3>Admin</th>
-        <th colspan=1>Assign Presentation IDs</th>
-</tr>
+        <th colspan = 3>Operations</th>
+    </tr>
 
-<?php foreach ($ceremonies as $ceremony): ?>
+    <?php foreach ($ceremonies as $ceremony): ?>
         <tr>
-            <!--<?= $isadmin ? "<td>" . $ceremony->id . "</td>" : "" ?>
+            <?= $isadmin ? "<td>" . $ceremony->id . "</td>" : "" ?>
             <td>
                 <?= $ceremony->registration_year ?>
-            </td>-->
+            </td>
             <td>
                 <?= $this->Html->link($ceremony->night, ['action' => 'view', $ceremony->id]) ?>
+            </td>
             <td>
-                <?= date("l d-M-Y g:ia", strtotime($ceremony->date)) ?>
+                <?= date("D Y-M-d g:ia", strtotime($ceremony->date)) ?>
             </td>
 
             <td>
-                <?= $this->Html->link('View', ['controller' => 'Registrations', 'action' => 'attendingrecipients', $ceremony->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
+                <?= $this->Html->link('Attending', ['controller' => 'Registrations', 'action' => 'attendingrecipients', $ceremony->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>
-
             <td>
-                <?= $this->Html->link('Assign Ministries', ['action' => 'view', $ceremony->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
+                <?= $this->Html->link('IDs', ['controller' => 'Registrations', 'action' => 'editpresentationids', $ceremony->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
+            </td>
+            <td>
+                <?= $this->Html->link('Criteria', ['action' => 'view', $ceremony->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>
             <td>
                 <?= $this->Html->link('Edit', ['action' => 'edit', $ceremony->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>
             <td>
                 <?= $this->Form->postLink('Delete', ['action' => 'delete', $ceremony->id], ['confirm' => 'Are you sure?','class' => 'btn btn-primary', 'role' => 'button']) ?>
-            </td>
-            <td>
-                <?= $this->Html->link('Presentation IDs', ['controller' => 'Registrations', 'action' => 'editpresentationids', $ceremony->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>
         </tr>
     <?php endforeach; ?>

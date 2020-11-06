@@ -1,4 +1,4 @@
-<h1>VIP Categories</h1>
+<h1>Categories</h1>
 <?= $this->Html->link('Add Category', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 <table>
     <tr>
