@@ -1,4 +1,4 @@
-<h1>Milestone Summary</h1>
+<h1>Total Recipients by Milestone</h1>
 
 <table>
     <tr>

@@ -7,7 +7,7 @@ echo $this->Form->create($recipients);
 
 <table>
     <tr>
-        <?= $isadmin ? "<th>Id</th>" : "" ?>
+        <!--<?= $isadmin ? "<th>Id</th>" : "" ?>-->
         <th>Recipient</th>
         <th>Presentation #</th>
     </tr>
@@ -15,7 +15,7 @@ echo $this->Form->create($recipients);
 
     <?php foreach ($recipients as $key => $recipient): ?>
         <tr>
-            <?= $isadmin ? "<td>" . $recipient->id . "</td>" : "" ?>
+            <!--<?= $isadmin ? "<td>" . $recipient->id . "</td>" : "" ?>-->
             <td>
                 <?= $recipient->last_name . ", " . $recipient->first_name ?>
             </td>

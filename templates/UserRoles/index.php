@@ -1,4 +1,4 @@
-<h1>User Roles</h1>
+<h1>System Permissions</h1>
 <?= $this->Html->link('Add User Role', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 
 <table>

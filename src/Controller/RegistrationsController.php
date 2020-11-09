@@ -745,6 +745,51 @@ class RegistrationsController extends AppController
         $this->set(compact('ministries'));
     }
 
+    public function reportministryrecipients() {
+        if (!$this->checkAuthorization(array(
+            Configure::read('Role.admin'),
+            Configure::read('Role.lsa_admin'),
+            Configure::read('Role.protocol')))) {
+            $this->Flash->error(__('You are not authorized to view this page.'));
+            $this->redirect('/');
+        }
+
+        $conditions = array();
+        $conditions['Registrations.registration_year ='] = date('Y');
+
+        // if Supervisor role only list registrations they created
+        $milestones = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+            'contain' => [
+                'Ministries',
+                'Milestones',
+            ],
+            'group' => ['Registrations.milestone_id']
+        ]);
+        $milestones->select([
+            'Milestones.name',
+            'count' => $milestones->func()->count('*')]);
+        $milestones->order(['Milestones.name' => 'ASC']);
+        $this->set(compact('milestones'));
+
+
+        // if Supervisor role only list registrations they created
+        $ministries = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+            'contain' => [
+                'Ministries',
+                'Milestones',
+            ],
+            'group' => ['Registrations.ministry_id', 'Registrations.milestone_id']
+        ]);
+        $ministries->select([
+            'Ministries.name',
+            'Milestones.name',
+            'count' => $milestones->func()->count('*')]);
+        $ministries->order(['Ministries.name' => 'ASC', 'Milestones.name' => 'ASC']);
+        $this->set(compact('ministries'));
+    }
+
 
     public function test()
     {
@@ -2102,7 +2147,7 @@ class RegistrationsController extends AppController
     }
 
 
-    public function reportministryrecipients()
+    public function reportministryrecipientsCopy()
     {
 
         if (!$this->checkAuthorization(array(
@@ -2136,6 +2181,8 @@ class RegistrationsController extends AppController
         $this->set(compact('recipients'));
 
     }
+
+   
 
 
 
