@@ -83,9 +83,7 @@ class CeremoniesController extends AppController
             $this->redirect('/');
         }
         $ceremony = $this->Ceremonies->newEmptyEntity();
-        $this->Flash->success('add pre post');
         if ($this->request->is('post')) {
-            $this->Flash->success(__('add post'));
             $ceremony = $this->Ceremonies->patchEntity($ceremony, $this->request->getData());
             $ceremony->registration_year = date("Y");
             $ceremony->date = $this->request->getData('ceremony_date') . " " . $this->request->getData('ceremony_time');
