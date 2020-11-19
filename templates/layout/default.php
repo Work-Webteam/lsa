@@ -111,7 +111,7 @@
             </a>
             <ul class="dropdown-menu" admin-drop-2>
                 <li><a class="dropdown-item" href="/registrations/reportlsaprogram">LSA Program Data</a></li>
-              
+
             </ul>
         </li> -->
         <!-- Dropdown -->
@@ -133,7 +133,7 @@
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="/userroles">System Permissions</a>
                 <a class="dropdown-item" href="/registrations/archive">Archive Database</a>
-                <a class="dropdown-item" href="/log">Error Log</a>
+                <a class="dropdown-item" href="/log">Log</a>
             </div>
         </li>
 
@@ -154,3 +154,4 @@
     </footer>
 </body>
 </html>
+
