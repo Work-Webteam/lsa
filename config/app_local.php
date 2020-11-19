@@ -191,4 +191,6 @@ else {
 
 }
 
+// echo "<pre>" . print_r($config, true) . "</pre>";
+
 return $config;
