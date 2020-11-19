@@ -1,4 +1,4 @@
-<h1>Diet</h1>
+<h1>Error Log</h1>
 
 <table>
     <tr>
