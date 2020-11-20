@@ -125,17 +125,16 @@
             echo '<tab name="Ceremony">';
             echo $this->Form->control('ceremony_id', ['label' => 'Ceremony Night', 'options' => $ceremonies, 'empty' => '- select ceremony -']);
 //                    echo $this->Form->control('ceremony_date', ['disabled' => true]);
-            echo $this->Form->control('responded');
-            echo $this->Form->control('attending');
-            echo $this->Form->control('guest');
-            echo $this->Form->control('noshow');
-            echo $this->Form->control('waitinglist');
-            echo $this->Form->control('recipient_speaker');
-            echo $this->Form->control('reserved_seating');
-            echo $this->Form->control('executive_recipient');
+            echo $this->Form->control('responded', ['type' => 'checkbox']);
+            echo $this->Form->control('attending', ['type' => 'checkbox']);
+            echo $this->Form->control('guest', ['type' => 'checkbox']);
+            echo $this->Form->control('noshow', ['type' => 'checkbox']);
+            echo $this->Form->control('waitinglist', ['type' => 'checkbox']);
+            echo $this->Form->control('recipient_speaker', ['type' => 'checkbox']);
+            echo $this->Form->control('reserved_seating', ['type' => 'checkbox']);
+            echo $this->Form->control('executive_recipient', ['type' => 'checkbox']);
             echo $this->Form->control('presentation_number', ['label' => 'Award Presentation #']);
-            echo $this->Form->control('accessibility_requirements_recipient', ['label' => 'Recipient Accessibility Requirements', 'type' => 'checkbox']);
-            echo $this->Form->control('accessibility_requirements_guest', ['label' => 'Guest Accessibility Requirements', 'type' => 'checkbox']);
+            echo $this->Form->control('accessibility_recipient', ['label' => 'Recipient Accessibility Requirements', 'type' => 'checkbox']);
 
             foreach ($accessibility as $item):
                 echo '<div>';
@@ -145,6 +144,9 @@
                 echo '</div>';
             endforeach;
             echo $this->Form->control('accessibility_recipient_notes');
+
+
+            echo $this->Form->control('accessibility_guest', ['label' => 'Guest Accessibility Requirements', 'type' => 'checkbox']);
 
             foreach ($accessibility as $item):
                 echo '<div>';
@@ -157,6 +159,9 @@
 
             echo $this->Form->control('accessibility_admin_notes');
 
+
+            echo $this->Form->control('recipient_diet', ['label' => 'Recipient Dietary Requirements', 'type' => 'checkbox']);
+
             foreach ($diet as $item):
                 echo '<div>';
                 echo '<label for="dietR-' . $item->id . '">';
@@ -165,6 +170,8 @@
                 echo '</div>';
             endforeach;
             echo $this->Form->control('dietary_recipient_other');
+
+            echo $this->Form->control('guest_diet', ['label' => 'Guest Dietary Requirements', 'type' => 'checkbox']);
 
             foreach ($diet as $item):
                 echo '<div>';
@@ -182,13 +189,13 @@
         <?php
         if ($isadmin) {
             echo '<tab name="Admin">';
-            echo $this->Form->control('survey_participation');
+            echo $this->Form->control('survey_participation', ['type' => 'checkbox']);
             echo $this->Form->control('created', ['disabled' => true]);
-            echo $this->Form->control('invite_sent', ['type' => 'date']);
+            echo $this->Form->control('invite_sent', ['type' => 'date', 'type' => 'checkbox']);
             echo $this->Form->control('id');
             echo $this->Form->control('photo_order');
             echo $this->Form->control('photo_frame_range');
-            echo $this->Form->control('photo_sent', ['type' => 'date']);
+            echo $this->Form->control('photo_sent', ['type' => 'date', 'type' => 'checkbox']);
             echo $this->Form->control('admin_notes');
             echo '</tab>';
         }

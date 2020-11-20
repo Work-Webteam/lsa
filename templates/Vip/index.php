@@ -1,9 +1,10 @@
-<h1>VIPs</h1>
-<?= $this->Html->link('Add VIP', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
+<h1>Executives</h1>
+<?= $this->Html->link('Add Executive', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 <table>
     <tr>
         <?= $isadmin ? "<th>Id</th>" : "" ?>
-        <th>VIPs</th>
+        <th>Executives</th>
+        <th>Ceremony Night</th>
         <th colspan = 2>Operations</th>
     </tr>
 
@@ -14,6 +15,9 @@
             <?= $isadmin ? "<td>" . $vip->id . "</td>" : "" ?>
             <td>
                 <?= $this->Html->link($vip->first_name . " " . $vip->last_name, ['action' => 'view', $vip->id]) ?>
+            </td>
+            <td>
+                <?= $vip->ceremony_id; ?>
             </td>
             <td>
                 <?= $this->Html->link('Edit', ['action' => 'edit', $vip->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>

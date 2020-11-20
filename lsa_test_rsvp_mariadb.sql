@@ -5,11 +5,8 @@ DROP TABLE IF EXISTS log;
 DROP TABLE IF EXISTS registrations;
 DROP TABLE IF EXISTS vip;
 
-DROP TABLE IF EXISTS user_roles;
-DROP TABLE IF EXISTS roles;
-
 DROP TABLE IF EXISTS categories;
-DROP TABLE IF EXISTS ministries;
+
 DROP TABLE IF EXISTS pecsf_charities;
 DROP TABLE IF EXISTS pecsf_regions;
 DROP TABLE IF EXISTS cities;
@@ -20,6 +17,13 @@ DROP TABLE IF EXISTS accessibility;
 DROP TABLE IF EXISTS ceremonies;
 DROP TABLE IF EXISTS registration_periods;
 
+DROP TABLE IF EXISTS user_roles;
+
+DROP TABLE IF EXISTS ministries;
+
+
+DROP TABLE IF EXISTS roles;
+
 
 
 
@@ -27,7 +31,7 @@ CREATE TABLE milestones (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     years VARCHAR(16) NOT NULL,
-    personalized lsa_test_rsvp.sql DEFAULT false,
+    personalized TINYINT(4) DEFAULT false,
     donation DECIMAL(19,4) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -127,8 +131,8 @@ CREATE TABLE awards (
     description TEXT,
     image VARCHAR(255),
     options TEXT,
-    personalized BOOLEAN DEFAULT false,
-    active BOOLEAN DEFAULT true,
+    personalized TINYINT(4) DEFAULT false,
+    active TINYINT(4) DEFAULT true,
     FOREIGN KEY milestone_key (milestone_id) REFERENCES milestones(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -150,16 +154,16 @@ CREATE TABLE registrations (
     award_options TEXT,
     award_instructions TEXT,
 
-    service_pin BOOLEAN DEFAULT false,
+    service_pin TINYINT(4) DEFAULT false,
 
     registration_year INT,
     qualifying_year INT,
-    award_received BOOLEAN DEFAULT false,
-    engraving_sent BOOLEAN DEFAULT false,
+    award_received TINYINT(4) DEFAULT false,
+    engraving_sent TINYINT(4) DEFAULT false,
     certificate_name VARCHAR(255),
-    certificate_ordered BOOLEAN,
+    certificate_ordered TINYINT(4),
 
-    pecsf_donation BOOLEAN DEFAULT 0,
+    pecsf_donation TINYINT(4) DEFAULT 0,
     pecsf_donation_type INT,
     pecsf_region_id INT,
     pecsf_charity1_id INT,
@@ -169,29 +173,29 @@ CREATE TABLE registrations (
     pecsf_cheque_date DATE,
     pecsf_name VARCHAR(255),
 
-    retiring_this_year BOOLEAN DEFAULT false,
+    retiring_this_year TINYINT(4) DEFAULT false,
     retirement_date DATE,
 
-    retroactive BOOLEAN,
+    retroactive TINYINT(4),
 
-    member_bcgeu BOOLEAN,
+    member_bcgeu TINYINT(4),
     admin_notes TEXT,
 
     alternate_ministry_id INT,
 
     invite_sent DATETIME,
 
-    responded BOOLEAN DEFAULT false,
-    attending BOOLEAN DEFAULT false,
-    guest BOOLEAN DEFAULT false,
-    noshow BOOLEAN DEFAULT false,
+    responded TINYINT(4) DEFAULT false,
+    attending TINYINT(4) DEFAULT false,
+    guest TINYINT(4) DEFAULT false,
+    noshow TINYINT(4) DEFAULT false,
 
-    waitinglist BOOLEAN DEFAULT false,
+    waitinglist TINYINT(4) DEFAULT false,
 
     ceremony_id INT,
 
-    accessibility_recipient BOOLEAN,
-    accessibility_guest BOOLEAN,
+    accessibility_recipient TINYINT(4),
+    accessibility_guest TINYINT(4),
     accessibility_requirements_recipient TEXT,
     accessibility_requirements_guest TEXT,
     accessibility_recipient_notes TEXT,
@@ -203,18 +207,18 @@ CREATE TABLE registrations (
     ministry_id INT,
     branch VARCHAR(255),
 
-    executive_recipient BOOLEAN,
-    recipient_speaker BOOLEAN,
-    reserved_seating BOOLEAN,
+    executive_recipient TINYINT(4),
+    recipient_speaker TINYINT(4),
+    reserved_seating TINYINT(4),
 
-    recipient_diet BOOLEAN,
+    recipient_diet TINYINT(4),
     dietary_requirements_recipient TEXT,
     dietary_recipient_other TEXT,
 
     guest_first_name VARCHAR(255),
     guest_last_name VARCHAR(255),
 
-    guest_diet BOOLEAN,
+    guest_diet TINYINT(4),
     dietary_requirements_guest TEXT,
     dietary_guest_other TEXT,
 
@@ -253,7 +257,7 @@ CREATE TABLE registrations (
     photo_order INT,
     photo_sent DATETIME,
 
-    survey_participation BOOLEAN DEFAULT false,
+    survey_participation TINYINT(4) DEFAULT false,
 
     FOREIGN KEY milestone_key (milestone_id) REFERENCES milestones(id),
     FOREIGN KEY ministry_key (ministry_id) REFERENCES ministries(id),
@@ -308,10 +312,10 @@ CREATE TABLE vip (
     contact_email VARCHAR(255),
 
     attending INT DEFAULT -1,
-    attending_designate BOOLEAN,
-    invitation_sent BOOLEAN,
+    attending_designate TINYINT(4),
+    invitation_sent TINYINT(4),
     total_attending INT,
-    parking_required BOOLEAN,
+    parking_required TINYINT(4),
     parking_spots_required INT,
     guest_first_name VARCHAR(255),
     guest_last_name VARCHAR(255),

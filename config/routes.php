@@ -77,7 +77,7 @@ $routes->scope('/', function (RouteBuilder $builder) {
             'id' => '[0-9]+',
         ]);
 
-
+    $builder->connect('/executives', ['controller' => 'Vip', 'action' => 'index']);
 
 
 

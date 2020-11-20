@@ -5,7 +5,7 @@ echo $this->Form->create($milestone);
 // Hard code the user for now.
 echo $this->Form->control('name');
 echo $this->Form->control('years');
-echo $this->Form->control('personalized');
+echo $this->Form->control('personalized', ['type' => 'checkbox']);
 echo $this->Form->control('donation');
 
 echo $this->Form->button(__('Save Milestone'), [

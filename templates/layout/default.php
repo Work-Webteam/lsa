@@ -53,6 +53,7 @@
         </a>
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="/ceremonies">Ceremony Dashboard</a></li>
+                <li><a class="dropdown-item" href="/executives">Executives Dashboard</a></li>
                 <li><a class="dropdown-item" href="/registrations/reportministryrsvp">RSVPs by Ceremony</a></li>
                 <li><a class="dropdown-item" href="/registrations/reportwaitinglist">Wait List</a></li>
                 <div class="dropdown-divider"></div>
@@ -103,6 +104,7 @@
                 <li><a class="dropdown-item" href="/registrations/reportwatches">Watch Report</a></li>
             </ul>
         </li>
+
 
         <!-- Dropdown -->
         <!--<li class="nav-item dropdown">

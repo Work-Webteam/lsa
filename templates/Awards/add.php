@@ -6,7 +6,7 @@ echo $this->Form->control('name');
 echo $this->Form->control('abbreviation');
 echo $this->Form->control('milestone_id', ['options' => $milestones]);
 echo $this->Form->control('description', ['type' => 'textarea', 'rows' => '6', 'cols' => '50']);
-echo $this->Form->control('personalized');
+echo $this->Form->control('personalized', ['type' => 'checkbox']);
 
 echo $this->Form->control('upload', ['type' => 'file']);
 

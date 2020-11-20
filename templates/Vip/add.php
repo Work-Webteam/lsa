@@ -1,5 +1,5 @@
 <div class="container" id="app">
-<h1>Add VIP</h1>
+<h1>Add Executive</h1>
 <?php
 echo $this->Form->create($vip, ['@submit' => 'processForm']);
 
@@ -30,10 +30,10 @@ echo $this->Form->control('group');
 echo $this->Form->control('category_id', ['label' => 'Category', 'options' => $categories, 'empty' => '- select category -']);
 
 echo $this->Form->control('attending', ['label' => 'Attending', 'options' => $attending]);
-echo $this->Form->control('attending_designate');
-echo $this->Form->control('invitation_sent');
+echo $this->Form->control('attending_designate', ['type' => 'checkbox']);
+echo $this->Form->control('invitation_sent', ['type' => 'checkbox']);
 echo $this->Form->control('total_attending');
-echo $this->Form->control('parking_required');
+echo $this->Form->control('parking_required', ['type' => 'checkbox']);
 echo $this->Form->control('parking_sports_required');
 
 echo $this->Form->control('guest_first_name');
