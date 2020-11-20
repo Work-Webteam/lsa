@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Cake\Core\Configure;
 
-class UserRolesController extends AppController
+class UserrolesController extends AppController
 {
 
     public function index()

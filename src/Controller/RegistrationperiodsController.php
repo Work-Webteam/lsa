@@ -5,7 +5,7 @@ namespace App\Controller;
 use Cake\I18n\FrozenDate;
 use Cake\Core\Configure;
 
-class RegistrationPeriodsController extends AppController
+class RegistrationperiodsController extends AppController
 {
     public function index()
     {
