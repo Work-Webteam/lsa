@@ -264,7 +264,7 @@ class RegistrationsController extends AppController
 
 
         $regions = $this->Registrations->PecsfRegions->find('list', [
-            'order' => ['PecsfRegions.name' => 'ASC']
+            'order' => ['Pecsfregions.name' => 'ASC']
         ]);
         $this->set('regions', $regions);
 
@@ -362,7 +362,7 @@ class RegistrationsController extends AppController
         $this->set('ministries', $ministries);
 
         $regions = $this->Registrations->PecsfRegions->find('list', [
-            'order' => ['PecsfRegions.name' => 'ASC']
+            'order' => ['Pecsfregions.name' => 'ASC']
         ]);
         $this->set('regions', $regions);
 

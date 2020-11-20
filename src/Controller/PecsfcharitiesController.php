@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Cake\Core\Configure;
 
-class PecsfCharitiesController extends AppController
+class PecsfcharitiesController extends AppController
 {
     public function index()
     {
@@ -14,7 +14,7 @@ class PecsfCharitiesController extends AppController
         }
         $this->loadComponent('Paginator');
         $charities = $this->Paginator->paginate($this->Pecsfcharities->find('all', [
-                'contain' => ['PecsfRegions']
+                'contain' => ['Pecsfregions']
             ]));
 
         $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
@@ -30,7 +30,7 @@ class PecsfCharitiesController extends AppController
         }
         $charity = $this->Pecsfcharities->find('all', [
             'conditions' => ['PecsfCharities.id' => $id],
-            'contain' => ['PecsfRegions']
+            'contain' => ['Pecsfregions']
         ])->firstOrFail();
 
         $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));

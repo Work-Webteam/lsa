@@ -17,7 +17,7 @@
         <tr>
             <?= $isadmin ? "<td>" . $charity->id . "</td>" : "" ?>
             <td>
-                <?= $charity->Pecsfregions['name'] ?>
+                <?= $charity->pecsfregion->name ?>
             </td>
             <td>
                 <?= $charity->vendor_code ?>
@@ -66,4 +66,5 @@ $paginator = $this->Paginator->setTemplates([
     var allCharities=<?php echo json_encode($charities); ?>;
 
     console.log(allCharities);
+    console.log(allCharities[0]['name']);
 </script>

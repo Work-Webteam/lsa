@@ -32,7 +32,7 @@ class RegistrationsTable extends Table
         $this->hasOne('SupervisorCity', ['className' => 'Cities'])
             ->setForeignKey('id')
             ->setBindingKey('supervisor_city_id');
-        $this->hasOne('PecsfRegions');
+        $this->hasOne('Pecsfregions');
         $this->hasOne('PecsfCharities');
         $this->hasOne('Ceremonies')
             ->setForeignKey('id')
