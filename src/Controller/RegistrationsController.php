@@ -19,8 +19,8 @@ class RegistrationsController extends AppController
 
         $query = $this->Registrations->RegistrationPeriods->find('all')
             ->where([
-                'RegistrationPeriods.open_registration <= ' => date('Y-m-d H:i:s'),
-                'RegistrationPeriods.close_registration >= ' => date('Y-m-d H:i:s')
+                'Registrationperiods.open_registration <= ' => date('Y-m-d H:i:s'),
+                'Registrationperiods.close_registration >= ' => date('Y-m-d H:i:s')
             ]);
         $registrationperiods = $query->first();
 
@@ -121,8 +121,8 @@ class RegistrationsController extends AppController
 
             $query = $this->Registrations->RegistrationPeriods->find('all')
                 ->where([
-                    'RegistrationPeriods.open_registration <=' => date('Y-m-d H:i:s'),
-                    'RegistrationPeriods.close_registration >=' => date('Y-m-d H:i:s')
+                    'Registrationperiods.open_registration <=' => date('Y-m-d H:i:s'),
+                    'Registrationperiods.close_registration >=' => date('Y-m-d H:i:s')
                 ]);
             $registrationperiods = $query->first();
 
@@ -163,8 +163,8 @@ class RegistrationsController extends AppController
     {
         $query = $this->Registrations->RegistrationPeriods->find('all')
             ->where([
-                'RegistrationPeriods.open_registration <=' => date('Y-m-d H:i:s'),
-                'RegistrationPeriods.close_registration >=' => date('Y-m-d H:i:s')
+                'Registrationperiods.open_registration <=' => date('Y-m-d H:i:s'),
+                'Registrationperiods.close_registration >=' => date('Y-m-d H:i:s')
             ]);
         $registrationperiods = $query->first();
 
@@ -403,8 +403,8 @@ class RegistrationsController extends AppController
 
         $query = $this->Registrations->RegistrationPeriods->find('all')
             ->where([
-                'RegistrationPeriods.open_registration <=' => date('Y-m-d H:i:s'),
-                'RegistrationPeriods.close_registration >=' => date('Y-m-d H:i:s')
+                'Registrationperiods.open_registration <=' => date('Y-m-d H:i:s'),
+                'Registrationperiods.close_registration >=' => date('Y-m-d H:i:s')
             ]);
         $registrationperiods = $query->first();
 
@@ -455,7 +455,7 @@ class RegistrationsController extends AppController
 
         $query = $this->Registrations->RegistrationPeriods->find('all')
             ->where([
-                'RegistrationPeriods.registration_year =' => date('Y')
+                'Registrationperiods.registration_year =' => date('Y')
             ]);
         $regperiod = $query->first();
 
@@ -2182,7 +2182,7 @@ class RegistrationsController extends AppController
 
     }
 
-   
+
 
 
 
@@ -2238,8 +2238,8 @@ class RegistrationsController extends AppController
 
         $query = $this->Registrations->RegistrationPeriods->find('all')
             ->where([
-                'RegistrationPeriods.open_registration <= ' => date('Y-m-d H:i:s'),
-                'RegistrationPeriods.close_registration >= ' => date('Y-m-d H:i:s')
+                'Registrationperiods.open_registration <= ' => date('Y-m-d H:i:s'),
+                'Registrationperiods.close_registration >= ' => date('Y-m-d H:i:s')
             ]);
         $registrationperiod = $query->first();
 
