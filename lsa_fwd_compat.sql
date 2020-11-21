@@ -2359,8 +2359,8 @@ INSERT INTO `ministries` (`id`, `name`, `name_shortform`) VALUES
 (18, 'Ministry of Social Development & Poverty Reduction', 'Social Development & Poverty Reduction'),
 (19, 'Ministry of Tourism, Arts & Culture', 'Tourism, Arts & Culture');
 
-DROP TABLE IF EXISTS `pecsf_charities`;
-CREATE TABLE IF NOT EXISTS `pecsf_charities` (
+DROP TABLE IF EXISTS `pecsfcharities`;
+CREATE TABLE IF NOT EXISTS `pecsfcharities` (
   `id` int NOT NULL AUTO_INCREMENT,
   `pecsf_region_id` int DEFAULT NULL,
   `vendor_code` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
@@ -2370,8 +2370,8 @@ CREATE TABLE IF NOT EXISTS `pecsf_charities` (
   KEY `pecsf_region_key` (`pecsf_region_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2685 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-TRUNCATE TABLE `pecsf_charities`;
-INSERT INTO `pecsf_charities` (`id`, `pecsf_region_id`, `vendor_code`, `name`, `url`) VALUES
+TRUNCATE TABLE `pecsfcharities`;
+INSERT INTO `pecsfcharities` (`id`, `pecsf_region_id`, `vendor_code`, `name`, `url`) VALUES
 (1, 1, 'FS0316', 'Alberni Valley Hospice Society Ty Watson House', 'www.albernihospice.ca'),
 (2, 1, 'FS0211', 'Bread of Life Society', ''),
 (3, 1, 'DC2725', 'Ucluelet Aquarium Society', ''),
@@ -3063,7 +3063,7 @@ INSERT INTO `pecsf_charities` (`id`, `pecsf_region_id`, `vendor_code`, `name`, `
 (689, 14, 'DC1988', 'Stewart Historical Society', ''),
 (690, 14, 'DC1961', 'Kitimat Concert Association', 'KITIMATCONCERTS.CA'),
 (691, 14, 'DC1960', 'Kitimat Arts for Youth', '');
-INSERT INTO `pecsf_charities` (`id`, `pecsf_region_id`, `vendor_code`, `name`, `url`) VALUES
+INSERT INTO `pecsfcharities` (`id`, `pecsf_region_id`, `vendor_code`, `name`, `url`) VALUES
 (692, 14, 'DC1861', 'Northern BC Friends of Children Society', 'www.friendsofchildren.ca'),
 (693, 14, 'DC1819', 'Canadian Fallen Firefighters Foundation', 'www.cfff.ca'),
 (694, 14, 'DC1656', 'Terrace Child Development Centre Soc', 'www.terracechilddevelopmentcentre.com'),
@@ -3737,7 +3737,7 @@ INSERT INTO `pecsf_charities` (`id`, `pecsf_region_id`, `vendor_code`, `name`, `
 (1362, 27, 'DC2462', 'H.I.M. Health Initiative for Men Society', 'checkhimout.ca'),
 (1363, 27, 'DC2455', 'Nature Conservancy of Canada for BC Section', 'www.natureconservancy.ca'),
 (1364, 27, 'DC2454', 'Autism Speaks Canada-Vancouver Walk Shooting Star Team', 'www.autismspeaks.ca');
-INSERT INTO `pecsf_charities` (`id`, `pecsf_region_id`, `vendor_code`, `name`, `url`) VALUES
+INSERT INTO `pecsfcharities` (`id`, `pecsf_region_id`, `vendor_code`, `name`, `url`) VALUES
 (1365, 27, 'DC2452', 'Fraser Valley Conservancy', 'WWW.FRASERVALLEYCONSERVANCY.CA'),
 (1366, 27, 'DC2449', 'Africa Community Technical Service Society', 'WWW.ACTS.CA'),
 (1367, 27, 'DC2447', 'Youth Excellence Society', 'www.theyes.ca'),
@@ -4369,7 +4369,7 @@ INSERT INTO `pecsf_charities` (`id`, `pecsf_region_id`, `vendor_code`, `name`, `
 (1993, 28, 'DC2503', 'Campbell River Hospice Society', 'http://www.crhospice.org/'),
 (1994, 28, 'DC2502', 'Iyengar Yoga Centre of Victoria Society', 'http://www.iyengaryogacentre.ca/'),
 (1995, 28, 'DC2501', 'Dance Victoria Society', 'dancevictoria.com');
-INSERT INTO `pecsf_charities` (`id`, `pecsf_region_id`, `vendor_code`, `name`, `url`) VALUES
+INSERT INTO `pecsfcharities` (`id`, `pecsf_region_id`, `vendor_code`, `name`, `url`) VALUES
 (1996, 28, 'DC2496', 'Land Trust Alliance of BC', 'http://ltabc.ca/'),
 (1997, 28, 'DC2495', 'Shelbourne Community Kitchen Society', 'shelbournecommunitykitchen.ca'),
 (1998, 28, 'DC2490', 'Vancouver Community College fdn Jess Daniel Nichol Memorial Award', 'http://www.vcc.ca/'),
@@ -5004,7 +5004,7 @@ INSERT INTO `pecsf_charities` (`id`, `pecsf_region_id`, `vendor_code`, `name`, `
 (2627, 28, 'DC0223', 'Navy League of Canada - Juan de Fuca', ''),
 (2628, 28, 'DC0222', 'Nature Trust of BC', 'www.naturetrust.bc.ca'),
 (2629, 28, 'DC0220', 'Nana Foundation', '');
-INSERT INTO `pecsf_charities` (`id`, `pecsf_region_id`, `vendor_code`, `name`, `url`) VALUES
+INSERT INTO `pecsfcharities` (`id`, `pecsf_region_id`, `vendor_code`, `name`, `url`) VALUES
 (2630, 28, 'DC0219', 'Myra Canyon Trestle Restoration Society', 'http://www.myra-trestles.com/'),
 (2631, 28, 'DC0218', 'Myasthenia Gravis Assn of BC', 'www.myastheniagravis.ca'),
 (2632, 28, 'DC0217', 'Mustard Seed Street Church', 'www.mustardseed.ca'),
@@ -5061,16 +5061,16 @@ INSERT INTO `pecsf_charities` (`id`, `pecsf_region_id`, `vendor_code`, `name`, `
 (2683, 28, 'DC0160', 'Animal Advocates Society', 'www.animaladvocates.com'),
 (2684, 28, 'DC0159', 'Adoptive Families Association of BC', 'www.bcadoption.com');
 
-DROP TABLE IF EXISTS `pecsf_regions`;
-CREATE TABLE IF NOT EXISTS `pecsf_regions` (
+DROP TABLE IF EXISTS `pecsfregions`;
+CREATE TABLE IF NOT EXISTS `pecsfregions` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `charity_id` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-TRUNCATE TABLE `pecsf_regions`;
-INSERT INTO `pecsf_regions` (`id`, `name`, `charity_id`) VALUES
+TRUNCATE TABLE `pecsfregions`;
+INSERT INTO `pecsfregions` (`id`, `name`, `charity_id`) VALUES
 (1, 'Alberni-Clayoquot', NULL),
 (2, 'Bulkley-Nechako', NULL),
 (3, 'Cariboo', NULL),
@@ -5233,8 +5233,8 @@ INSERT INTO `registrations` (`id`, `created`, `modified`, `user_idir`, `user_gui
 (27, '2020-08-06 20:40:28', '2020-08-06 20:40:28', 'rkuyvenh', '60DCD2AF73FB44AE9345F11B71CD3495', 99999, 'Andy', 'Aaronson', 3, 0, '[]', NULL, 0, 2020, 2020, 0, 0, NULL, NULL, 0, 0, 0, 0, '0.0000', 0, '0.0000', NULL, '', 0, NULL, 0, NULL, NULL, NULL, NULL, 0, 1, 1, 0, 0, 4, NULL, NULL, '[]', '[]', NULL, NULL, NULL, NULL, 2, 'Branch 13', NULL, NULL, NULL, NULL, '[]', NULL, 'Betty', 'Aaronson', NULL, '[]', NULL, '', '123 Office Street', '', 1997, 'BC', 'V8V 4R6', '565 Home Street', '', 1997, 'BC', 'V8V 4R6', '(250) 555-0772', '(250) 555-5476', '', 'aaaronson@gov.bc.ca', '', 'Franklin', 'Hughes', '', '123 Office Street', '', 1997, 'BC', 'V8V 4R6', 'fhughes@gov.bc.ca', NULL, NULL, NULL, 0),
 (28, '2020-08-06 21:43:28', '2020-08-06 21:43:28', 'rkuyvenh', '60DCD2AF73FB44AE9345F11B71CD3495', 99999, 'Larry', 'Mullen', 3, 10, '[]', NULL, 0, 2020, 2020, 0, 0, NULL, NULL, 0, 0, 0, 0, '0.0000', 0, '0.0000', NULL, '', 0, NULL, 0, NULL, NULL, NULL, NULL, 0, 1, 1, 0, 0, 4, NULL, NULL, '[]', '[]', NULL, NULL, NULL, NULL, 2, 'Branch 13', NULL, NULL, NULL, NULL, '[]', NULL, 'Ann', 'Acheson', NULL, '[]', NULL, '', '123 Office Street', '', 1997, 'BC', 'V8V 4R6', '565 Home Street', '', 1997, 'BC', 'V8V 4R6', '(250) 555-0772', '(250) 555-5476', '', 'hsimpson@gov.bc.ca', '', 'Franklin', 'Hughes', '', '123 Office Street', '', 1997, 'BC', 'V8V 4R6', 'fhughes@gov.bc.ca', NULL, NULL, NULL, 0);
 
-DROP TABLE IF EXISTS `registration_periods`;
-CREATE TABLE IF NOT EXISTS `registration_periods` (
+DROP TABLE IF EXISTS `registrationperiods`;
+CREATE TABLE IF NOT EXISTS `registrationperiods` (
   `id` int NOT NULL AUTO_INCREMENT,
   `registration_year` int DEFAULT NULL,
   `qualifying_years` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -5244,8 +5244,8 @@ CREATE TABLE IF NOT EXISTS `registration_periods` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-TRUNCATE TABLE `registration_periods`;
-INSERT INTO `registration_periods` (`id`, `registration_year`, `qualifying_years`, `open_registration`, `close_registration`, `close_rsvp`) VALUES
+TRUNCATE TABLE `registrationperiods`;
+INSERT INTO `registrationperiods` (`id`, `registration_year`, `qualifying_years`, `open_registration`, `close_registration`, `close_rsvp`) VALUES
 (1, 2020, '2019,2020,2021', '2020-02-01 00:00:00', '2020-10-31 23:59:59', '2020-11-30 23:59:59');
 
 DROP TABLE IF EXISTS `roles`;
@@ -5264,8 +5264,8 @@ INSERT INTO `roles` (`id`, `name`) VALUES
 (5, 'Ministry Contact'),
 (6, 'Supervisor');
 
-DROP TABLE IF EXISTS `user_roles`;
-CREATE TABLE IF NOT EXISTS `user_roles` (
+DROP TABLE IF EXISTS `userroles`;
+CREATE TABLE IF NOT EXISTS `userroles` (
   `id` int NOT NULL AUTO_INCREMENT,
   `idir` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
   `guid` varchar(128) COLLATE utf8_unicode_ci DEFAULT '',
@@ -5275,8 +5275,8 @@ CREATE TABLE IF NOT EXISTS `user_roles` (
   KEY `role_key` (`role_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-TRUNCATE TABLE `user_roles`;
-INSERT INTO `user_roles` (`id`, `idir`, `guid`, `role_id`, `ministry_id`) VALUES
+TRUNCATE TABLE `userroles`;
+INSERT INTO `userroles` (`id`, `idir`, `guid`, `role_id`, `ministry_id`) VALUES
 (1, 'rkuyvenh', '60DCD2AF73FB44AE9345F11B71CD3495', 1, 0),
 (2, 'twerdal', '', 1, 0),
 (3, 'apunshon', '', 1, 0),
@@ -5355,8 +5355,8 @@ ALTER TABLE `awards`
 ALTER TABLE `log`
   ADD CONSTRAINT `log_ibfk_1` FOREIGN KEY (`registration_id`) REFERENCES `registrations` (`id`);
 
-ALTER TABLE `pecsf_charities`
-  ADD CONSTRAINT `pecsf_charities_ibfk_1` FOREIGN KEY (`pecsf_region_id`) REFERENCES `pecsf_regions` (`id`);
+ALTER TABLE `pecsfcharities`
+  ADD CONSTRAINT `pecsfcharities_ibfk_1` FOREIGN KEY (`pecsf_region_id`) REFERENCES `pecsfregions` (`id`);
 
 ALTER TABLE `registrations`
   ADD CONSTRAINT `registrations_ibfk_1` FOREIGN KEY (`milestone_id`) REFERENCES `milestones` (`id`),
@@ -5367,8 +5367,8 @@ ALTER TABLE `registrations`
   ADD CONSTRAINT `registrations_ibfk_6` FOREIGN KEY (`supervisor_city_id`) REFERENCES `cities` (`id`),
   ADD CONSTRAINT `registrations_ibfk_7` FOREIGN KEY (`office_city_id`) REFERENCES `cities` (`id`);
 
-ALTER TABLE `user_roles`
-  ADD CONSTRAINT `user_roles_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`);
+ALTER TABLE `userroles`
+  ADD CONSTRAINT `userroles_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`);
 
 ALTER TABLE `vip`
   ADD CONSTRAINT `vip_ibfk_1` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`);
