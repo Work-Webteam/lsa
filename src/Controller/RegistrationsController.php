@@ -263,12 +263,12 @@ class RegistrationsController extends AppController
         $this->set('cities', $cities);
 
 
-        $regions = $this->Registrations->PecsfRegions->find('list', [
+        $regions = $this->Registrations->Pecsfregions->find('list', [
             'order' => ['Pecsfregions.name' => 'ASC']
         ]);
         $this->set('regions', $regions);
 
-        $charities = $this->Registrations->PecsfCharities->find('all', [
+        $charities = $this->Registrations->Pecsfcharities->find('all', [
             'order' => ['PecsfCharities.name' => 'ASC']
         ]);
         $this->set('charities', $charities);

@@ -56,12 +56,36 @@
                 { data: "office_city.name", title: "Office City", visible: false },
                 { data: "home_city.name", title: "Home City", visible: false },
                 { data: "supervisor_city.name", title: "Supervisor City", visible: false },
-                { data: "retroactive", title: "Retroactive", visible: true, orderable: false },
+                { data: "retroactive", title: "Retroactive", visible: true, orderable: false,
+                    render: function (data, type, row) {
+                        if (type === 'display' || type === 'filter') {
+                            if (data == true) {
+                                return "Yes";
+                            }
+                            if (data == false) {
+                                return "No";
+                            }
+                        }
+                        return data;
+                    }
+                },
                 { data: "preferred_email", title: "Work Email", visible: false },
                 { data: "alternate_email", title: "Personal Email", visible: false },
                 { data: "supervisor_email", title: "Supervisor Email", visible: false },
                 { data: "award_instructions", title: "Award Instructions", visible: false, orderable: false },
-                { data: "award_received", title: "Award Received", visible: true, orderable: false },
+                { data: "award_received", title: "Award Received", visible: true, orderable: false,
+                    render: function (data, type, row) {
+                        if (type === 'display' || type === 'filter' ) {
+                            if (data == true) {
+                                return "Yes";
+                            }
+                            if (data == false) {
+                                return "No";
+                            }
+                        }
+                        return data;
+                    }
+                },
                 { data: "engraving_sent", title: "Engraving Sent", visible: false, orderable: false },
                 { data: "survey_participation", title: "LSA Consent", visible: false, orderable: false },
             ],
