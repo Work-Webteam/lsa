@@ -269,11 +269,7 @@ class RegistrationsController extends AppController
         $this->set('regions', $regions);
 
         $charities = $this->Registrations->Pecsfcharities->find('all', [
-<<<<<<< HEAD
-            'order' => ['PecsfCharities.name' => 'ASC']
-=======
             'order' => ['Pecsfcharities.name' => 'ASC']
->>>>>>> master
         ]);
         $this->set('charities', $charities);
 
