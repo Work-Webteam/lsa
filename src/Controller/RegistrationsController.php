@@ -269,7 +269,7 @@ class RegistrationsController extends AppController
         $this->set('regions', $regions);
 
         $charities = $this->Registrations->Pecsfcharities->find('all', [
-            'order' => ['PecsfCharities.name' => 'ASC']
+            'order' => ['Pecsfcharities.name' => 'ASC']
         ]);
         $this->set('charities', $charities);
 
