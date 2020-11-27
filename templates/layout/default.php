@@ -37,8 +37,8 @@
             </a>
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="/registrations">Recipients Dashboard</a></li>
-                <li><a class="dropdown-item" href="/registrations/milestonesummary">Total by Milestone</a></li>
-                <li><a class="dropdown-item" href="/registrations/reportministryrecipients">Total by Ministry</a></li>
+                <li><a class="dropdown-item" href="/registrations/reportmilestonesummary">Total by Milestone</a></li>
+                <li><a class="dropdown-item" href="/registrations/reportministrysummary">Total by Ministry</a></li>
                 <div class="dropdown-divider"></div>
                 <li><a class="dropdown-item" href="/registrations/exportrecipients">Export Recipients</a></li>
                 <li><a class="dropdown-item" href="/registrations/reportministryrecipients_copy">Export Recipients by Ministry</a></li>

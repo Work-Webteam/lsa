@@ -11,6 +11,7 @@
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/rowgroup/1.1.2/js/dataTables.rowGroup.min.js"/>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
@@ -50,6 +51,7 @@ echo $this->Form->button('Cancel', array(
     var edit = true;
     var toolbar = true;
     var datestr="<?php echo date("Y"); ?>";
+    var totalColumns = 0;
 
     console.log(datestr);
     console.log(results);
@@ -78,21 +80,149 @@ echo $this->Form->button('Cancel', array(
             { data: "ministry.name_shortform", title: "Ministry", orderData: [1,3], orderSequence: ["asc"]},
         ];
 
+
         years.forEach(function callback(value1, index1) {
              milestones.forEach(function callback2(value2, index2) {
-                 cols.push({ data: "years." + value1 + "." + value2.years, title: value1 + " - " + value2.years});
+                 totalColumns++;
+                 cols.push({ name: "years_" + value1 + "_" + value2.years, data: "years." + value1 + "." + value2.years, title: value1 + " - " + value2.years,
+                     render: function (data, type, row) {
+                         if (type === 'display' || type === 'filter') {
+                             if (data > 0) {
+                                 return data;
+                             }
+                            else {
+                                 return "";
+                             }
+                         }
+                         return data;
+                     },
+                     className: 'lsa-totals-column'
+                 });
              });
-            cols.push({ data: "years." + value1 + ".Total", title: value1 + " - Total"});
+
+            totalColumns++;
+            cols.push({ data: "years." + value1 + ".Total", title: value1 + " - Total",
+                render: function (data, type, row) {
+                    if (type === 'display' || type === 'filter') {
+                        if (data > 0) {
+                            return data;
+                        }
+                        else {
+                            return "";
+                        }
+                    }
+                    return data;
+                },
+                className: 'lsa-totals-column-highlight'
+            });
         });
-        cols.push({ data: "total", title: "Total"});
+        cols.push({ data: "total", title: "Total",
+            className: 'lsa-totals-column'
+        });
+
+        // console.log(cols);
+        console.log("columns: " + totalColumns);
+
+
+        var strFooter = "<tfoot><th></th><th></th><th></th><th></th>";
+        for (var i = 0; i < totalColumns+1; i++) {
+            strFooter += '<th class="lsa-totals-column"></th>';
+        }
+        strFooter += "</tfoot>";
+
+        $("#data-table-1").append(strFooter);
+        // for (var i = 0; i < totalColumns; i++) {
+        //     $("#data-table-1").append('<th></th>');
+        // }
+        // $("#data-table-1").append('<th></th></tfoot>');
 
         $('#data-table-1').DataTable( {
             data: results,
             columns: cols,
+            order: [[0, 'asc']],
+            rowGroup: {
+                startRender: null,
+                endRender: function (rows, group) {
+                    var container = $('<tr/>');
+                    container.append('<td colspan= "4"> Ceremony Night ' + group + ' Totals</td>');
+                    var i;
+
+                    var info = rows.data().pluck("years").toArray();
+
+                    var totalSum = 0;
+                    years.forEach(function callback(value1, index1) {
+                        var yearSum = 0;
+                        milestones.forEach(function callback2(value2, index2) {
+                            var milestoneSum = 0
+                            info.forEach(function callback3(value3, index3) {
+                                milestoneSum += value3[value1][value2.years];
+                                yearSum += value3[value1][value2.years];
+                                totalSum += value3[value1][value2.years];
+                            });
+                            if (milestoneSum > 0) {
+                                container.append('<td class="lsa-totals-column">' + milestoneSum + '</td>');
+                            }
+                            else {
+                                container.append('<td></td>');
+                            }
+                        });
+                        if (yearSum > 0) {
+                            container.append('<td class="lsa-totals-column">' + yearSum + '</td>');
+                        }
+                        else {
+                            container.append('<td></td>');
+                        }
+
+                    });
+                    if (totalSum > 0) {
+                        container.append('<td class="lsa-totals-column">' + totalSum + '</td>');
+                    }
+                    else {
+                        container.append('<td></td>');
+                    }
+                    return $(container)
+
+                },
+                dataSrc: "ceremony_id",
+            },
+
+            footerCallback: function ( row, data, start, end, display ) {
+                var api = this.api();
+                var col = 4;
+
+              console.log("footer");
+              console.log(data);
+
+              $( api.column( 0 ).footer() ).html( 'Totals' );
+
+              var totalSum = 0;
+              years.forEach(function callback(value1, index1) {
+                  var yearSum = 0;
+                  milestones.forEach(function callback2(value2, index2) {
+                      var milestoneSum = 0;
+                      data.forEach(function callback3(value3, index3) {
+                          milestoneSum += value3['years'][value1][value2.years];
+                          yearSum += value3['years'][value1][value2.years];
+                          totalSum += value3['years'][value1][value2.years];
+                      });
+                      if (milestoneSum > 0) {
+                          $( api.column(col).footer() ).html( milestoneSum );
+                      }
+                      col++;
+                  });
+                  if (yearSum > 0) {
+                      $(api.column(col).footer()).html(yearSum);
+                  }
+                  col++
+              });
+              if (totalSum > 0) {
+                $(api.column(col).footer()).html(totalSum);
+              }
+            },
+
             // stateSave: true,
             pageLength: 15,
             lengthChange: false,
-            // order: [[ 1, "asc" ]],
 
             dom: '<"toolbar">Bfrtip',
             buttons: [

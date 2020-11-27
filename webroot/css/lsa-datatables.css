@@ -32,3 +32,17 @@
 #dateFilter {
     width: 50%;
 }
+
+
+table.dataTable .dtrg-group {
+    background-color: lightgray;
+}
+
+table.dataTable .lsa-totals-column {
+    text-align: right;
+}
+
+table.dataTable .lsa-totals-column-highlight {
+    text-align: right;
+    background-color: lightgray;
+}

@@ -700,7 +700,7 @@ class RegistrationsController extends AppController
 
 
 
-    public function milestonesummary() {
+    public function reportmilestonesummary() {
         if (!$this->checkAuthorization(array(
             Configure::read('Role.admin'),
             Configure::read('Role.lsa_admin'),
@@ -722,6 +722,7 @@ class RegistrationsController extends AppController
             'group' => ['Registrations.milestone_id']
         ]);
         $milestones->select([
+            'Milestones.id',
             'Milestones.name',
             'count' => $milestones->func()->count('*')]);
         $milestones->order(['Milestones.name' => 'ASC']);
@@ -745,7 +746,8 @@ class RegistrationsController extends AppController
         $this->set(compact('ministries'));
     }
 
-    public function reportministryrecipients() {
+
+    public function reportministrysummary() {
         if (!$this->checkAuthorization(array(
             Configure::read('Role.admin'),
             Configure::read('Role.lsa_admin'),
@@ -757,37 +759,88 @@ class RegistrationsController extends AppController
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
 
-        // if Supervisor role only list registrations they created
-        $milestones = $this->Registrations->find('all', [
+        $registrations = $this->Registrations->find('all', [
             'conditions' => $conditions,
             'contain' => [
-                'Ministries',
                 'Milestones',
+                'Ministries',
+                'Awards',
+                'OfficeCity',
+                'HomeCity',
+                'SupervisorCity'
             ],
-            'group' => ['Registrations.milestone_id']
         ]);
-        $milestones->select([
-            'Milestones.name',
-            'count' => $milestones->func()->count('*')]);
-        $milestones->order(['Milestones.name' => 'ASC']);
-        $this->set(compact('milestones'));
 
 
-        // if Supervisor role only list registrations they created
-        $ministries = $this->Registrations->find('all', [
-            'conditions' => $conditions,
-            'contain' => [
-                'Ministries',
-                'Milestones',
-            ],
-            'group' => ['Registrations.ministry_id', 'Registrations.milestone_id']
+        $list = $this->Registrations->Milestones->find('all');
+
+        $milestones = [];
+        foreach ($list as $key => $record) {
+            $milestones[] = $record;
+        }
+        $this->set('milestones', $milestones);
+
+
+        $list = $this->Registrations->Ministries->find('all', [
+            'order' => ['Ministries.name' => 'ASC']
         ]);
-        $ministries->select([
-            'Ministries.name',
-            'Milestones.name',
-            'count' => $milestones->func()->count('*')]);
-        $ministries->order(['Ministries.name' => 'ASC', 'Milestones.name' => 'ASC']);
-        $this->set(compact('ministries'));
+
+        $ministries = [];
+        foreach ($list as $key => $record) {
+            $ministry = new \stdClass();
+            $ministry->id = $record->id;
+            $ministry->name = $record->name;
+            $ministry->name_shortform = $record->name_shortform;
+            $ministry->milestone25 = 0;
+            $ministry->milestone30 = 0;
+            $ministry->milestone35 = 0;
+            $ministry->milestone40 = 0;
+            $ministry->milestone45 = 0;
+            $ministry->milestone50 = 0;
+            $ministry->total = 0;
+            $ministries[] = $ministry;
+        }
+
+//        echo "<pre>";
+//        echo print_r($ministries, true);
+//        echo "</pre>";
+        foreach ($registrations as $registration) {
+            $ministry_key = $this->findInArray($ministries, $registration->ministry_id);
+            $milestone_key = $this->findInArray($milestones, $registration->milestone_id);
+            switch($milestones[$milestone_key]->years) {
+                case "25":
+                    $ministries[$ministry_key]->milestone25++;
+                    break;
+                case "30":
+                    $ministries[$ministry_key]->milestone30++;
+                    break;
+                case "35":
+                    $ministries[$ministry_key]->milestone35++;
+                    break;
+                case "40":
+                    $ministries[$ministry_key]->milestone40++;
+                    break;
+                case "45":
+                    $ministries[$ministry_key]->milestone45++;
+                    break;
+                case "50":
+                    $ministries[$ministry_key]->milestone50++;
+                    break;
+            }
+            $ministries[$ministry_key]->total++;
+        }
+        $this->set('ministries', $ministries);
+    }
+
+
+    public function findInArray($array, $id) {
+        $i = -1;
+        foreach ($array as $key => $item) {
+            if ($item->id == $id) {
+                $i = $key;
+            }
+        }
+        return $i;
     }
 
 
@@ -844,7 +897,13 @@ class RegistrationsController extends AppController
 
         if ($this->request->is(['post', 'put'])) {
             foreach ($recipients as $key => $recipient) {
+                $empty = empty($recipient->presentation_number);
                 $recipient->presentation_number = $this->request->getData('Registrations.'.$key. '.presentation_number');
+
+                // if a presentation number is assigned and was previously empty set award received to true
+                if (!empty($recipient->presentation_number) && $empty) {
+                    $recipient->award_received = 1;
+                }
                 $this->Registrations->save($recipient);
             }
             $this->Flash->success(__('Presentation numbers have been updated.'));

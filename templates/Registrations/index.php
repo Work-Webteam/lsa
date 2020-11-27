@@ -34,6 +34,7 @@
 
         $('#lsa-registrations').DataTable( {
             data: registrations,
+            order: [[ 1, "asc" ]],
             columns: [
                 { data: "id", title: "Edit", orderable: false, render: function( data, type, row, meta) {
                         if (edit) {
@@ -84,7 +85,7 @@
                             }
                         }
                         return data;
-                    }
+                    },
                 },
                 { data: "engraving_sent", title: "Engraving Sent", visible: false, orderable: false },
                 { data: "survey_participation", title: "LSA Consent", visible: false, orderable: false },
@@ -141,7 +142,19 @@
                         } );
 
                     column.data().unique().sort().each( function ( d, j ) {
-                        select.append( '<option value="'+d+'">'+d+'</option>' )
+                        if (column.index() == 11 || column.index() == 16) {
+                            if (d === 1) {
+                                var option = '<option value="Yes">Yes</option>';
+                            }
+                            else {
+                                var option = '<option value="No">No</option>';
+                            }
+
+                        }
+                        else {
+                            var option = '<option value="'+d+'">'+d+'</option>';
+                        }
+                        select.append( option );
                     } );
                 } );
             }
