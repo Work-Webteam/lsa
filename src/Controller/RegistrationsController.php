@@ -713,37 +713,32 @@ class RegistrationsController extends AppController
         $conditions['Registrations.registration_year ='] = date('Y');
 
         // if Supervisor role only list registrations they created
-        $milestones = $this->Registrations->find('all', [
+        $registrations = $this->Registrations->find('all', [
             'conditions' => $conditions,
-            'contain' => [
-                'Ministries',
-                'Milestones',
-            ],
             'group' => ['Registrations.milestone_id']
         ]);
-        $milestones->select([
-            'Milestones.id',
-            'Milestones.name',
-            'count' => $milestones->func()->count('*')]);
-        $milestones->order(['Milestones.name' => 'ASC']);
-        $this->set(compact('milestones'));
+        $registrations->select([
+            'milestone_id',
+            'count' => $registrations->func()->count('*')]);
 
 
-        // if Supervisor role only list registrations they created
-        $ministries = $this->Registrations->find('all', [
-            'conditions' => $conditions,
-            'contain' => [
-                'Ministries',
-                'Milestones',
-            ],
-            'group' => ['Registrations.ministry_id', 'Registrations.milestone_id']
-        ]);
-        $ministries->select([
-            'Ministries.name',
-            'Milestones.name',
-            'count' => $milestones->func()->count('*')]);
-        $ministries->order(['Ministries.name' => 'ASC', 'Milestones.name' => 'ASC']);
-        $this->set(compact('ministries'));
+        $list = $this->Registrations->Milestones->find('all');
+
+        $milestones = [];
+        foreach ($list as $key => $record) {
+            $record->count = 0;
+            $milestones[] = $record;
+        }
+        foreach ($registrations as $record) {
+            $key = $this->findInArray($milestones, $record->milestone_id);
+            $milestones[$key]->count = $record->count;
+        }
+        $this->set('milestones', $milestones);
+
+//        $this->set(compact('milestones'));
+
+
+
     }
 
 
