@@ -131,10 +131,7 @@ echo $this->Form->button('Cancel', array(
         strFooter += "</tfoot>";
 
         $("#data-table-1").append(strFooter);
-        // for (var i = 0; i < totalColumns; i++) {
-        //     $("#data-table-1").append('<th></th>');
-        // }
-        // $("#data-table-1").append('<th></th></tfoot>');
+
 
         $('#data-table-1').DataTable( {
             data: results,
