@@ -14,7 +14,8 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
-<h1>Recipients</h1>
+<h2>Recipients</h2>
+
     <div class="datatable-container">
         <?= $this->Flash->render() ?>
         <table id="lsa-registrations" class="display lsa-datatable" style="font-size: 12px; width:100%">
@@ -164,14 +165,6 @@
 
         btns = '<div>';
         btns += '<button class="btn btn-primary" onClick="resetFilters()">Reset Filters</button>';
-        // btns += '</div><div>';
-        // btns += '<button class="btn btn-info" onClick="dataExport()">Export</button>';
-        // btns += '&nbsp;';
-        // btns += '<button class="btn btn-info" onClick="summaryAward()">Award Summary</button>';
-        // btns += '&nbsp;';
-        // btns += '<button class="btn btn-info" onClick="summaryMinistry()">Ministry Summary</button>';
-        // btns += '&nbsp;';
-        // btns += '<button class="btn btn-info" onClick="summaryMilestone()">Milestone Summary</button>';
         btns += '</div>';
 
         $("div.toolbar").html(btns);

@@ -16,13 +16,12 @@
 
 <h2>Accessibility and Dietary Requirements - <?= date("Y") ?></h2>
 
+    <div class="datatable-container">
+        <?= $this->Flash->render() ?>
+        <table id="data-table-1" class="display lsa-datatable" style="font-size: 12px; width:100%">
 
-<div class="datatable-container">
-    <?= $this->Flash->render() ?>
-    <table id="data-table-1" class="display ceremony-datatable" style="font-size: 12px; width:100%">
-
-    </table>
-</div>
+        </table>
+    </div>
 
 
 <?php
@@ -38,23 +37,30 @@ echo $this->Form->button('Cancel', array(
 
 <script>
     var registrations=<?php echo json_encode($recipients); ?>;
-    var edit = true;
+    var edit=<?php echo json_encode($edit); ?>;
     var toolbar = true;
     var datestr="<?php echo date("Y"); ?>";
 
-    console.log(datestr);
-    console.log(registrations);
-
     $(document).ready(function() {
 
-
-        // console.log(registrations);
-
+        console.log(registrations);
 
         $('#data-table-1').DataTable( {
             data: registrations,
+            order: [[ 1, "asc" ]],
             columns: [
-                { data: "ceremony.night", title: "Night", orderData: [0, 4, 3]},
+                { data: "id", title: "Edit", orderable: false, render: function( data, type, row, meta) {
+                        if (edit) {
+                            // link = '<a href="/registrations/view/' + data + '">view</a> | <a href="/registrations/edit/' + data + '">edit</a>';
+                            link = '<a class="btn btn-primary" href="/registrations/edit/' + data + '">edit</a>';
+                        }
+                        else {
+                            link = '';
+                        }
+                        return link;
+                    }
+                },
+                { data: "ceremony.night", title: "Night", orderData: [1, 5, 4]},
                 { data: "ceremony.date", title: "Ceremony Date", orderable: false, render: function( data, type, row, meta) {
                         const months = ["Jan", "Feb", "Mar","Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
                         const days = ["Sunday", "Monday", "Tuesday", "Wednewday", "Thursday", "Friday", "Saturday"];
@@ -64,16 +70,16 @@ echo $this->Form->button('Cancel', array(
                         return formatted_date;
                     } },
                 { data: "ministry.name_shortform", title: "Ministry", orderable: false},
-                { data: "first_name", title: "First Name", orderData: [3, 2, 1], orderSequence: ["asc"], orderable: false},
+                { data: "first_name", title: "First Name", orderData: [4, 3, 2], orderSequence: ["asc"], orderable: false},
                 { data: "last_name", title: "Last Name", orderable: false},
                 //{ data: "id", title: "ID", orderable: false},
                 { data: "attending", title: "Attending Ceremony",
                     render: function (data, type, row) {
                         if (type === 'display' || type === 'filter' ) {
-                            if (data == true) {
+                            if (data == 1) {
                                 return "Yes";
                             }
-                            if (data == false) {
+                            if (data == 0) {
                                 return "No";
                             }
                         }
@@ -130,10 +136,10 @@ echo $this->Form->button('Cancel', array(
                 { data: "report_reserved_seating", title: "Reserved Seating",
                     render: function (data, type, row) {
                         if (type === 'display' || type === 'filter' ) {
-                            if (data == true) {
+                            if (data == 1) {
                                 return "Yes";
                             }
-                            if (data == false) {
+                            if (data == 0) {
                                 return "";
                             }
                         }
@@ -144,10 +150,10 @@ echo $this->Form->button('Cancel', array(
                 { data: "report_reserved_parking", title: "Reserved Parking",
                     render: function (data, type, row) {
                         if (type === 'display' || type === 'filter' ) {
-                            if (data == true) {
+                            if (data == 1) {
                                 return "Yes";
                             }
-                            if (data == false) {
+                            if (data == 0) {
                                 return "";
                             }
                         }
@@ -159,7 +165,7 @@ echo $this->Form->button('Cancel', array(
             bFilter: false,
             pageLength: 15,
             lengthChange: false,
-            order: [[ 0, "asc" ]],
+
             dom: '<"toolbar">Bfrtip',
             buttons: [
                 {
@@ -193,11 +199,55 @@ echo $this->Form->button('Cancel', array(
             },
 
             initComplete: function () {
+                // $('<tr id="select-filters">').appendTo( '#lsa-registrations thead' );
+                // this.api().columns().every( function () {
+                //     var column = this;
+                //     if (column.visible()) {
+                //         $('<td id="data-column-' + column.index() + '"></td>').appendTo('#data-table-1 thead');
+                //     }
+                // });
+                // $('</tr>').appendTo( '#data-table-1 thead' );
+                //
+                // this.api().columns([1, 3]).every( function () {
+                //
+                //     var column = this;
+                //     var select = $('<select id="column-' + column.index() + '"><option value=""></option></select><br>')
+                //         .appendTo( $('#data-column-'+column.index()) )
+                //         .on( 'change', function () {
+                //             console.log('we here');
+                //             var val = $.fn.dataTable.util.escapeRegex(
+                //                 $(this).val()
+                //             );
+                //
+                //             column.search(val ? '^' + val + '$' : '', true, false).draw();
+                //         } );
+                //
+                //     column.data().unique().sort().each( function ( d, j ) {
+                //         if (column.index() == 11 || column.index() == 16) {
+                //             if (d === 1) {
+                //                 var option = '<option value="Yes">Yes</option>';
+                //             }
+                //             else {
+                //                 var option = '<option value="No">No</option>';
+                //             }
+                //
+                //         }
+                //         else {
+                //             var option = '<option value="'+d+'">'+d+'</option>';
+                //         }
+                //         select.append( option );
+                //     } );
+                // } );
             }
 
 
         } );
 
+        btns = '<div>';
+        btns += '<button class="btn btn-primary" onClick="resetFilters()">Reset Filters</button>';
+        btns += '</div>';
+
+        $("div.toolbar").html(btns);
 
     } );
 
@@ -206,6 +256,7 @@ echo $this->Form->button('Cancel', array(
 
         var table = $('#data-table-1').DataTable();
 
+        console.log("resetFilter");
         table.columns().every( function () {
             var column = this;
             $('#column-' + column.index()).prop("selectedIndex", 0);

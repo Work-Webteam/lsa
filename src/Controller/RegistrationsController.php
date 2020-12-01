@@ -61,6 +61,7 @@ class RegistrationsController extends AppController
         $this->set(compact('registrations'));
         $this->set(compact('edit'));
         $this->set(compact('toolbar'));
+
     }
 
 
@@ -199,7 +200,7 @@ class RegistrationsController extends AppController
             $registration->home_province = "BC";
             $registration->supervisor_province = "BC";
             $registration->retirement_date = $this->request->getData('date');
-            $registration->retroactive = false;
+            $registration->retroactive = 0;
 
             $registration->accessibility_requirements_recipient = "[]";
             $registration->accessibility_requirements_guest = "[]";
@@ -293,6 +294,16 @@ class RegistrationsController extends AppController
 
     public function edit($id)
     {
+
+
+
+        if ($this->request->referer() == "/registrations/exportspecialrequirements") {
+            $return_path = $this->request->referer();
+        }
+        else {
+            $return_path = "/registrations";
+        }
+
         $registration = $this->Registrations->find('all', [
             'conditions' => array(
                 'Registrations.id' => $id
@@ -309,14 +320,14 @@ class RegistrationsController extends AppController
         ])->first();
         if (!$registration) {
             $this->Flash->error(__('Registration not found.'));
-            $this->redirect(['action' => 'index']);
+            $this->redirect($return_path);
         }
 
         if ($this->request->is(['post', 'put'])) {
             $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
 
             $registration->modified = time();
-            $registration->invite_sent = $this->request->getData('invite_sent');
+            if ($this->request->getData('invite_sent'));
             if (empty($registration->invite_sent)) {
                 $registration->invite_sent = NULL;
             }
@@ -327,7 +338,7 @@ class RegistrationsController extends AppController
 
             if ($this->Registrations->save($registration)) {
                 $this->Flash->success(__('Registration has been updated.'));
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect($registration->return_path);
             }
             $this->Flash->error(__('Unable to update registration.'));
 
@@ -397,6 +408,7 @@ class RegistrationsController extends AppController
         $this->set('accessibility', $accessibility);
 
 
+        $registration->return_path = $return_path;
         $this->set('registration', $registration);
 
         $isadmin = true;
@@ -441,7 +453,6 @@ class RegistrationsController extends AppController
             $isadmin = false;
         }
 
-        //
         $this->set('isadmin', $isadmin);
 
 
@@ -2100,12 +2111,14 @@ class RegistrationsController extends AppController
             $this->redirect('/');
         }
 
+        $edit = true;
+
 //        ["or" => ["description =" => "Attending YES","description =" => "Attending NO"]]
 
         $conditions = array();
-        $conditions['Registrations.attending ='] = true;
+        $conditions['Registrations.attending ='] = 1;
         $conditions['Registrations.waitinglist ='] = 0;
-        $conditions["or"] = ["Registrations.accessibility_recipient =" => true, "Registrations.accessibility_guest =" => true, "Registrations.recipient_diet =" => true, "Registrations.guest_diet =" => true];
+        $conditions["or"] = ["Registrations.accessibility_recipient =" => 1, "Registrations.accessibility_guest =" => 1, "Registrations.recipient_diet =" => 1, "Registrations.guest_diet =" => 1];
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -2197,11 +2210,11 @@ class RegistrationsController extends AppController
         $recipients = $list;
 
         $this->set(compact('recipients'));
-
+        $this->set(compact('edit'));
     }
 
 
-    public function reportministryrecipientsCopy()
+    public function reportministryrecipients()
     {
 
         if (!$this->checkAuthorization(array(

@@ -41,7 +41,7 @@
                 <li><a class="dropdown-item" href="/registrations/reportministrysummary">Total by Ministry</a></li>
                 <div class="dropdown-divider"></div>
                 <li><a class="dropdown-item" href="/registrations/exportrecipients">Export Recipients</a></li>
-                <li><a class="dropdown-item" href="/registrations/reportministryrecipients_copy">Export Recipients by Ministry</a></li>
+                <li><a class="dropdown-item" href="/registrations/reportministryrecipients">Export Recipients by Ministry</a></li>
                 <li><a class="dropdown-item" href="/registrations/reportpivot/0">Pivot - All Recipients</a></li>
                 <li><a class="dropdown-item" href="/registrations/reportpivot/1">Pivot - Attending Only</a></li>
             </ul>

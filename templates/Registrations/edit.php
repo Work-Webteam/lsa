@@ -4,6 +4,8 @@
     <?php
     echo $this->Form->create($registration, ['@submit' => 'processForm', 'horizontal' => true]);
 
+    echo $this->Form->hidden('return_path');
+
     echo $this->Form->hidden('award_options', ['value' => '']);
     echo $this->Form->hidden('pecsf_donation', ['v-model' => 'pecsfDonation']);
     echo $this->Form->hidden('pecsf_donation_type', ['v-model' => 'pecsfDonationType']);
@@ -215,7 +217,7 @@
     echo '&nbsp;';
     echo $this->Form->button('Cancel', array(
         'type' => 'button',
-        'onclick' => 'location.href=\'/registrations\'',
+        'onclick' => 'location.href="' . $registration->return_path . '"',
         'class' => 'btn btn-secondary'
     ));
     echo $this->Form->end();
