@@ -12,6 +12,8 @@ echo $this->Form->control('open_date', ['label' => 'Registration Open Date', 'ty
 echo $this->Form->hidden('open_time', ['type' => 'time', 'value' => '00:00:00']);
 echo $this->Form->control('close_date', ['label' => 'Registration Close Date', 'type' => 'date', 'value' => date('Y-m-d')]);
 echo $this->Form->hidden('close_time', ['type' => 'time', 'value' => '23:59:59']);
+echo $this->Form->control('rsvp_open_date', ['label' => 'RSVP Open Date', 'type' => 'date', 'value' => date('Y-m-d')]);
+echo $this->Form->hidden('rsvp_open_time', ['value' => '00:00:00']);
 echo $this->Form->control('rsvp_close_date', ['label' => 'RSVP Close Date', 'type' => 'date', 'value' => date('Y-m-d')]);
 echo $this->Form->hidden('rsvp_close_time', ['value' => '23:59:59']);
 

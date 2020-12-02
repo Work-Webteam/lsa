@@ -99,6 +99,7 @@ CREATE TABLE registrationperiods (
     qualifying_years VARCHAR(255) NOT NULL,
     open_registration DATETIME,
     close_registration DATETIME,
+    open_rvsp DATETIME,
     close_rsvp DATETIME
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

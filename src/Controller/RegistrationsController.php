@@ -297,7 +297,8 @@ class RegistrationsController extends AppController
 
 
 
-        if ($this->request->referer() == "/registrations/exportspecialrequirements") {
+        if ($this->request->referer() == "/registrations/exportspecialrequirements" ||
+            $this->request->referer() == "/registrations/reportawards") {
             $return_path = $this->request->referer();
         }
         else {
@@ -1769,6 +1770,7 @@ class RegistrationsController extends AppController
                     $info->award = "PECSF Donation";
                     $info->award_options = "[]";
                 }
+                $info->milestone = $recipient->milestone->name;
                 $info->total = 1;
                 $info->attending = 0;
                 $info->notattending = 0;

@@ -9,6 +9,7 @@
         <th>Award Years</th>
         <th>Open Date</th>
         <th>Close Date</th>
+        <th>RSVP Open Date</th>
         <th>RSVP Close Date</th>
         <th colspan = 2>Operations</th>
     </tr>
@@ -27,6 +28,9 @@
             </td>
             <td>
                 <?= date("D Y-M-d", strtotime($period->close_registration)) ?>
+            </td>
+            <td>
+                <?= date("D Y-M-d", strtotime($period->open_rsvp)) ?>
             </td>
             <td>
                 <?= date("D Y-M-d", strtotime($period->close_rsvp)) ?>

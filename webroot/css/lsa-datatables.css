@@ -16,6 +16,13 @@
     height: 2rem;
 }
 
+#data-table-1 select {
+     margin-bottom: 0rem;
+     padding-right: 0rem;
+     padding: 0.2rem 0.2rem;
+     height: 2rem;
+ }
+
 .dataTables_wrapper .dataTables_filter input {
     margin-left: 0em;
 }

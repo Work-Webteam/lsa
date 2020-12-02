@@ -162,7 +162,7 @@ echo $this->Form->button('Cancel', array(
                 },
 
             ],
-            bFilter: false,
+            // bFilter: false,
             pageLength: 15,
             lengthChange: false,
 
@@ -199,45 +199,49 @@ echo $this->Form->button('Cancel', array(
             },
 
             initComplete: function () {
-                // $('<tr id="select-filters">').appendTo( '#lsa-registrations thead' );
-                // this.api().columns().every( function () {
-                //     var column = this;
-                //     if (column.visible()) {
-                //         $('<td id="data-column-' + column.index() + '"></td>').appendTo('#data-table-1 thead');
-                //     }
-                // });
-                // $('</tr>').appendTo( '#data-table-1 thead' );
-                //
-                // this.api().columns([1, 3]).every( function () {
-                //
-                //     var column = this;
-                //     var select = $('<select id="column-' + column.index() + '"><option value=""></option></select><br>')
-                //         .appendTo( $('#data-column-'+column.index()) )
-                //         .on( 'change', function () {
-                //             console.log('we here');
-                //             var val = $.fn.dataTable.util.escapeRegex(
-                //                 $(this).val()
-                //             );
-                //
-                //             column.search(val ? '^' + val + '$' : '', true, false).draw();
-                //         } );
-                //
-                //     column.data().unique().sort().each( function ( d, j ) {
-                //         if (column.index() == 11 || column.index() == 16) {
-                //             if (d === 1) {
-                //                 var option = '<option value="Yes">Yes</option>';
-                //             }
-                //             else {
-                //                 var option = '<option value="No">No</option>';
-                //             }
-                //
-                //         }
-                //         else {
-                //             var option = '<option value="'+d+'">'+d+'</option>';
-                //         }
-                //         select.append( option );
-                //     } );
-                // } );
+                $('<tr id="select-filters">').appendTo( '#lsa-registrations thead' );
+                this.api().columns().every( function () {
+                    var column = this;
+                    if (column.visible()) {
+                        $('<td id="data-column-' + column.index() + '"></td>').appendTo('#data-table-1 thead');
+                    }
+                });
+                $('</tr>').appendTo( '#data-table-1 thead' );
+
+                this.api().columns([1, 3, 6, 15, 16]).every( function () {
+
+                    var column = this;
+                    var select = $('<select id="column-' + column.index() + '"><option value=""></option></select><br>')
+                        .appendTo( $('#data-column-'+column.index()) )
+                        .on( 'change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+
+                            column.search(val ? '^' + val + '$' : '', true, false).draw();
+                        } );
+
+                    column.data().unique().sort().each( function ( d, j ) {
+                        if (column.index() == 6) {
+                            if (d === 1) {
+                                var option = '<option value="Yes">Yes</option>';
+                            }
+                            else {
+                                var option = '<option value="No">No</option>';
+                            }
+                        }
+                        else if (column.index() == 15 || column.index() == 16) {
+                            console.log(d);
+                            if (d === true) {
+                                var option = '<option value="Yes">Yes</option>';
+                            }
+                        }
+                        else {
+                            var option = '<option value="'+d+'">'+d+'</option>';
+                        }
+                        select.append( option );
+                    } );
+                } );
             }
 
 

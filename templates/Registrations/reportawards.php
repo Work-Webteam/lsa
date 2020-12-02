@@ -65,11 +65,21 @@ echo $this->Form->button('Cancel', array(
 
         var cols;
             cols = [
-                {data: "ceremony.night", title: "Ceremony", orderData: [0, 1, 4], orderSequence: ["asc"] },
+                { data: "id", title: "Edit", orderable: false, render: function( data, type, row, meta) {
+                        if (edit) {
+                            link = '<a class="btn btn-primary" href="/registrations/edit/' + data + '">edit</a>';
+                        }
+                        else {
+                            link = '';
+                        }
+                        return link;
+                    }
+                },
+                {data: "ceremony.night", title: "Ceremony", orderData: [1, 2, 5], orderSequence: ["asc"] },
                 {data: "ministry.name", title: "Ministry", orderable: false },
                 {data: "last_name", title: "Last Name", orderable: false },
                 {data: "first_name", title: "First Name", orderable: false },
-                {data: "presentation_number", title: "Presentation ID", orderData: [0, 4], orderSequence: ["asc"] },
+                {data: "presentation_number", title: "Presentation ID", orderData: [1, 5], orderSequence: ["asc"] },
                 {data: "award.name", title: "Award", orderable: false },
                 {data: "optionsDisplay", title: "Options", orderable: false },
             ];
@@ -82,7 +92,7 @@ echo $this->Form->button('Cancel', array(
             // stateSave: true,
             pageLength: 15,
             lengthChange: false,
-            // order: [[ 1, "asc" ]],
+            order: [[ 1, "asc" ]],
 
             dom: '<"toolbar">Bfrtip',
             buttons: [
@@ -109,11 +119,43 @@ echo $this->Form->button('Cancel', array(
             },
 
             initComplete: function () {
+                $('<tr id="select-filters">').appendTo( '#lsa-registrations thead' );
+                this.api().columns().every( function () {
+                    var column = this;
+                    if (column.visible()) {
+                        $('<td id="data-column-' + column.index() + '"></td>').appendTo('#data-table-1 thead');
+                    }
+                });
+                $('</tr>').appendTo( '#data-table-1 thead' );
+
+                this.api().columns([1, 2, 6]).every( function () {
+
+                    var column = this;
+                    var select = $('<select id="column-' + column.index() + '"><option value=""></option></select><br>')
+                        .appendTo( $('#data-column-'+column.index()) )
+                        .on( 'change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+
+                            column.search(val ? '^' + val + '$' : '', true, false).draw();
+                        } );
+
+                    column.data().unique().sort().each( function ( d, j ) {
+                        var option = '<option value="'+d+'">'+d+'</option>';
+                        select.append( option );
+                    } );
+                } );
             }
 
 
         } );
 
+        btns = '<div>';
+        btns += '<button class="btn btn-primary" onClick="resetFilters()">Reset Filters</button>';
+        btns += '</div>';
+
+        $("div.toolbar").html(btns);
 
         // only show buttons for users with appropriate permissions
         if (!toolbar) {

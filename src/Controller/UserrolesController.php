@@ -115,6 +115,10 @@ class UserrolesController extends AppController
     }
 
 
+    public function info() {
+
+    }
+
     public function delete($id)
     {
         if (!$this->checkAuthorization(array(Configure::read('Role.admin'), Configure::read('Role.lsa_admin')))) {

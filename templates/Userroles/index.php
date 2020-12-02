@@ -1,6 +1,6 @@
 <h1>System Permissions</h1>
-<?= $this->Html->link('Add User Role', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
-
+<?= $this->Html->link('Add User', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>&nbsp;
+<?= $this->Html->link('Permission Info', ['action' => 'info'], ['class' => 'btn btn-primary']) ?>
 <table>
     <tr>
         <?= $isadmin ? "<th>Id</th>" : "" ?>

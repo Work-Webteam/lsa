@@ -1,4 +1,4 @@
-<h1>User Role</h1>
+<h1>User</h1>
 <p><?= h($userrole->idir) ?></p>
 <p><?= h($userrole->role->name) ?></p>
 <p>

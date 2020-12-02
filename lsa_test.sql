@@ -99,6 +99,7 @@ CREATE TABLE registrationperiods (
     qualifying_years VARCHAR(255) NOT NULL,
     open_registration DATETIME,
     close_registration DATETIME,
+    open_rsvp DATEIME,
     close_rsvp DATETIME
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -5271,7 +5272,7 @@ INSERT INTO `awards` (`id`, `name`, `abbreviation`, `milestone_id`, `description
 INSERT INTO `awards` (`id`, `name`, `abbreviation`, `milestone_id`, `description`, `image`, `options`, `personalized`, `active`) VALUES(25, 'Bulova® \"Yarmouth\" Clock', 'Clock', 6, 'Bulova wall clock with thermometer and hygrometer. Comes in a beautiful walnut finish and has an engraved plate, “In recognition of fifty years of service.”\r\nSize: 17 ¼ \"H x 10 ¾” W x 3“ D', 'bulova-clock-yarmouth.jpg', '[]', 0, 1);
 
 
-INSERT INTO `registrationperiods` (`id`, `registration_year`, `qualifying_years`, `open_registration`, `close_registration`, `close_rsvp`) VALUES(1, 2020, '2019,2020,2021', '2020-02-01 00:00:00', '2020-07-31 23:59:59', '2020-08-31 23:59:59');
+INSERT INTO `registrationperiods` (`id`, `registration_year`, `qualifying_years`, `open_registration`, `close_registration`, `open_rsvp`, ``close_rsvp`) VALUES(1, 2020, '2019,2020,2021', '2020-02-01 00:00:00', '2020-07-31 23:59:59', '2020-08-31 23:59:59', '2020-10-31 23:59:59');
 
 
 INSERT INTO `ceremonies` (`id`, `registration_year`, `night`, `date`, `notes`, `attending`) VALUES(1, 2019, 1, '2019-10-10 19:30:00', NULL, '[]');

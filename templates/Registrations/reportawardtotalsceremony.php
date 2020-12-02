@@ -53,6 +53,7 @@ echo $this->Form->button('Cancel', array(
     $(document).ready(function() {
 
         console.log("year: " + year);
+        console.log(recipients);
 
         for (i = 0; i < recipients.length; i++) {
             options = JSON.parse(recipients[i].award_options);
@@ -77,8 +78,8 @@ echo $this->Form->button('Cancel', array(
                         return formatted_date;
                     } },
                 { data: "award", title: "Award", orderable: false },
+                { data: "milestone", title: "Milestone", orderable: true },
                 { data: "total", title: "Total", orderable: false },
-                //{ data: "milestone", title: "Milestone", orderable: true },
                 { data: "attending", title: "Total Attending", orderable: false },
                 { data: "notattending", title: "Total Not Attending", orderable: false},
                 // { data: "lastupdate", title: "Last Update", orderable: false},
@@ -130,10 +131,43 @@ echo $this->Form->button('Cancel', array(
 
 
             initComplete: function () {
+                $('<tr id="select-filters">').appendTo( '#lsa-registrations thead' );
+                this.api().columns().every( function () {
+                    var column = this;
+                    if (column.visible()) {
+                        $('<td id="data-column-' + column.index() + '"></td>').appendTo('#data-table-1 thead');
+                    }
+                });
+                $('</tr>').appendTo( '#data-table-1 thead' );
+
+                this.api().columns([3]).every( function () {
+
+                    var column = this;
+                    var select = $('<select id="column-' + column.index() + '"><option value=""></option></select><br>')
+                        .appendTo( $('#data-column-'+column.index()) )
+                        .on( 'change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+
+                            column.search(val ? '^' + val + '$' : '', true, false).draw();
+                        } );
+
+                    column.data().unique().sort().each( function ( d, j ) {
+                        var option = '<option value="'+d+'">'+d+'</option>';
+                        select.append( option );
+                    } );
+                } );
             }
 
-
         } );
+
+        btns = '<div>';
+        btns += '<button class="btn btn-primary" onClick="resetFilters()">Reset Filters</button>';
+        btns += '</div>';
+
+        $("div.toolbar").html(btns);
+
 
         $("#datepicker_from").datepicker({
             // showOn: "button",
@@ -152,7 +186,17 @@ echo $this->Form->button('Cancel', array(
     } );
 
 
+    function resetFilters() {
 
+        var table = $('#data-table-1').DataTable();
+
+        console.log("resetFilter");
+        table.columns().every( function () {
+            var column = this;
+            $('#column-' + column.index()).prop("selectedIndex", 0);
+        });
+        table.search('').columns().search('').draw();
+    }
 
 </script>
 

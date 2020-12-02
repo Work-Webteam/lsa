@@ -48,6 +48,7 @@ class RegistrationperiodsController extends AppController
             $registrationperiod->registration_year = $this->request->getData('registration_year');
             $registrationperiod->open_registration = $this->request->getData('open_date') . " " . $this->request->getData('open_time');
             $registrationperiod->close_registration = $this->request->getData('close_date') . " " . $this->request->getData('close_time');
+            $registrationperiod->open_rsvp = $this->request->getData('rsvp_open_date') . " " . $this->request->getData('rsvp_open_time');
             $registrationperiod->close_rsvp = $this->request->getData('rsvp_close_date') . " " . $this->request->getData('rsvp_close_time');
             if ($this->Registrationperiods->save($registrationperiod)) {
                 $this->Flash->success(__('Your registration period has been saved.'));
@@ -70,6 +71,7 @@ class RegistrationperiodsController extends AppController
             $registrationperiod->registration_year = $this->request->getData('registration_year');
             $registrationperiod->open_registration = $this->request->getData('open_date') . " " . $this->request->getData('open_time');
             $registrationperiod->close_registration = $this->request->getData('close_date') . " " . $this->request->getData('close_time');
+            $registrationperiod->open_rsvp = $this->request->getData('rsvp_open_date') . " " . $this->request->getData('rsvp_open_time');
             $registrationperiod->close_rsvp = $this->request->getData('rsvp_close_date') . " " . $this->request->getData('rsvp_close_time');
             if ($this->Registrationperiods->save($registrationperiod)) {
                 $this->Flash->success(__('Registration Period has been updated.'));
