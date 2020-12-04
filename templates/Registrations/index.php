@@ -14,7 +14,7 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
-<h2>Recipients</h2>
+<h2 class="page-title">Recipients</h2>
 
     <div class="datatable-container">
         <?= $this->Flash->render() ?>
