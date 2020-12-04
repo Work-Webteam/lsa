@@ -1,0 +1,123 @@
+.label-01 {
+  font-family: "Noto Sans JP";
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1em;
+  letter-spacing: 0.32px;
+}
+
+.helper-text-01 {
+  font-family: "Noto Sans JP";
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1em;
+  letter-spacing: 0.32px;
+}
+
+.body-short-01 {
+  font-family: "Noto Sans JP";
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.125em;
+  letter-spacing: 0.16px;
+}
+
+.body-long-01 {
+  font-family: "Noto Sans JP";
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.25em;
+  letter-spacing: 0.16px;
+}
+
+.body-short-02 {
+  font-family: "Noto Sans JP";
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5em;
+}
+
+.productive-heading-01 {
+  font-type: "Noto Sans JP";
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.125em;
+  letter-spacing: 0.16px;
+}
+
+.productive-heading-02 {
+  font-type: "Noto Sans JP";
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.375em;
+}
+
+.productive-heading-03 {
+  font-type: "Noto Sans JP";
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 1.75em;
+  letter-spacing: 0px;
+}
+
+.productive-heading-04 {
+  font-type: "Noto Sans JP";
+  font-size: 1.75rem;
+  font-weight: 400;
+  line-height: 2.25em;
+  letter-spacing: 0px;
+}
+
+.productive-heading-05 {
+  font-type: "Noto Sans JP";
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 2.5em;
+  letter-spacing: 0px;
+}
+
+.productive-heading-06 {
+  font-type: "Noto Sans JP";
+  font-size: 2.625rem;
+  font-weight: 300;
+  line-height: 3.125em;
+  letter-spacing: 0px;
+}
+
+.productive-heading-07 {
+  font-type: "Noto Sans JP";
+  font-size: 3.375rem;
+  font-weight: 300;
+  line-height: 4em;
+  letter-spacing: 0px;
+}
+
+body {
+  font-size: 16px;
+}
+
+.navbar {
+  height: 3em;
+}
+
+.navbar-brand {
+  font-family: "Noto Sans JP";
+  font-size: 1.2rem;
+  padding-left: 1rem;
+  padding-right: 2rem;
+}
+
+.nav-item {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.8em;
+}
+
+.navbar-dark {
+  background-color: rgba(0, 0, 0, 0.87);
+  font-family: "Noto Sans JP";
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+/*# sourceMappingURL=lsa-carbon.css.map */
