@@ -86,7 +86,7 @@ $heading-font-family : 'Noto Sans JP';
 
 .productive-heading-01 {
     font: {
-        type: $heading-font-family;
+        family: $heading-font-family;
         size: 0.875rem;
         weight: 500;
     }
@@ -96,7 +96,7 @@ $heading-font-family : 'Noto Sans JP';
 
 .productive-heading-02 {
     font: {
-        type: $heading-font-family;
+        family: $heading-font-family;
         size: 1rem;
         weight: 500;
     }
@@ -104,7 +104,7 @@ $heading-font-family : 'Noto Sans JP';
 }
 .productive-heading-03 {
     font: {
-        type:   $heading-font-family;
+        family:   $heading-font-family;
         size:   1.25rem;
         weight: 400;
     }
@@ -113,7 +113,7 @@ $heading-font-family : 'Noto Sans JP';
 }
 .productive-heading-04 {
     font: {
-        type:   $heading-font-family;
+        family:   $heading-font-family;
         size:   1.75rem;
         weight: 400;
     }
@@ -122,7 +122,7 @@ $heading-font-family : 'Noto Sans JP';
 }
 .productive-heading-05 {
     font: {
-        type:   $heading-font-family;
+        family:   $heading-font-family;
         size:   2rem;
         weight: 400;
     }
@@ -131,7 +131,7 @@ $heading-font-family : 'Noto Sans JP';
 }
 .productive-heading-06 {
     font: {
-        type:   $heading-font-family;
+        family:   $heading-font-family;
         size:   2.625rem;
         weight: 300;
     }
@@ -140,7 +140,7 @@ $heading-font-family : 'Noto Sans JP';
 }
 .productive-heading-07 {
     font: {
-        type:   $heading-font-family;
+        family:   $heading-font-family;
         size:   3.375rem;
         weight: 300;
     }
@@ -151,7 +151,11 @@ $heading-font-family : 'Noto Sans JP';
 
 //Global Nav
 body {
-    font-size: 16px;
+    font: {
+        family: $primary-font-family;
+        size: 16px;
+        weight: 400
+    }
 }
 
 .navbar {
@@ -170,15 +174,15 @@ body {
 .nav-item {
     padding-left: 1rem;
     padding-right: 1rem;
-    padding-top: 0.8em;
+    padding-top: 0;
 }
 
 .navbar-dark {
     background-color: rgba(0,0,0,.87);
     font: {
         family: $primary-font-family;
-        weight: 600;
-        size: 1.2rem;
+        weight: 400;
+        size: 0.875rem;
     }
 }
 

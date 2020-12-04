@@ -19,7 +19,7 @@
 
 <title>Long Service Awards</title>
 
-<?= $this->Html->css(['milligram.min', 'cake', 'lsa-carbon']) ?>
+<?= $this->Html->css(['lsa-carbon']) ?>
 
 
 <?= $this->fetch('meta') ?>
