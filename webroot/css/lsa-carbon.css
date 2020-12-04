@@ -84,7 +84,7 @@
   letter-spacing: 0px;
 }
 
-.productive-heading-07 {
+.productive-heading-07, .page-title {
   font-family: "Noto Sans JP";
   font-size: 3.375rem;
   font-weight: 300;
@@ -110,16 +110,24 @@ body {
 }
 
 .nav-item {
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 0;
+  padding-left: 0.875em;
+  padding-right: 0.875em;
 }
 
 .navbar-dark {
-  background-color: rgba(0, 0, 0, 0.87);
+  background-color: #161616;
   font-family: "Noto Sans JP";
   font-weight: 400;
   font-size: 0.875rem;
+}
+
+.dropdown-menu {
+  background-color: #161616;
+  color: #f4f4f4;
+}
+
+.page-title {
+  margin-left: 10rem;
 }
 
 /*# sourceMappingURL=lsa-carbon.css.map */
