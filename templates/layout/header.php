@@ -22,7 +22,7 @@
 
 <?= $this->Html->css('milligram.min.css') ?>
 <?= $this->Html->css('cake.css') ?>
-<?= $this->Html->css('lsa.css') ?>
+
 
 <?= $this->fetch('meta') ?>
 <?= $this->fetch('css') ?>
