@@ -23,9 +23,12 @@
 </head>
 <body>
 
-<nav class="top-nav navbar navbar-expand-lg navbar-dark">
+
+<nav class="navbar navbar-expand-lg navbar-dark">
     <!-- Brand -->
-    <a href="/"><span><img src="/img/lsa_logo.png" class="navbar-brand lsa-logo"></span></a>
+    <!-- HARDCORELOGO <a href="/"><span><img src="/img/lsa_logo.png" class="navbar-brand lsa-logo"></span></a> -->
+    <a class="navbar-brand" href="/">Long Service Awards</a>
+
 
     <!-- Links -->
     <div class="collapse navbar-collapse" id="main_nav">
@@ -96,7 +99,7 @@
             </a>
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="/registrations/reportawards">Awards Dashboard</a></li>
-                <li><a class="dropdown-item" href="/registrations/reportawardtotalstype">Totals by Award Type</a></li>
+                <li><a class="dropdown-item" href="/registrations/awardsummary">Totals by Award Type</a></li>
                 <li><a class="dropdown-item" href="/registrations/reportawardtotalsceremony">Totals by Ceremony</a></li>
                 <li><a class="dropdown-item" href="/registrations/reportawardtotalsmilestone">Totals by Milestone</a></li>
                 <li><a class="dropdown-item" href="/registrations/reportcertificatesmilestone">25 Year Certificates</a></li>
@@ -146,6 +149,7 @@
 
 </nav>
 
+
     <main class="main">
         <div class="container">
             <?= $this->Flash->render() ?>
@@ -154,6 +158,7 @@
     </main>
     <footer>
     </footer>
+
 </body>
 </html>
 

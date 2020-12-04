@@ -38,7 +38,7 @@
 }
 
 .productive-heading-01 {
-  font-type: "Noto Sans JP";
+  font-family: "Noto Sans JP";
   font-size: 0.875rem;
   font-weight: 500;
   line-height: 1.125em;
@@ -46,14 +46,14 @@
 }
 
 .productive-heading-02 {
-  font-type: "Noto Sans JP";
+  font-family: "Noto Sans JP";
   font-size: 1rem;
   font-weight: 500;
   line-height: 1.375em;
 }
 
 .productive-heading-03 {
-  font-type: "Noto Sans JP";
+  font-family: "Noto Sans JP";
   font-size: 1.25rem;
   font-weight: 400;
   line-height: 1.75em;
@@ -61,7 +61,7 @@
 }
 
 .productive-heading-04 {
-  font-type: "Noto Sans JP";
+  font-family: "Noto Sans JP";
   font-size: 1.75rem;
   font-weight: 400;
   line-height: 2.25em;
@@ -69,7 +69,7 @@
 }
 
 .productive-heading-05 {
-  font-type: "Noto Sans JP";
+  font-family: "Noto Sans JP";
   font-size: 2rem;
   font-weight: 400;
   line-height: 2.5em;
@@ -77,7 +77,7 @@
 }
 
 .productive-heading-06 {
-  font-type: "Noto Sans JP";
+  font-family: "Noto Sans JP";
   font-size: 2.625rem;
   font-weight: 300;
   line-height: 3.125em;
@@ -85,7 +85,7 @@
 }
 
 .productive-heading-07 {
-  font-type: "Noto Sans JP";
+  font-family: "Noto Sans JP";
   font-size: 3.375rem;
   font-weight: 300;
   line-height: 4em;
@@ -93,7 +93,9 @@
 }
 
 body {
+  font-family: "Noto Sans JP";
   font-size: 16px;
+  font-weight: 400;
 }
 
 .navbar {
@@ -110,14 +112,14 @@ body {
 .nav-item {
   padding-left: 1rem;
   padding-right: 1rem;
-  padding-top: 0.8em;
+  padding-top: 0;
 }
 
 .navbar-dark {
   background-color: rgba(0, 0, 0, 0.87);
   font-family: "Noto Sans JP";
-  font-weight: 600;
-  font-size: 1.2rem;
+  font-weight: 400;
+  font-size: 0.875rem;
 }
 
 /*# sourceMappingURL=lsa-carbon.css.map */
