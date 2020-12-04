@@ -53,3 +53,7 @@ table.dataTable .lsa-totals-column-highlight {
     text-align: right;
     background-color: lightgray;
 }
+
+table.dataTable .lsa-no-subtotal {
+    display: none;
+}

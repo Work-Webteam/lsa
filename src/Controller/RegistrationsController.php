@@ -655,7 +655,7 @@ class RegistrationsController extends AppController
         }
     }
 
-    public function awardsummary() {
+    public function reportawardtotalstype() {
         if (!$this->checkAuthorization(array(
             Configure::read('Role.admin'),
             Configure::read('Role.lsa_admin'),
@@ -671,17 +671,104 @@ class RegistrationsController extends AppController
         $registrations = $this->Registrations->find('all', [
             'conditions' => $conditions,
             'contain' => [
-                'Awards'
-            ],
-            'group' => ['Registrations.award_id']
+                'Awards',
+                'Milestones'
+            ]
         ]);
-        $registrations->select([
-            'Awards.name',
-            'count' => $registrations->func()->count('*')]);
-        $registrations->order(['count' => 'DESC']);
-        $this->set(compact('registrations'));
+
+
+
+        // load all Awards
+        $info = [];
+        $records = $this->Registrations->Awards->find('all');
+        foreach ($records as $record) {
+            $record->options = json_decode($record->options, true);
+            $info[$record->id] = $record;
+        }
+
+        // load all Awards
+        $milestones = [];
+        $records = $this->Registrations->Milestones->find('all');
+        foreach ($records as $record) {
+            $milestones[$record->id] = $record;
+        }
+
+//        echo "<pre>" . print_r($info, true) . "</pre>";
+
+        $ctr = 0;
+        $awards = [];
+        foreach ($registrations as $registration) {
+            if ($ctr == 2) {
+//                echo "<pre>" . print_r($registration, true) . "</pre>";
+            }
+            // generate key
+            if ($registration->award_id > 0) {
+                $name = $info[$registration->award_id]->name;
+                $type = $this->awardOptionKey(json_decode($registration->award_options, true), $info[$registration->award_id]->options);
+            }
+            else {
+                $name = "PECSF Donation";
+                $type = $milestones[$registration->milestone_id]->name;
+            }
+//            echo "<pre>" . $name . " : " . $type . "</pre>";
+            // search list
+
+
+            $key = $this->findAward($awards, $name, $type);
+            if ($key == -1) {
+                $award = new \stdClass();
+                $award->award = $name;
+                $award->type = $type;
+                $award->milestone = $milestones[$registration->milestone_id]->name;
+                $award->count = 1;
+                $awards[] = $award;
+            }
+            else {
+                $awards[$key]->count++;
+            }
+
+        }
+        $this->set(compact('awards'));
 
     }
+
+    public function findAward($awards, $name, $type) {
+
+        foreach ($awards as $key => $award) {
+            if ($award->award == $name && $award->type == $type) {
+                return $key;
+            }
+        }
+        return -1;
+    }
+
+
+    public function awardOptionKey($values, $options) {
+
+        $key = "";
+        foreach ($values as $value) {
+            $pos = strpos($value, ":");
+            $name = substr($value, 0, $pos);
+            $type = "";
+            foreach ($options as $option) {
+                if ($option['name'] == $name) {
+                    $type = $option['type'];
+                    continue;
+                }
+            }
+            if ($type == "choice") {
+                if ($pos > 0) {
+                    $value = substr($value, $pos+2);
+                }
+                if (!empty($key)) {
+                    $key .= " - ";
+                }
+                $key .= $value;
+            }
+        }
+        return $key;
+    }
+
 
     public function ministrysummary() {
         if (!$this->checkAuthorization(array(
