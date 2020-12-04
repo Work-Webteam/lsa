@@ -99,7 +99,7 @@
             </a>
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="/registrations/reportawards">Awards Dashboard</a></li>
-                <li><a class="dropdown-item" href="/registrations/reportawardtotoalstype">Totals by Award Type</a></li>
+                <li><a class="dropdown-item" href="/registrations/reportawardtotalstype">Totals by Award Type</a></li>
                 <li><a class="dropdown-item" href="/registrations/reportawardtotalsceremony">Totals by Ceremony</a></li>
                 <li><a class="dropdown-item" href="/registrations/reportawardtotalsmilestone">Totals by Milestone</a></li>
                 <li><a class="dropdown-item" href="/registrations/reportcertificatesmilestone">25 Year Certificates</a></li>
