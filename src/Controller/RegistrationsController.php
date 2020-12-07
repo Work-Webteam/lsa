@@ -538,7 +538,7 @@ class RegistrationsController extends AppController
                 $registration->dietary_guest_other = "";
                 $registration->dietary_requirements_guest = "[]";
             }
-            $registration->responded = true;
+            $registration->responded = 1;
 
             if ($this->Registrations->save($registration)) {
 
@@ -619,7 +619,11 @@ class RegistrationsController extends AppController
         $diet = $this->Registrations->Diet->find('all');
         $this->set('diet', $diet);
 
-        $accessibility = $this->Registrations->Accessibility->find('all');
+        $accessibility = $this->Registrations->Accessibility->find('all', [
+            'order' => ['Accessibility.sortorder' => 'ASC',
+                        'Accessibility.name' => 'ASC']
+        ]);
+
         $this->set('accessibility', $accessibility);
 
         $this->set('regperiod', $regperiod);

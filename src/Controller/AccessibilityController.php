@@ -13,7 +13,10 @@ class AccessibilityController extends AppController
             $this->redirect('/');
         }
         $this->loadComponent('Paginator');
-        $accessibility = $this->Paginator->paginate($this->Accessibility->find());
+        $accessibility = $this->Paginator->paginate($this->Accessibility->find('all', [
+               'order' => ['sortorder' => 'ASC',
+                           'name' => 'ASC'],
+        ]));
 
         $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
         $this->set(compact('isadmin'));
