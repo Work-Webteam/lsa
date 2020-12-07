@@ -538,7 +538,7 @@ class RegistrationsController extends AppController
                 $registration->dietary_guest_other = "";
                 $registration->dietary_requirements_guest = "[]";
             }
-            $registration->responded = true;
+            $registration->responded = 1;
 
             if ($this->Registrations->save($registration)) {
 
