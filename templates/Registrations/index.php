@@ -18,7 +18,7 @@
 
     <div class="datatable-container">
         <?= $this->Flash->render() ?>
-        <table id="lsa-registrations" class="display lsa-datatable" style="font-size: 12px; width:100%">
+        <table id="lsa-registrations" class="display lsa-datatable" >
 
         </table>
     </div>

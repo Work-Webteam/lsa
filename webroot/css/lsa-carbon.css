@@ -1,3 +1,7 @@
+body {
+  background-color: #f3f3f3;
+}
+
 .label-01 {
   font-family: "Noto Sans JP";
   font-size: 0.75rem;
@@ -112,6 +116,7 @@ body {
 .nav-item {
   padding-left: 0.875em;
   padding-right: 0.875em;
+  color: #F4F4F4;
 }
 
 .navbar-dark {
@@ -123,11 +128,65 @@ body {
 
 .dropdown-menu {
   background-color: #161616;
-  color: #f4f4f4;
+}
+
+.dropdown-item {
+  font-weight: 400;
+  font-size: 0.875rem;
+  color: #f3f3f3;
+  background-color: #262626;
+}
+
+.dropdown-item:hover {
+  color: #f3f3f3;
+  background-color: #444444;
 }
 
 .page-title {
-  margin-left: 10rem;
+  margin-left: 1rem;
+}
+
+th {
+  background-color: #F4F4F4;
+  height: 3rem;
+  font-size: 1.1em;
+}
+
+.dataTables_filter input {
+  height: 2.5rem;
+  border: 1px solid;
+}
+
+table .odd td {
+  background-color: #f3f3f3;
+  border-bottom: 8px solid #f3f3f3;
+}
+
+tr {
+  border: none;
+}
+
+table .even td {
+  border-bottom: 1px solid #f3f3f3;
+}
+
+tr td {
+  height: 4em;
+  border: 0px solid rgba(0, 0, 0, 0);
+}
+
+button.btn {
+  border-radius: 0;
+  padding: 1em 4em 1em 1em;
+  text-align: left;
+  min-width: 4em;
+}
+
+button.dt-button {
+  border-radius: 0;
+  padding: 1em 4em 1em 1em;
+  text-align: left;
+  min-width: 4em;
 }
 
 /*# sourceMappingURL=lsa-carbon.css.map */
