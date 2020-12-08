@@ -1,14 +1,20 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.css" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
 <h1>Accessibility Requirements</h1>
 <?= $this->Html->link('Add Accessibility Requirement', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 <table>
     <tr>
         <?= $isadmin ? "<th>Id</th>" : "" ?>
+        <th></th>
         <th>Accessibility Requirements</th>
         <th>Order</th>
         <th colspan = 2>Operations</th>
     </tr>
 
+    <tbody>
     <!-- Here is where we iterate through our $articles query object, printing out article info -->
 
     <?php foreach ($accessibility as $item): ?>
@@ -29,42 +35,37 @@
             </td>
         </tr>
     <?php endforeach; ?>
+
+    </tbody>
 </table>
 
 
 <script type="text/javascript">
-    $(document).ready(function(){
-        $('.reorder_link').on('click',function(){
-            $("ul.reorder-photos-list").sortable({ tolerance: 'pointer' });
-            $('.reorder_link').html('save reordering');
-            $('.reorder_link').attr("id","saveReorder");
-            $('#reorderHelper').slideDown('slow');
-            $('.image_link').attr("href","javascript:void(0);");
-            $('.image_link').css("cursor","move");
 
-            $("#saveReorder").click(function( e ){
-                if( !$("#saveReorder i").length ){
-                    $(this).html('').prepend('<img src="images/refresh-animated.gif"/>');
-                    $("ul.reorder-photos-list").sortable('destroy');
-                    $("#reorderHelper").html("Reordering Photos - This could take a moment. Please don't navigate away from this page.").removeClass('light_box').addClass('notice notice_error');
+    $('tbody').sortable({ handle: ".lsa-row-handle"});
 
-                    var h = [];
-                    $("ul.reorder-photos-list li").each(function() {
-                        h.push($(this).attr('id').substr(9));
-                    });
+    $( "tbody" ).on( "sortupdate", function( event, ui ) {
+        console.log("sort update");
 
-                    $.ajax({
-                        type: "POST",
-                        url: "orderUpdate.php",
-                        data: {ids: " " + h + ""},
-                        success: function(){
-                            window.location.reload();
-                        }
-                    });
-                    return false;
-                }
-                e.preventDefault();
-            });
-        });
-    });
+        
+        // var queue = rjkGetQueueArray();
+        // var curr = localStorage.getItem("rjkQueueIndexCurrent");
+        // var currId = queue[curr].video_id;
+        // var sortedIDs = $( "tbody" ).sortable( "toArray", {attribute:
+        //         'value'} );
+        //
+        // var newQueue = [];
+        // for (var idx = 0; idx < sortedIDs.length; idx++) {
+        //     var idx1 = rjkFindVideo(sortedIDs[idx]);
+        //     if (idx1 > -1) {
+        //         newQueue.push(queue[idx1]);
+        //     }
+        // }
+        // rjkSetQueueArray(newQueue);
+        // newIdx = sortedIDs.findIndex(k => k == currId);
+        // localStorage.setItem("rjkQueueSortUpdate", 1);
+        // localStorage.setItem("rjkQueueIndexCurrent", newIdx);
+        // rjkQueueRefresh();
+
+    } );
 </script>
