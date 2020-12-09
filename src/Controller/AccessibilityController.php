@@ -3,9 +3,17 @@
 namespace App\Controller;
 
 use Cake\Core\Configure;
+use Cake\Routing\Router;
 
 class AccessibilityController extends AppController
 {
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->loadComponent('RequestHandler');
+    }
+
+
     public function index()
     {
         if (!$this->checkAuthorization(array(Configure::read('Role.admin'), Configure::read('Role.lsa_admin')))) {
@@ -19,6 +27,9 @@ class AccessibilityController extends AppController
         ]));
 
         $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
+
+        $saveurl = Router::url(array('controller'=>'Accessibility','action'=>'saveorder'));
+        $this->set(compact('saveurl'));
         $this->set(compact('isadmin'));
         $this->set(compact('accessibility'));
     }
@@ -45,7 +56,7 @@ class AccessibilityController extends AppController
         $accessibility = $this->Accessibility->newEmptyEntity();
         if ($this->request->is('post')) {
             $accessibility = $this->Accessibility->patchEntity($accessibility, $this->request->getData());
-
+            $accessibility->sortorder = 999;
             if ($this->Accessibility->save($accessibility)) {
                 $this->Flash->success(__('Accessibility Requirements has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -88,6 +99,22 @@ class AccessibilityController extends AppController
             $this->Flash->success(__('{0} accessibility requirement has been deleted.', $accessibility->name));
             return $this->redirect(['action' => 'index']);
         }
+    }
+
+
+    public function saveorder(){
+        if( $this->request->is('ajax') ) {
+            $order = $this->request->getData('order');
+
+            $i = 1;
+            foreach ($order as $id) {
+                $accessibility = $this->Accessibility->findById($id)->firstOrFail();
+                $accessibility->sortorder = $i++;
+                $this->Accessibility->save($accessibility);
+            }
+            return;
+        }
+
     }
 
 }

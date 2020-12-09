@@ -1724,6 +1724,10 @@ class RegistrationsController extends AppController
         $year = date('Y');
         $this->set(compact('year'));
 
+        $today = date("Y-m-d");
+        $this->set(compact('today'));
+
+
         $this->set(compact('recipients'));
 
     }
