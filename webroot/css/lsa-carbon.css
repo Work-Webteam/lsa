@@ -142,6 +142,10 @@ body {
   background-color: #393939;
 }
 
+.table td, .table th {
+  vertical-align: middle;
+}
+
 .toolbar {
   float: left;
 }
