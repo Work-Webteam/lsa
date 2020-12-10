@@ -343,8 +343,11 @@ body {
     background-color:$interactive-1;
     color: $ui-01;
     height: 4em;
+    width: 12em;
     padding-right: 4em;
     margin-right: 0.5em;
+    position: relative;
+    left: calc(100vw - 39em - 5px );
 }
 
 //Export Buttons
@@ -354,10 +357,19 @@ body {
 .dt-button {
     border: none;
     height: 4em;
+
     background-color: $interactive-2;
     color: $ui-01;
+    border-radius: 0;
+    padding: 1em 4em 1em 1em;
+    text-align: left;
+    width: 12em;
 
 }
+
+
+
+
 
 
 //Search Field
@@ -367,13 +379,23 @@ body {
     height: 4em;
     border-radius: 0;
     float: left;
+    position: relative;
+    left: -12.5rem;
 }
 
 
 //----Tables Pagination
 
+.dataTables_info {
+    float: left;
+
+}
+
 .dataTables_paginate {
     float: right;
+    position: relative;
+    top: -18px;
+    left: -1rem;
 }
 
 .dataTables_paginate .pagination  {
@@ -390,6 +412,19 @@ body {
 }
 
 
+.paginate_button a {
+    height: 4em;
+    width: 4em;
+}
+
+
+.paginate_button.next a{
+    background-color: $interactive-1;
+    color: $ui-01;
+}
+.page-item:first-child .page-link, .page-item:last-child .page-link {
+    border-radius: 0;
+}
 
 //Buttons
 .btn-primary {
@@ -403,14 +438,6 @@ body {
     min-width: 4em;
 }
 
-
-
-button.dt-button {
-    border-radius: 0;
-    padding: 1em 4em 1em 1em;
-    text-align: left;
-    min-width: 4em;
-}
 
 //Edit Buttons
 
