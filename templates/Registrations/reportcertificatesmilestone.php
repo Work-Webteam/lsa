@@ -15,7 +15,12 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
 <h2>25 Year Certificate Report</h2>
+<h4><?= $today ?></h4>
 
+<p id="date_filter">
+    <span id="date-label-from" class="date-label">Changes Since: </span><input class="date_range_filter date" type="text" id="datepicker_from" />
+
+</p>
 
 <div class="datatable-container">
     <?= $this->Flash->render() ?>
@@ -43,6 +48,8 @@ echo $this->Form->button('Cancel', array(
     var attending = true;
     var year =<?php echo $year; ?>;
     var today;
+    var fromDate;
+    var indicator;
 
     $(document).ready(function() {
 
@@ -95,11 +102,20 @@ echo $this->Form->button('Cancel', array(
                     }
                 }
             },
-            //{ data: "milestone.name", title: "Milestone", visible: true},
+            { data: "lastupdate", title: "Changes", orderable: false, render: function (data, type, row, meta) {
+
+                    indicator = "";
+                    if (fromDate) {
+                        if (data > fromDate) {
+                            indicator = "CHANGED" ; // data;
+                        }
+                    }
+                    return indicator;
+                } },
         ];
 
 
-        $('#data-table-1').DataTable( {
+        var dTable = $('#data-table-1').DataTable( {
             data: recipients,
             columns: cols,
             order: [[ 0, "asc" ]],
@@ -113,6 +129,7 @@ echo $this->Form->button('Cancel', array(
                 {
                     extend: 'csv',
                     text: 'Export to CSV',
+                    message: '25 Year Certificate Report - ' + today,
                     filename: function () {
                         return year + '-CertificatesMilestone-' + today;
                     },
@@ -120,6 +137,7 @@ echo $this->Form->button('Cancel', array(
                 {
                     extend: 'excel',
                     text: 'Export to Excel',
+                    message: '25 Year Certificate Report - ' + today,
                     filename: function () {
                         return year + '-CertificatesMilestone-' + today;
                     },
@@ -137,6 +155,19 @@ echo $this->Form->button('Cancel', array(
 
 
         } );
+
+        $("#datepicker_from").datepicker({
+            // showOn: "button",
+            // buttonImage: "/img/icons/calendar.png",
+            // buttonImageOnly: false,
+            "onSelect": function(date) {
+                fromDate = new Date(date).toISOString();
+                dTable.rows().invalidate().draw();
+            }
+        }).keyup(function() {
+            fromDate = new Date(this.value).toISOString();
+            dTable.rows().invalidate().draw();
+        }).next(".ui-datepicker-trigger").addClass("btn-light");
 
     } );
 

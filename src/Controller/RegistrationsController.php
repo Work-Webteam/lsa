@@ -6,6 +6,9 @@ use Cake\Core\Configure;
 use Cake\Error\Debugger;
 use Cake\Mailer\Mailer;
 use DateTime;
+use Cake\Database\Expression\QueryExpression;
+use Cake\ORM\Query;
+
 
 
 class RegistrationsController extends AppController
@@ -325,6 +328,9 @@ class RegistrationsController extends AppController
         }
 
         if ($this->request->is(['post', 'put'])) {
+
+            $old = clone($registration);
+
             $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
 
             $registration->modified = time();
@@ -338,6 +344,50 @@ class RegistrationsController extends AppController
             }
 
             if ($this->Registrations->save($registration)) {
+
+                if ($registration->milestone_id <> $old->milestone_id) {
+                    $milestone = $this->Registrations->Milestones->findById($registration->milestone_id)->firstOrFail();
+                    $description = "Milestone changed to " . $milestone->name;
+                    $this->logChanges($registration->id, "MILESTONE", "CHANGE", $description);
+                }
+
+                if ($registration->award_id <> $old->award_id) {
+                    if ($registration->award_id == 0) {
+                        $name = "PECSF Donation";
+                    }
+                    else {
+                        $award = $this->Registrations->Awards->findById($registration->award_id)->firstOrFail();
+                        $name = $award->name;
+                    }
+                    $description = "Award changed to " . $name;
+                    $this->logChanges($registration->id, "AWARD", "CHANGE", $description);
+                }
+
+                // if attending flag changed
+                if ($registration->attending <> $old->attending) {
+                    $description = $registration->attending ? "Attending YES" : "Attending NO";
+                    $this->logChanges($registration->id, "ATTENDING", "CHANGE", $description);
+                }
+
+                // if guest flag changed
+                if ($registration->guest <> $old->guest) {
+                    $description = $registration->guest ? "Guest YES" : "Guest NO";
+                    $this->logChanges($registration->id, "GUEST", "CHANGE", $description);
+                }
+
+                // if accessibility flag changed
+                if ($registration->accessibility_recipient <> $old->accessibility_recipient || $registration->accessibility_guest <> $old->accessibility_guest ) {
+                    $description = ($registration->accessibility_recipient || $registration->accessibility_guest) ? "Accessibility YES" : "Accessibility NO";
+                    $this->logChanges($registration->id, "ACCESSIBILITY", "CHANGE", $description);
+                }
+
+                // if diet flag changed
+                if ($registration->recipient_diet <> $old->recipient_diet || $registration->guest_diet <> $old->guest_diet ) {
+                    $description = ($registration->recipient_diet || $registration->guest_diet) ? "Diet YES" : "Diet NO";
+                    $this->logChanges($registration->id, "DIET", "CHANGE", $description);
+                }
+
+
                 $this->Flash->success(__('Registration has been updated.'));
                 return $this->redirect($registration->return_path);
             }
@@ -459,6 +509,20 @@ class RegistrationsController extends AppController
 
     }
 
+    public function logChanges($id, $type, $operation, $description) {
+        $log = $this->Registrations->Log->newEmptyEntity();
+        $session = $this->getRequest()->getSession();
+        $log->user_idir = $session->read('user.idir');
+        $log->user_guid = $session->read('user.guid');
+        $log->timestamp = time();
+        $log->registration_id = $id;
+        $log->type = $type;
+        $log->operation = $operation;
+        $log->description = $description;
+        if ($this->Registrations->Log->save($log)) {
+        }
+    }
+
 
     public function rsvp($id)
     {
@@ -549,7 +613,7 @@ class RegistrationsController extends AppController
                     $log->user_guid = $session->read('user.guid');
                     $log->timestamp = time();
                     $log->registration_id = $registration->id;
-                    $log->type = "RSVP";
+                    $log->type = "ATTENDING";
                     $log->operation = $operation;
                     $log->description = $registration->attending ? "Attending YES" : "Attending NO";
                     if ($this->Registrations->Log->save($log)) {
@@ -562,7 +626,7 @@ class RegistrationsController extends AppController
                     $log->user_guid = $session->read('user.guid');
                     $log->timestamp = time();
                     $log->registration_id = $registration->id;
-                    $log->type = "RSVP";
+                    $log->type = "GUEST";
                     $log->operation = $operation;
                     $log->description = $registration->guest ? "Guest YES" : "Guest NO";
                     if ($this->Registrations->Log->save($log)) {
@@ -575,7 +639,7 @@ class RegistrationsController extends AppController
                     $log->user_guid = $session->read('user.guid');
                     $log->timestamp = time();
                     $log->registration_id = $registration->id;
-                    $log->type = "RSVP";
+                    $log->type = "ACCESSIBILITY";
                     $log->operation = $operation;
                     $log->description = ($registration->accessibility_recipient || $registration->accessibility_guest) ? "Accessibility YES" : "Accessibility NO";
                     if ($this->Registrations->Log->save($log)) {
@@ -588,7 +652,7 @@ class RegistrationsController extends AppController
                     $log->user_guid = $session->read('user.guid');
                     $log->timestamp = time();
                     $log->registration_id = $registration->id;
-                    $log->type = "RSVP";
+                    $log->type = "DIET";
                     $log->operation = $operation;
                     $log->description = ($registration->recipient_diet || $registration->guest_diet) ? "Diet YES" : "Diet NO";
                     if ($this->Registrations->Log->save($log)) {
@@ -1718,8 +1782,13 @@ class RegistrationsController extends AppController
                 'HomeCity',
                 'SupervisorCity',
                 'Ceremonies',
+                'Log' => function(\Cake\ORM\Query $q) {
+                    return $q->where(["or" => ["type =" => "ATTENDING", "type" => "MILESTONE"]])
+                             ->order(["timestamp" => "DESC"]);
+                }
             ],
         ]);
+
 
         $year = date('Y');
         $this->set(compact('year'));
@@ -1728,6 +1797,17 @@ class RegistrationsController extends AppController
         $this->set(compact('today'));
 
 
+        $list = [];
+        foreach ($recipients as $recipient) {
+            if (isset($recipient->log[0]->timestamp)) {
+                $recipient->lastupdate = $recipient->log[0]->timestamp;
+            }
+            else {
+                $recipient->lastupdate = $recipient->created;
+            }
+            $list[] = $recipient;
+        }
+        $recipients = $list;
         $this->set(compact('recipients'));
 
     }
@@ -1746,7 +1826,6 @@ class RegistrationsController extends AppController
 
 
         $award_id = 0;
-        $milestone_id = 1;
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
@@ -1762,12 +1841,30 @@ class RegistrationsController extends AppController
                 'HomeCity',
                 'SupervisorCity',
                 'Ceremonies',
+                'Log' => function(\Cake\ORM\Query $q) {
+                    return $q->where(["or" => ["type =" => "ATTENDING", "type" => "AWARD"]])
+                             ->order(["timestamp" => "DESC"]);
+                }
             ],
         ]);
 
         $year = date('Y');
         $this->set(compact('year'));
 
+        $today = date("Y-m-d");
+        $this->set(compact('today'));
+
+        $list = [];
+        foreach ($recipients as $recipient) {
+            if (isset($recipient->log[0]->timestamp)) {
+                $recipient->lastupdate = $recipient->log[0]->timestamp;
+            }
+            else {
+                $recipient->lastupdate = $recipient->created;
+            }
+            $list[] = $recipient;
+        }
+        $recipients = $list;
         $this->set(compact('recipients'));
 
     }
@@ -1834,8 +1931,7 @@ class RegistrationsController extends AppController
                 'SupervisorCity',
                 'Ceremonies',
                 'Log' => function(\Cake\ORM\Query $q) {
-                    return $q->where(["or" => ["description =" => "Attending YES","description =" => "Attending NO"]])
-                             ->limit(1)
+                    return $q->where(["or" => ["type =" => "ATTENDING"]])
                              ->order(["timestamp" => "DESC"]);
                 }
             ],
