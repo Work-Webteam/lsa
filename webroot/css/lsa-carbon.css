@@ -146,6 +146,11 @@ body {
   vertical-align: middle;
 }
 
+.table thead th {
+  height: 4em;
+  vertical-align: middle;
+}
+
 .toolbar {
   float: left;
 }
@@ -159,6 +164,7 @@ body {
   margin-right: 0.5em;
   position: relative;
   left: calc(100vw - 39em - 5px );
+  top: 14px;
 }
 
 .dt-buttons {
@@ -174,6 +180,8 @@ body {
   padding: 1em 4em 1em 1em;
   text-align: left;
   width: 12em;
+  position: relative;
+  top: 14px;
 }
 
 .dataTables_filter input.form-control {
@@ -184,6 +192,7 @@ body {
   float: left;
   position: relative;
   left: -12.5rem;
+  top: 14px;
 }
 
 .dataTables_info {
@@ -252,6 +261,33 @@ td a.btn-primary:hover {
   background-color: #8d8d8d;
   color: rgba(0, 0, 0, 0);
   border-color: rgba(0, 0, 0, 0);
+}
+
+.dataTable thead select {
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid #8d8d8d;
+  height: 3em;
+  appearance: none;
+  min-width: 4em;
+  background-image: url("/img/chevron-down.svg");
+  background-repeat: no-repeat;
+  background-size: 1.5rem;
+  background-position-x: calc(100% - 0.5em);
+  background-position-y: center;
+  background-color: #e0e0e0;
+  font-family: "Noto Sans JP";
+}
+
+.dataTable thead select::-ms-expand {
+  display: none;
+}
+
+@media screen and (min-width: 0\0 ) {
+  .dataTable thead select {
+    background: none\9 ;
+    padding: 5px\9 ;
+  }
 }
 
 /*# sourceMappingURL=lsa-carbon.css.map */

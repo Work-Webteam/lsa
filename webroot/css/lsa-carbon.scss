@@ -333,6 +333,10 @@ body {
 .table td, .table th {
     vertical-align: middle;
 }
+.table thead th {
+  height: 4em;
+    vertical-align: middle;
+}
 
 //Reset Filters
 
@@ -348,6 +352,7 @@ body {
     margin-right: 0.5em;
     position: relative;
     left: calc(100vw - 39em - 5px );
+    top: 14px;
 }
 
 //Export Buttons
@@ -364,12 +369,10 @@ body {
     padding: 1em 4em 1em 1em;
     text-align: left;
     width: 12em;
+    position: relative;
+    top: 14px;
 
 }
-
-
-
-
 
 
 //Search Field
@@ -381,6 +384,7 @@ body {
     float: left;
     position: relative;
     left: -12.5rem;
+    top: 14px;
 }
 
 
@@ -458,4 +462,37 @@ td a.btn-primary:hover {
     background-color: $ui-04;
     color: rgba(0,0,0,0);
     border-color: rgba(0,0,0,0);
+}
+
+//Filter Dropdowns
+
+.dataTable thead select {
+    border-radius: 0;
+    border: none;
+    border-bottom: 1px solid $ui-04;
+    height: 3em;
+    appearance: none;
+    min-width: 4em;
+    background-image: url('/img/chevron-down.svg');
+    background-repeat: no-repeat;
+    background-size: 1.5rem;
+    background-position-x: calc(100% - 0.5em);
+    background-position-y: center;
+    background-color: $ui-03;
+    font : {
+        family: $primary-font-family;
+
+    }
+}
+
+
+// CAUTION: Wack-ass IE hackery ahead
+.dataTable thead select::-ms-expand {
+    display: none;
+}
+@media screen and (min-width:0\0) {
+    .dataTable thead select {
+        background: none\9;
+        padding: 5px\9;
+    }
 }
