@@ -15,7 +15,12 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
 <h2>25 Year Certificate Report</h2>
+<h4><?= $today ?></h4>
 
+<p id="date_filter">
+    <span id="date-label-from" class="date-label">Changes Since: </span><input class="date_range_filter date" type="text" id="datepicker_from" />
+
+</p>
 
 <div class="datatable-container">
     <?= $this->Flash->render() ?>
@@ -42,10 +47,20 @@ echo $this->Form->button('Cancel', array(
     var toolbar = true;
     var attending = true;
     var year =<?php echo $year; ?>;
+    var today;
+    var fromDate;
+    var indicator;
 
     $(document).ready(function() {
 
-        console.log("year: " + year);
+        today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+
+        today = yyyy + "-" + mm + "-" + dd;
+
+        console.log(recipients);
 
         for (i = 0; i < recipients.length; i++) {
             options = JSON.parse(recipients[i].award_options)
@@ -61,19 +76,16 @@ echo $this->Form->button('Cancel', array(
             }
         }
 
-        console.log(recipients);
-
         var cols;
 
         cols = [
-            { data: "ceremony.date", visible: false },
-            { data: "ceremony.night", title: "Ceremony", orderable: false},
-            { data: "ceremony.date", title: "Ceremony", orderable: false, orderData: [0, 7, 3, 6], render: function( data, type, row, meta) {
+            { data: "ceremony.night", title: "Ceremony", orderData: [0, 2, 3, 4], orderable: false},
+            { data: "ceremony.date", title: "Ceremony", orderable: false, render: function( data, type, row, meta) {
                     const months = ["Jan", "Feb", "Mar","Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
                     var d = new Date(data);
 
                     let formatted_date = months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear()
-                    console.log(formatted_date)
+
 
                     return formatted_date;
                 } },
@@ -81,7 +93,7 @@ echo $this->Form->button('Cancel', array(
             { data: "ministry.name", title: "Ministry", orderable: false},
             { data: "last_name", title: "Last Name", orderable: false},
             { data: "first_name", title: "First Name", orderable: false},
-            { data: "presentation_number", title: "Presentation ID", orderable: false},
+            { data: "certificate_name", title: "Certificate Name", orderable: false},
             { data: "attending", title: "Attending", orderable: true, render: function (data, type, row, meta) {
                     if (data) {
                         return "Attending";
@@ -90,14 +102,23 @@ echo $this->Form->button('Cancel', array(
                     }
                 }
             },
-            //{ data: "milestone.name", title: "Milestone", visible: true},
+            { data: "lastupdate", title: "Changes", orderable: false, render: function (data, type, row, meta) {
+
+                    indicator = "";
+                    if (fromDate) {
+                        if (data > fromDate) {
+                            indicator = "CHANGED" ; // data;
+                        }
+                    }
+                    return indicator;
+                } },
         ];
 
 
-        $('#data-table-1').DataTable( {
+        var dTable = $('#data-table-1').DataTable( {
             data: recipients,
             columns: cols,
-            order: [[ 2, "asc" ]],
+            order: [[ 0, "asc" ]],
             // stateSave: true,
             pageLength: 15,
             lengthChange: false,
@@ -108,15 +129,17 @@ echo $this->Form->button('Cancel', array(
                 {
                     extend: 'csv',
                     text: 'Export to CSV',
+                    message: '25 Year Certificate Report - ' + today,
                     filename: function () {
-                        return year + '-CertificatesMilestone';
+                        return year + '-CertificatesMilestone-' + today;
                     },
                 },
                 {
                     extend: 'excel',
                     text: 'Export to Excel',
+                    message: '25 Year Certificate Report - ' + today,
                     filename: function () {
-                        return year + '-CertificatesMilestone';
+                        return year + '-CertificatesMilestone-' + today;
                     },
                 }
             ],
@@ -132,6 +155,19 @@ echo $this->Form->button('Cancel', array(
 
 
         } );
+
+        $("#datepicker_from").datepicker({
+            // showOn: "button",
+            // buttonImage: "/img/icons/calendar.png",
+            // buttonImageOnly: false,
+            "onSelect": function(date) {
+                fromDate = new Date(date).toISOString();
+                dTable.rows().invalidate().draw();
+            }
+        }).keyup(function() {
+            fromDate = new Date(this.value).toISOString();
+            dTable.rows().invalidate().draw();
+        }).next(".ui-datepicker-trigger").addClass("btn-light");
 
     } );
 

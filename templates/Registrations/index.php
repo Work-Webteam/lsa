@@ -19,6 +19,7 @@
 
     <div class="datatable-container">
         <?= $this->Flash->render() ?>
+
         <table id="lsa-registrations" class="table thead-dark table-striped" >
 
         </table>

@@ -4,7 +4,10 @@
     <tr>
         <?= $isadmin ? "<th>Id</th>" : "" ?>
         <th>Log</th>
-        <th colspan = 2>Operations</th>
+        <th>Reg ID</th>
+        <th>Type</th>
+        <th>Action</th>
+        <th>Description</th>
     </tr>
 
     <!-- Here is where we iterate through our $articles query object, printing out article info -->
@@ -26,9 +29,6 @@
             </td>
             <td>
                 <?= $log->description ?>
-            </td>
-            <td>
-                <?= $this->Form->postLink('Delete', ['action' => 'delete', $log->id], ['confirm' => 'Are you sure?','class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>
         </tr>
     <?php endforeach; ?>

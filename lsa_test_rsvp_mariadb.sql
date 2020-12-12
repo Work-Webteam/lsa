@@ -58,7 +58,7 @@ CREATE TABLE diet (
 CREATE TABLE accessibility (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    weight INT DEFAULT 0
+    sortorder INT DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
@@ -366,15 +366,15 @@ INSERT INTO `diet` (`name`) VALUES ('No Shellfish');
 INSERT INTO `diet` (`name`) VALUES ('Vegetarian');
 INSERT INTO `diet` (`name`) VALUES ('Vegan');
 
-INSERT INTO `accessibility` (`id`, `name`, `weight`) VALUES (1, 'Consideration for my mobility aid (e.g. cane, walker or wheelchiar)', 0);
-INSERT INTO `accessibility` (`id`, `name`, `weight`) VALUES (2, 'Accessible parking', 0);
-INSERT INTO `accessibility` (`id`, `name`, `weight`) VALUES (3, 'Reserved seating', 0);
-INSERT INTO `accessibility` (`id`, `name`, `weight`) VALUES (4, 'Assistance at the buffet', 0);
-INSERT INTO `accessibility` (`id`, `name`, `weight`) VALUES (5, 'CART (Communication Access Realtime Translation) services', 0);
-INSERT INTO `accessibility` (`id`, `name`, `weight`) VALUES (6, 'American Sign Language interpreter services', 0);
-INSERT INTO `accessibility` (`id`, `name`, `weight`) VALUES (7, 'A large-print commemorative program', 0);
-INSERT INTO `accessibility` (`id`, `name`, `weight`) VALUES (8, 'My guide/service dog to attend with me', 0);
-INSERT INTO `accessibility` (`id`, `name`, `weight`) VALUES (9, 'My personal assistant to attend with me', 0);
+INSERT INTO `accessibility` (`id`, `name`, `sortorder`) VALUES (1, 'Consideration for my mobility aid (e.g. cane, walker or wheelchiar)', 0);
+INSERT INTO `accessibility` (`id`, `name`, `sortorder`) VALUES (2, 'Accessible parking', 0);
+INSERT INTO `accessibility` (`id`, `name`, `sortorder`) VALUES (3, 'Reserved seating', 0);
+INSERT INTO `accessibility` (`id`, `name`, `sortorder`) VALUES (4, 'Assistance at the buffet', 0);
+INSERT INTO `accessibility` (`id`, `name`, `sortorder`) VALUES (5, 'CART (Communication Access Realtime Translation) services', 0);
+INSERT INTO `accessibility` (`id`, `name`, `sortorder`) VALUES (6, 'American Sign Language interpreter services', 0);
+INSERT INTO `accessibility` (`id`, `name`, `sortorder`) VALUES (7, 'A large-print commemorative program', 0);
+INSERT INTO `accessibility` (`id`, `name`, `sortorder`) VALUES (8, 'My guide/service dog to attend with me', 0);
+INSERT INTO `accessibility` (`id`, `name`, `sortorder`) VALUES (9, 'My personal assistant to attend with me', 0);
 
 
 INSERT INTO `ministries` (`id`, `name`, `name_shortform`) VALUES(1, 'Ministry of Finance', 'Finance');

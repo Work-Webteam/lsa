@@ -2,6 +2,7 @@
 <?php
 echo $this->Form->create($accessibility);
 echo $this->Form->control('name');
+//echo $this->Form->control('sortorder');
 
 echo $this->Form->button(__('Save Accessibility Requirement'), [
     'class' => 'btn btn-primary'

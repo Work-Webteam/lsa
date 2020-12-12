@@ -311,7 +311,7 @@
     var regions=<?php echo json_encode($regions); ?>;
     var allCharities=<?php echo json_encode($charities); ?>;
     var donation=<?php echo json_encode($donation); ?>;
-    var options=<?php echo $registration->award_options; ?>;
+    var options=<?php echo json_encode($registration->award_options); ?>;
 
     var listAccessibility=<?php echo json_encode($accessibility); ?>;
     var listDiet=<?php echo json_encode($diet); ?>;

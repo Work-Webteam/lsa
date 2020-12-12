@@ -14,7 +14,6 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
-
 <h2>Award Totals by Ceremony</h2>
 
 <p id="date_filter">
@@ -48,7 +47,7 @@ echo $this->Form->button('Cancel', array(
     var attending = true;
     var year =<?php echo $year; ?>;
     var fromDate;
-    var indicator = "what!";
+    var indicator;
 
     $(document).ready(function() {
 
@@ -92,7 +91,7 @@ echo $this->Form->button('Cancel', array(
                             }
                         }
                     return indicator;
-                    } }
+                    } },
             ];
 
 
@@ -174,7 +173,6 @@ echo $this->Form->button('Cancel', array(
             // buttonImage: "/img/icons/calendar.png",
             // buttonImageOnly: false,
             "onSelect": function(date) {
-                console.log("here");
                 fromDate = new Date(date).toISOString();
                 dTable.rows().invalidate().draw();
             }
