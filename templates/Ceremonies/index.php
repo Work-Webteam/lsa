@@ -1,5 +1,5 @@
 
-<h1>Ceremony Dashboard</h1>
+<h2 class="page-title">Ceremony Dashboard</h2>
 <p>NOTE: Only ceremony dates for the current registration year are displayed.</p>
 <?= $this->Html->link('Add Ceremony', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 <table>
