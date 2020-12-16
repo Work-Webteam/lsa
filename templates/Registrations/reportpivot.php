@@ -1,31 +1,31 @@
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css"/>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
-<?= $this->Html->css('lsa-datatables.css') ?>
-
-<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<!-- JQuery TODO: Exterminate! -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<!-- JZip -->
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/rowgroup/1.1.2/js/dataTables.rowGroup.min.js"/>
+
+<!-- PDF Generation Scripts -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
-<h2>Pivot Table: <?php echo $title; ?> - <?php echo date("Y"); ?></h2>
+<!-- Custom Miscellaneous Script-->
+<script type="text/javascript" src="/js/lsa.js"></script>
+
+<h2 class="page-title">Pivot Table: <?php echo $title; ?> - <?php echo date("Y"); ?></h2>
 
 
 <div class="datatable-container">
     <?= $this->Flash->render() ?>
-    <table id="data-table-1" class="display ceremony-datatable" style="font-size: 12px; width:100%">
+    <table id="data-table-1" class="table thead-dark table-striped table-sm">
 
     </table>
 
 
-    <table id="data-table-2" class="display ceremony-datatable" style="font-size: 12px; width:100%">
+    <table id="data-table-2" class="table thead-dark table-striped table-sm">
 
     </table>
 
@@ -219,6 +219,7 @@ echo $this->Form->button('Cancel', array(
 
             // stateSave: true,
             pageLength: 15,
+            pagingType: 'simple',
             lengthChange: false,
 
             dom: '<"toolbar">Bfrtip',
@@ -273,6 +274,7 @@ echo $this->Form->button('Cancel', array(
         ],
             // stateSave: true,
             pageLength: 15,
+            pagingType: 'simple',
             lengthChange: false,
             // order: [[ 1, "asc" ]],
 
