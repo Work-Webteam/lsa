@@ -17,13 +17,12 @@
 <h2>25 Year Certificate Report</h2>
 <h4><?= $today ?></h4>
 
-<p id="date_filter">
-    <span id="date-label-from" class="date-label">Changes Since: </span><input class="date_range_filter date" type="text" id="datepicker_from" />
-
-</p>
-
 <div class="datatable-container">
     <?= $this->Flash->render() ?>
+    <p id="date_filter">
+        <span id="date-label-from" class="date-label">Changes Since: </span><input class="date_range_filter date" type="text" id="datepicker_from" />
+
+    </p>
     <table id="data-table-1" class="display ceremony-datatable" style="font-size: 12px; width:100%">
 
     </table>

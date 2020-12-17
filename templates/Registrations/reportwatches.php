@@ -15,10 +15,13 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
 <h2>Watch Report</h2>
-
+<h4><?= $today ?></h4>
 
 <div class="datatable-container">
     <?= $this->Flash->render() ?>
+    <p id="date_filter">
+        <span id="date-label-from" class="date-label">Changes Since: </span><input class="date_range_filter date" type="text" id="datepicker_from" />
+    </p>
     <table id="data-table-1" class="display ceremony-datatable" style="font-size: 12px; width:100%">
 
     </table>
@@ -42,6 +45,15 @@ echo $this->Form->button('Cancel', array(
     var toolbar = true;
     var attending = true;
     var year =<?php echo $year; ?>;
+    var today;
+    var fromDate;
+    var indicator;
+
+    today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    today = yyyy + "-" + mm + "-" + dd;
 
     $(document).ready(function() {
 
@@ -50,8 +62,9 @@ echo $this->Form->button('Cancel', array(
         for (i = 0; i < recipients.length; i++) {
             options = JSON.parse(recipients[i].award_options)
             recipients[i].optionsDisplay = "";
-            for (j = 0; j < options.length; j++) {
-                if (i > 0) {
+            console.log(options.length);
+            for (var j = 0; j < options.length; j++) {
+                if (j > 0) {
                     recipients[i].optionsDisplay += "<BR>";
                 }
                 recipients[i].optionsDisplay += "- " + options[j];
@@ -66,14 +79,12 @@ echo $this->Form->button('Cancel', array(
         var cols;
 
         cols = [
-            { data: "ceremony.date", visible: false },
-            { data: "ceremony.night", title: "Ceremony", orderable: false},
-            { data: "ceremony.date", title: "Ceremony", orderable: false, orderData: [0, 3, 4, 5, 6], render: function( data, type, row, meta) {
+            { data: "ceremony.night", title: "Ceremony", orderable: false,  orderData: [0, 2, 3, 4]},
+            { data: "ceremony.date", title: "Ceremony", orderable: false, render: function( data, type, row, meta) {
                     const months = ["Jan", "Feb", "Mar","Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
                     var d = new Date(data);
 
                     let formatted_date = months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear()
-                    console.log(formatted_date)
 
                     return formatted_date;
                 } },
@@ -91,14 +102,23 @@ echo $this->Form->button('Cancel', array(
             },
             { data: "award.name", title: "Award", orderable: false},
             { data: "optionsDisplay", title: "Options", orderable: false},
-            { data: "engraving_sent", title: "Engraving Sent?", visible: true, orderable: true },
+            { data: "lastupdate", title: "Changes", orderable: false, render: function (data, type, row, meta) {
+
+                    indicator = "";
+                    if (fromDate) {
+                        if (data > fromDate) {
+                            indicator = "CHANGED" ; // data;
+                        }
+                    }
+                    return indicator;
+                } },
         ];
 
 
-        $('#data-table-1').DataTable( {
+        var dTable = $('#data-table-1').DataTable( {
             data: recipients,
             columns: cols,
-            order: [[ 2, "asc" ]],
+            order: [[ 0, "asc" ]],
             // stateSave: true,
             pageLength: 15,
             lengthChange: false,
@@ -109,15 +129,17 @@ echo $this->Form->button('Cancel', array(
                 {
                     extend: 'csv',
                     text: 'Export to CSV',
+                    message: 'Watch Report - ' + today,
                     filename: function () {
-                        return year + '-AwardWatches';
+                        return year + '-AwardWatches-' + today;
                     },
                 },
                 {
                     extend: 'excel',
                     text: 'Export to Excel',
+                    message: 'Watch Report - ' + today,
                     filename: function () {
-                        return year + '-AwardWatches';
+                        return year + '-AwardWatches-' + today;
                     },
                 }
             ],
@@ -140,6 +162,21 @@ echo $this->Form->button('Cancel', array(
             $("div.toolbar").hide();
             $(".dt-buttons").hide();
         }
+
+
+        $("#datepicker_from").datepicker({
+            // showOn: "button",
+            // buttonImage: "/img/icons/calendar.png",
+            // buttonImageOnly: false,
+            "onSelect": function(date) {
+                fromDate = new Date(date).toISOString();
+                dTable.rows().invalidate().draw();
+            }
+        }).keyup(function() {
+            fromDate = new Date(this.value).toISOString();
+            dTable.rows().invalidate().draw();
+        }).next(".ui-datepicker-trigger").addClass("btn-light");
+
     } );
 
 

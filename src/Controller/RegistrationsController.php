@@ -343,6 +343,7 @@ class RegistrationsController extends AppController
                 $registration->photo_sent = NULL;
             }
 
+
             if ($this->Registrations->save($registration)) {
 
                 if ($registration->milestone_id <> $old->milestone_id) {
@@ -607,56 +608,20 @@ class RegistrationsController extends AppController
             if ($this->Registrations->save($registration)) {
 
                 if ($operation == "NEW" || $oldAttending <> $registration->attending) {
-                    $log = $this->Registrations->Log->newEmptyEntity();
-                    $session = $this->getRequest()->getSession();
-                    $log->user_idir = $session->read('user.idir');
-                    $log->user_guid = $session->read('user.guid');
-                    $log->timestamp = time();
-                    $log->registration_id = $registration->id;
-                    $log->type = "ATTENDING";
-                    $log->operation = $operation;
-                    $log->description = $registration->attending ? "Attending YES" : "Attending NO";
-                    if ($this->Registrations->Log->save($log)) {
-                    }
+                    $description = $registration->attending ? "Attending YES" : "Attending NO";
+                    $this->logChanges($registration->id, "ATTENDING", "CHANGE", $description);
                 }
                 if ($operation == "NEW" || $oldGuest <> $registration->guest) {
-                    $log = $this->Registrations->Log->newEmptyEntity();
-                    $session = $this->getRequest()->getSession();
-                    $log->user_idir = $session->read('user.idir');
-                    $log->user_guid = $session->read('user.guid');
-                    $log->timestamp = time();
-                    $log->registration_id = $registration->id;
-                    $log->type = "GUEST";
-                    $log->operation = $operation;
-                    $log->description = $registration->guest ? "Guest YES" : "Guest NO";
-                    if ($this->Registrations->Log->save($log)) {
-                    }
+                    $description = $registration->guest ? "Guest YES" : "Guest NO";
+                    $this->logChanges($registration->id, "GUEST", "CHANGE", $description);
                 }
                 if ($operation == "NEW" || $oldRecipientAccess <> $registration->accessibility_recipient || $oldGuestAccess <> $registration->accessibility_guest) {
-                    $log = $this->Registrations->Log->newEmptyEntity();
-                    $session = $this->getRequest()->getSession();
-                    $log->user_idir = $session->read('user.idir');
-                    $log->user_guid = $session->read('user.guid');
-                    $log->timestamp = time();
-                    $log->registration_id = $registration->id;
-                    $log->type = "ACCESSIBILITY";
-                    $log->operation = $operation;
-                    $log->description = ($registration->accessibility_recipient || $registration->accessibility_guest) ? "Accessibility YES" : "Accessibility NO";
-                    if ($this->Registrations->Log->save($log)) {
-                    }
+                    $description = ($registration->accessibility_recipient || $registration->accessibility_guest) ? "Accessibility YES" : "Accessibility NO";
+                    $this->logChanges($registration->id, "ACCESSIBILITY", "CHANGE", $description);
                 }
                 if ($operation == "NEW" || $oldRecipientDiet <> $registration->recipient_diet || $oldGuestDiet <> $registration->guest_diet) {
-                    $log = $this->Registrations->Log->newEmptyEntity();
-                    $session = $this->getRequest()->getSession();
-                    $log->user_idir = $session->read('user.idir');
-                    $log->user_guid = $session->read('user.guid');
-                    $log->timestamp = time();
-                    $log->registration_id = $registration->id;
-                    $log->type = "DIET";
-                    $log->operation = $operation;
-                    $log->description = ($registration->recipient_diet || $registration->guest_diet) ? "Diet YES" : "Diet NO";
-                    if ($this->Registrations->Log->save($log)) {
-                    }
+                    $description = ($registration->recipient_diet || $registration->guest_diet) ? "Diet YES" : "Diet NO";
+                    $this->logChanges($registration->id, "DIET", "CHANGE", $description);
                 }
                 $this->Flash->success(__('Registration has been updated.'));
                 return $this->redirect('/');
@@ -1733,12 +1698,31 @@ class RegistrationsController extends AppController
                 'HomeCity',
                 'SupervisorCity',
                 'Ceremonies',
+                'Log' => function(\Cake\ORM\Query $q) {
+                    return $q->where(["or" => ["type =" => "ATTENDING", "type =" => "AWARD"]])
+                        ->order(["timestamp" => "DESC"]);
+                }
             ],
         ]);
 
         $year = date('Y');
         $this->set(compact('year'));
 
+        $today = date("M d, Y");
+        $this->set(compact('today'));
+
+
+        $list = [];
+        foreach ($recipients as $recipient) {
+            if (isset($recipient->log[0]->timestamp)) {
+                $recipient->lastupdate = $recipient->log[0]->timestamp;
+            }
+            else {
+                $recipient->lastupdate = $recipient->created;
+            }
+            $list[] = $recipient;
+        }
+        $recipients = $list;
         $this->set(compact('recipients'));
 
     }
@@ -1793,7 +1777,7 @@ class RegistrationsController extends AppController
         $year = date('Y');
         $this->set(compact('year'));
 
-        $today = date("Y-m-d");
+        $today = date("M d, Y");
         $this->set(compact('today'));
 
 
@@ -1851,7 +1835,7 @@ class RegistrationsController extends AppController
         $year = date('Y');
         $this->set(compact('year'));
 
-        $today = date("Y-m-d");
+        $today = date("M d, Y");
         $this->set(compact('today'));
 
         $list = [];
@@ -2221,10 +2205,12 @@ class RegistrationsController extends AppController
             $this->redirect('/');
         }
 
+        $milestones = $this->Registrations->Milestones->find('all');
+
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
         $conditions['Registrations.ceremony_id >'] = 0;
-//        $conditions
+
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
             'contain' => [
@@ -2238,57 +2224,96 @@ class RegistrationsController extends AppController
             ],
         ]);
 
-        $ministries = [];
+        $results = [];
         foreach ($recipients as $recipient) {
-            $i = $this->findCeremonyMinistry($ministries, $recipient->ceremony_id, $recipient->ministry_id);
+            $i = $this->findCeremonyMinistry($results, $recipient->ceremony_id, $recipient->ministry_id);
             if ($i == -1) {
                 $info = new \stdClass();
                 $info->ceremony_id = $recipient->ceremony_id;
                 $info->ministry_id = $recipient->ministry_id;
                 $info->ceremony = $recipient->ceremony;
                 $info->ministry = $recipient->ministry;
-                $info->attending_recipients = 0;
-                $info->attending_total = 0;
-                $info->not_attending_recipients = 0;
-                $info->not_attending_total = 0;
-                $info->no_response_recipients = 0;
-                $info->no_response_total = 0;
-                $info->no_show_recipients = 0;
-                $info->no_show_total = 0;
-                $ministries[] = $info;
-                $i = $this->findCeremonyMinistry($ministries, $recipient->ceremony_id, $recipient->ministry_id);
+                $info->total_attending = 0;
+
+                $info->years = array();
+                foreach ($milestones as $milestone) {
+                   $info->years[$milestone->years]['attending'] = 0;
+                }
+                $info->years['executives']['attending'] = 0;
+                $info->years['total']['attending'] = 0;
+
+                $results[] = $info;
+                $i = $this->findCeremonyMinistry($results, $recipient->ceremony_id, $recipient->ministry_id);
             }
+
             if ($recipient->responded) {
                 if ($recipient->attending) {
-                    $ministries[$i]->attending_recipients++;
-                    $ministries[$i]->attending_total++;
+                    $results[$i]->years[$recipient->milestone->years]['attending']++;
+                    $results[$i]->years['total']['attending']++;
+                    $results[$i]->total_attending++;
                     if ($recipient->guest) {
-                        $ministries[$i]->attending_total++;
+                        $results[$i]->years[$recipient->milestone->years]['attending']++;
+                        $results[$i]->years['total']['attending']++;
+                        $results[$i]->total_attending++;
                     }
-                }
-                else {
-                    $ministries[$i]->not_attending_recipients++;
-                    $ministries[$i]->not_attending_total++;
-                    if ($recipient->guest) {
-                        $ministries[$i]->not_attending_total++;
-                    }
-                }
-            }
-            else {
-                $ministries[$i]->no_response_recipients++;
-                $ministries[$i]->no_response_total++;
-            }
-            if ($recipient->noshow) {
-                $ministries[$i]->no_show_recipient++;
-                $ministries[$i]->no_show_total++;
-                if ($recipeient->guest) {
-                    $ministries[$i]->no_show_total++;
                 }
             }
         }
 
 
-        $this->set(compact('ministries'));
+        // load VIP model so we add VIP numbers to report. Not ideal, but this is the simplest way to accomplish this.
+        $this->loadModel('Vip');
+
+        $conditions = array();
+        $conditions['Vip.year ='] = date('Y');
+        $conditions['Vip.ceremony_id >'] = 0;
+        $conditions['Vip.attending ='] = 1;
+
+        $executives = $this->Vip->find('all', [
+            'conditions' => $conditions,
+            'contain' => [
+                'Ministries',
+                'Ceremonies',
+            ],
+        ]);
+
+        foreach ($executives as $executive) {
+            $i = $this->findCeremonyMinistry($results, $executive->ceremony_id, $executive->ministry_id);
+            if ($i == -1) {
+                $info = new \stdClass();
+                $info->ceremony_id = $executive->ceremony_id;
+                $info->ministry_id = $executive->ministry_id;
+                $info->ceremony = $executive->ceremony;
+                $info->ministry = $executive->ministry;
+                $info->total_attending = 0;
+
+                $info->years = array();
+                foreach ($milestones as $milestone) {
+                    $info->years[$milestone->years]['attending'] = 0;
+                }
+                $info->years['executives']['attending'] = 0;
+                $info->years['total']['attending'] = 0;
+
+                $results[] = $info;
+                $i = $this->findCeremonyMinistry($results, $executive->ceremony_id, $executive->ministry_id);
+            }
+
+            if ($executive->attending) {
+                    $results[$i]->years['executives']['attending'] += $executive->total_attending;
+                    $results[$i]->years['total']['attending'] += $executive->total_attending;
+                    $results[$i]->total_attending += $executive->total_attending;
+
+            }
+        }
+
+
+        $this->loadModel('Registrations');
+
+
+        $this->set(compact('milestones'));
+
+        $this->set(compact('results'));
+
 
     }
 

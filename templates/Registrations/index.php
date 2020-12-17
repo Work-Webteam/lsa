@@ -94,7 +94,7 @@
                 { data: "survey_participation", title: "LSA Consent", visible: false, orderable: false },
             ],
             // stateSave: true,
-            pageLength: 15,
+            pageLength: 25,
             pagingType: 'simple',
             lengthChange: false,
             // order: [[ 1, "asc" ]],

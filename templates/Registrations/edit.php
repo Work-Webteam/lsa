@@ -311,7 +311,7 @@
     var regions=<?php echo json_encode($regions); ?>;
     var allCharities=<?php echo json_encode($charities); ?>;
     var donation=<?php echo json_encode($donation); ?>;
-    var options=<?php echo json_encode($registration->award_options); ?>;
+    var options=<?php echo $registration->award_options; ?>;
 
     var listAccessibility=<?php echo json_encode($accessibility); ?>;
     var listDiet=<?php echo json_encode($diet); ?>;
@@ -454,7 +454,6 @@
         methods: {
 
             processForm: function(e) {
-                console.log('processForm');
 
                 errors = [];
                 errors = errors.concat(this.checkEmployeeInfo());
@@ -816,6 +815,7 @@ console.log(errors);
 
 
             processAwardOptions: function () {
+                console.log("processAwardOptions");
                 award = this.getAward(this.selectedAward);
                 options = JSON.parse(award.options);
 
@@ -844,7 +844,9 @@ console.log(errors);
                 }
 
                 if (errors.length == 0) {
+                    console.log(this.awardOptions);
                     $('input[name=award_options]').val(JSON.stringify(this.awardOptions));
+                    console.log($('input[name=award_options]').val());
                     this.selectedOptions = this.parseSelectedOptions(this.awardOptions);
                     $("#award-1").modal('hide');
                     this.errorsOptions = '';
