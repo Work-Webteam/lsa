@@ -48,9 +48,9 @@ echo $this->Form->button('Cancel', array(
     var toolbar = true;
     var attending = true;
     var year =<?php echo $year; ?>;
-    var today;
     var fromDate;
     var indicator;
+    var today;
 
     today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');

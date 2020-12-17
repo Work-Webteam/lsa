@@ -2,6 +2,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 <!-- JZip -->
 
+<script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
@@ -16,16 +19,14 @@
 <script type="text/javascript" src="/js/lsa.js"></script>
 
 <h2 class="page-title">Award Totals by Ceremony</h2>
-
-<p id="date_filter">
-    <span id="date-label-from" class="date-label">Changes Since: </span><input class="date_range_filter date" type="text" id="datepicker_from" />
-
-</p>
+<h4><?= $today ?></h4>
 
 <div class="datatable-container">
     <?= $this->Flash->render() ?>
+    <p id="date_filter">
+        <span id="date-label-from" class="date-label">Changes Since: </span><input class="date_range_filter date" type="text" id="datepicker_from" />
+    </p>
     <table id="data-table-1" class="table thead-dark table-striped table-sm">
-
     </table>
 </div>
 
@@ -49,6 +50,15 @@ echo $this->Form->button('Cancel', array(
     var year =<?php echo $year; ?>;
     var fromDate;
     var indicator;
+    var today;
+
+    today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    today = yyyy + "-" + mm + "-" + dd;
+
+
 
     $(document).ready(function() {
 
@@ -111,15 +121,17 @@ echo $this->Form->button('Cancel', array(
                 {
                     extend: 'csv',
                     text: 'Export to CSV',
+                    message: 'Award Totals by Ceremony - ' + today,
                     filename: function () {
-                        return year + '-AwardTotalsByCeremony';
+                        return year + '-AwardTotalsByCeremony-' + today;
                     },
                 },
                 {
                     extend: 'excel',
                     text: 'Export to Excel',
+                    message: 'Award Totals by Ceremony - ' + today,
                     filename: function () {
-                        return year + '-AwardTotalsByCeremony';
+                        return year + '-AwardTotalsByCeremony-' + today;
                     },
                 }
             ],

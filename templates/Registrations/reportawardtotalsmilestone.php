@@ -2,6 +2,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 <!-- JZip -->
 
+<script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
@@ -16,10 +19,13 @@
 <script type="text/javascript" src="/js/lsa.js"></script>
 
 <h2 class="page-title">Award Totals by Milestone</h2>
-
+<h4><?= $today ?></h4>
 
 <div class="datatable-container">
     <?= $this->Flash->render() ?>
+    <p id="date_filter">
+        <span id="date-label-from" class="date-label">Changes Since: </span><input class="date_range_filter date" type="text" id="datepicker_from" />
+    </p>
     <table id="data-table-1" class="table thead-dark table-striped table-sm">
 
     </table>
@@ -43,6 +49,15 @@ echo $this->Form->button('Cancel', array(
     var toolbar = true;
     var attending = true;
     var year =<?php echo $year; ?>;
+    var fromDate;
+    var indicator;
+    var today;
+
+    today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    today = yyyy + "-" + mm + "-" + dd;
 
     $(document).ready(function() {
 
@@ -69,13 +84,22 @@ echo $this->Form->button('Cancel', array(
                 {data: "total", title: "Total", orderable: false, className: "lsa-totals-column"},
                 {data: "attending", title: "Total Attending", orderable: false, className: "lsa-totals-column"},
                 {data: "notattending", title: "Total Not Attending", orderable: false, className: "lsa-totals-column"},
+                {data: "lastupdate", title: "Changes", orderable: false, render: function (data, type, row, meta) {
+                        indicator = "";
+                        if (fromDate) {
+                            if (data > fromDate) {
+                                indicator = "CHANGES" ; // data;
+                            }
+                        }
+                        return indicator;
+                    } },
             ];
 
 
         var strFooter = "<tfoot><th></th><th></th><th></th><th></th><th></th></tfoot>";
         $("#data-table-1").append(strFooter);
 
-        $('#data-table-1').DataTable( {
+        var dTable = $('#data-table-1').DataTable( {
             data: recipients,
             columns: cols,
             order: [[ 0, "asc" ]],
@@ -117,9 +141,6 @@ echo $this->Form->button('Cancel', array(
                 var api = this.api();
                 var col = 4;
 
-                console.log("footer");
-                console.log(data);
-
                 $( api.column( 0 ).footer() ).html( 'Totals' );
 
                 var totalSum1 = 0;
@@ -127,7 +148,6 @@ echo $this->Form->button('Cancel', array(
                 var totalSum3 = 0;
 
                 data.forEach(function callback(value1, index1) {
-                    console.log(value1);
                     totalSum1 += value1.total;
                     totalSum2 += value1.attending;
                     totalSum3 += value1.notattending;
@@ -137,7 +157,6 @@ echo $this->Form->button('Cancel', array(
                 $( api.column( 3 ).footer() ).html( totalSum2 );
                 $( api.column( 4 ).footer() ).html( totalSum3 );
             },
-
 
             // stateSave: true,
             pageLength: 25,
@@ -150,15 +169,17 @@ echo $this->Form->button('Cancel', array(
                 {
                     extend: 'csv',
                     text: 'Export to CSV',
+                    message: 'Award Totals by Milestone - ' + today,
                     filename: function () {
-                        return year + '-AwardTotalsByMilestone';
+                        return year + '-AwardTotalsByMilestone-' + today;
                     },
                 },
                 {
                     extend: 'excel',
                     text: 'Export to Excel',
+                    message: 'Award Totals by Milestone - ' + today,
                     filename: function () {
-                        return year + '-AwardTotalsByMilestone';
+                        return year + '-AwardTotalsByMilestone-' + today;
                     },
                 }
             ],
@@ -181,6 +202,21 @@ echo $this->Form->button('Cancel', array(
             $("div.toolbar").hide();
             $(".dt-buttons").hide();
         }
+
+
+        $("#datepicker_from").datepicker({
+            // showOn: "button",
+            // buttonImage: "/img/icons/calendar.png",
+            // buttonImageOnly: false,
+            "onSelect": function(date) {
+                fromDate = new Date(date).toISOString();
+                dTable.rows().invalidate().draw();
+            }
+        }).keyup(function() {
+            fromDate = new Date(this.value).toISOString();
+            dTable.rows().invalidate().draw();
+        }).next(".ui-datepicker-trigger").addClass("btn-light");
+
     } );
 
 

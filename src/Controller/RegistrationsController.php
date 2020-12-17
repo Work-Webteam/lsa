@@ -705,7 +705,11 @@ class RegistrationsController extends AppController
             'conditions' => $conditions,
             'contain' => [
                 'Awards',
-                'Milestones'
+                'Milestones',
+                'Log' => function(\Cake\ORM\Query $q) {
+                    return $q->where(["or" => ["type =" => "AWARD"]])
+                        ->order(["timestamp" => "DESC"]);
+                }
             ]
         ]);
 
@@ -719,21 +723,16 @@ class RegistrationsController extends AppController
             $info[$record->id] = $record;
         }
 
-        // load all Awards
+        // load all Milestones
         $milestones = [];
         $records = $this->Registrations->Milestones->find('all');
         foreach ($records as $record) {
             $milestones[$record->id] = $record;
         }
 
-//        echo "<pre>" . print_r($info, true) . "</pre>";
-
         $ctr = 0;
         $awards = [];
         foreach ($registrations as $registration) {
-            if ($ctr == 2) {
-//                echo "<pre>" . print_r($registration, true) . "</pre>";
-            }
             // generate key
             if ($registration->award_id > 0) {
                 $name = $info[$registration->award_id]->name;
@@ -743,25 +742,37 @@ class RegistrationsController extends AppController
                 $name = "PECSF Donation";
                 $type = $milestones[$registration->milestone_id]->name;
             }
-//            echo "<pre>" . $name . " : " . $type . "</pre>";
+
             // search list
-
-
             $key = $this->findAward($awards, $name, $type);
             if ($key == -1) {
                 $award = new \stdClass();
                 $award->award = $name;
                 $award->type = $type;
                 $award->milestone = $milestones[$registration->milestone_id]->name;
-                $award->count = 1;
+                $award->count = 0;
+                $award->lastupdate = $registration->created;
                 $awards[] = $award;
+                $key = $this->findAward($awards, $name, $type);
             }
-            else {
-                $awards[$key]->count++;
+            $awards[$key]->count++;
+            if ($registration->created > $awards[$key]->lastupdate) {
+                $awards[$key]->lastupdate = $registration->created;
+            }
+            if (isset($registration->log[0]->timestamp)) {
+                if ($registration->log[0]->timestamp > $awards[$key]->lastupdate) {
+                    $awards[$key]->lastupdate = $registration->log[0]->timestamp;
+                }
             }
 
         }
         $this->set(compact('awards'));
+
+        $year = date('Y');
+        $this->set(compact('year'));
+
+        $today = date("M d, Y");
+        $this->set(compact('today'));
 
     }
 
@@ -1452,13 +1463,11 @@ class RegistrationsController extends AppController
                 $value->guest_reqs .= $diet[$requirement]->name;
             }
             $temp[$key] = $value;
-//            debug($value);
         }
 
-//        debug($temp);
+
         $recipients = $temp;
 
-//        $this->set($recipients);
         $this->set(compact('recipients'));
 
 
@@ -1507,14 +1516,9 @@ class RegistrationsController extends AppController
         ]);
 
 
-//        $this->set($recipients);
         $this->set(compact('recipients'));
 
         $this->set('attending', $attending);
-
-//        $awards = $this->Registrations->Awards->find('list');
-//        $this->set('awards', $awards);
-
 
         $this->set('ceremony_id', $id);
 
@@ -1925,6 +1929,8 @@ class RegistrationsController extends AppController
         $year = date('Y');
         $this->set(compact('year'));
 
+        $today = date("M d, Y");
+        $this->set(compact('today'));
 
         $totals = [];
         foreach ($recipients as $recipient) {
@@ -2013,12 +2019,18 @@ class RegistrationsController extends AppController
                 'HomeCity',
                 'SupervisorCity',
                 'Ceremonies',
+                'Log' => function(\Cake\ORM\Query $q) {
+                    return $q->where(["or" => ["type =" => "ATTENDING", "type =" => "AWARD"]])
+                        ->order(["timestamp" => "DESC"]);
+                }
             ],
         ]);
 
         $year = date('Y');
         $this->set(compact('year'));
 
+        $today = date("M d, Y");
+        $this->set(compact('today'));
 
         $totals = [];
         foreach ($recipients as $recipient) {
@@ -2037,26 +2049,30 @@ class RegistrationsController extends AppController
                     $info->award = "PECSF Donation";
                     $info->award_options = "[]";
                 }
-                $info->total = 1;
+                $info->total = 0;
                 $info->attending = 0;
                 $info->notattending = 0;
-                if ($recipient->attending) {
-                    $info->attending++;
-                }
-                else {
-                    $info->notattending++;
-                }
+                $info->lastupdate = $recipient->created;
                 $totals[] = $info;
+                $i = $this->findInTotalsMilestone($totals, $recipient->milestone_id, $recipient->award_id);
+            }
+
+            $totals[$i]->total++;
+            if ($recipient->attending) {
+               $totals[$i]->attending++;
             }
             else {
-                $totals[$i]->total++;
-                if ($recipient->attending) {
-                    $totals[$i]->attending++;
-                }
-                else {
-                    $totals[$i]->notattending++;
+               $totals[$i]->notattending++;
+            }
+            if ($recipient->created > $totals[$i]->lastupdate) {
+                $totals[$i]->lastupdate = $recipient->created;
+            }
+            if (isset($recipient->log[0]->timestamp)) {
+                if ($recipient->log[0]->timestamp > $totals[$i]->lastupdate) {
+                    $totals[$i]->lastupdate = $recipient->log[0]->timestamp;
                 }
             }
+
         }
         $recipients = $totals;
         $this->set(compact('recipients'));
