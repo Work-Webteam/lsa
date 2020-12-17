@@ -1,34 +1,39 @@
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css"/>
-
-<?= $this->Html->css('lsa-datatables.css') ?>
+<!-- JQuery TODO: Exterminate! -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<!-- JZip -->
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
 
-<h2>Long Service Awards - Totals [year]</h2>
+<!-- PDF Generation Scripts -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+
+<!-- Custom Miscellaneous Script-->
+<script type="text/javascript" src="/js/lsa.js"></script>
+
+<h2 class="page-title">Long Service Awards - Totals [year]</h2>
 
 
 <div class="datatable-container">
     <?= $this->Flash->render() ?>
-    <table id="data-table-1" class="display ceremony-datatable" style="font-size: 12px; width:100%">
+    <table id="data-table-1" class="table thead-dark table-striped table-sm">
 
     </table>
 </div>
 
 
 <?php
-
+/*
 echo $this->Form->button('Cancel', array(
     'type' => 'button',
     'onclick' => 'location.href=\'/registrations\'',
     'class' => 'btn btn-secondary',
 ));
-
+*/
 ?>
 
 

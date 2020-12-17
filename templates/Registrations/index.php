@@ -20,7 +20,7 @@
     <div class="datatable-container">
         <?= $this->Flash->render() ?>
 
-        <table id="lsa-registrations" class="table thead-dark table-striped" >
+        <table id="lsa-registrations" class="table thead-dark table-striped table-sm" >
 
         </table>
     </div>
@@ -94,7 +94,7 @@
                 { data: "survey_participation", title: "LSA Consent", visible: false, orderable: false },
             ],
             // stateSave: true,
-            pageLength: 25,
+            pageLength: 10,
             pagingType: 'simple',
             lengthChange: false,
             // order: [[ 1, "asc" ]],

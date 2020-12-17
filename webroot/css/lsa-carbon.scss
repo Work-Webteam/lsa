@@ -274,7 +274,7 @@ body {
 body {
     font: {
         family: $primary-font-family;
-        size: 16px;
+
         weight: 400
     }
 }
@@ -329,13 +329,17 @@ body {
 //PAGE HEAD
 
 
-//Tables
+//TABLES
+
 .table td, .table th {
     vertical-align: middle;
 }
 .table thead th {
-  height: 4em;
+  height: 3em;
     vertical-align: middle;
+}
+.table tbody tr {
+    height: 3em;
 }
 
 //Reset Filters
@@ -346,7 +350,7 @@ body {
 .toolbar button.btn-primary {
     background-color:$interactive-1;
     color: $ui-01;
-    height: 4em;
+    height: 3em;
     width: 12em;
     padding-right: 4em;
     margin-right: 0.5em;
@@ -361,7 +365,7 @@ body {
 }
 .dt-button {
     border: none;
-    height: 4em;
+    height: 3em;
 
     background-color: $interactive-2;
     color: $ui-01;
@@ -379,7 +383,7 @@ body {
 .dataTables_filter input.form-control {
     width: 50vw;
     font-size: 1rem;
-    height: 4em;
+    height: 3em;
     border-radius: 0;
     float: left;
     position: relative;
@@ -424,10 +428,26 @@ body {
 
 .paginate_button.next a{
     background-color: $interactive-1;
-    color: $ui-01;
+    color: rgba(0,0,0,0);
+    background-image: url('/img/chevron--right.svg');
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: center;
 }
+
+.paginate_button.previous a {
+    background-image: url('/img/chevron--left.svg');
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: center;
+}
+
+
 .page-item:first-child .page-link, .page-item:last-child .page-link {
     border-radius: 0;
+    color: rgba(0,0,0,0);
 }
 
 //Buttons
