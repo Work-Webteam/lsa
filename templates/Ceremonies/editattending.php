@@ -1,5 +1,5 @@
 <div class="container" id="app">
-<h1>Edit Attendee</h1>
+<h1 class="page-title">Edit Attendee</h1>
 
 <?php
 

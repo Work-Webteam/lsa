@@ -1,4 +1,4 @@
-<h1><?= h($region->name) ?></h1>
+<h1 class="page-title"><?= h($region->name) ?></h1>
 
 <p>
     <?= $this->Html->link('Edit', ['action' => 'edit', $region->id], ['class' => 'btn btn-primary btn-lg', 'role' => 'button']) ?>

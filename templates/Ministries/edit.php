@@ -1,4 +1,4 @@
-<h1>Edit Ministry</h1>
+<h1 class="page-title">Edit Ministry</h1>
 <?php
 echo $this->Form->create($ministry);
 echo $this->Form->control('name');

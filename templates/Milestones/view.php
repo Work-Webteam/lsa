@@ -1,4 +1,4 @@
-<h1><?= h($milestone->name) ?></h1>
+<h1 class="page-title"><?= h($milestone->name) ?></h1>
 
 <p><?= h("Years: " . $milestone->years) ?></p>
 

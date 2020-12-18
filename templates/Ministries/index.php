@@ -1,5 +1,5 @@
 
-<h1>Ministries</h1>
+<h1 class="page-title">Ministries</h1>
 <?= $this->Html->link('Add Ministry', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 <table>
     <tr>

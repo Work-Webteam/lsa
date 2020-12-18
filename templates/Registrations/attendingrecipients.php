@@ -1,4 +1,4 @@
-<h2>Ceremony Night <?= $ceremony->night ?> - <?= date("l M j, Y g:ia", strtotime($ceremony->date)) ?></h2>
+<h2 class="page-title">Ceremony Night <?= $ceremony->night ?> - <?= date("l M j, Y g:ia", strtotime($ceremony->date)) ?></h2>
 <h3>Attending Recipients</h3>
 <?php
 

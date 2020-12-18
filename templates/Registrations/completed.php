@@ -1,4 +1,4 @@
-<h1>Congratulations</h1>
+<h1 class="page-title">Congratulations</h1>
 
 <h3><?= $registration->first_name ?> <?= $registration->last_name ?></h3>
 <p>You have successfully registered for the <?= date("Y") ?> Long Service Awards</p>

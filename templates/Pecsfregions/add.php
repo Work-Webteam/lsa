@@ -1,5 +1,5 @@
 
-<h1>Add PECSF Region</h1>
+<h1 class="page-title">Add PECSF Region</h1>
 <?php
 echo $this->Form->create($region);
 // Hard code the user for now.

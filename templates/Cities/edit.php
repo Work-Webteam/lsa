@@ -1,4 +1,4 @@
-<h1>Edit City</h1>
+<h1 class="page-title">Edit City</h1>
 <?php
 echo $this->Form->create($city);
 echo $this->Form->control('name');

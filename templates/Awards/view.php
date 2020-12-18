@@ -1,4 +1,4 @@
-<h1><?= h($award->name) ?></h1>
+<h1 class="page-title"><?= h($award->name) ?></h1>
 <p><?= h("Abbreviation: " . $award->abbreviation) ?></p>
 <p><?= h("Milestone: " . $milestone->name) ?></p>
 <p><?= h($award->description) ?></p>

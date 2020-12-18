@@ -1,4 +1,4 @@
-<h1>Awards</h1>
+<h1 class="page-title">Awards</h1>
 <?= $this->Html->link('Add Award', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 <table>
     <tr>

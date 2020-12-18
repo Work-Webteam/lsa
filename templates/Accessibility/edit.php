@@ -1,4 +1,4 @@
-<h1>Edit Accessibility Requirement</h1>
+<h1 class="page-title">Edit Accessibility Requirement</h1>
 <?php
 echo $this->Form->create($accessibility);
 echo $this->Form->control('name');

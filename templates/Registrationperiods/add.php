@@ -1,4 +1,4 @@
-<h1>Add Registration Period</h1>
+<h1 class="page-title">Add Registration Period</h1>
 <?php
 echo $this->Form->create($registrationperiod);
 

@@ -1,4 +1,4 @@
-<h1>Diet</h1>
+<h1 class="page-title">Diet</h1>
 <?= $this->Html->link('Add Diet', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 <table>
     <tr>

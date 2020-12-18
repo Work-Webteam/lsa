@@ -1,4 +1,4 @@
-<h1>Edit PECSF Region</h1>
+<h1 class="page-title">Edit PECSF Region</h1>
 <?php
 echo $this->Form->create($region);
 echo $this->Form->control('name');

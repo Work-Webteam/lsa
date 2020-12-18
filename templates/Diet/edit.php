@@ -1,4 +1,4 @@
-<h1>Edit Diet</h1>
+<h1 class="page-title">Edit Diet</h1>
 <?php
 echo $this->Form->create($diet);
 echo $this->Form->control('name');

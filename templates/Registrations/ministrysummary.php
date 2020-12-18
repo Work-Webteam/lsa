@@ -1,4 +1,4 @@
-<h1>Ministry Summary</h1>
+<h1 class="page-title">Ministry Summary</h1>
 
 <table>
     <tr>

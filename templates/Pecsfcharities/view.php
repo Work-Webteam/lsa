@@ -1,4 +1,4 @@
-<h1><?= h($charity->name) ?></h1>
+<h1 class="page-title"><?= h($charity->name) ?></h1>
 <p><?= h($charity->Pecsfregions['name']) ?></p>
 <p><?= h($charity->vendor_code) ?></p>
 <p>
