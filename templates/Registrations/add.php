@@ -1,5 +1,5 @@
 
-<h1>Add Registration</h1>
+<h1 class="page-title">Add Registration</h1>
 <?php
 echo $this->Form->create($registration);
 // Hard code the user for now.

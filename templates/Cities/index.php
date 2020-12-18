@@ -1,4 +1,4 @@
-<h1>Cities</h1>
+<h1 class="page-title">Cities</h1>
 <?= $this->Html->link('Add City', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 <table>
     <tr>

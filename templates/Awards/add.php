@@ -1,4 +1,4 @@
-<h1>Add Award</h1>
+<h1 class="page-title">Add Award</h1>
 <?php
 echo $this->Form->create($award, ['type' => 'file']);
 

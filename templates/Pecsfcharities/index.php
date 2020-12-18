@@ -1,4 +1,4 @@
-<h1>PECSF Charities</h1>
+<h1 class="page-title">PECSF Charities</h1>
 <?= $this->Html->link('Add PECSF Charity', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 
 <table>

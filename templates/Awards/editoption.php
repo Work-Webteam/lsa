@@ -1,4 +1,4 @@
-<h1>Edit Option</h1>
+<h1 class="page-title">Edit Option</h1>
 <?php
 echo $this->Form->create();
 

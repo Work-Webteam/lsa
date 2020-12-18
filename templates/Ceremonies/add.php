@@ -1,4 +1,4 @@
-<h1>Add Ceremony</h1>
+<h1 class="page-title">Add Ceremony</h1>
 <?php
 echo $this->Form->create($ceremony);
 //$this->Form->templates(

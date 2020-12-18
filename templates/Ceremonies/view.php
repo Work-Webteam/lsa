@@ -1,4 +1,4 @@
-<h1><?= h("Ceremony Night " . $ceremony->night) ?></h1>
+<h1 class="page-title"><?= h("Ceremony Night " . $ceremony->night) ?></h1>
 
 <p><?= h($ceremony->date) ?></p>
 

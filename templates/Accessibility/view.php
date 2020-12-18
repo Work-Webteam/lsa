@@ -1,4 +1,4 @@
-<h1><?= h($acessibility->name) ?></h1>
+<h1 class="page-title"><?= h($acessibility->name) ?></h1>
 
 <p>
     <?= $this->Html->link('Edit', ['action' => 'edit', $accessibility->id], ['class' => 'btn btn-primary btn-lg', 'role' => 'button']) ?>

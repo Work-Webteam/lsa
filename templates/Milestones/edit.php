@@ -1,4 +1,4 @@
-<h1>Edit Milestone</h1>
+<h1 class="page-title">Edit Milestone</h1>
 <?php
 echo $this->Form->create($milestone);
 echo $this->Form->control('name');

@@ -1,4 +1,4 @@
-    <h1>Accessibility Requirements</h1>
+    <h1 class="page-title">Accessibility Requirements</h1>
     <?= $this->Html->link('Add Accessibility Requirement', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
     <table>
 

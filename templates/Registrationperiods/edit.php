@@ -1,4 +1,4 @@
-<h1>Edit Ceremony</h1>
+<h1 class="page-title">Edit Ceremony</h1>
 <?php
 echo $this->Form->create($registrationperiod);
 echo $this->Form->control('registration_year');

@@ -1,4 +1,4 @@
-<h1>Add Categories</h1>
+<h1 class="page-title">Add Categories</h1>
 <?php
 echo $this->Form->create($category);
 // Hard code the user for now.

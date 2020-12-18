@@ -1,4 +1,4 @@
-<h1>Add Value</h1>
+<h1 class="page-title">Add Value</h1>
 <?php
 echo $this->Form->create();
 

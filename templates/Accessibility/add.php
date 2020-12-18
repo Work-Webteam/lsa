@@ -1,5 +1,5 @@
 
-<h1>Add Accessibility Requirement</h1>
+<h1 class="page-title">Add Accessibility Requirement</h1>
 <?php
 echo $this->Form->create($accessibility);
 // Hard code the user for now.

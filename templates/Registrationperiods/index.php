@@ -1,5 +1,5 @@
 
-<h1>Registration Periods</h1>
+<h1 class="page-title">Registration Periods</h1>
 
 <?= $this->Html->link('Add Registration Period', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
 <table>

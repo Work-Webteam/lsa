@@ -1,4 +1,4 @@
-<h1><?= h(category->name) ?></h1>
+<h1 class="page-title"><?= h(category->name) ?></h1>
 
 <p>
     <?= $this->Html->link('Edit', ['action' => 'edit', $city->id], ['class' => 'btn btn-primary btn-lg', 'role' => 'button']) ?>

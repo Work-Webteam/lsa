@@ -1,4 +1,4 @@
-<h1>Ceremony Summary</h1>
+<h1 class="page-title">Ceremony Summary</h1>
 
 <h4>Total Attendees: <?= $totals->recipients + $totals->guests; ?></h4>
 <h4>Recipients: <?= $totals->recipients; ?></h4>

@@ -1,5 +1,5 @@
 
-<h1>Add Diet</h1>
+<h1 class="page-title">Add Diet</h1>
 <?php
 echo $this->Form->create($diet);
 // Hard code the user for now.

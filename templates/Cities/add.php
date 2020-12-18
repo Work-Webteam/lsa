@@ -1,4 +1,4 @@
-<h1>Add City</h1>
+<h1 class="page-title">Add City</h1>
 <?php
 echo $this->Form->create($city);
 // Hard code the user for now.

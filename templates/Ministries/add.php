@@ -1,5 +1,5 @@
 
-<h1>Add Ministry</h1>
+<h1 class="page-title">Add Ministry</h1>
 <?php
 echo $this->Form->create($ministry);
 // Hard code the user for now.

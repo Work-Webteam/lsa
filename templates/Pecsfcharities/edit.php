@@ -1,4 +1,4 @@
-<h1>Edit Charity</h1>
+<h1 class="page-title">Edit Charity</h1>
 <?php
 echo $this->Form->create($charity);
 echo $this->Form->control('pecsf_region_id', ['options' => $regions]);
