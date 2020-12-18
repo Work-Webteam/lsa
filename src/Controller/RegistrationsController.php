@@ -349,7 +349,7 @@ class RegistrationsController extends AppController
                 if ($registration->milestone_id <> $old->milestone_id) {
                     $milestone = $this->Registrations->Milestones->findById($registration->milestone_id)->firstOrFail();
                     $description = "Milestone changed to " . $milestone->name;
-                    $this->logChanges($registration->id, "MILESTONE", "CHANGE", $description);
+                    $this->logChanges($registration->id, "MILESTONE", "CHANGE", $description, $old->milestone_id, $registration->milestone_id);
                 }
 
                 if ($registration->award_id <> $old->award_id) {
@@ -361,31 +361,35 @@ class RegistrationsController extends AppController
                         $name = $award->name;
                     }
                     $description = "Award changed to " . $name;
-                    $this->logChanges($registration->id, "AWARD", "CHANGE", $description);
+                    $this->logChanges($registration->id, "AWARD", "CHANGE", $description, $old->award_id, $registration->award_id);
                 }
 
                 // if attending flag changed
                 if ($registration->attending <> $old->attending) {
                     $description = $registration->attending ? "Attending YES" : "Attending NO";
-                    $this->logChanges($registration->id, "ATTENDING", "CHANGE", $description);
+                    $this->logChanges($registration->id, "ATTENDING", "CHANGE", $description, $old->attending, $registration->attending);
                 }
 
                 // if guest flag changed
                 if ($registration->guest <> $old->guest) {
                     $description = $registration->guest ? "Guest YES" : "Guest NO";
-                    $this->logChanges($registration->id, "GUEST", "CHANGE", $description);
+                    $this->logChanges($registration->id, "GUEST", "CHANGE", $description, $old->guest, $registration->guest);
                 }
 
                 // if accessibility flag changed
                 if ($registration->accessibility_recipient <> $old->accessibility_recipient || $registration->accessibility_guest <> $old->accessibility_guest ) {
                     $description = ($registration->accessibility_recipient || $registration->accessibility_guest) ? "Accessibility YES" : "Accessibility NO";
-                    $this->logChanges($registration->id, "ACCESSIBILITY", "CHANGE", $description);
+                    $old = ($old->accessibility_recipient || $old->accessibility_guest) ? 1 : 0;
+                    $new = ($registration->accessibility_recipient || $registration->accessibility_guest) ? 1 : 0;
+                    $this->logChanges($registration->id, "ACCESSIBILITY", "CHANGE", $description, $old, $new);
                 }
 
                 // if diet flag changed
                 if ($registration->recipient_diet <> $old->recipient_diet || $registration->guest_diet <> $old->guest_diet ) {
                     $description = ($registration->recipient_diet || $registration->guest_diet) ? "Diet YES" : "Diet NO";
-                    $this->logChanges($registration->id, "DIET", "CHANGE", $description);
+                    $old = ($old->recipient_diet || $registration->$old) ? 1 : 0;
+                    $new = ($registration->recipient_diet || $registration->guest_diet) ? 1 : 0;
+                    $this->logChanges($registration->id, "DIET", "CHANGE", $description, $old, $new);
                 }
 
 
@@ -510,7 +514,8 @@ class RegistrationsController extends AppController
 
     }
 
-    public function logChanges($id, $type, $operation, $description) {
+
+    public function logChanges($id, $type, $operation, $description, $old = NULL, $new = NULL) {
         $log = $this->Registrations->Log->newEmptyEntity();
         $session = $this->getRequest()->getSession();
         $log->user_idir = $session->read('user.idir');
@@ -520,6 +525,10 @@ class RegistrationsController extends AppController
         $log->type = $type;
         $log->operation = $operation;
         $log->description = $description;
+        if ($operation <> "NEW") {
+            $log->old_value = $old;
+        }
+        $log->new_value = $new;
         if ($this->Registrations->Log->save($log)) {
         }
     }
@@ -609,19 +618,23 @@ class RegistrationsController extends AppController
 
                 if ($operation == "NEW" || $oldAttending <> $registration->attending) {
                     $description = $registration->attending ? "Attending YES" : "Attending NO";
-                    $this->logChanges($registration->id, "ATTENDING", "CHANGE", $description);
+                    $this->logChanges($registration->id, "ATTENDING", $operation, $description, $oldAttending, $registration->attending);
                 }
                 if ($operation == "NEW" || $oldGuest <> $registration->guest) {
                     $description = $registration->guest ? "Guest YES" : "Guest NO";
-                    $this->logChanges($registration->id, "GUEST", "CHANGE", $description);
+                    $this->logChanges($registration->id, "GUEST", $operation, $description, $oldGuest, $registration->guest);
                 }
                 if ($operation == "NEW" || $oldRecipientAccess <> $registration->accessibility_recipient || $oldGuestAccess <> $registration->accessibility_guest) {
                     $description = ($registration->accessibility_recipient || $registration->accessibility_guest) ? "Accessibility YES" : "Accessibility NO";
-                    $this->logChanges($registration->id, "ACCESSIBILITY", "CHANGE", $description);
+                    $old = ($oldRecipientAccess || $oldGuestAccess) ? 1 : 0;
+                    $new = ($registration->accessibility_recipient || $registration->accessibility_guest) ? 1 : 0;
+                    $this->logChanges($registration->id, "ACCESSIBILITY", $operation, $description, $old, $new);
                 }
                 if ($operation == "NEW" || $oldRecipientDiet <> $registration->recipient_diet || $oldGuestDiet <> $registration->guest_diet) {
                     $description = ($registration->recipient_diet || $registration->guest_diet) ? "Diet YES" : "Diet NO";
-                    $this->logChanges($registration->id, "DIET", "CHANGE", $description);
+                    $old = ($oldRecipientDiet || $oldGuestDiet) ? 1 : 0;
+                    $new = ($registration->recipient_diet || $registration->guest_diet) ? 1 : 0;
+                    $this->logChanges($registration->id, "DIET", $operation, $description, $old, $new);
                 }
                 $this->Flash->success(__('Registration has been updated.'));
                 return $this->redirect('/');

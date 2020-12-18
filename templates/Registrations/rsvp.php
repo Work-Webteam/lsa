@@ -7,10 +7,10 @@
 
         echo $this->Form->hidden('attending', ['v-model' => 'recipientAttending']);
         echo $this->Form->hidden('guest', ['v-model' => 'recipientGuest']);
-        echo $this->Form->hidden('accessibility_recipient', ['v-model' => 'recipientAccessibilityRecipient']);
-        echo $this->Form->hidden('accessibility_guest', ['v-model' => 'recipientAccessibilityGuest']);
-        echo $this->Form->hidden('recipient_diet', ['v-model' => 'recipientDietaryRecipient']);
-        echo $this->Form->hidden('guest_diet', ['v-model' => 'recipientDietaryGuest']);
+        echo $this->Form->hidden('accessibility_recipient');
+        echo $this->Form->hidden('accessibility_guest');
+        echo $this->Form->hidden('recipient_diet');
+        echo $this->Form->hidden('guest_diet');
         echo $this->Form->hidden('accessibility_requirements_recipient');
         echo $this->Form->hidden('accessibility_requirements_guest');
         echo $this->Form->hidden('dietary_requirements_recipient');
@@ -231,6 +231,9 @@
 
         mounted() {
             window.addEventListener('load', () => {
+                // console.log(this.recipientAttending);
+                // console.log(this.recipientGuest);
+                // console.log(this.recipientResponded);
             if (this.recipientAttending && this.recipientGuest) {
                 this.buttonAttendingWith(2);
             }
@@ -292,26 +295,48 @@
 
 
                 if (this.currentAttending == 2) {
-                    this.recipientAttending = true;
-                    this.recipientGuest = true;
+                    this.recipientAttending = 1;
+                    this.recipientGuest = 1;
                 }
                 else if (this.currentAttending == 1) {
-                    this.recipientAttending = true;
-                    this.recipientGuest = false;
+                    this.recipientAttending = 1;
+                    this.recipientGuest = 0;
                 }
                 else {
-                    this.recipientAttending = false;
-                    this.recipientGuest = false;
+                    this.recipientAttending = 0;
+                    this.recipientGuest = 0;
+                }
+
+
+                if (this.recipientAccessibilityRecipient) {
+                    $('input[name=accessibility_recipient]').val(1);
+                }
+                else {
+                    $('input[name=accessibility_recipient]').val(0);
+                }
+                if (this.recipientAccessibilityGuest) {
+                    $('input[name=accessibility_guest]').val(1);
+                }
+                else {
+                    $('input[name=accessibility_guest]').val(0);
+                }
+                if (this.recipientDietaryRecipient) {
+                    $('input[name=recipient_diet]').val(1);
+                }
+                else {
+                    $('input[name=recipient_diet]').val(0);
+                }
+                if (this.recipientDietaryGuest) {
+                    $('input[name=guest_diet]').val(1);
+                }
+                else {
+                    $('input[name=guest_diet]').val(0);
                 }
 
                 $('input[name=accessibility_requirements_recipient]').val(JSON.stringify(this.accessRecipientSelections));
                 $('input[name=accessibility_requirements_guest]').val(JSON.stringify(this.accessGuestSelections));
                 $('input[name=dietary_requirements_recipient]').val(JSON.stringify(this.dietRecipientSelections));
                 $('input[name=dietary_requirements_guest]').val(JSON.stringify(this.dietGuestSelections));
-
-
-
-
 
             },
 

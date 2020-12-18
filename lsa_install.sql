@@ -333,6 +333,8 @@ CREATE TABLE log (
     type VARCHAR(16),
     operation VARCHAR(16),
     description VARCHAR(255),
+    old_value INT DEFAULT NULL,
+    new_value INT DEFAULT NULL,
 
     FOREIGN KEY registration_key (registration_id) REFERENCES registrations(id)
 

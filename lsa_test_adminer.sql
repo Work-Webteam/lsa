@@ -2288,34 +2288,37 @@ CREATE TABLE `log` (
   `type` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
   `operation` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
   `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `old_value` int(11) DEFAULT NULL,
+  `new_value` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `registration_key` (`registration_id`),
   CONSTRAINT `log_ibfk_1` FOREIGN KEY (`registration_id`) REFERENCES `registrations` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `log` (`id`, `user_idir`, `user_guid`, `timestamp`, `registration_id`, `type`, `operation`, `description`) VALUES
-(1,	'kblack',	'5F4CF1B88565FCA2E8D17AD85B57CE0A',	'2020-07-23 23:35:43',	15,	'ATTENDING',	'NEW',	'Attending YES'),
-(2,	'kblack',	'5F4CF1B88565FCA2E8D17AD85B57CE0A',	'2020-07-23 23:36:43',	15,	'GUEST',	'NEW',	'Guest NO'),
-(3,	'kblack',	'5F4CF1B88565FCA2E8D17AD85B57CE0A',	'2020-07-23 23:37:43',	15,	'ACCESSIBILITY',	'NEW',	'Accessibility NO'),
-(4,	'kblack',	'5F4CF1B88565FCA2E8D17AD85B57CE0A',	'2020-07-23 23:38:43',	15,	'DIET',	'NEW',	'Diet NO'),
-(5,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-07-23 17:30:01',	7,	'ATTENDING',	'CHANGE',	'Attending NO'),
-(6,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-07-23 17:30:01',	7,	'GUEST',	'CHANGE',	'Guest NO'),
-(7,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-07-28 17:33:22',	7,	'ATTENDING',	'CHANGE',	'Attending YES'),
-(8,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-07-28 17:33:22',	7,	'GUEST',	'CHANGE',	'Guest YES'),
-(9,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-07-29 23:15:21',	26,	'ATTENDING',	'NEW',	'Attending YES'),
-(10,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-07-29 23:15:21',	26,	'GUEST',	'NEW',	'Guest YES'),
-(11,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-07-29 23:15:21',	26,	'ACCESSIBILITY',	'NEW',	'Accessibility NO'),
-(12,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-07-29 23:15:21',	26,	'DIET',	'NEW',	'Diet NO'),
-(13,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-12-07 22:34:03',	2,	'ATTENDING',	'CHANGE',	'Attending NO'),
-(14,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-12-07 22:34:03',	2,	'GUEST',	'CHANGE',	'Guest NO'),
-(15,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-12-07 22:34:03',	2,	'ACCESSIBILITY',	'CHANGE',	'Accessibility YES'),
-(16,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-12-10 18:50:24',	28,	'ATTENDING',	'NEW',	'Attending NO'),
-(17,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-12-10 18:50:24',	28,	'GUEST',	'NEW',	'Guest NO'),
-(18,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-12-10 18:50:24',	28,	'ACCESSIBILITY',	'NEW',	'Accessibility NO'),
-(19,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-12-10 18:50:24',	28,	'DIET',	'NEW',	'Diet NO'),
-(20,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-12-10 22:03:19',	11,	'MILESTONE',	'CHANGE',	'Milestone changed to 25 Years'),
-(21,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-12-10 22:03:19',	11,	'AWARD',	'CHANGE',	'Award changed to Cross® Pen'),
-(22,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-12-17 20:19:27',	11,	'AWARD',	'CHANGE',	'Award changed to Bugatti® writing case and tablet holder');
+INSERT INTO `log` (`id`, `user_idir`, `user_guid`, `timestamp`, `registration_id`, `type`, `operation`, `description`, `old_value`, `new_value`) VALUES
+(1,	'kblack',	'5F4CF1B88565FCA2E8D17AD85B57CE0A',	'2020-07-23 23:35:43',	15,	'ATTENDING',	'NEW',	'Attending YES',	NULL,	1),
+(2,	'kblack',	'5F4CF1B88565FCA2E8D17AD85B57CE0A',	'2020-07-23 23:36:43',	15,	'GUEST',	'NEW',	'Guest NO',	NULL,	0),
+(3,	'kblack',	'5F4CF1B88565FCA2E8D17AD85B57CE0A',	'2020-07-23 23:37:43',	15,	'ACCESSIBILITY',	'NEW',	'Accessibility NO',	NULL,	0),
+(4,	'kblack',	'5F4CF1B88565FCA2E8D17AD85B57CE0A',	'2020-07-23 23:38:43',	15,	'DIET',	'NEW',	'Diet NO',	NULL,	0),
+(5,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-07-23 17:30:01',	7,	'ATTENDING',	'CHANGE',	'Attending NO',	1,	0),
+(6,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-07-23 17:30:01',	7,	'GUEST',	'CHANGE',	'Guest NO',	1,	0),
+(7,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-07-28 17:33:22',	7,	'ATTENDING',	'CHANGE',	'Attending YES',	0,	1),
+(8,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-07-28 17:33:22',	7,	'GUEST',	'CHANGE',	'Guest YES',	0,	1),
+(9,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-07-29 23:15:21',	26,	'ATTENDING',	'NEW',	'Attending YES',	NULL,	1),
+(10,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-07-29 23:15:21',	26,	'GUEST',	'NEW',	'Guest YES',	NULL,	1),
+(11,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-07-29 23:15:21',	26,	'ACCESSIBILITY',	'NEW',	'Accessibility NO',	NULL,	0),
+(12,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-07-29 23:15:21',	26,	'DIET',	'NEW',	'Diet NO',	NULL,	0),
+(13,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-12-07 22:34:03',	2,	'ATTENDING',	'CHANGE',	'Attending NO',	1,	0),
+(14,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-12-07 22:34:03',	2,	'GUEST',	'CHANGE',	'Guest NO',	1,	0),
+(15,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-12-07 22:34:03',	2,	'ACCESSIBILITY',	'CHANGE',	'Accessibility YES',	0,	1),
+(16,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-12-10 18:50:24',	28,	'ATTENDING',	'NEW',	'Attending NO',	NULL,	0),
+(17,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-12-10 18:50:24',	28,	'GUEST',	'NEW',	'Guest NO',	NULL,	0),
+(18,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-12-10 18:50:24',	28,	'ACCESSIBILITY',	'NEW',	'Accessibility NO',	NULL,	0),
+(19,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-12-10 18:50:24',	28,	'DIET',	'NEW',	'Diet NO',	NULL,	0),
+(20,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-12-10 22:03:19',	11,	'MILESTONE',	'CHANGE',	'Milestone changed to 25 Years',	2,	1),
+(21,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-12-10 22:03:19',	11,	'AWARD',	'CHANGE',	'Award changed to Cross® Pen',	0,	1),
+(22,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-12-17 20:19:27',	11,	'AWARD',	'CHANGE',	'Award changed to Bugatti® writing case and tablet holder',	1,	2),
+(23,	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	'2020-12-17 23:54:41',	27,	'AWARD',	'CHANGE',	'Award changed to Blue Flower Bouquet glass vase',	0,	11);
 
 DROP TABLE IF EXISTS `milestones`;
 CREATE TABLE `milestones` (
@@ -5251,7 +5254,7 @@ INSERT INTO `registrations` (`id`, `created`, `modified`, `user_idir`, `user_gui
 (24,	'2020-06-23 18:43:15',	'2020-06-23 18:43:15',	'rjkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	34524,	'Pete',	'Honore',	3,	11,	'[]',	NULL,	0,	2020,	2020,	0,	0,	NULL,	NULL,	0,	0,	0,	0,	0.0000,	0,	0.0000,	NULL,	'',	0,	NULL,	0,	NULL,	NULL,	NULL,	NULL,	0,	0,	0,	0,	0,	4,	NULL,	NULL,	'[]',	'[]',	NULL,	NULL,	NULL,	NULL,	11,	'Branch 964',	NULL,	NULL,	NULL,	NULL,	'[]',	NULL,	NULL,	NULL,	NULL,	'[]',	NULL,	'',	'565 Superior',	'',	1997,	'BC',	'V9E 5Z3',	'345 Barner',	'',	1988,	'BC',	'V9L 7P4',	'(250) 247-5433',	'(250) 555-1234',	'',	'phonore@gov.bc.ca',	'',	'Gretchen',	'Wilson',	'',	'523 Waterford',	'234',	1988,	'BC',	'V9P 2H6',	'gwilson@gov.bc.ca',	NULL,	NULL,	NULL,	0),
 (25,	'2020-07-23 19:13:51',	'2020-07-29 23:13:48',	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	99999,	'Homer',	'Ancaster',	5,	18,	'[]',	'',	0,	2020,	2019,	0,	0,	'',	0,	0,	0,	0,	0,	0.0000,	0,	0.0000,	NULL,	'',	0,	NULL,	0,	NULL,	'',	NULL,	NULL,	0,	0,	0,	0,	0,	NULL,	NULL,	NULL,	'[]',	'[]',	'',	'',	'',	NULL,	10,	'Branch 13',	0,	0,	0,	NULL,	'[]',	NULL,	NULL,	NULL,	NULL,	'[]',	NULL,	'',	'123 Office Street',	'',	1997,	'BC',	'V8V 4R6',	'565 Home Street',	'',	1997,	'BC',	'V8V 4R6',	'(250) 555-0772',	'(250) 555-5476',	'',	'hsimpson@gov.bc.ca',	'',	'Franklin',	'Hughes',	'',	'123 Office Street',	'',	11,	'BC',	'V8V 4R6',	'fhughes@gov.bc.ca',	NULL,	NULL,	NULL,	0),
 (26,	'2020-07-29 23:13:00',	'2020-12-11 19:35:39',	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	23453,	'Destiny',	'Petrel',	3,	0,	'[\"$300.00 Donation - PECSF Region Charity Fund\"]',	'',	0,	2020,	2019,	0,	0,	'',	0,	1,	0,	28,	0,	300.0000,	0,	0.0000,	NULL,	'Destiny',	0,	NULL,	0,	NULL,	'some notes go here.',	NULL,	'1970-01-01 00:00:00',	1,	1,	1,	0,	0,	4,	0,	0,	'[]',	'[]',	'',	'',	'',	NULL,	2,	'Branch 13',	0,	0,	0,	0,	'[]',	'',	'Guy',	'Sum',	0,	'[]',	'',	'',	'123 Office Street',	'',	1997,	'BC',	'V8V 4R6',	'565 Home Street',	'',	1997,	'BC',	'V8V 4R6',	'(250) 555-0772',	'(250) 555-5476',	'',	'dpetrel@localhost.com',	'dpetrel.home@localhost.com',	'Franklin',	'Hughes',	'',	'123 Office Street',	'',	1997,	'BC',	'V8V 4R6',	'fhughes@gov.bc.ca',	NULL,	NULL,	NULL,	0),
-(27,	'2020-08-06 20:40:28',	'2020-08-06 20:40:28',	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	99999,	'Andy',	'Aaronson',	3,	0,	'[]',	NULL,	0,	2020,	2020,	0,	0,	NULL,	NULL,	0,	0,	0,	0,	0.0000,	0,	0.0000,	NULL,	'',	0,	NULL,	0,	NULL,	NULL,	NULL,	NULL,	0,	1,	1,	0,	0,	4,	NULL,	NULL,	'[]',	'[]',	NULL,	NULL,	NULL,	NULL,	2,	'Branch 13',	NULL,	NULL,	NULL,	NULL,	'[]',	NULL,	'Betty',	'Aaronson',	NULL,	'[]',	NULL,	'',	'123 Office Street',	'',	1997,	'BC',	'V8V 4R6',	'565 Home Street',	'',	1997,	'BC',	'V8V 4R6',	'(250) 555-0772',	'(250) 555-5476',	'',	'aaaronson@gov.bc.ca',	'',	'Franklin',	'Hughes',	'',	'123 Office Street',	'',	1997,	'BC',	'V8V 4R6',	'fhughes@gov.bc.ca',	NULL,	NULL,	NULL,	0),
+(27,	'2020-08-06 20:40:28',	'2020-12-17 23:54:41',	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	99999,	'Andy',	'Aaronson',	3,	11,	'[]',	'',	0,	2020,	2020,	0,	0,	'',	NULL,	0,	NULL,	0,	0,	0.0000,	0,	0.0000,	NULL,	'',	0,	NULL,	0,	NULL,	'',	NULL,	'1970-01-01 00:00:00',	0,	1,	1,	0,	0,	4,	0,	0,	'[]',	'[]',	'',	'',	'',	NULL,	2,	'Branch 13',	0,	0,	0,	0,	'[]',	'',	'Betty',	'Aaronson',	0,	'[]',	'',	'',	'123 Office Street',	'',	1997,	'BC',	'V8V 4R6',	'565 Home Street',	'',	1997,	'BC',	'V8V 4R6',	'(250) 555-0772',	'(250) 555-5476',	'',	'aaaronson@gov.bc.ca',	'',	'Franklin',	'Hughes',	'',	'123 Office Street',	'',	1997,	'BC',	'V8V 4R6',	'fhughes@gov.bc.ca',	NULL,	NULL,	NULL,	0),
 (28,	'2020-08-06 21:43:28',	'2020-12-10 18:41:42',	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	99999,	'Larry',	'Mullen',	1,	NULL,	'[]',	'',	0,	2020,	2020,	0,	0,	'Larry Mullen Jnr.',	NULL,	0,	NULL,	0,	0,	0.0000,	0,	0.0000,	NULL,	'',	0,	NULL,	0,	NULL,	'',	NULL,	'1970-01-01 00:00:00',	1,	NULL,	NULL,	0,	0,	4,	0,	0,	'[]',	'[]',	'',	'',	'',	NULL,	2,	'Branch 13',	0,	0,	0,	0,	'[]',	'',	'',	'',	0,	'[]',	'',	'',	'123 Office Street',	'',	1997,	'BC',	'V8V 4R6',	'565 Home Street',	'',	1997,	'BC',	'V8V 4R6',	'(250) 555-0772',	'(250) 555-5476',	'',	'hsimpson@gov.bc.ca',	'',	'Franklin',	'Hughes',	'',	'123 Office Street',	'',	1997,	'BC',	'V8V 4R6',	'fhughes@gov.bc.ca',	NULL,	NULL,	NULL,	0);
 
 DROP TABLE IF EXISTS `roles`;
@@ -5353,4 +5356,4 @@ INSERT INTO `vip` (`id`, `created`, `modified`, `user_idir`, `user_guid`, `year`
 (10,	'2020-08-31 22:39:07',	'2020-08-31 22:39:07',	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	2020,	9,	7,	NULL,	2,	'Katherin',	'Bollinger',	'',	'Title',	'9234 Nashville St.',	'',	1997,	'BC',	'V5W 6B3',	'(250) 555-1111',	'',	'',	'kbollinger@localhost.com',	'Margie',	'Powers',	'',	'',	'(250) 555-0245',	'',	NULL,	-1,	0,	1,	NULL,	0,	NULL,	'',	'',	'',	'',	''),
 (11,	'2020-09-01 18:01:31',	'2020-09-01 18:01:31',	'rkuyvenh',	'60DCD2AF73FB44AE9345F11B71CD3495',	2020,	1,	7,	NULL,	4,	'Lillian',	'Lane',	'The Honourable',	'Minister of Finance',	'45634 Butler St.',	'',	1997,	'BC',	'V9H 9L4',	'(250) 555-5634',	'',	'',	'llane@localhost.com',	'Clifton',	'Gonzalez',	'',	'',	'(250) 555-7435',	'',	NULL,	1,	0,	1,	1,	1,	NULL,	'',	'',	'',	'',	'');
 
--- 2020-12-17 18:33:30
+-- 2020-12-18 19:07:27
