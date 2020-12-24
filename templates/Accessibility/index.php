@@ -42,7 +42,7 @@
 <script type="text/javascript">
 
     var saveurl="<?php echo $saveurl; ?>";
-
+console.log(saveurl);
     document.getElementById("btnSaveOrder").disabled =true;
 
     $('tbody').sortable({ handle: ".lsa-row-handle"});

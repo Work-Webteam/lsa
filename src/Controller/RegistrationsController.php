@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Cake\Core\Configure;
+use Cake\Routing\Router;
 use Cake\Error\Debugger;
 use Cake\Mailer\Mailer;
 use DateTime;
@@ -2512,7 +2513,7 @@ class RegistrationsController extends AppController
         $conditions['Registrations.registration_year ='] = date('Y');
         $conditions['Registrations.waitinglist ='] = 1;
 
-        $recipients = $this->Registrations->find('all', [
+        $waiting = $this->Registrations->find('all', [
             'conditions' => $conditions,
             'order' => [
                 'Registrations.ceremony_id ASC',
@@ -2531,11 +2532,49 @@ class RegistrationsController extends AppController
         ]);
 
 
+        $conditions = array();
+        $conditions['Registrations.registration_year ='] = date('Y');
+        $conditions['Registrations.waitinglist ='] = 0;
+
+        $recipients = $this->Registrations->find('all', [
+            'conditions' => $conditions,
+            'order' => [
+                'Registrations.ceremony_id ASC',
+                'Ministries.name ASC',
+
+            ],
+            'contain' => [
+                'Milestones',
+                'Ministries',
+                'Awards',
+                'OfficeCity',
+                'HomeCity',
+                'SupervisorCity',
+                'Ceremonies',
+            ],
+        ]);
+
+        $waiturl = Router::url(array('controller'=>'Registrations','action'=>'wait'));
+        $this->set(compact('waiturl'));
+
+        $this->set(compact('waiting'));
         $this->set(compact('recipients'));
     }
 
 
+    public function wait(){
+        echo "<pre>here</pre>";
+        if( $this->request->is('ajax') ) {
+            $id = $this->request->getData('id');
 
+            $recipient = $this->Registrations->findById($id)->firstOrFail();
+            $recipient->waitinglist = 1;
+            $this->Registrations->save($recipient);
+
+            return;
+        }
+
+    }
 
 
     public function reportpivot($attending = 0)
