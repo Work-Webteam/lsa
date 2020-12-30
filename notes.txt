@@ -1,0 +1,136 @@
+Process Information
+
+_Registration Period_
+
+The registration period defines the time the system is open for registrations and for RSVP
+
+The registration period record is also where the administrator specifies which award years are applicable for the period.  Typically, this will be the current year and the previous year.  Enter the years separated by a comma.  You can specify as many years as needed.
+
+
+
+_Registration_
+
+Users can register for a Long Service Award by completing the registration form
+
+Administrators can view all current registrations by go to the Admin Registrations dashboard.  The dashboard will allow administrators to view or edit individual registrations
+
+
+
+
+_Ceremony Night_
+
+After creating ceremony nights.  Recipients can be auto assigned a ceremony night by first selecting the appropriate criteria.   Recipients can be assigned by Ministry, Milestone, region (Victoria, Vancouver, Victoria/Vancouver) and Last Name range.  For regions you can select recipients who are in that region or are not in that region. For the Last Name filter you provide the start and end letter.
+
+After criteria have been assigned, clicking the assign recipients and all recipients that met the specified criteria are assigned that ceremony.
+
+Criteria information is stored in an array in the ceremonies table.
+
+NOTE: There is currently no checking to highlight any overlapping of criteria over different ceremony nights.
+
+
+_RSVP_
+
+After recipients have been assigned to a ceremony, administrators can send invites for recipients to RSVP.  Recipients click the link in the invite email take them to the RSVP page where they can indicate if they plan to attend as well as provide Accessibilty and Dietary needs info.
+
+
+
+_Executive Dashboard_
+
+This lists executives who have been invited to attend one or more of the ceremony nights. Executives can be added to the list by clicking the Add Executive button
+
+
+_Waiting List_
+
+Recipients are assigned to the waiting list by checking the Waiting List checkbox under the Ceremony tab when editing a registration record.
+
+In addition, on the Waiting List dashboard there is an Add button. When clicked it will list all recipients for the current year and allow the user to add a recipient to the waiting list by clicking the Add to Wait List button listed beside the name.
+
+
+
+
+_Technical Information_
+
+The system assumes current year.  All dashboards and reports use the current year to filter data.
+
+There is an archive dashboard which does show all registrations in the system with some filtering and ability to view individual registrations.
+
+
+_Registration Period_
+
+The Registration Period table allows administrators to set the open and close dates for LSA Registration and RSVP.
+
+In addition, administrators can specify which years users can register for.  Typically, this will be the current year and the past year.  Enter each year separated by a comma.
+
+ie:
+2020, 2021
+or
+2019, 2020, 2021
+
+
+
+_Awards_
+
+There is no record in the Awards table for PECSF Donations. In the system and Award ID of 0 is treated as a PECSF Donation.
+
+Option details for awards that have options are stored as an array in the Awards table.
+
+In addition, recipient choices for these awards are also stored as an array in the Registrations table.
+
+
+_User Security_
+To allow administrative access these users can be assigned specific roles.  Users require an IDIR to access the system.  When visiting the LSA site the system checks the SiteMinder (or alternative) session variables and looks up the user in the User table.  If the user is not found the user is only permitted to Register or RSVP.
+
+If the user is found in the User table they will receive the appropriate permissions based on the role they have been assigned.
+
+Add add a user to the system, an administrator adds then to the user table providing the user’s name, IDIR and role.  The User table also has a GUID field. However, this field is not populated by an administrator.
+
+When someone visits the site, the system first checks to see if the GUID provided by the session variables is in the system.  If it is, the system assigns the appropriate permissions.
+
+However, if the GUID is not found (which will be the case the first time a user visits the site after they have been assigned a user role) the system will then check for the IDIR.  If not found the user receives no administrative permissions.
+
+If the IDIR is found then the system will populated the User table record with the GUID and the user will be assigned the appropriate permissions.
+
+This approach is taken because IDIRs are not guaranteed to be unique over time.
+The code for this is located in the Initialize function in AppController.php.  Currently, user credentials are hardcoded.
+
+
+_User Roles_
+
+Administrator
+Administrators are able to add, view and edit all registrations. They are able to access all reports. In addition, they are able to add, view, edit and delete records in the various settings tables.
+
+
+LSA Administrator
+LSA Adminstrators are able to add, view and edit all registrations. They are able to access all reports. In addition, they are able to add, view and edit records in the various settings tables.
+
+
+Protocol
+Protocol is able to add, view and edit all registrations. They are able to access all reports.
+
+
+Award Procurement
+They are able to access all reports
+
+
+Ministry Contact
+Ministry Contacts are able to add, view and edit all registrations for their ministry. They are able to access reports, although data is limited to their ministry.
+
+
+Supervisor
+Supervisors are able to add, view and edit registrations they have created.
+
+
+_Recent database changes_   Dec 2020
+
+Some new fields were added to the Accessibility and Log tables.  The lsa_install.sql and lsa_test_adminer.sql files have been updated appropriately.
+
+
+_Data Dump Files_
+lsa_install.sql – generates a starting point database.  Various support tables (such as awards, accessibility, diet, etc) are pre-populated. It should be noted that the data used for these tables was provided in early 2020 and may no longer be up to date.
+
+lsa_test_adminer.sql – creates a database that includes registration, ceremony and rsvp info
+
+NOTE: in late 2020 any fields with type Boolean were changed to Integer due to MarieDB considerations.  This has required some modifications in code as CakePHP makes various assumptions based on field type. I believe I have found all instances where the code needed to be changed. However, much of the impacted code that was written and tested well before this change was made and it is possible I may have missed some code that needs to be modified to accommodate this change.
+
+The required changes have typically required assigning variables a value of 1 or 0 rather than true or false.
+
