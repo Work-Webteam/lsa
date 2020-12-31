@@ -1,0 +1,59 @@
+@use 'colours';
+@use 'base-type';
+
+
+//Global Nav
+body {
+    font: {
+        family: base-type.$primary-font-family;
+
+        weight: 400
+    }
+}
+
+.navbar {
+    height: 3em;
+}
+
+.navbar-brand {
+    font: {
+        family: base-type.$primary-font-family;
+        size: 1.2rem;
+    }
+    padding-left: 1rem;
+    padding-right: 2rem;
+}
+
+.nav-item {
+    padding-left: 0.875em;
+    padding-right: 0.875em;
+    color: colours.$ui-01;
+
+}
+
+
+.navbar-dark {
+    background-color: colours.$gray-100;
+    font: {
+        family: base-type.$primary-font-family;
+        weight: 400;
+        size: 0.875rem;
+    }
+}
+
+.dropdown-menu {
+    background-color: colours.$gray-100;
+
+}
+.dropdown-item {
+    font: {
+        weight: 400;
+        size: 0.875rem;
+    }
+    color: colours.$gray-10;
+    background-color: colours.$gray-90;
+}
+.dropdown-item:hover {
+    color: colours.$gray-10;
+    background-color: colours.$interactive-2;
+}
