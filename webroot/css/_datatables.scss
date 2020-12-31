@@ -53,6 +53,24 @@
 
 }
 
+.data-tables-action {
+    float: right;
+    background-color: colours.$interactive-1;
+    color: colours.$ui-01;
+    height: 3em;
+    min-width: 12em;
+    padding: 0.7em 4em 1em 1em;
+
+}
+
+.data-tables-action.add-item {
+    background-image: url('/img/add-white.svg');
+    background-size: 5%;
+    background-position-x: 90%;
+    background-position-y: center;
+    background-repeat: no-repeat;
+}
+
 
 //Search Field
 .dataTables_filter input.form-control {
@@ -126,6 +144,10 @@
     color: rgba(0,0,0,0);
 }
 
+
+
+
+
 //Edit Buttons
 
 td a.btn-primary {
@@ -145,6 +167,25 @@ td a.btn-primary:hover {
     background-color: colours.$ui-04;
     color: rgba(0,0,0,0);
     border-color: rgba(0,0,0,0);
+}
+
+//Delete Buttons
+
+td a.btn-primary.delete {
+    background-image: url('/img/trash-can.svg');
+    background-repeat: no-repeat;
+    background-size: 1.5rem 1.5rem;
+    color: rgba(0,0,0,0);
+    background-color: rgba(0,0,0,0);
+    background-position-x: center;
+    backgorund-position-y: center;
+    border-color: rgba(0,0,0,0);
+    width: 3em;
+    height: 3em;
+}
+
+td a.btn-primary.delete:hover {
+    background-color: colours.$hover-danger;
 }
 
 //Filter Dropdowns
