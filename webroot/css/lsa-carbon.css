@@ -128,12 +128,12 @@ body {
 .dropdown-item {
   font-weight: 400;
   font-size: 0.875rem;
-  color: #f3f3f3;
-  background-color: #262626;
+  color: #FFFFFF;
+  background-color: #8d8d8d;
 }
 
 .dropdown-item:hover {
-  color: #f3f3f3;
+  color: #FFFFFF;
   background-color: #393939;
 }
 
@@ -292,7 +292,7 @@ td a.btn-primary:hover {
   }
 }
 body {
-  background-color: #f3f3f3;
+  background-color: #FFFFFF;
 }
 
 .btn-primary {

@@ -1,81 +1,4 @@
-//Colours
-$ui-background : '';
-$ui-01 : #F4F4F4;
-$ui-02 : #FFFFFF;
-$ui-03 : #e0e0e0;
-$ui-04 : #8d8d8d;
-$ui-05 : #161616;
 
-$interactive-1 : #7A3073;
-$interactive-2 : #393939;
-$interactive-3 : #0f62fe;
-$interactive-4 : #0f62fe;
-
-$text-01 : #161616;
-$text-02 : #393939;
-$text-03 : #a8a8a8;
-$text-05 : #6f6f6f;
-
-$link-01 : #7A3073;
-
-$icon-01 : #161616;
-$icon-02 : #525252;
-$icon-03 : #FFFFFF;
-
-$field-01 : #F4F4F4;
-$field-02 : #FFFFFF;
-
-$inverse-01: #FFFFFF;
-$inverse-02: #393939;
-
-$support-01 : #da1e28;
-$support-02 : #24a148;
-$support-03 : #f1c21b;
-$support-04 : #0043ce;
-
-$inverse-support-01 : #FA4D56;
-$inverse-support-02 : #42BE65;
-$inverse-support-03 : #F1C21B;
-$inverse-support-04 : #4589FF;
-
-$inverse-link : #78A9FF;
-$overlay-01 : #161616;
-
-$danger : #da1e28;
-
-$focus : #0F62FE;
-$hover-primary : #0353e9;
-$hover-primary-text : #054ADA;
-$hover-secondary : #4C4C4C;
-$hover-tertiary : #0353E9;
-$hover-ui : #E5E5E5;
-$hover-danger : #BA1B23;
-$active-primary : #002D9C;
-$active-secondary : #6F6F6F;
-$active-tertiary : #002D9C;
-$active-ui : #C6C6C6;
-$active-danger : #750E13;
-
-$selected-ui : #E0E0E0;
-$highlight : #D0E2FF;
-
-$visited-link : #8a3FFC;
-
-$disabled-01 : #F4F4F4;
-$disabled-02 : #C6C6C6;
-$disabled-03 : #8D8D8D;
-
-$skeleton-01 : #E5E5E5;
-$skeleton-02 : #C6C6C6;
-
-$hover-selected-ui : #CACACA;
-$inverse-hover-ui : #4C4C4C;
-$inverse-focus-ui : #FFFFFF;
-
-
-$gray-100 : #161616;
-$gray-10 : #f3f3f3;
-$gray-90 : #262626;
 
 //COLORS
 
@@ -134,3 +57,8 @@ $skeleton-02 : #C6C6C6;
 $hover-selected-ui : #CACACA;
 $inverse-hover-ui : #4C4C4C;
 $inverse-focus-ui : #FFFFFF;
+
+
+$gray-100 : $ui-05;
+$gray-10 : $ui-02;
+$gray-90 : $ui-04;
