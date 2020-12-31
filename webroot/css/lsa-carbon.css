@@ -129,7 +129,7 @@ body {
   font-weight: 400;
   font-size: 0.875rem;
   color: #FFFFFF;
-  background-color: #8d8d8d;
+  background-color: #161616;
 }
 
 .dropdown-item:hover {
@@ -163,7 +163,7 @@ body {
   margin-right: 0.5em;
   position: absolute;
   left: calc(100vw - 37.5em );
-  top: 17.5em;
+  top: 16.7em;
 }
 
 .dt-buttons {
@@ -180,7 +180,6 @@ body {
   text-align: left;
   width: 12em;
   position: relative;
-  top: 14px;
 }
 
 .dataTables_filter input.form-control {
@@ -189,9 +188,10 @@ body {
   height: 3em;
   border-radius: 0;
   float: left;
-  position: relative;
-  left: -12.5rem;
-  top: 14px;
+  position: absolute;
+  left: 1rem;
+  top: 16.7rem;
+  display: block;
 }
 
 .dataTables_info {
@@ -292,7 +292,7 @@ td a.btn-primary:hover {
   }
 }
 body {
-  background-color: #FFFFFF;
+  background-color: #F4F4F4;
 }
 
 .btn-primary {

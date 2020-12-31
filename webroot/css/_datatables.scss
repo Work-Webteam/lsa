@@ -32,7 +32,7 @@
     margin-right: 0.5em;
     position: absolute;
     left: calc(100vw - 37.5em );
-    top: 17.5em;
+    top: 16.70em;
 }
 
 //Export Buttons
@@ -42,7 +42,6 @@
 .dt-button {
     border: none;
     height: 3em;
-
     background-color: colours.$interactive-2;
     color: colours.$ui-01;
     border-radius: 0;
@@ -50,7 +49,7 @@
     text-align: left;
     width: 12em;
     position: relative;
-    top: 14px;
+
 
 }
 
@@ -62,9 +61,10 @@
     height: 3em;
     border-radius: 0;
     float: left;
-    position: relative;
-    left: -12.5rem;
-    top: 14px;
+    position: absolute;
+    left: 1rem;
+    top: 16.7rem;
+    display: block;
 }
 
 
