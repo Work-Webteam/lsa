@@ -1,8 +1,8 @@
 <!-- File: templates/Milestones/index.php -->
 
 <h1 class="page-title">PECSF Donations</h1>
-<?= $this->Html->link('Add Milestone', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
-<table>
+<?= $this->Html->link('Add Milestone', ['action' => 'add'], ['class' => 'btn btn-primary data-tables-action add-item']) ?>
+<table class="table table-striped">
     <tr>
         <?= $isadmin ? "<th>Id</th>" : "" ?>
         <th>Milestone</th>
@@ -29,7 +29,7 @@
                 <?= $this->Html->link('Edit', ['action' => 'edit', $milestone->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>
             <td>
-                <?= $this->Form->postLink('Delete', ['action' => 'delete', $milestone->id], ['confirm' => 'Are you sure?','class' => 'btn btn-primary', 'role' => 'button']) ?>
+                <?= $this->Form->postLink('Delete', ['action' => 'delete', $milestone->id], ['confirm' => 'Are you sure?','class' => 'btn btn-primary delete', 'role' => 'button']) ?>
             </td>
         </tr>
     <?php endforeach; ?>

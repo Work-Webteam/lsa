@@ -188,6 +188,27 @@ td a.btn-primary.delete:hover {
     background-color: colours.$hover-danger;
 }
 
+//View Buttons
+td a.btn-primary.view {
+    background-image: url('/img/view.svg');
+    background-repeat: no-repeat;
+    background-size: 1.5rem 1.5rem;
+    color: rgba(0,0,0,0);
+    background-color: rgba(0,0,0,0);
+    background-position-x: center;
+    background-position-y: center;
+    border-color: rgba(0,0,0,0);
+    width: 3em;
+    height: 3em;
+}
+
+td a.btn-primary.view:hover {
+    background-color: colours.$ui-04;
+    color: rgba(0,0,0,0);
+    border-color: rgba(0,0,0,0);
+}
+
+
 //Filter Dropdowns
 
 .dataTable thead select {

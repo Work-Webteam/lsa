@@ -1,8 +1,8 @@
 
 <h1 class="page-title">Registration Periods</h1>
 
-<?= $this->Html->link('Add Registration Period', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
-<table>
+<?= $this->Html->link('Add Registration Period', ['action' => 'add'], ['class' => 'btn btn-primary data-tables-action add-item']) ?>
+<table class="table table-striped">
     <tr>
         <?= $isadmin ? "<th>Id</th>" : "" ?>
         <th>Registration Year</th>
@@ -11,12 +11,13 @@
         <th>Close Date</th>
         <th>RSVP Open Date</th>
         <th>RSVP Close Date</th>
-        <th colspan = 2>Operations</th>
+        <th>Edit</th>
+        <th>Delete</th>
     </tr>
 
     <?php foreach ($registrationperiods as $period): ?>
         <tr>
-            <?= $isadmin ? "<td>" . $period->id . "</td>" : "" ?>
+            <?= $isadmin ? "<td> <strong>" . $period->id . "</strong></td>" : "" ?>
             <td>
                 <?= $this->Html->link($period->registration_year, ['action' => 'view', $period->id]) ?>
             </td>
@@ -39,7 +40,7 @@
                 <?= $this->Html->link('Edit', ['action' => 'edit', $period->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>
             <td>
-                <?= $this->Form->postLink('Delete', ['action' => 'delete', $period->id], ['confirm' => 'Are you sure?','class' => 'btn btn-primary', 'role' => 'button']) ?>
+                <?= $this->Form->postLink('Delete', ['action' => 'delete', $period->id], ['confirm' => 'Are you sure?','class' => 'btn btn-primary delete', 'role' => 'button']) ?>
             </td>
         </tr>
     <?php endforeach; ?>

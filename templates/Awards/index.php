@@ -1,13 +1,15 @@
 <h1 class="page-title">Awards</h1>
-<?= $this->Html->link('Add Award', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
-<table>
+<?= $this->Html->link('Add Award', ['action' => 'add'], ['class' => 'btn btn-primary data-tables-action add-item']) ?>
+<table class="table table-striped">
     <tr>
         <?= $isadmin ? "<th>Id</th>" : "" ?>
         <th>Name</th>
         <th>Milestone</th>
         <th>Personalized</th>
         <th>Status</th>
-        <th colspan = "3">Operations</th>
+        <th>View</th>
+        <th>Edit</th>
+        <th>Delete</th>
     </tr>
 
     <?php foreach ($awards as $award): ?>
@@ -26,7 +28,7 @@
                 <?= $award->active ? 'active' : 'inactive' ?>
             </td>
             <td>
-                <?= $this->Html->link('View', ['action' => 'view', $award->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
+                <?= $this->Html->link('View', ['action' => 'view', $award->id], ['class' => 'btn btn-primary view', 'role' => 'button']) ?>
             </td>
             <td>
                 <?= $this->Html->link('Edit', ['action' => 'edit', $award->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
@@ -35,7 +37,7 @@
                 <?= $this->Form->postLink(
                     'Delete',
                     ['action' => 'delete', $award->id],
-                    ['confirm' => 'Are you sure?','class' => 'btn btn-primary', 'role' => 'button'])
+                    ['confirm' => 'Are you sure?','class' => 'btn btn-primary delete', 'role' => 'button'])
                 ?>
             </td>
         </tr>
