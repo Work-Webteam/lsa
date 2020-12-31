@@ -1,5 +1,5 @@
 <h1 class="page-title">Diet</h1>
-<?= $this->Html->link('Add Diet', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
+<?= $this->Html->link('Add Diet', ['action' => 'add'], ['class' => 'btn btn-primary data-tables-action add-item']) ?>
 <table>
     <tr>
         <?= $isadmin ? "<th>Id</th>" : "" ?>
@@ -19,7 +19,7 @@
                 <?= $this->Html->link('Edit', ['action' => 'edit', $diet->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>
             <td>
-                <?= $this->Form->postLink('Delete', ['action' => 'delete', $diet->id], ['confirm' => 'Are you sure?','class' => 'btn btn-primary', 'role' => 'button']) ?>
+                <?= $this->Form->postLink('Delete', ['action' => 'delete', $diet->id], ['confirm' => 'Are you sure?','class' => 'btn btn-primary delete', 'role' => 'button']) ?>
             </td>
         </tr>
     <?php endforeach; ?>

@@ -1,6 +1,6 @@
 <h1 class="page-title">VIP Categories</h1>
 <?= $this->Html->link('Add Category', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
-<table>
+<table class="table table-striped">
     <tr>
         <?= $isadmin ? "<th>Id</th>" : "" ?>
         <th>Category</th>
@@ -19,7 +19,7 @@
                 <?= $this->Html->link('Edit', ['action' => 'edit', $category->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>
             <td>
-                <?= $this->Form->postLink('Delete', ['action' => 'delete', $category->id], ['confirm' => 'Are you sure?','class' => 'btn btn-primary', 'role' => 'button']) ?>
+                <?= $this->Form->postLink('Delete', ['action' => 'delete', $category->id], ['confirm' => 'Are you sure?','class' => 'btn btn-primary delete', 'role' => 'button']) ?>
             </td>
         </tr>
     <?php endforeach; ?>

@@ -1,8 +1,8 @@
 
 <h2 class="page-title">Ceremony Dashboard</h2>
 <p>NOTE: Only ceremony dates for the current registration year are displayed.</p>
-<?= $this->Html->link('Add Ceremony', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
-<table>
+<?= $this->Html->link('Add Ceremony', ['action' => 'add'], ['class' => 'btn btn-primary data-tables-action add-item']) ?>
+<table class="table table-striped">
     <tr>
         <!--<?= $isadmin ? "<th>Ignore</th>" : "" ?>
         <th>Registration Year</th>-->

@@ -1,7 +1,7 @@
 
 <h1 class="page-title">Ministries</h1>
 <?= $this->Html->link('Add Ministry', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
-<table>
+<table class="table table-striped">
     <tr>
         <?= $isadmin ? "<th>Id</th>" : "" ?>
         <th>Ministry</th>
@@ -20,7 +20,7 @@
                 <?= $this->Html->link('Edit', ['action' => 'edit', $ministry->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>
             <td>
-                <?= $this->Form->postLink('Delete', ['action' => 'delete', $ministry->id], ['confirm' => 'Are you sure?','class' => 'btn btn-primary', 'role' => 'button']) ?>
+                <?= $this->Form->postLink('Delete', ['action' => 'delete', $ministry->id], ['confirm' => 'Are you sure?','class' => 'btn btn-primary delete', 'role' => 'button']) ?>
             </td>
         </tr>
     <?php endforeach; ?>

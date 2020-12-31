@@ -1,6 +1,6 @@
     <h1 class="page-title">Accessibility Requirements</h1>
     <?= $this->Html->link('Add Accessibility Requirement', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
-    <table>
+    <table class="table table-striped">
 
         <thead>
         <tr>
@@ -24,7 +24,7 @@
                     <?= $this->Html->link('Edit', ['action' => 'edit', $item->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
                 </td>
                 <td>
-                    <?= $this->Form->postLink('Delete', ['action' => 'delete', $item->id], ['confirm' => 'Are you sure?','class' => 'btn btn-primary', 'role' => 'button']) ?>
+                    <?= $this->Form->postLink('Delete', ['action' => 'delete', $item->id], ['confirm' => 'Are you sure?','class' => 'btn btn-primary delete', 'role' => 'button']) ?>
                 </td>
             </tr>
         <?php endforeach; ?>
