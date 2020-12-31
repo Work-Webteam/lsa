@@ -8,7 +8,8 @@
         <th>Milestone</th>
         <th>Personalized</th>
         <th>Donation Amount</th>
-        <th colspan = 2>Operations</th>
+        <th>Edit</th>
+        <th>Delete</th>
     </tr>
 
     <!-- Here is where we iterate through our $articles query object, printing out article info -->

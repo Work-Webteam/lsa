@@ -1,13 +1,14 @@
 <h1 class="page-title">PECSF Charities</h1>
-<?= $this->Html->link('Add PECSF Charity', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
+<?= $this->Html->link('Add PECSF Charity', ['action' => 'add'], ['class' => 'btn btn-primary data-tables-action add-item']) ?>
 
-<table>
+<table class="table table-striped">
     <tr>
         <?= $isadmin ? "<th>Id</th>" : "" ?>
         <th>Region</th>
         <th>Vendor</th>
         <th>Charity</th>
-        <th colspan = 2>Operations</th>
+        <th>Edit</th>
+        <th>Delete</th>
     </tr>
 
     <!-- Here is where we iterate through our $articles query object, printing out article info -->
@@ -23,13 +24,13 @@
                 <?= $charity->vendor_code ?>
             </td>
             <td>
-                <?= $this->Html->link($charity->name, ['action' => 'view', $charity->id]) ?>
+                <?= $this->Html->link($charity->name, ['action' => 'view', $charity->id], ['class' => 'btn ', 'role' => 'button']) ?>
             </td>
             <td>
                 <?= $this->Html->link('Edit', ['action' => 'edit', $charity->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
             </td>
             <td>
-                <?= $this->Form->postLink('Delete', ['action' => 'delete', $charity->id], ['confirm' => 'Are you sure?','class' => 'btn btn-primary', 'role' => 'button']) ?>
+                <?= $this->Form->postLink('Delete', ['action' => 'delete', $charity->id], ['confirm' => 'Are you sure? This cannot be undone.','class' => 'btn btn-primary delete', 'role' => 'button']) ?>
             </td>
         </tr>
     <?php endforeach; ?>
