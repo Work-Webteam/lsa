@@ -1,10 +1,11 @@
 <h1 class="page-title">VIP Categories</h1>
-<?= $this->Html->link('Add Category', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
+<?= $this->Html->link('Add Category', ['action' => 'add'], ['class' => 'btn btn-primary data-tables-action add-item']) ?>
 <table class="table table-striped">
     <tr>
         <?= $isadmin ? "<th>Id</th>" : "" ?>
         <th>Category</th>
-        <th colspan = 2>Operations</th>
+        <th>Edit</th>
+        <th>Delete</th>
     </tr>
 
     <!-- Here is where we iterate through our $articles query object, printing out article info -->

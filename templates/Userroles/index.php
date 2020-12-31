@@ -1,12 +1,13 @@
-<h1>System Permissions</h1>
+<h1 class="page-title">System Permissions</h1>
 <?= $this->Html->link('Add User', ['action' => 'add'], ['class' => 'btn btn-primary data-tables-action add-item']) ?>&nbsp;
 <?= $this->Html->link('Permission Info', ['action' => 'info'], ['class' => 'btn btn-primary']) ?>
-<table class="tables table-striped">
+<table class="table table-striped">
     <tr>
         <?= $isadmin ? "<th>Id</th>" : "" ?>
         <th>User Id</th>
         <th>Role Id</th>
-        <th colspan = 2>Operations</th>
+        <th>Edit</th>
+        <th>Delete</th>
     </tr>
 
     <?php foreach ($userroles as $userrole): ?>

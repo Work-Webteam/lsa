@@ -1,10 +1,11 @@
 <h1 class="page-title">Diet</h1>
 <?= $this->Html->link('Add Diet', ['action' => 'add'], ['class' => 'btn btn-primary data-tables-action add-item']) ?>
-<table>
+<table class="table table-striped">
     <tr>
         <?= $isadmin ? "<th>Id</th>" : "" ?>
         <th>Diet</th>
-        <th colspan = 2>Operations</th>
+        <th>Edit</th>
+        <th>Delete</th>
     </tr>
 
     <!-- Here is where we iterate through our $articles query object, printing out article info -->
