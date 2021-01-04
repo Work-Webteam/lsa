@@ -1,13 +1,14 @@
     <h1 class="page-title">Accessibility Requirements</h1>
-    <?= $this->Html->link('Add Accessibility Requirement', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
-    <table>
+    <?= $this->Html->link('Add Accessibility Requirement', ['action' => 'add'], ['class' => 'btn btn-primary data-tables-action add-item']) ?>
+    <table class="table table-striped">
 
         <thead>
         <tr>
             <?= $isadmin ? "<th>Id</th>" : "" ?>
-            <th></th>
+            <th>Re-Order</th>
             <th>Accessibility Requirements</th>
-            <th colspan = 2>Operations</th>
+            <th>Edit</th>
+            <th>Delete</th>
         </tr>
         </thead>
 
@@ -24,7 +25,7 @@
                     <?= $this->Html->link('Edit', ['action' => 'edit', $item->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>
                 </td>
                 <td>
-                    <?= $this->Form->postLink('Delete', ['action' => 'delete', $item->id], ['confirm' => 'Are you sure?','class' => 'btn btn-primary', 'role' => 'button']) ?>
+                    <?= $this->Form->postLink('Delete', ['action' => 'delete', $item->id], ['confirm' => 'Are you sure?','class' => 'btn btn-primary delete', 'role' => 'button']) ?>
                 </td>
             </tr>
         <?php endforeach; ?>

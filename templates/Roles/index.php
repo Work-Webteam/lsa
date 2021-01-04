@@ -1,6 +1,6 @@
 <h1>Roles<h1>
-<?= $this->Html->link('Add Roles', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
-<table>
+<?= $this->Html->link('Add Roles', ['action' => 'add'], ['class' => 'btn btn-primary data-tables-action add-item']) ?>
+<table class="tables tables-striped">
     <tr>
         <?= $isadmin ? "<th>Id</th>" : "" ?>
         <th>Roles</th>
