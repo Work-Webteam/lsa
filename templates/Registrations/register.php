@@ -9,7 +9,7 @@
         <div class="form-group">
             <?php
                 echo $this->Form->hidden('award_options', ['value' => '']);
-                echo $this->Form->control('milestone_id', ['type' => 'select', 'label' => 'Milestone', 'options' => $milestones, 'empty' => '- select milestone -', 'onChange' => 'app.milestoneSelected(this.value)']);
+                echo $this->Form->control('milestone_id', ['type' => 'select', 'label' => 'Milestone', 'class' => 'form-control', 'options' => $milestones, 'empty' => '- select milestone -', 'onChange' => 'app.milestoneSelected(this.value)']);
                 echo $this->Form->hidden('award_id', ['value' => 0]);
                 echo $this->Form->hidden('pecsf_donation', ['value' => 0]);
                 echo $this->Form->hidden('pecsf_donation_type', ['value' => 0]);
@@ -31,7 +31,7 @@
                 ?>
             </div>
             <?php
-                echo $this->Form->control('qualifying_year', ['type' => 'select', 'label' => 'Award Year', 'options' => $award_years, 'empty' => '- select Award Year -']);
+                echo $this->Form->control('qualifying_year', ['type' => 'select', 'label' => 'Award Year', 'class' => 'form-control', 'options' => $award_years, 'empty' => '- select Award Year -']);
             ?>
             <?php
                 echo $this->Form->label("Registered last year but didn't attend ceremony?");
@@ -74,15 +74,15 @@
         <fieldset id="identifyingInfo" v-show="awardConfirmed">
             <?php
 
-            echo $this->Form->control('employee_id', ['label' => 'Employee ID', 'type' => 'text', 'v-model' => 'employeeID', 'onChange' => 'app.populateTestData()']);
-            echo $this->Form->control('first_name', ['v-model' => 'firstName']);
-            echo $this->Form->control('last_name', ['v-model' => 'lastName']);
+            echo $this->Form->control('employee_id', ['label' => 'Employee ID', 'class' => 'form-control', 'type' => 'text', 'v-model' => 'employeeID', 'onChange' => 'app.populateTestData()']);
+            echo $this->Form->control('first_name', ['v-model' => 'firstName', 'class' => 'form-control',]);
+            echo $this->Form->control('last_name', ['v-model' => 'lastName', 'class' => 'form-control',]);
 
-            echo $this->Form->control('ministry_id', ['options' => $ministries, 'empty' => '- select ministry -', 'onChange' => 'app.ministrySelected()']);
-            echo $this->Form->control('branch', ['label' => 'Branch', 'v-model' => 'ministryBranch']);
+            echo $this->Form->control('ministry_id', ['options' => $ministries, 'empty' => '- select ministry -', 'class' => 'form-control', 'onChange' => 'app.ministrySelected()']);
+            echo $this->Form->control('branch', ['label' => 'Branch', 'v-model' => 'ministryBranch', 'class' => 'form-control',]);
 
-            echo $this->Form->control('preferred_email', ['label' => 'Government Email', 'v-model' => 'govtEmail']);
-            echo $this->Form->control('alternate_email', ['v-model' => 'altEmail']);
+            echo $this->Form->control('preferred_email', ['label' => 'Government Email', 'v-model' => 'govtEmail', 'class' => 'form-control',]);
+            echo $this->Form->control('alternate_email', ['v-model' => 'altEmail', 'class' => 'form-control',]);
 
             echo $this->Form->label("Retiring this year?");
             echo $this->Form->hidden('retiring_this_year', ['value' => 0]);
@@ -95,7 +95,7 @@
             <transition name="fade">
                 <div class="form-group" id="retirementdate" v-if="isRetiringThisYear">
                     <?php
-                    echo $this->Form->control('date', ['label' => 'Retirement Date', 'type' => 'date', 'value' => date('Y-m-d'), 'minYear' => date('Y'), 'maxYear' => date('Y'), 'v-model' => 'retirementDate']);
+                    echo $this->Form->control('date', ['label' => 'Retirement Date', 'type' => 'date', 'value' => date('Y-m-d'), 'class' => 'form-control','minYear' => date('Y'), 'maxYear' => date('Y'), 'v-model' => 'retirementDate']);
                     ?>
                 </div>
             </transition>
@@ -123,14 +123,14 @@
         <fieldset id="officeAddress" v-show="identifyingInfoInput">
             <?php
 
-            echo $this->Form->control('office_careof', ['label' => 'Floor / Room / Care Of', 'v-model' => 'officeMailPrefix']);
-            echo $this->Form->control('office_suite', ['label' => 'Suite', 'v-model' => 'officeSuite']);
-            echo $this->Form->control('office_address', ['v-model' => 'officeStreetAddress']);
-            echo $this->Form->control('office_city_id', ['options' => $cities, 'empty' => '- select city -', 'onChange' => 'app.officeCitySelected(this.text)']);
-            echo $this->Form->control('office_province', ['disabled' => true]);
-            echo $this->Form->control('office_postal_code', ['v-model' => 'officePostalCode', 'text-transform' => 'uppercase']);
-            echo $this->Form->control('work_phone', ['label' => 'Office Phone', 'v-model' => 'officePhone']);
-            echo $this->Form->control('work_extension', ['label' => 'Office Phone Extension', 'v-model' => 'officeExtension']);
+            echo $this->Form->control('office_careof', ['label' => 'Floor / Room / Care Of', 'class' => 'form-control', 'v-model' => 'officeMailPrefix']);
+            echo $this->Form->control('office_suite', ['label' => 'Suite', 'class' => 'form-control', 'v-model' => 'officeSuite']);
+            echo $this->Form->control('office_address', ['v-model' => 'officeStreetAddress', 'class' => 'form-control',]);
+            echo $this->Form->control('office_city_id', ['options' => $cities, 'empty' => '- select city -', 'class' => 'form-control', 'onChange' => 'app.officeCitySelected(this.text)']);
+            echo $this->Form->control('office_province', ['disabled' => true , 'class' => 'form-control']);
+            echo $this->Form->control('office_postal_code', ['v-model' => 'officePostalCode', 'class' => 'form-control', 'text-transform' => 'uppercase']);
+            echo $this->Form->control('work_phone', ['label' => 'Office Phone', 'class' => 'form-control', 'v-model' => 'officePhone']);
+            echo $this->Form->control('work_extension', ['label' => 'Office Phone Extension', 'class' => 'form-control','v-model' => 'officeExtension']);
 
             ?>
 
@@ -151,12 +151,12 @@
         <fieldset id="homeAddress" v-show="officeAddressInput">
 
             <?php
-                echo $this->Form->control('home_suite', ['label' => 'Suite', 'v-model' => 'homeSuite']);
-                echo $this->Form->control('home_address', ['v-model' => 'homeStreetAddress']);
-                echo $this->Form->control('home_city_id', ['options' => $cities, 'empty' => '- select city -', 'onChange' => 'app.homeCitySelected()']);
-                echo $this->Form->control('home_province', ['disabled' => true]);
-                echo $this->Form->control('home_postal_code', ['v-model' => 'homePostalCode']);
-                echo $this->Form->control('home_phone', ['v-model' => 'homePhone']);
+                echo $this->Form->control('home_suite', ['label' => 'Suite', 'v-model' => 'homeSuite', 'class' => 'form-control']);
+                echo $this->Form->control('home_address', ['v-model' => 'homeStreetAddress', 'class' => 'form-control',]);
+                echo $this->Form->control('home_city_id', ['options' => $cities, 'empty' => '- select city -', 'onChange' => 'app.homeCitySelected()', 'class' => 'form-control',]);
+                echo $this->Form->control('home_province', ['disabled' => true, 'class' => 'form-control',]);
+                echo $this->Form->control('home_postal_code', ['v-model' => 'homePostalCode', 'class' => 'form-control',]);
+                echo $this->Form->control('home_phone', ['v-model' => 'homePhone' , 'class' => 'form-control',]);
             ?>
             <div>
                 <span v-html="errorsHome" class="lsa-errors-container">
@@ -174,15 +174,15 @@
         <div id="supervisorAnchor">
         <fieldset id="supervisor" v-if="homeAddressInput">
             <?php
-                echo $this->Form->control('supervisor_first_name', ['v-model' => 'supervisorFirstName']);
-                echo $this->Form->control('supervisor_last_name', ['v-model' => 'supervisorLastName']);
-                echo $this->Form->control('supervisor_careof', ['label' => 'Floor / Room / Care Of', 'v-model' => 'supervisorMailPrefix']);
-                echo $this->Form->control('supervisor_suite', ['label' => 'Suite', 'v-model' => 'supervisorSuite']);
-                echo $this->Form->control('supervisor_address', ['v-model' => 'supervisorStreetAddress']);
-                echo $this->Form->control('supervisor_city_id', ['options' => $cities, 'empty' => '- select city -', 'onChange' => 'app.supervisorCitySelected()']);
-                echo $this->Form->control('supervisor_province', ['disabled' => true]);
-                echo $this->Form->control('supervisor_postal_code', ['v-model' => 'supervisorPostalCode']);
-                echo $this->Form->control('supervisor_email', ['type' => 'email', 'v-model' => 'supervisorEmail']);
+                echo $this->Form->control('supervisor_first_name', ['v-model' => 'supervisorFirstName', 'class' => 'form-control']);
+                echo $this->Form->control('supervisor_last_name', ['v-model' => 'supervisorLastName','class' => 'form-control' ]);
+                echo $this->Form->control('supervisor_careof', ['label' => 'Floor / Room / Care Of', 'class' => 'form-control', 'v-model' => 'supervisorMailPrefix']);
+                echo $this->Form->control('supervisor_suite', ['label' => 'Suite', 'class' => 'form-control','v-model' => 'supervisorSuite']);
+                echo $this->Form->control('supervisor_address', ['class' => 'form-control', 'v-model' => 'supervisorStreetAddress']);
+                echo $this->Form->control('supervisor_city_id', ['class' => 'form-control', 'options' => $cities, 'empty' => '- select city -', 'onChange' => 'app.supervisorCitySelected()']);
+                echo $this->Form->control('supervisor_province', ['class' => 'form-control','disabled' => true]);
+                echo $this->Form->control('supervisor_postal_code', ['class' => 'form-control', 'v-model' => 'supervisorPostalCode']);
+                echo $this->Form->control('supervisor_email', ['class' => 'form-control', 'type' => 'email', 'v-model' => 'supervisorEmail']);
             ?>
             <div>
                 <span v-html="errorsSupervisor" class="lsa-errors-container">
@@ -345,13 +345,13 @@
                 <div class="modal-body">
                     <fieldset id="formDonationOptions">
                         <?php
-                            echo $this->Form->control('donorName', ['label' => 'Donor Name']);
-                            echo $this->Form->control('selectedRegion', ['options' => $regions, 'empty' => '- select region -', 'onChange' => 'app.regionSelected()']);
+                            echo $this->Form->control('donorName', ['class' => 'form-control','label' => 'Donor Name']);
+                            echo $this->Form->control('selectedRegion', ['class' => 'form-control', 'options' => $regions, 'empty' => '- select region -', 'onChange' => 'app.regionSelected()']);
                         ?>
 
                         <div id="donation-type" v-if="inputDonationType">
                             <label>Donate to</label>
-                            <?php echo $this->Form->radio('selectDonationType', ['PECSF Region Charity Fund', 'One Individual Charity', 'Two Individual Charities'], ['onChange' => 'app.donationTypeSelected()']); ?>
+                            <?php echo $this->Form->radio('selectDonationType', ['class' => 'form-control', 'PECSF Region Charity Fund', 'One Individual Charity', 'Two Individual Charities'], ['onChange' => 'app.donationTypeSelected()']); ?>
                         </div>
                         <div v-if="inputCharity1">
                             <select id="selectedCharity1">
