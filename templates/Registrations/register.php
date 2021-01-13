@@ -1,8 +1,3 @@
-
-
-
-
-
 <div id="app">
     <v-app>
         <v-main>
@@ -272,15 +267,237 @@
 
                         <v-stepper-content step="4">
                             <h3>Your Supervisor's Contact Information</h3>
-                            <div class="form-row">
+                            <h3 class="display-3">Your Supervisor's Contact Information</h3>
 
+                            <div class="form-row">
+                                <div class="col-6">
+                                    <label for="">Supervisor's First Name</label>
+                                    <input type="text" class="form-control" placeholder="Your Supervisor's First Name" v-model="supervisorFirstName">
+                                </div>
+                                <div class="col-6">
+                                    <label for="">Supervisor's Last Name</label>
+                                    <input type="text" class="form-control" placeholder="Your Supervisors's Last Name" v-model="supervisorLastName">
+                                </div>
                             </div>
 
+                            <div class="form-row">
+                                <div class="col-12">
+                                    <label for="">Supervisor's Email</label>
+                                    <input type="email" class="form-control" placeholder="i.e. Taylor.Publicservant@gov.bc.ca" v-model="supervisorEmail">
+                                </div>
+                            </div>
+
+
+                            <h4 class="display-2">Supervisor's Office Address</h4>
+
+                            <div class="form-row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="">Floor/Room/Care Of</label>
+                                        <input type="text" class="form-control" placeholder="i.e. Discovery Room" v-model="supervisorMailPrefix">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="">Suite</label>
+                                        <input type="text" class="form-control" placeholder="i.e. 800" v-model="supervisorSuite">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="">Street Address</label>
+                                        <input type="text" class="form-control" placeholder="i.e. 1445 10th Ave." v-model="supervisorStreetAddress">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-8">
+                                    <div class="form-group">
+                                        <label for="">City</label>
+
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label for="">Postal Code</label>
+                                        <input type="text" class="form-control" placeholder="i.e. A1A 1A1" v-model="supervisorPostalCode">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="form-row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="">Office Phone Number</label>
+                                        <input type="text" class="form-control" placeholder="i.e. (604) 555-5555" v-model="supervisorPhone">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div clas="form-group">
+                                        <label for="">Extension</label>
+                                        <input type="text" class="form-control" placeholder="ie. 800" v-model="supervisorExtension">
+                                    </div>
+                                </div>
+                            </div>
+
+</div>
 
 
                         </v-stepper-content>
 
                         <v-stepper-content step="5">
+                            <h3 class="display-3">Please Confirm Your Information</h3>
+                            <div class="confirmation-group">
+                                <h4>Milestone</h4>
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Milestone reached:</p>
+                                        <p class="confirmation-value">{{milestone}}</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Name on certificate</p>
+                                        <p class="confirmation-value">{{}}</p>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Year milestone reached:</p>
+                                        <p class="confirmation-value">{{}}</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Registered last year but didn't attended</p>
+                                        <p class="confirmation-value">{{}}</p>
+                                    </div>
+                                </div>
+                                <form class="form-row">
+                                    <div class="col-9">
+
+                                    </div>
+                                    <div class="col-3">
+                                        <button class="btn btn-secondary" @click="e1 = 1">Edit this Section</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="confirmation-group">
+                                <h4>Award &amp; Options</h4>
+
+                            </div>
+                            <div class="confirmation-group">
+                                <h3 class="display-3">Your Contact Information</h3>
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Your Name</p>
+                                        <p class="confirmation-value">{{firstName}} {{lastName}}</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Your Employee ID #</p>
+                                        <p class="confirmation-value">{{employeeID}}</p>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Your Government email address</p>
+                                        <p class="confirmation-value">{{}}</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Your alternate email address</p>
+                                        <p class="confirmation-value">{{}}</p>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Your current Ministry</p>
+                                        <p class="confirmation-value">{{}}</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Your current branch</p>
+                                        <p class="confirmation-value">{{}}</p>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Your Office Address</p>
+                                        <p class="confirmation-value">{{officeMailPrefix}}</p>
+                                        <p class="confirmation-value">{{officeSuite}} {{officeStreetAddress}}</p>
+                                        <p class="confirmation-value">{{officeCity}}, BC</p>
+                                        <p class="confirmation-value">{{officePostalCode}}</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Your Home Address</p>
+                                        <p class="confirmation-value">{{homeSuite}}</p>
+                                        <p class="confirmation-value">{{homeStreetAddress}}</p>
+                                        <p class="confirmation-value">{{homeCity}}</p>
+                                        <p class="confirmation-value">{{homePostalCode}}</p>
+                                    </div>
+                                </div>
+
+                                <div class="confirmation-group">
+                                    <h3 class="display-3">Your Supervisor&apos;s Contact Information</h3>
+                                    <div class="form-row">
+                                        <div class="col-6">
+                                            <p class="confirmation-label">Supervisor&apos;s Name</p>
+                                            <p class="confirmation-value">{{firstName}} {{lastName}}</p>
+                                        </div>
+                                        <div class="col-6">
+                                            <p class="confirmation-label">Supervisor&apos;s Email</p>
+                                            <p class="confirmation-value">{{employeeID}}</p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Supervisor&apos;s Office Address</p>
+                                        <p class="confirmation-value">{{officeMailPrefix}}</p>
+                                        <p class="confirmation-value">{{officeSuite}} {{officeStreetAddress}}</p>
+                                        <p class="confirmation-value">{{officeCity}}, BC</p>
+                                        <p class="confirmation-value">{{officePostalCode}}</p>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="confirmation-group">
+                                <h3 class="display-3">LSA Survey Participation</h3>
+                                <div class="form-row">
+                                    <div class="col-2">
+                                        <div class="form-group">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="confirmation-group">
+                                <h3 class="display-3">Declaration &amp; Notice of Collection, Consent &amp; Authorize</h3>
+                                <div class="form-row">
+                                    <div class="col-3">
+                                        <div class="form-group">
+
+                                        </div>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="form-group">
+                                            <p class="collectionStatement">I declare, to the best of my knowledge and consistent with the Long Service Awards eligibility guidelines (which I have reviewed) that as of
+                                                December 31, 2021, I will have worked for the BC Public Service for 25, 30, 35, 40, 45 or 50 years and I am therefore eligible for a Long Service Award. By providing my
+                                                personal information, I am allowing the BC Public Service Agency to use and disclose this information for the planning and delivery of the Long Service Award recognition events.
+                                                This personal information is required to process your application for the Long Service Awards and is collected in accordance with section 26(c) of the Freedom of Information and
+                                                Protection of Privacy Act (FOIPPA).
+                                                Questions about the collection, use or disclosure of this information, can be directed to: LongServiceAwards@gov.bc.ca, 1st Floor, 563 Superior Street, Victoria BC, V8V 0C5.</p>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-8">
+
+                                </div>
+                                <div class="col-4">
+                                    <button class="btn btn-primary">Confirm &amp; Agree</button>
+                                </div>
+                            </div>
 
                         </v-stepper-content>
 
