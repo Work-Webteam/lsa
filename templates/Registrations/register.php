@@ -1,7 +1,6 @@
 
 
 
-<div id="app"></div>
 
 
 <div class="container">
@@ -10,7 +9,7 @@
     <?php
        echo $this->Form->create($registration);
     ?>
-
+<div id="app">
     <v-app>
         <v-main>
             <v-container>
@@ -502,8 +501,7 @@
         </v-main>
     </v-app>
 
-
-
+</div>
 
     <div>
         <?php
@@ -577,9 +575,6 @@
 
 
     Vue.config.devtools = true;
-
-
-
 
     var app = new Vue({
         el: "#app",

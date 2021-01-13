@@ -1,6 +1,6 @@
-<h1>Executives</h1>
+<h2 class="page-title">Executives</h2>
 <?= $this->Html->link('Add Executive', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
-<table>
+<table class="table table-striped">
     <tr>
         <?= $isadmin ? "<th>Id</th>" : "" ?>
         <th>Executives</th>
