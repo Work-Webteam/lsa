@@ -23,6 +23,52 @@
                     <v-stepper-items>
                         <v-stepper-content step="1">
                             <h3 class="display-3">Milestone</h3>
+                            <div class="form-row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="milestone">Which milestone are you celebrating?</label>
+                                        <select class="form-control" id="milestone" name="milestone">
+                                           <?php foreach($milestoneInfo as $milestone) : ?>
+                                            <option value="<?= $milestone->id ?>"><?= $milestone->name ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="">I which year did you reach this milestone?</label>
+                                        <select class="form-control" id="" name="" >
+                                            <option selected disabled>Select Year</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="">How would you like your name to appear on your certificate?</label>
+                                        <input type="text" id="" name="" class="form-control" v-model="">
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <label>Did you register for a Long Service Award last year, but not attend a ceremony?</label>
+                                        <input class="form-check-input" type="radio" name="" id="" value="">
+                                        <label class="form-check-label" for="">Yes</label>
+                                        <input class="form-check-input" type="radio" name="" id="" value="">
+                                        <label class="form-check-label" for="">No</label>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <label>Are you retiring this calendar year? </label>
+                                        <input class="form-check-input" type="radio" name="" id="" value="true" v-model="isRetiringThisYear">
+                                        <label class="form-check-label" for="">Yes</label>
+                                        <input class="form-check-input" type="radio" name="" id="" value="false" v-model="isRetiringThisYear">
+                                        <label class="form-check-label" for="">No</label>
+                                    </div>
+                                </div>
+                            </div>
 
 
 
