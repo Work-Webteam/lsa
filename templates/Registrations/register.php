@@ -1,312 +1,510 @@
-<div class="container" id="app">
+
+
+
+<div id="app"></div>
+
+
+<div class="container">
     <h1>Register for Long Service Award</h1>
 
     <?php
        echo $this->Form->create($registration);
     ?>
 
-    <transition name="fade">
-        <div class="form-group">
-            <?php
-                echo $this->Form->hidden('award_options', ['value' => '']);
-                echo $this->Form->control('milestone_id', ['type' => 'select', 'label' => 'Milestone', 'class' => 'form-control', 'options' => $milestones, 'empty' => '- select milestone -', 'onChange' => 'app.milestoneSelected(this.value)']);
-                echo $this->Form->hidden('award_id', ['value' => 0]);
-                echo $this->Form->hidden('pecsf_donation', ['value' => 0]);
-                echo $this->Form->hidden('pecsf_donation_type', ['value' => 0]);
-                echo $this->Form->hidden('pecsf_region_id', ['value' => 0]);
-                echo $this->Form->hidden('pecsf_charity1_id', ['value' => 0]);
-                echo $this->Form->hidden('pecsf_amount1', ['value' => 0]);
-                echo $this->Form->hidden('pecsf_charity2_id', ['value' => '0']);
-                echo $this->Form->hidden('pecsf_amount2', ['value' => 0]);
-                echo $this->Form->hidden('pecsf_name', ['value' => '']);
-            ?>
-        </div>
-    </transition>
+    <v-app>
+        <v-main>
+            <v-container>
+                <v-stepper v-model="e1">
+                    <v-stepper-header>
+                        <v-stepper-step :complete="e1 > 1" step="1"> Milestone</v-stepper-step>
+                        <v-divider></v-divider>
+                        <v-stepper-step :complete="e1 > 2" step="2"> Award</v-stepper-step>
+                        <v-divider></v-divider>
+                        <v-stepper-step :complete="e1 > 3" step="3"> Contact <br> <span class="step-name-subtext">Employee</span></v-stepper-step>
+                        <v-divider></v-divider>
+                        <v-stepper-step :complete="e1 > 4" step="4"> Contact <br> <span class="step-name-subtext">Supervisor</span></v-stepper-step>
+                        <v-divider></v-divider>
+                        <v-stepper-step :complete="e1 > 5" step="5"> Confirm </v-stepper-step>
+                    </v-stepper-header>
 
-    <transition name="fade">
-        <div class="form-group" v-if="milestoneKnown">
-            <div v-if="milestonePersonalized">
-                <?php
-                    echo $this->Form->control('certificate_name', ['label' => 'Name on Certificate']);
-                ?>
-            </div>
-            <?php
-                echo $this->Form->control('qualifying_year', ['type' => 'select', 'label' => 'Award Year', 'class' => 'form-control', 'options' => $award_years, 'empty' => '- select Award Year -']);
-            ?>
-            <?php
-                echo $this->Form->label("Registered last year but didn't attend ceremony?");
-                echo $this->Form->button('Yes', ['type' => 'button', 'onclick' => 'app.buttonMissedCeremony(1)', 'class' => 'btn btn-primary']);
-                echo "&nbsp;";
-                echo $this->Form->button('No', ['type' => 'button',  'onclick' => 'app.buttonMissedCeremony(0)', 'class' => 'btn btn-primary']);
-            ?>
-        </div>
-    </transition>
+                    <v-stepper-items>
+                        <v-stepper-content step="1">
+                            <h3 class="display-3">Milestone</h3>
 
-    <transition name="fade">
-        <div class="form-group" v-if="selectAward">
-            <span v-html="availableAwards" class="lsa-awards-container">
-            </span>
-
-            <div id="lsa-award-card">
-                <div id="lsa-award-image-container">
-                    <img alt="..." v-bind:src="'/img/awards/' + currentAwardImage" class="lsa-award-image">
-                </div>
-                <div id="lsa-award-description-container">
-                    <h4 class="card-title">{{ currentAwardName }}</h4>
-                    <p class="card-text" v-html="currentAwardDescription">{{ currentAwardDescription }}</p>
-                </div>
-            </div>
-            <div>
-                <?php
-                    echo $this->Form->button('<', ['type' => 'button', 'onclick' => 'app.showPreviousAward()', 'class' => 'btn btn-primary']);
-                    echo "&nbsp;";
-                    echo $this->Form->button('Select Award', ['type' => 'button', 'onclick' => 'app.selectCurrentAward()', 'class' => 'btn btn-primary']);
-                    echo "&nbsp;";
-                    echo $this->Form->button('>', ['type' => 'button',  'onclick' => 'app.showNextAward()', 'class' => 'btn btn-primary']);
-                ?>
-            </div>
-        </div>
-
-    </transition>
-
-    <transition name="fade">
-        <div id="employeeAnchor">
-        <fieldset id="identifyingInfo" v-show="awardConfirmed">
-            <?php
-
-            echo $this->Form->control('employee_id', ['label' => 'Employee ID', 'class' => 'form-control', 'type' => 'text', 'v-model' => 'employeeID', 'onChange' => 'app.populateTestData()']);
-            echo $this->Form->control('first_name', ['v-model' => 'firstName', 'class' => 'form-control',]);
-            echo $this->Form->control('last_name', ['v-model' => 'lastName', 'class' => 'form-control',]);
-
-            echo $this->Form->control('ministry_id', ['options' => $ministries, 'empty' => '- select ministry -', 'class' => 'form-control', 'onChange' => 'app.ministrySelected()']);
-            echo $this->Form->control('branch', ['label' => 'Branch', 'v-model' => 'ministryBranch', 'class' => 'form-control',]);
-
-            echo $this->Form->control('preferred_email', ['label' => 'Government Email', 'v-model' => 'govtEmail', 'class' => 'form-control',]);
-            echo $this->Form->control('alternate_email', ['v-model' => 'altEmail', 'class' => 'form-control',]);
-
-            echo $this->Form->label("Retiring this year?");
-            echo $this->Form->hidden('retiring_this_year', ['value' => 0]);
-            echo $this->Form->button('Yes', ['type' => 'button', 'onclick' => 'app.buttonRetirementClick(1)', 'class' => 'btn btn-primary']);
-            echo "&nbsp;";
-            echo $this->Form->button('No', ['type' => 'button',  'onclick' => 'app.buttonRetirementClick(0)', 'class' => 'btn btn-primary']);
-
-            ?>
-
-            <transition name="fade">
-                <div class="form-group" id="retirementdate" v-if="isRetiringThisYear">
-                    <?php
-                    echo $this->Form->control('date', ['label' => 'Retirement Date', 'type' => 'date', 'value' => date('Y-m-d'), 'class' => 'form-control','minYear' => date('Y'), 'maxYear' => date('Y'), 'v-model' => 'retirementDate']);
-                    ?>
-                </div>
-            </transition>
-
-
-        </fieldset>
-        </div>
-    </transition>
-
-    <transition name="fade">
-        <div v-if="retirementStatusKnown">
-            <div>
-                <span v-html="errorsEmployee" class="lsa-errors-container">
-                </span>
-            </div>
-            <?php
-                echo $this->Form->button('ID Info Input', ['type' => 'button',  'onclick' => 'app.showOfficeAddressInput()', 'class' => 'btn btn-primary']);
-            ?>
-        </div>
-    </transition>
-
-
-    <transition name="fade">
-        <div id="officeAnchor">
-        <fieldset id="officeAddress" v-show="identifyingInfoInput">
-            <?php
-
-            echo $this->Form->control('office_careof', ['label' => 'Floor / Room / Care Of', 'class' => 'form-control', 'v-model' => 'officeMailPrefix']);
-            echo $this->Form->control('office_suite', ['label' => 'Suite', 'class' => 'form-control', 'v-model' => 'officeSuite']);
-            echo $this->Form->control('office_address', ['v-model' => 'officeStreetAddress', 'class' => 'form-control',]);
-            echo $this->Form->control('office_city_id', ['options' => $cities, 'empty' => '- select city -', 'class' => 'form-control', 'onChange' => 'app.officeCitySelected(this.text)']);
-            echo $this->Form->control('office_province', ['disabled' => true , 'class' => 'form-control']);
-            echo $this->Form->control('office_postal_code', ['v-model' => 'officePostalCode', 'class' => 'form-control', 'text-transform' => 'uppercase']);
-            echo $this->Form->control('work_phone', ['label' => 'Office Phone', 'class' => 'form-control', 'v-model' => 'officePhone']);
-            echo $this->Form->control('work_extension', ['label' => 'Office Phone Extension', 'class' => 'form-control','v-model' => 'officeExtension']);
-
-            ?>
-
-            <div>
-                <span v-html="errorsOffice" class="lsa-errors-container">
-                </span>
-            </div>
-            <?php
-            echo $this->Form->button('Office Address Input', ['type' => 'button',  'onclick' => 'app.showHomeAddressInput()', 'class' => 'btn btn-primary']);
-            ?>
-        </fieldset>
-        </div>
-    </transition>
-
-
-    <transition name="fade">
-        <div id="homeAnchor">
-        <fieldset id="homeAddress" v-show="officeAddressInput">
-
-            <?php
-                echo $this->Form->control('home_suite', ['label' => 'Suite', 'v-model' => 'homeSuite', 'class' => 'form-control']);
-                echo $this->Form->control('home_address', ['v-model' => 'homeStreetAddress', 'class' => 'form-control',]);
-                echo $this->Form->control('home_city_id', ['options' => $cities, 'empty' => '- select city -', 'onChange' => 'app.homeCitySelected()', 'class' => 'form-control',]);
-                echo $this->Form->control('home_province', ['disabled' => true, 'class' => 'form-control',]);
-                echo $this->Form->control('home_postal_code', ['v-model' => 'homePostalCode', 'class' => 'form-control',]);
-                echo $this->Form->control('home_phone', ['v-model' => 'homePhone' , 'class' => 'form-control',]);
-            ?>
-            <div>
-                <span v-html="errorsHome" class="lsa-errors-container">
-                </span>
-            </div>
-            <?php
-                echo $this->Form->button('Home Address Input', ['type' => 'button',  'onclick' => 'app.showSupervisorInput()', 'class' => 'btn btn-primary']);
-            ?>
-        </fieldset>
-        </div>
-    </transition>
-
-
-    <transition name="fade">
-        <div id="supervisorAnchor">
-        <fieldset id="supervisor" v-if="homeAddressInput">
-            <?php
-                echo $this->Form->control('supervisor_first_name', ['v-model' => 'supervisorFirstName', 'class' => 'form-control']);
-                echo $this->Form->control('supervisor_last_name', ['v-model' => 'supervisorLastName','class' => 'form-control' ]);
-                echo $this->Form->control('supervisor_careof', ['label' => 'Floor / Room / Care Of', 'class' => 'form-control', 'v-model' => 'supervisorMailPrefix']);
-                echo $this->Form->control('supervisor_suite', ['label' => 'Suite', 'class' => 'form-control','v-model' => 'supervisorSuite']);
-                echo $this->Form->control('supervisor_address', ['class' => 'form-control', 'v-model' => 'supervisorStreetAddress']);
-                echo $this->Form->control('supervisor_city_id', ['class' => 'form-control', 'options' => $cities, 'empty' => '- select city -', 'onChange' => 'app.supervisorCitySelected()']);
-                echo $this->Form->control('supervisor_province', ['class' => 'form-control','disabled' => true]);
-                echo $this->Form->control('supervisor_postal_code', ['class' => 'form-control', 'v-model' => 'supervisorPostalCode']);
-                echo $this->Form->control('supervisor_email', ['class' => 'form-control', 'type' => 'email', 'v-model' => 'supervisorEmail']);
-            ?>
-            <div>
-                <span v-html="errorsSupervisor" class="lsa-errors-container">
-                </span>
-            </div>
-
-            <?php
-                echo $this->Form->button('Supervisor Input', ['type' => 'button',  'onclick' => 'app.showConfirmation()', 'class' => 'btn btn-primary']);
-            ?>
-        </fieldset>
-        </div>
-    </transition>
-
-    <transition name="fade">
-        <div id="confirmationAnchor">
-        <div class="confirmationDisplay" v-if="supervisorInput">
-
-            <h3 class="display-4">Please Confirm Your Information</h3>
-
-            <h4>{{firstName}}
-                {{lastName}}</h4>
-
-            <p>Milestone: {{ milestone }}</p>
-            <p>Employee ID:
-                {{employeeID}}</p>
-            <div class="row">
-                <div class="col-sm-6">
-                    <h5>Office Address</h5>
-                    <div class="address">
-                        <p>{{officeMailPrefix}}</p>
-                        <p>{{officeSuite}}
-                            {{officeStreetAddress}}</p>
-                        <p>{{officeCity}}, BC</p>
-                        <p>{{officePostalCode}}</p>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <h5>Home Address</h5>
-                    <div class="address">
-                        <p>{{homeSuite}}
-                            {{homeStreetAddress}}</p>
-                        <p>{{homeCity}}, BC</p>
-                        <p>{{homePostalCode}}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="award">
-                        <div class="card award-card">
-                            <img alt="..." class="card-img-top" v-bind:src="'/img/awards/' + awardImage">
-                            <div class="card-body">
-                                <h5 class="card-title">{{awardName}}</h5>
-                                <p class="card-text">
-                                <ul id="award-options">
-                                    <li v-for="option in awardOptions">
-                                        {{ option }}
-                                    </li>
-                                </ul>
-                                </p>
+                            <div class="form-row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="milestone">Which milestone are you celebrating?</label>
+                                        <select id="milestone" name="milestone" v-model="milestone">
+                                                <option selected disabled>Select Milestone</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="">I which year did you reach this milestone?</label>
+                                        <select id="" name="" v-model="">
+                                            <option selected disabled>Select Year</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <p class="divisionMinistryDisplay">You work in
-                        {{ministryBranch}}
-                        at
-                        {{ministry}}</p>
-                    <p class="retirementDisplay" v-if="isRetiringThisYear">You are retiring on
-                        {{retirementDate}}</p>
+                            <div class="form-row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="">How would you like your name to appear on your certificate?</label>
+                                        <input type="text" id="" name="" class="form-control" v-model="">
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <label>Did you register for a Long Service Award last year, but not attend a ceremony?</label>
+                                        <input class="form-check-input" type="radio" name="" id="" value="">
+                                        <label class="form-check-label" for="">Yes</label>
+                                        <input class="form-check-input" type="radio" name="" id="" value="">
+                                        <label class="form-check-label" for="">No</label>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <label>Are you retiring this calendar year? </label>
+                                        <input class="form-check-input" type="radio" name="" id="" value="true" v-model="isRetiringThisYear">
+                                        <label class="form-check-label" for="">Yes</label>
+                                        <input class="form-check-input" type="radio" name="" id="" value="false" v-model="isRetiringThisYear">
+                                        <label class="form-check-label" for="">No</label>
+                                    </div>
+                                </div>
+                            </div>
 
-                    <h5>Your Supervisor</h5>
-                    <p>{{supervisorFirstName}}
-                        {{supervisorLastName}}</p>
-                    <div class="address">
-                        <p>{{supervisorMailPrefix}}</p>
-                        <p>{{supervisorSuite}}
-                            {{supervisorStreetAddress}}</p>
-                        <p>{{supervisorCity}}, BC</p>
-                        <p>{{supervisorPostalCode}}</p>
-                    </div>
-                </div>
-<!--                <a class="btn btn-primary" href="#register" id="confirmInfo" v-on:click="showDeclaration">Confirm</a>-->
-                <?php
-                    echo $this->Form->button('Confirm', ['type' => 'button',  'onclick' => 'app.showDeclaration()', 'class' => 'btn btn-primary']);
-                ?>
-            </div>
-        </div>
-        </div>
-    </transition>
+                            <button class="btn btn-primary" @click="e1 = 2">Select Award</button>
+                        </v-stepper-content>
 
-    <transition name="fade">
-        <div id="declarationAnchor">
-        <div class="confirmationDisplay" v-if="informationConfirmed">
-            <div class="row" id="declaration" v-if="informationConfirmed">
-                <div class="col-sm-10">
-                    <h5>Declaration and Notice of Collection, Consent and Authorize</h5>
-                    <p class="collectionStatement">I declare, to the best of my knowledge and consistent with the Long Service Awards eligibility guidelines (which I have reviewed) that as of
-                        December 31, 2021, I will have worked for the BC Public Service for 25, 30, 35, 40, 45 or 50 years and I am therefore eligible for a Long Service Award. By providing my
-                        personal information, I am allowing the BC Public Service Agency to use and disclose this information for the planning and delivery of the Long Service Award recognition events.
-                        This personal information is required to process your application for the Long Service Awards and is collected in accordance with section 26(c) of the Freedom of Information and
-                        Protection of Privacy Act (FOIPPA).
-                        Questions about the collection, use or disclosure of this information, can be directed to: LongServiceAwards@gov.bc.ca, 1st Floor, 563 Superior Street, Victoria BC, V8V 0C5.</p>
-                    <div class="form-check">
-                        <input class="form-check-input" id="agreedToDeclaration" type="checkbox" value="true">
-                        <label class="form-check-label" for="agreedToDeclaration">I agree to the above declaration and its terms</label>
-                    </div>
-                </div>
-            </div>
-            <div id="register">
-                <?php
-                echo $this->Form->button(__('Register'), array('class' => 'btn btn-primary'));
-                echo '&nbsp;';
-                echo $this->Form->button('Cancel', array(
-                    'type' => 'button',
-                    'onclick' => 'location.href=\'/\'',
-                    'class' => 'btn btn-primary'
-                ));
-                ?>
-            </div>
-        </div>
-        </div>
-    </transition>
+                        <v-stepper-content step="2">
+
+                            <button class="btn btn-primary" @click="e1 = 3">Enter Contact Information</button>
+                        </v-stepper-content>
+
+
+                        <v-stepper-content step="3">
+                            <h3 class="display-3">Your Contact Information</h3>
+                            <div class="form-row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="">Employee ID #</label>
+                                        <input type="text" id="employee_id" name="employee_id" class="form-control" v-model="employeeID">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="">First Name</label>
+                                        <input type="text" id="first_name" name="first_name" v-model="firstName" class="form-control" placeholder="Your First Name">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="">Last Name</label>
+                                        <input type="text" id="last_name" name="last_name" v-model="lastName" class="form-control" placeholder="Your Last Name">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="">Government email address</label>
+                                        <input type="email" id="preferred_email" name="preferred_email" v-model="govtEmail" class="form-control" placeholder="i.e. taylor.publicservant@gov.bc.ca">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="">Alternate email address</label>
+                                        <input type="email" id="alternate_email" name="alternate_email" v-model="altEmail" class="form-control" placeholder="i.e. taylor_publicservant@gmail.com">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="">Current Ministry</label>
+                                        <?= $this->Form->control('ministry_id', ['options' => $ministries, 'empty' => 'Choose your Ministry', 'class' => 'form-control', 'onChange' => 'app.ministrySelected()']); ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="">Current branch</label>
+                                        <input type="text" id="branch" name="branch" v-model="ministryBranch" class="form-control" placeholder="i.e. Corporate Services">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <h4 class="display-2">Your Office Address</h4>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="">Floor/Room/Care Of</label>
+                                        <input type="text" class="form-control" placeholder="i.e. Discovery Room" v-model="officeMailPrefix">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="">Suite</label>
+                                        <input type="text" class="form-control" placeholder="i.e. 800" v-model="officeSuite">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="">Street Address</label>
+                                        <input type="text" class="form-control" placeholder="i.e. 1445 10th Ave." v-model="officeStreetAddress">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-8">
+                                    <div class="form-group">
+                                        <label for="">City</label>
+                                        <?= $this->Form->control('office_city_id', ['options' => $cities, 'empty' => '- select city -', 'onChange' => 'app.officeCitySelected()', 'class' => 'form-control',]); ?>
+                                    </div>
+                                </div>
+
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label for="">Postal Code</label>
+                                        <input type="text" class="form-control" placeholder="i.e. A1A 1A1" v-model="officePostalCode">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+
+                            </div>
+                            <div class="form-row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="">Office Phone Number</label>
+                                        <input type="text" class="form-control" placeholder="i.e. (604) 555-5555" v-model="officePhone">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div clas="form-group">
+                                        <label for="">Extension</label>
+                                        <input type="text" class="form-control" placeholder="ie. 800" v-model="officeExtension">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <h4 class="display-2">Your Home Address</h4>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="">Floor/Room/Care Of</label>
+                                        <input type="text" class="form-control" placeholder="i.e. Discovery Room" v-model="homeMailPrefix">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="">Suite</label>
+                                        <input type="text" class="form-control" placeholder="i.e. 800" v-model="homeSuite">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="">Street Address</label>
+                                        <input type="text" class="form-control" placeholder="i.e. 1445 10th Ave." v-model="homeStreetAddress">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-8">
+                                    <div class="form-group">
+                                        <label for="">City</label>
+                                       <?= $this->Form->control('home_city_id', ['options' => $cities, 'empty' => '- select city -', 'onChange' => 'app.homeCitySelected()', 'class' => 'form-control',]); ?>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label for="">Postal Code</label>
+                                        <input type="text" class="form-control" placeholder="i.e. A1A 1A1" v-model="homePostalCode">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="form-row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="">Office Phone Number</label>
+                                        <input type="text" class="form-control" placeholder="i.e. (604) 555-5555" v-model="officePhone">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div clas="form-group">
+                                        <label for="">Extension</label>
+                                        <input type="text" class="form-control" placeholder="ie. 800" v-model="officeExtension">
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <button class="btn btn-primary" @click="e1 = 4">Enter Supervisor's Contact Info.</button>
+                        </v-stepper-content>
+
+                        <v-stepper-content step="4">
+                            <h3 class="display-3">Your Supervisor's Contact Information</h3>
+
+                            <div class="form-row">
+                                <div class="col-6">
+                                    <label for="">Supervisor's First Name</label>
+                                    <input type="text" class="form-control" placeholder="Your Supervisor's First Name" v-model="supervisorFirstName">
+                                </div>
+                                <div class="col-6">
+                                    <label for="">Supervisor's Last Name</label>
+                                    <input type="text" class="form-control" placeholder="Your Supervisors's Last Name" v-model="supervisorLastName">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="col-12">
+                                    <label for="">Supervisor's Email</label>
+                                    <input type="email" class="form-control" placeholder="i.e. Taylor.Publicservant@gov.bc.ca" v-model="supervisorEmail">
+                                </div>
+                            </div>
+
+
+                            <h4 class="display-2">Supervisor's Office Address</h4>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="">Floor/Room/Care Of</label>
+                                        <input type="text" class="form-control" placeholder="i.e. Discovery Room" v-model="supervisorMailPrefix">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="">Suite</label>
+                                        <input type="text" class="form-control" placeholder="i.e. 800" v-model="supervisorSuite">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="">Street Address</label>
+                                        <input type="text" class="form-control" placeholder="i.e. 1445 10th Ave." v-model="supervisorStreetAddress">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-8">
+                                    <div class="form-group">
+                                        <label for="">City</label>
+                                        <?= $this->Form->control('supervisor_city_id', ['class' => 'form-control', 'options' => $cities, 'empty' => '- select city -', 'onChange' => 'app.supervisorCitySelected()']); ?>
+
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label for="">Postal Code</label>
+                                        <input type="text" class="form-control" placeholder="i.e. A1A 1A1" v-model="supervisorPostalCode">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="form-row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="">Office Phone Number</label>
+                                        <input type="text" class="form-control" placeholder="i.e. (604) 555-5555" v-model="supervisorPhone">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div clas="form-group">
+                                        <label for="">Extension</label>
+                                        <input type="text" class="form-control" placeholder="ie. 800" v-model="supervisorExtension">
+                                    </div>
+                                </div>
+                            </div>
+
+                            </div>
+
+
+
+                        </v-stepper-content>
+
+                        <v-stepper-content step="5">
+                            <h3 class="display-3">Please Confirm Your Information</h3>
+                            <div class="confirmation-group">
+                                <h4>Milestone</h4>
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Milestone reached:</p>
+                                        <p class="confirmation-value">{{milestone}}</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Name on certificate</p>
+                                        <p class="confirmation-value">{{}}</p>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Year milestone reached:</p>
+                                        <p class="confirmation-value">{{}}</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Registered last year but didn't attended</p>
+                                        <p class="confirmation-value">{{}}</p>
+                                    </div>
+                                </div>
+                                <form class="form-row">
+                                    <div class="col-9">
+
+                                    </div>
+                                    <div class="col-3">
+                                        <button class="btn btn-secondary" @click="e1 = 1">Edit this Section</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="confirmation-group">
+                                <h4>Award &amp; Options</h4>
+
+                            </div>
+                            <div class="confirmation-group">
+                                <h3 class="display-3">Your Contact Information</h3>
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Your Name</p>
+                                        <p class="confirmation-value">{{firstName}} {{lastName}}</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Your Employee ID #</p>
+                                        <p class="confirmation-value">{{employeeID}}</p>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Your Government email address</p>
+                                        <p class="confirmation-value">{{}}</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Your alternate email address</p>
+                                        <p class="confirmation-value">{{}}</p>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Your current Ministry</p>
+                                        <p class="confirmation-value">{{}}</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Your current branch</p>
+                                        <p class="confirmation-value">{{}}</p>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Your Office Address</p>
+                                        <p class="confirmation-value">{{officeMailPrefix}}</p>
+                                        <p class="confirmation-value">{{officeSuite}} {{officeStreetAddress}}</p>
+                                        <p class="confirmation-value">{{officeCity}}, BC</p>
+                                        <p class="confirmation-value">{{officePostalCode}}</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Your Home Address</p>
+                                        <p class="confirmation-value">{{homeSuite}}</p>
+                                        <p class="confirmation-value">{{homeStreetAddress}}</p>
+                                        <p class="confirmation-value">{{homeCity}}</p>
+                                        <p class="confirmation-value">{{homePostalCode}}</p>
+                                    </div>
+                                </div>
+
+                                <div class="confirmation-group">
+                                    <h3 class="display-3">Your Supervisor&apos;s Contact Information</h3>
+                                    <div class="form-row">
+                                        <div class="col-6">
+                                            <p class="confirmation-label">Supervisor&apos;s Name</p>
+                                            <p class="confirmation-value">{{firstName}} {{lastName}}</p>
+                                        </div>
+                                        <div class="col-6">
+                                            <p class="confirmation-label">Supervisor&apos;s Email</p>
+                                            <p class="confirmation-value">{{employeeID}}</p>
+                                        </div>
+                                    </div>
+
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-6">
+                                            <p class="confirmation-label">Supervisor&apos;s Office Address</p>
+                                            <p class="confirmation-value">{{officeMailPrefix}}</p>
+                                            <p class="confirmation-value">{{officeSuite}} {{officeStreetAddress}}</p>
+                                            <p class="confirmation-value">{{officeCity}}, BC</p>
+                                            <p class="confirmation-value">{{officePostalCode}}</p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="confirmation-group">
+                                    <h3 class="display-3">LSA Survey Participation</h3>
+                                    <div class="form-row">
+                                        <div class="col-2">
+                                            <div class="form-group">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="confirmation-group">
+                                <h3 class="display-3">Declaration &amp; Notice of Collection, Consent &amp; Authorize</h3>
+                                <div class="form-row">
+                                    <div class="col-3">
+                                        <div class="form-group">
+
+                                        </div>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="form-group">
+                                            <p class="collectionStatement">I declare, to the best of my knowledge and consistent with the Long Service Awards eligibility guidelines (which I have reviewed) that as of
+                                                December 31, 2021, I will have worked for the BC Public Service for 25, 30, 35, 40, 45 or 50 years and I am therefore eligible for a Long Service Award. By providing my
+                                                personal information, I am allowing the BC Public Service Agency to use and disclose this information for the planning and delivery of the Long Service Award recognition events.
+                                                This personal information is required to process your application for the Long Service Awards and is collected in accordance with section 26(c) of the Freedom of Information and
+                                                Protection of Privacy Act (FOIPPA).
+                                                Questions about the collection, use or disclosure of this information, can be directed to: LongServiceAwards@gov.bc.ca, 1st Floor, 563 Superior Street, Victoria BC, V8V 0C5.</p>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-8">
+
+                                </div>
+                                <div class="col-4">
+                                    <button class="btn btn-primary">Confirm &amp; Agree</button>
+                                </div>
+                            </div>
+
+
+                        </v-stepper-content>
+
+                    </v-stepper-items>
+
+
+                </v-stepper>
+            </v-container>
+        </v-main>
+    </v-app>
+
+
+
+
     <div>
         <?php
 
@@ -315,69 +513,7 @@
 
     </div>
 
-    <div aria-hidden="true" aria-labelledby="Awards" class="modal fade" id="award-1"  data-backdrop="static" data-keyboard="false"  role="dialog" tabindex="-1">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 id="awardName" class="modal-title">Award The First</h5>
-                </div>
-                <div class="modal-body">
-                    <fieldset id="formAwardOptions">
-                    </fieldset>
-                </div>
-                <div id="pop-up-errors">
-                        <span v-html="errorsOptions" class="lsa-errors-container">
-                        </span>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" type="button" v-on:click="processOptions">Select</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div aria-hidden="true" aria-labelledby="Donations" class="modal fade" id="donation-1"  data-backdrop="static" data-keyboard="false"  role="dialog" tabindex="-1">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 id="donationName" class="modal-title">Charitable Donation</h5>
-                </div>
-                <div class="modal-body">
-                    <fieldset id="formDonationOptions">
-                        <?php
-                            echo $this->Form->control('donorName', ['class' => 'form-control','label' => 'Donor Name']);
-                            echo $this->Form->control('selectedRegion', ['class' => 'form-control', 'options' => $regions, 'empty' => '- select region -', 'onChange' => 'app.regionSelected()']);
-                        ?>
-
-                        <div id="donation-type" v-if="inputDonationType">
-                            <label>Donate to</label>
-                            <?php echo $this->Form->radio('selectDonationType', ['class' => 'form-control', 'PECSF Region Charity Fund', 'One Individual Charity', 'Two Individual Charities'], ['onChange' => 'app.donationTypeSelected()']); ?>
-                        </div>
-                        <div v-if="inputCharity1">
-                            <select id="selectedCharity1">
-                                <option value>- select charity -</option>
-                                <option v-for='data in availableCharities' :value='data.id'>{{ data.name }}</option>
-                            </select>
-                        </div>
-                        <div v-if="inputCharity2">
-                            <select id="selectedCharity2">
-                                <option value>- select charity -</option>
-                                <option v-for='data in availableCharities' :value='data.id'>{{ data.name }}</option>
-                            </select>
-                        </div>
-
-                    </fieldset>
-                </div>
-                <div id="pop-up-errors">
-                        <span v-html="errorsOptions" class="lsa-errors-container">
-                        </span>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" type="button" v-on:click="processOptions">Select</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
 
@@ -393,9 +529,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.1.3/vue-router.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/smooth-scroll/16.1.0/smooth-scroll.min.js"></script>
+<!-- Special JavaScript just for Registration form -->
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
 
 
 <script type="text/javascript">
+
 
     var clrError = "#ff0000";
     var clrDefault = "#d1d1d1";
@@ -440,8 +579,11 @@
     Vue.config.devtools = true;
 
 
+
+
     var app = new Vue({
         el: "#app",
+        vuetify: new Vuetify(),
         data: {
             isRetiringThisYear: false,
             retirementStatusKnown: false,
@@ -468,6 +610,7 @@
             officePhone: '',
             officeExtension: '',
 
+            homeMailPrefix: '',
             homeSuite: '',
             homeStreetAddress: '',
             homeCity: '',
@@ -482,6 +625,9 @@
             supervisorCity: '',
             supervisorPostalCode: '',
             supervisorEmail: '',
+
+            supervisorPhone: '',
+            supervisorExtension: '',
 
             availableAwards: '',
             availableAwardOptions: '',
@@ -1353,7 +1499,8 @@
         speed: 1500
     });
 
-
+*/
 </script>
 
+<!-- FOR TESTING -->
 
