@@ -126,7 +126,6 @@
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label for="">Current Ministry</label>
-                                        <?= $this->Form->control('ministry_id', ['options' => $ministries, 'empty' => 'Choose your Ministry', 'class' => 'form-control', 'onChange' => 'app.ministrySelected()']); ?>
                                     </div>
                                 </div>
                             </div>
@@ -168,7 +167,6 @@
                                 <div class="col-8">
                                     <div class="form-group">
                                         <label for="">City</label>
-                                        <?= $this->Form->control('office_city_id', ['options' => $cities, 'empty' => '- select city -', 'onChange' => 'app.officeCitySelected()', 'class' => 'form-control',]); ?>
                                     </div>
                                 </div>
 
@@ -225,8 +223,7 @@
                                 <div class="col-8">
                                     <div class="form-group">
                                         <label for="">City</label>
-                                       <?= $this->Form->control('home_city_id', ['options' => $cities, 'empty' => '- select city -', 'onChange' => 'app.homeCitySelected()', 'class' => 'form-control',]); ?>
-                                    </div>
+                                                                   </div>
                                 </div>
                                 <div class="col-4">
                                     <div class="form-group">
@@ -305,7 +302,6 @@
                                 <div class="col-8">
                                     <div class="form-group">
                                         <label for="">City</label>
-                                        <?= $this->Form->control('supervisor_city_id', ['class' => 'form-control', 'options' => $cities, 'empty' => '- select city -', 'onChange' => 'app.supervisorCitySelected()']); ?>
 
                                     </div>
                                 </div>
@@ -572,14 +568,16 @@
 
         app.awardSelected = true;
     }
+</script>
 
+<script type="text/javascript">
 
-    Vue.config.devtools = true;
 
     var app = new Vue({
         el: "#app",
         vuetify: new Vuetify(),
         data: {
+            e1: 1,
             isRetiringThisYear: false,
             retirementStatusKnown: false,
             retirementDate: '',
@@ -605,7 +603,6 @@
             officePhone: '',
             officeExtension: '',
 
-            homeMailPrefix: '',
             homeSuite: '',
             homeStreetAddress: '',
             homeCity: '',
@@ -620,9 +617,6 @@
             supervisorCity: '',
             supervisorPostalCode: '',
             supervisorEmail: '',
-
-            supervisorPhone: '',
-            supervisorExtension: '',
 
             availableAwards: '',
             availableAwardOptions: '',
@@ -1494,8 +1488,7 @@
         speed: 1500
     });
 
+    Vue.config.devtools = true;
+
 
 </script>
-
-<!-- FOR TESTING -->
-
