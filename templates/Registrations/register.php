@@ -1499,7 +1499,7 @@
         speed: 1500
     });
 
-*/
+
 </script>
 
 <!-- FOR TESTING -->
