@@ -1,4 +1,5 @@
 <div id="app">
+    <template>
     <v-app>
         <v-main>
             <v-container>
@@ -8,11 +9,13 @@
                         <v-divider></v-divider>
                         <v-stepper-step :complete="e1 > 2" step="2"> Award</v-stepper-step>
                         <v-divider></v-divider>
-                        <v-stepper-step :complete="e1 > 3" step="3"> Contact <br> <span class="step-name-subtext">Employee</span></v-stepper-step>
+                        <v-stepper-step :complete="e1 > 3" step="3"> Contact <br> <span class="step-name-subtext">Employee</span>
+                        </v-stepper-step>
                         <v-divider></v-divider>
-                        <v-stepper-step :complete="e1 > 4" step="4"> Contact <br> <span class="step-name-subtext">Supervisor</span></v-stepper-step>
+                        <v-stepper-step :complete="e1 > 4" step="4"> Contact <br> <span class="step-name-subtext">Supervisor</span>
+                        </v-stepper-step>
                         <v-divider></v-divider>
-                        <v-stepper-step :complete="e1 > 5" step="5"> Confirm </v-stepper-step>
+                        <v-stepper-step :complete="e1 > 5" step="5"> Confirm</v-stepper-step>
                     </v-stepper-header>
 
                     <v-stepper-items>
@@ -22,16 +25,23 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="milestone">Which milestone are you celebrating?</label>
+
                                         <select class="form-control" id="milestone" name="milestone">
                                             <option selected disabled>Select Milestone</option>
+                                            <?php foreach ($milestoneinfo as $mstone) : ?>
+                                                <option value="<?= $mstone->id ?>"><?= $mstone->name ?></option>
+                                            <?php endforeach ?>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
-                                        <label for="">I which year did you reach this milestone?</label>
-                                        <select class="form-control" id="" name="" >
+                                        <label for="">In which year did you reach this milestone?</label>
+                                        <select class="form-control" id="" name="">
                                             <option selected disabled>Select Year</option>
+                                            <?php foreach ($award_years as $ayear) : ?>
+                                                <option value="<?= $ayear ?>"><?= $ayear ?></option>
+                                            <?php endforeach ?>
                                         </select>
                                     </div>
                                 </div>
@@ -39,26 +49,36 @@
                             <div class="form-row">
                                 <div class="col-6">
                                     <div class="form-group">
-                                        <label for="">How would you like your name to appear on your certificate?</label>
-                                        <input type="text" id="" name="" class="form-control" >
+                                        <label for="">How would you like your name to appear on your
+                                            certificate?</label>
+                                        <input type="text" id="certificateName" name="certificateName" v-model="certificateName" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-3">
+                                    <p>Did you register for a Long Service Award last year, but not attend a
+                                        ceremony?</p>
                                     <div class="form-group">
-                                        <label>Did you register for a Long Service Award last year, but not attend a ceremony?</label>
                                         <input class="form-check-input" type="radio" name="" id="" value="">
                                         <label class="form-check-label" for="">Yes</label>
+                                    </div>
+                                    <div class="form-group">
                                         <input class="form-check-input" type="radio" name="" id="" value="">
                                         <label class="form-check-label" for="">No</label>
                                     </div>
                                 </div>
                                 <div class="col-3">
                                     <div class="form-group">
-                                        <label>Are you retiring this calendar year? </label>
-                                        <input class="form-check-input" type="radio" name="" id="" value="true" v-model="isRetiringThisYear">
-                                        <label class="form-check-label" for="">Yes</label>
-                                        <input class="form-check-input" type="radio" name="" id="" value="false" v-model="isRetiringThisYear">
-                                        <label class="form-check-label" for="">No</label>
+                                        <p>Are you retiring this calendar year? </p>
+                                        <div class="form-group">
+                                            <input class="form-check-input" type="radio" name="" id="" value="true"
+                                                   v-model="isRetiringThisYear">
+                                            <label class="form-check-label" for="">Yes</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-check-input" type="radio" name="" id="" value="false"
+                                                   v-model="isRetiringThisYear">
+                                            <label class="form-check-label" for="">No</label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -69,6 +89,10 @@
                         </v-stepper-content>
 
                         <v-stepper-content step="2">
+                            <h3 class="display-3">Select Your Award</h3>
+
+
+
 
                             <button class="btn btn-primary" @click="e1 = 3">Enter Contact Information</button>
                         </v-stepper-content>
@@ -76,11 +100,13 @@
 
                         <v-stepper-content step="3">
                             <h3 class="display-3">Your Contact Information</h3>
+
                             <div class="form-row">
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">Employee ID #</label>
-                                        <input type="text" id="employee_id" name="employee_id" class="form-control" v-model="employeeID">
+                                        <input type="text" id="employee_id" name="employee_id" class="form-control"
+                                               v-model="employeeID">
                                     </div>
                                 </div>
                             </div>
@@ -88,13 +114,15 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">First Name</label>
-                                        <input type="text" id="first_name" name="first_name" v-model="firstName" class="form-control" placeholder="Your First Name">
+                                        <input type="text" id="first_name" name="first_name" v-model="firstName"
+                                               class="form-control" placeholder="Your First Name">
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">Last Name</label>
-                                        <input type="text" id="last_name" name="last_name" v-model="lastName" class="form-control" placeholder="Your Last Name">
+                                        <input type="text" id="last_name" name="last_name" v-model="lastName"
+                                               class="form-control" placeholder="Your Last Name">
                                     </div>
                                 </div>
                             </div>
@@ -102,13 +130,17 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">Government email address</label>
-                                        <input type="email" id="preferred_email" name="preferred_email" v-model="govtEmail" class="form-control" placeholder="i.e. taylor.publicservant@gov.bc.ca">
+                                        <input type="email" id="preferred_email" name="preferred_email"
+                                               v-model="govtEmail" class="form-control"
+                                               placeholder="i.e. taylor.publicservant@gov.bc.ca">
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">Alternate email address</label>
-                                        <input type="email" id="alternate_email" name="alternate_email" v-model="altEmail" class="form-control" placeholder="i.e. taylor_publicservant@gmail.com">
+                                        <input type="email" id="alternate_email" name="alternate_email"
+                                               v-model="altEmail" class="form-control"
+                                               placeholder="i.e. taylor_publicservant@gmail.com">
                                     </div>
                                 </div>
                             </div>
@@ -116,7 +148,8 @@
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label for="">Current Ministry</label>
-                                        <select name="ministry_id" id="ministry_id" @change="app.ministrySelected()" class="form-control">
+                                        <select name="ministry_id" id="ministry_id" @change="app.ministrySelected()"
+                                                class="form-control">
                                             <option selected default>Choose your Ministry</option>
                                         </select>
                                     </div>
@@ -126,7 +159,8 @@
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label for="">Current branch</label>
-                                        <input type="text" id="branch" name="branch" v-model="ministryBranch" class="form-control" placeholder="i.e. Corporate Services">
+                                        <input type="text" id="branch" name="branch" v-model="ministryBranch"
+                                               class="form-control" placeholder="i.e. Corporate Services">
                                     </div>
                                 </div>
                             </div>
@@ -174,6 +208,9 @@
                                         <label for="">City</label>
                                         <select name="" id="" class="form-control">
                                             <option selected disabled>Choose city</option>
+                                            <?php foreach ($cities as $city) : ?>
+                                                <option value="<?= $city ?>"><?= h($city) ?></option>
+                                            <?php endforeach; ?>
                                         </select>
                                     </div>
                                 </div>
@@ -233,6 +270,9 @@
                                         <label for="">City</label>
                                         <select name="" id="" class="form-control">
                                             <option selected disabled>Choose city</option>
+                                            <?php foreach ($cities as $city) : ?>
+                                                <option value="<?= $city ?>"><?= h($city) ?></option>
+                                            <?php endforeach; ?>
                                         </select>
                                     </div>
                                 </div>
@@ -260,42 +300,244 @@
                             </div>
 
 
+
                             <button class="btn btn-primary" @click="e1 = 4">Enter Supervisor's Contact Info.</button>
                         </v-stepper-content>
 
                         <v-stepper-content step="4">
-                            <h3>Your Supervisor's Contact Information</h3>
-                            <div class="form-row">
+                            <h3 class="display-3">Your Supervisor's Contact Information</h3>
 
+                            <div class="form-row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="">Floor/Room/Care Of</label>
+                                        <input type="text" class="form-control" placeholder="i.e. Discovery Room">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="">Suite</label>
+                                        <input type="text" class="form-control" placeholder="i.e. 800">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="">Street Address</label>
+                                        <input type="text" class="form-control" placeholder="i.e. 1445 10th Ave.">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-8">
+                                    <div class="form-group">
+                                        <label for="">City</label>
+                                        <select name="" id="" class="form-control">
+                                            <option selected disabled>Choose city</option>
+                                            <?php foreach ($cities as $city) : ?>
+                                                <option value="<?= $city ?>"><?= h($city) ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label for="">Postal Code</label>
+                                        <input type="text" class="form-control" placeholder="i.e. A1A 1A1">
+                                    </div>
+                                </div>
                             </div>
 
 
-
+                            <button class="btn btn-primary" @click="e1 = 5">Enter Supervisor's Contact Info.</button>
                         </v-stepper-content>
-
                         <v-stepper-content step="5">
+                            <h3 class="display-3">Confirm Your Information</h3>
+                            <div class="confirmation-group">
+                                <h4>Milestone</h4>
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Milestone reached:</p>
+                                        <p class="confirmation-value">{{milestone}}</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Name on certificate</p>
+                                        <p class="confirmation-value">{{certificateName}}</p>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Year milestone reached:</p>
+                                        <p class="confirmation-value">{{awardYear}}</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Registered last year but didn't attended</p>
+                                        <p class="confirmation-value">{{}}</p>
+                                    </div>
+                                </div>
+                                <form class="form-row">
+                                    <div class="col-9">
+
+                                    </div>
+                                    <div class="col-3">
+                                        <button class="btn btn-secondary" @click="e1 = 1">Edit this Section</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="confirmation-group">
+                                <h4>Award &amp; Options</h4>
+
+                            </div>
+                            <div class="confirmation-group">
+                                <h4>Your Contact Information</h4>
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Your Name</p>
+                                        <p class="confirmation-value">{{firstName}} {{lastName}}</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Your Employee ID #</p>
+                                        <p class="confirmation-value">{{employeeID}}</p>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Your Government email address</p>
+                                        <p class="confirmation-value">{{govtEmail}}</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Your alternate email address</p>
+                                        <p class="confirmation-value">{{altEmail}}</p>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Your current Ministry</p>
+                                        <p class="confirmation-value">{{ministry}}</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Your current branch</p>
+                                        <p class="confirmation-value">{{ministryBranch}}</p>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Your Office Address</p>
+                                        <p class="confirmation-value">{{officeMailPrefix}}</p>
+                                        <p class="confirmation-value">{{officeSuite}} {{officeStreetAddress}}</p>
+                                        <p class="confirmation-value">{{officeCity}}, BC</p>
+                                        <p class="confirmation-value">{{officePostalCode}}</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="confirmation-label">Your Home Address</p>
+                                        <p class="confirmation-value">{{homeSuite}}</p>
+                                        <p class="confirmation-value">{{homeStreetAddress}}</p>
+                                        <p class="confirmation-value">{{homeCity}}</p>
+                                        <p class="confirmation-value">{{homePostalCode}}</p>
+                                    </div>
+                                    <div class="form-row">
+                                        <button class="btn btn-secondary" @click="e1 = 3">Edit this Section</button>
+                                    </div>
+                                </div>
+                                <div class="confirmation-group">
+                                    <h4>Your Supervisor&apos;s Contact Information</h4>
+                                    <div class="form-row">
+                                        <div class="col-6">
+                                            <p class="confirmation-label">Supervisor&apos;s Name</p>
+                                            <p class="confirmation-value">{{firstName}} {{lastName}}</p>
+                                        </div>
+                                        <div class="col-6">
+                                            <p class="confirmation-label">Supervisor&apos;s Email</p>
+                                            <p class="confirmation-value">{{employeeID}}</p>
+                                        </div>
+                                    </div
+                                    <div class="form-row">
+                                        <div class="col-6">
+                                        <p class="confirmation-label">Supervisor&apos;s Office Address</p>
+                                        <p class="confirmation-value">{{officeMailPrefix}}</p>
+                                        <p class="confirmation-value">{{officeSuite}} {{officeStreetAddress}}</p>
+                                        <p class="confirmation-value">{{officeCity}}, BC</p>
+                                        <p class="confirmation-value">{{officePostalCode}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <button class="btn btn-secondary" @click="e1 = 4">Edit this Section</button>
+                                    </div>
+                                </div>
+                            <div class="confirmation-group">
+                                <h4>LSA Survey Participation</h4>
+                                <div class="form-row">
+                                    <div class="col-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="">
+                                            <label class="form-check-label" for="">
+                                                I Agree
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-8">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="confirmation-group">
+                                <h4>Declaration &amp; Notice of Collection, Consent &amp; Authorize</h4>
+                                <div class="form-row">
+                                    <div class="col-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="">
+                                            <label class="form-check-label" for="">
+                                                I Agree
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="form-group">
+                                            <p class="collectionStatement">I declare, to the best of my knowledge and consistent with the Long Service Awards eligibility guidelines (which I have reviewed) that as of
+                                                December 31, 2021, I will have worked for the BC Public Service for 25, 30, 35, 40, 45 or 50 years and I am therefore eligible for a Long Service Award. By providing my
+                                                personal information, I am allowing the BC Public Service Agency to use and disclose this information for the planning and delivery of the Long Service Award recognition events.
+                                                This personal information is required to process your application for the Long Service Awards and is collected in accordance with section 26(c) of the Freedom of Information and
+                                                Protection of Privacy Act (FOIPPA).
+                                                Questions about the collection, use or disclosure of this information, can be directed to: LongServiceAwards@gov.bc.ca, 1st Floor, 563 Superior Street, Victoria BC, V8V 0C5.</p>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-8">
+
+                                </div>
+                                <div class="col-4">
+                                    <button class="btn btn-primary">Confirm &amp; Agree</button>
+                                </div>
+                            </div>
 
                         </v-stepper-content>
+
 
                     </v-stepper-items>
-
 
                 </v-stepper>
             </v-container>
         </v-main>
     </v-app>
-
+</template>
 </div>
-
 
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script crossorigin="anonymous"
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script crossorigin="anonymous"
+        src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/smooth-scroll/16.1.0/smooth-scroll.min.js"></script>
 <!-- Special JavaScript just for Registration form -->
@@ -303,31 +545,22 @@
 <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
 
 
-</body>
-</html>
-
-
 <script>
-
-
     var app = new Vue({
         el: "#app",
         vuetify: new Vuetify(),
         data: {
             e1: 1,
             isRetiringThisYear: false,
-            retirementStatusKnown: false,
-            retirementDate: '',
-            yearsOfService: 0,
-            milestoneKnown: false,
-            milestonePersonalized: false,
             milestone: '',
+            awardYear: '',
 
             employeeID: '',
             firstName: '',
             lastName: '',
             ministry: '',
             ministryBranch: '',
+            certificateName: '',
 
             govtEmail: '',
             altEmail: '',
@@ -481,16 +714,14 @@
                 this.inputDonationType = true;
             },
 
-            donationTypeSelected: function() {
+            donationTypeSelected: function () {
                 if ($("input:radio[name ='selectDonationType']:checked").val() == 0) {
                     this.inputCharity1 = false;
                     this.inputCharity2 = false;
-                }
-                else if ($("input:radio[name ='selectDonationType']:checked").val() == 1) {
+                } else if ($("input:radio[name ='selectDonationType']:checked").val() == 1) {
                     this.inputCharity1 = true;
                     this.inputCharity2 = false;
-                }
-                else if ($("input:radio[name ='selectDonationType']:checked").val() == 2) {
+                } else if ($("input:radio[name ='selectDonationType']:checked").val() == 2) {
                     this.inputCharity1 = true;
                     this.inputCharity2 = true;
                 }
@@ -536,13 +767,12 @@
             processOptions: function () {
                 if (this.selectedAward == 0) {
                     this.processDonationOptions();
-                }
-                else {
+                } else {
                     this.processAwardOptions();
                 }
             },
 
-            processDonationOptions: function() {
+            processDonationOptions: function () {
 
                 for (var i = 0; i < milestones.length; i++) {
                     if (milestones[i].id == $('#milestone-id').val()) {
@@ -564,13 +794,11 @@
                     this.awardOptions.push(this.currencyFormat(amount) + " Donation - PECSF Region Charity Fund");
                     $('input[name=pecsf_amount1]').val(amount);
                     $('input[name=pecsf_donation_type]').val(0);
-                }
-                else if ($("input:radio[name ='selectDonationType']:checked").val() == 1) {
+                } else if ($("input:radio[name ='selectDonationType']:checked").val() == 1) {
                     if ($('#selectedCharity1').val() == 0) {
                         errors.push("Charity is required");
                         $('#selectedCharity1').css("border-color", clrError);
-                    }
-                    else {
+                    } else {
                         amount = milestone.donation;
                         charity = this.getCharity($('#selectedCharity1').val());
                         this.awardOptions.push(this.currencyFormat(amount) + " Donation - (" + charity.vendor_code + ") " + charity.name);
@@ -579,17 +807,15 @@
                         $('input[name=pecsf_amount1]').val(amount);
                     }
                     $('input[name=pecsf_donation_type]').val(1);
-                }
-                else if ($("input:radio[name ='selectDonationType']:checked").val() == 2) {
+                } else if ($("input:radio[name ='selectDonationType']:checked").val() == 2) {
                     amount = milestone.donation / 2;
 
                     if ($('#selectedCharity1').val() == 0) {
                         errors.push("First Charity is required");
                         $('#selectedCharity1').css("border-color", clrError);
-                    }
-                    else {
+                    } else {
                         charity = this.getCharity($('#selectedCharity1').val());
-                        this.awardOptions.push(this.currencyFormat(amount) + " Donation - (" + charity.vendor_code + ") "  + charity.name);
+                        this.awardOptions.push(this.currencyFormat(amount) + " Donation - (" + charity.vendor_code + ") " + charity.name);
                         $('#selectedCharity1').css("border-color", clrDefault);
                         $('input[name=pecsf_charity1_id]').val(charity.id);
                         $('input[name=pecsf_amount1]').val(amount);
@@ -598,17 +824,15 @@
                     if ($('#selectedCharity2').val() == 0) {
                         errors.push("Second Charity is required");
                         $('#selectedCharity2').css("border-color", clrError);
-                    }
-                    else {
+                    } else {
                         charity = this.getCharity($('#selectedCharity2').val());
-                        this.awardOptions.push(this.currencyFormat(amount) + " Donation - (" + charity.vendor_code + ") "  + charity.name);
+                        this.awardOptions.push(this.currencyFormat(amount) + " Donation - (" + charity.vendor_code + ") " + charity.name);
                         $('#selectedCharity2').css("border-color", clrDefault);
                         $('input[name=pecsf_charity2_id]').val(charity.id);
                         $('input[name=pecsf_amount2]').val(amount);
                     }
                     $('input[name=pecsf_donation_type]').val(2);
-                }
-                else {
+                } else {
                     if (this.inputDonationType) {
                         errors.push('Please select the type of donation.');
                         $('#donation-type').css("border-color", clrError);
@@ -618,8 +842,7 @@
                 if (document.getElementById("selectedregion").selectedIndex == 0) {
                     errors.push('Region is required');
                     $('#selectedregion').css("border-color", clrError);
-                }
-                else {
+                } else {
                     $('#selectedregion').css("border-color", clrDefault);
                     $('input[name=pecsf_region_id]').val($('#selectedregion').val());
                 }
@@ -628,8 +851,7 @@
                     $('input[name=award_options]').val(JSON.stringify(this.awardOptions));
                     $("#donation-1").modal('hide');
                     this.errorsOptions = '';
-                }
-                else {
+                } else {
                     this.errorsOptions = '<ul>';
                     for (var i = 0; i < errors.length; i++) {
                         this.errorsOptions += '<li>' + errors[i] + '</li>';
@@ -650,25 +872,22 @@
                 for (i = 0; i < options.length; i++) {
                     console.log(options[i]);
                     if (options[i].type == "choice") {
-                        var sel = document.getElementById("award-option-"+i);
+                        var sel = document.getElementById("award-option-" + i);
                         if (sel.selectedIndex == 0) {
                             errors.push(options[i].name + " is required");
-                        }
-                        else {
+                        } else {
                             this.awardOptions.push(options[i].name + ": " + sel.options[sel.selectedIndex].text);
                         }
                     }
                     if (options[i].type == "text") {
-                        var field = document.getElementById("award-option-"+i);
+                        var field = document.getElementById("award-option-" + i);
                         if (field.value) {
                             if (field.value.length <= options[i].maxlength) {
                                 this.awardOptions.push(options[i].name + ": " + field.value);
-                            }
-                            else {
+                            } else {
                                 errors.push(options[i].name + " may not contain more than " + options[i].maxlength + " characters.");
                             }
-                        }
-                        else {
+                        } else {
                             errors.push(options[i].name + " is required");
                         }
                     }
@@ -687,8 +906,7 @@
                     $('input[name=pecsf_amount1]').val(0);
                     $('input[name=pecsf_charity2_id]').val(0);
                     $('input[name=pecsf_amount2]').val(0);
-                }
-                else {
+                } else {
                     this.errorsOptions = '<ul>';
                     for (var i = 0; i < errors.length; i++) {
                         this.errorsOptions += '<li>' + errors[i] + '</li>';
@@ -729,7 +947,7 @@
                 }
             },
 
-            showPreviousAward: function() {
+            showPreviousAward: function () {
                 this.currentAwardIndex--;
                 if (this.currentAwardIndex < 0) {
                     this.currentAwardIndex = this.currentAwards.length - 1;
@@ -737,7 +955,7 @@
                 this.updateAwardDisplay(this.currentAwardIndex);
             },
 
-            showNextAward: function() {
+            showNextAward: function () {
                 this.currentAwardIndex++;
                 if (this.currentAwardIndex >= this.currentAwards.length) {
                     this.currentAwardIndex = 0;
@@ -745,20 +963,19 @@
                 this.updateAwardDisplay(this.currentAwardIndex);
             },
 
-            updateAwardDisplay: function(awardIndex) {
+            updateAwardDisplay: function (awardIndex) {
                 this.currentAwardName = this.currentAwards[awardIndex].name;
                 this.currentAwardImage = this.currentAwards[awardIndex].image;
                 this.currentAwardDescription = nl2br(this.currentAwards[awardIndex].description);
                 if (this.selectedAward == this.currentAwards[awardIndex].id) {
                     $('#lsa-award-card').css('background-color', 'lightblue');
-                }
-                else {
+                } else {
                     $('#lsa-award-card').css('background-color', 'transparent');
                 }
             },
 
 
-            selectCurrentAward: function() {
+            selectCurrentAward: function () {
 
                 award = this.currentAwards[this.currentAwardIndex];
 
@@ -774,8 +991,7 @@
                 // check if it is a donation
                 if (award.id == 0) {
                     app.selectCharityOptions();
-                }
-                else {
+                } else {
                     app.selectAwardOptions(award.id);
                 }
 
@@ -791,8 +1007,7 @@
                 var sel = document.getElementById("office-city-id");
                 if (sel.selectedIndex > 0) {
                     this.officeCity = sel.options[sel.selectedIndex].text;
-                }
-                else {
+                } else {
                     this.officeCity = '';
                 }
 
@@ -802,8 +1017,7 @@
                 var sel = document.getElementById("home-city-id");
                 if (sel.selectedIndex > 0) {
                     this.homeCity = sel.options[sel.selectedIndex].text;
-                }
-                else {
+                } else {
                     this.homeCity = '';
                 }
             },
@@ -812,8 +1026,7 @@
                 var sel = document.getElementById("supervisor-city-id");
                 if (sel.selectedIndex > 0) {
                     this.supervisorCity = sel.options[sel.selectedIndex].text;
-                }
-                else {
+                } else {
                     this.supervisorCity = '';
                 }
             },
@@ -822,8 +1035,7 @@
                 var sel = document.getElementById("ministry-id");
                 if (sel.selectedIndex > 0) {
                     this.ministry = sel.options[sel.selectedIndex].text;
-                }
-                else {
+                } else {
                     this.ministry = '';
                 }
             },
@@ -832,8 +1044,7 @@
                 if (missed == 1) {
                     this.selectAward = false;
                     this.showIdentifyingInfoInputs();
-                }
-                else {
+                } else {
                     this.selectAward = true;
                 }
             },
@@ -842,8 +1053,7 @@
                 $('input[name=retiring_this_year]').val(retiring);
                 if (retiring == 1) {
                     this.exposeRetirementDatePicker();
-                }
-                else {
+                } else {
                     this.setRetirementStatusKnown();
                 }
                 $('html, body').animate({
@@ -861,7 +1071,7 @@
                 this.retirementStatusKnown = true;
             },
 
-            exposeAwardSelector: function(milestone) {
+            exposeAwardSelector: function (milestone) {
                 this.milestoneKnown = true;
             },
 
@@ -879,8 +1089,7 @@
 
                     this.identifyingInfoInput = true;
                     this.errorsEmployee = '';
-                }
-                else {
+                } else {
 
                     this.errorsEmployee = '<ul>';
                     for (var i = 0; i < errors.length; i++) {
@@ -899,8 +1108,7 @@
                     }, 1000);
                     this.officeAddressInput = true;
                     this.errorsOffice = '';
-                }
-                else {
+                } else {
                     this.errorsOffice = '<ul>';
                     for (var i = 0; i < errors.length; i++) {
                         this.errorsOffice += '<li>' + errors[i] + '</li>';
@@ -917,8 +1125,7 @@
                     }, 1000);
                     this.homeAddressInput = true;
                     this.errorsHome = '';
-                }
-                else {
+                } else {
                     this.errorsHome = '<ul>';
                     for (var i = 0; i < errors.length; i++) {
                         this.errorsHome += '<li>' + errors[i] + '</li>';
@@ -935,8 +1142,7 @@
                     }, 1000);
                     this.supervisorInput = true;
                     this.errorsSupervisor = '';
-                }
-                else {
+                } else {
                     this.errorsSupervisor = '<ul>';
                     for (var i = 0; i < errors.length; i++) {
                         this.errorsSupervisor += '<li>' + errors[i] + '</li>';
@@ -963,53 +1169,46 @@
                 if (!this.employeeID) {
                     $('#employee-id').css("border-color", clrError);
                     error.push('Employee ID is required');
-                }
-                else {
+                } else {
                     $('#employee-id').css("border-color", clrDefault);
                 }
 
                 if (!this.firstName) {
                     $('#first-name').css("border-color", clrError);
                     error.push('Employee first name is required');
-                }
-                else {
+                } else {
                     $('#first-name').css("border-color", clrDefault);
                 }
 
                 if (!this.lastName) {
                     $('#last-name').css("border-color", clrError);
                     error.push('Employee last name is required');
-                }
-                else {
+                } else {
                     $('#last-name').css("border-color", clrDefault);
                 }
 
                 if (!this.ministry) {
                     $('#ministry-id').css("border-color", clrError);
                     error.push('Ministry is required');
-                }
-                else {
+                } else {
                     $('#ministry-id').css("border-color", clrDefault);
                 }
 
                 if (!this.ministryBranch) {
                     $('#branch').css("border-color", clrError);
                     error.push('Branch is required');
-                }
-                else {
+                } else {
                     $('#branch').css("border-color", clrDefault);
                 }
 
                 if (!this.govtEmail) {
                     $('#preferred-email').css("border-color", clrError);
                     error.push('Government Email is required.');
-                }
-                else {
+                } else {
                     if (!isEmail(this.govtEmail)) {
                         $('#preferred-email').css("border-color", clrError);
                         error.push('Government Email invalid format');
-                    }
-                    else {
+                    } else {
                         $('#preferred-email').css("border-color", clrDefault);
                     }
                 }
@@ -1033,43 +1232,37 @@
                 if (!this.officeStreetAddress) {
                     $('#office-address').css("border-color", clrError);
                     error.push('Office Address is required');
-                }
-                else {
+                } else {
                     $('#office-address').css("border-color", clrDefault);
                 }
 
                 if (!this.officeCity) {
                     $('#office-city-id').css("border-color", clrError);
-                    error.push ('Office City is required');
-                }
-                else {
+                    error.push('Office City is required');
+                } else {
                     $('#office-city-id').css("border-color", clrDefault);
                 }
 
                 if (!this.officePostalCode) {
                     $('#office-postal-code').css("border-color", clrError);
-                    error.push ('Office Postal Code is required');
-                }
-                else {
+                    error.push('Office Postal Code is required');
+                } else {
                     if (!isPostalCode(this.officePostalCode)) {
                         $('#office-postal-code').css("border-color", clrError);
-                        error.push ('Office Postal Code invalid format (A1A 1A1)');
-                    }
-                    else {
+                        error.push('Office Postal Code invalid format (A1A 1A1)');
+                    } else {
                         $('#office-postal-code').css("border-color", clrDefault);
                     }
                 }
 
                 if (!this.officePhone) {
                     $('#work-phone').css("border-color", clrError);
-                    error.push ('Office Phone number is required');
-                }
-                else {
+                    error.push('Office Phone number is required');
+                } else {
                     if (!isPhone(this.officePhone)) {
                         $('#work-phone').css("border-color", clrError);
-                        error.push ('Office Phone number invalid format (###) ###-####');
-                    }
-                    else {
+                        error.push('Office Phone number invalid format (###) ###-####');
+                    } else {
                         $('#work-phone').css("border-color", clrDefault);
                     }
                 }
@@ -1084,29 +1277,25 @@
                 if (!this.homeStreetAddress) {
                     $('#home-address').css("border-color", clrError);
                     error.push('Home Address is required');
-                }
-                else {
+                } else {
                     $('#home-address').css("border-color", clrDefault);
                 }
 
                 if (!this.homeCity) {
                     $('#home-city-id').css("border-color", clrError);
                     error.push('Home City is required');
-                }
-                else {
+                } else {
                     $('#home-city-id').css("border-color", clrDefault);
                 }
 
                 if (!this.homePostalCode) {
                     $('#home-postal-code').css("border-color", clrError);
                     error.push('Home Postal Code is required');
-                }
-                else {
+                } else {
                     if (!isPostalCode(this.homePostalCode)) {
                         $('#home-postal-code').css("border-color", clrError);
                         error.push('Home Postal Code invalid format (A1A 1A1)');
-                    }
-                    else {
+                    } else {
                         $('#home-postal-code').css("border-color", clrDefault);
                     }
                 }
@@ -1114,13 +1303,11 @@
                 if (!this.homePhone) {
                     $('#home-phone').css("border-color", clrError);
                     error.push('Home Phone number is required');
-                }
-                else {
+                } else {
                     if (!isPhone(this.homePhone)) {
                         $('#home-phone').css("border-color", clrError);
                         error.push('Home Phone number invalid format (###) ###-####');
-                    }
-                    else {
+                    } else {
                         $('#home-phone').css("border-color", clrDefault);
                     }
                 }
@@ -1136,45 +1323,39 @@
                 if (!this.supervisorFirstName) {
                     $('#supervisor-first-name').css("border-color", clrError);
                     error.push('Supervisor First Name is required');
-                }
-                else {
+                } else {
                     $('#supervisor-first-name').css("border-color", clrDefault);
                 }
 
                 if (!this.supervisorLastName) {
                     $('#supervisor-last-name').css("border-color", clrError);
                     error.push('Supervisor last name is required');
-                }
-                else {
+                } else {
                     $('#supervisor-last-name').css("border-color", clrDefault);
                 }
 
                 if (!this.supervisorStreetAddress) {
                     $('#supervisor-address').css("border-color", clrError);
                     error.push('Supervisor Address is required');
-                }
-                else {
+                } else {
                     $('#supervisor-address').css("border-color", clrDefault);
                 }
 
                 if (!this.supervisorCity) {
                     $('#supervisor-city-id').css("border-color", clrError);
                     error.push('Supervisor City is required');
-                }
-                else {
+                } else {
                     $('#supervisor-city-id').css("border-color", clrDefault);
                 }
 
                 if (!this.supervisorPostalCode) {
                     $('#supervisor-postal-code').css("border-color", clrError);
                     error.push('Supervisor Postal Code is required');
-                }
-                else {
+                } else {
                     if (!isPostalCode(this.supervisorPostalCode)) {
                         $('#supervisor-postal-code').css("border-color", clrError);
                         error.push('Supervisor Postal Code invalid format (A1A 1A1)');
-                    }
-                    else {
+                    } else {
                         $('#supervisor-postal-code').css("border-color", clrDefault);
                     }
                 }
@@ -1182,13 +1363,11 @@
                 if (!this.supervisorEmail) {
                     $('#supervisor-email').css("border-color", clrError);
                     error.push('Supervisor Email is required');
-                }
-                else {
+                } else {
                     if (!isEmail(this.supervisorEmail)) {
                         $('#supervisor-email').css("border-color", clrError);
                         error.push('Supervisor Email invalid format');
-                    }
-                    else {
+                    } else {
                         $('#supervisor-email').css("border-color", clrDefault);
                     }
                 }
@@ -1200,30 +1379,27 @@
     });
 
 
-
-    function isEmail (email) {
+    function isEmail(email) {
         var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
         return regex.test(email);
     }
 
-    function isPhone (phone) {
+    function isPhone(phone) {
         var regex = /\(([0-9]{3})\) ([0-9]{3})-([0-9]{4})/;
         return regex.test(phone);
     }
 
-    function isPostalCode (code) {
+    function isPostalCode(code) {
         var regex = /^[ABCEGHJ-NPRSTVXY][0-9][ABCEGHJ-NPRSTV-Z] [0-9][ABCEGHJ-NPRSTV-Z][0-9]$/;
         return regex.test(code);
     }
 
-    function nl2br (str, is_xhtml) {
+    function nl2br(str, is_xhtml) {
         var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
-        return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1'+ breakTag +'$2');
+        return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
     }
 
     Vue.config.devtools = true;
-
-
 
 
 </script>

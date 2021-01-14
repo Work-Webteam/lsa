@@ -162,10 +162,11 @@ class RegistrationsController extends AppController
             $this->redirect(['action' => 'index']);
         }
     }
-
-
     public function register()
     {
+        $this->viewBuilder()->setLayout('clean');
+
+        //First, make sure registrations are open, flash an error if they're not.
         $query = $this->Registrations->RegistrationPeriods->find('all')
             ->where([
                 'Registrationperiods.open_registration <=' => date('Y-m-d H:i:s'),
@@ -178,6 +179,16 @@ class RegistrationsController extends AppController
             return $this->redirect('/');
         }
 
+
+        //Handle post requests
+        if ($this->request->is('post')) {
+            $this->register_post();
+        }
+
+        //Initialize new registratio object
+        //$registration = $this->Registrations->newEmptyEntity();
+
+        //Initialize Arrays for Awards options, Select Menus and validation
         $list = explode(",", $registrationperiods->qualifying_years);
         $award_years = [];
         foreach ($list as $year) {
@@ -185,102 +196,104 @@ class RegistrationsController extends AppController
         }
         $this->set('award_years', $award_years);
 
-        // customized layout excluding top nav, etc.
-        $this->viewBuilder()->setLayout('clean');
+        $milestones = $this->Registrations->Milestones->find('list');
+        $this->set('milestones', $milestones);
+        $milestoneInfo = $this->Registrations->Milestones->find('all');
+        $this->set('milestoneinfo', $milestoneInfo);
+        $awards = $this->Registrations->Awards->find('list', [
+            'conditions' => ['Awards.active =' => 1],
+        ]);
+        $this->set('awards', $awards);
+        $awardInfo = $this->Registrations->Awards->find('all', [
+            'conditions' => ['Awards.active =' => 1],
+        ]);
+        $this->set('awardinfo', $awardInfo);
+        $ministries = $this->Registrations->Ministries->find('list', [
+            'order' => ['Ministries.name' => 'ASC']
+        ]);
+        $this->set('ministries', $ministries);
+        $diet = $this->Registrations->Diet->find('list');
+        $this->set('diet', $diet);
+        $cities = $this->Registrations->Cities->find('list', [
+            'order' => ['Cities.name' => 'ASC']
+        ]);
+        $this->set('cities', $cities);
+        $regions = $this->Registrations->Pecsfregions->find('list', [
+            'order' => ['Pecsfregions.name' => 'ASC']
+        ]);
+        $this->set('regions', $regions);
+        $charities = $this->Registrations->Pecsfcharities->find('all', [
+            'order' => ['Pecsfcharities.name' => 'ASC']
+        ]);
+        $this->set('charities', $charities);
+        //$this->set('registration', $registration);
 
-        $registration = $this->Registrations->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
 
-            $session = $this->getRequest()->getSession();
-            $registration->user_idir = $session->read('user.idir');
-            $registration->user_guid = $session->read('user.guid');
+    }
 
-            $registration->created = time();
-            $registration->modified = time();
+    private function register_post()
+    {
+        $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
 
-            $registration->registration_year = date("Y");
-            $registration->office_province = "BC";
-            $registration->home_province = "BC";
-            $registration->supervisor_province = "BC";
-            $registration->retirement_date = $this->request->getData('date');
-            $registration->retroactive = 0;
+        $session = $this->getRequest()->getSession();
+        $registration->user_idir = $session->read('user.idir');
+        $registration->user_guid = $session->read('user.guid');
 
-            $registration->accessibility_requirements_recipient = "[]";
-            $registration->accessibility_requirements_guest = "[]";
-            $registration->dietary_requirements_recipient = "[]";
-            $registration->dietary_requirements_guest = "[]";
+        $registration->created = time();
+        $registration->modified = time();
 
-            if (empty($registration->award_options)) {
-                $registration->award_options = '[]';
-            }
-            if ($this->Registrations->save($registration)) {
-                $this->Flash->success(__('Registration has been saved.'));
+        $registration->registration_year = date("Y");
+        $registration->office_province = "BC";
+        $registration->home_province = "BC";
+        $registration->supervisor_province = "BC";
+        $registration->retirement_date = $this->request->getData('date');
+        $registration->retroactive = 0;
 
-                // Send email here
-                $mailer = new Mailer('default');
+        $registration->accessibility_requirements_recipient = "[]";
+        $registration->accessibility_requirements_guest = "[]";
+        $registration->dietary_requirements_recipient = "[]";
+        $registration->dietary_requirements_guest = "[]";
 
-                $message = "Congratulations, you have sucessfully registered for your Long Service Award.";
+        if (empty($registration->award_options)) {
+            $registration->award_options = '[]';
+        }
+        if ($this->Registrations->save($registration)) {
+            $this->Flash->success(__('Registration has been saved.'));
+
+            // Send email here
+            $mailer = new Mailer('default');
+
+            $message = "Congratulations, you have sucessfully registered for your Long Service Award.";
 //                $mailer->setFrom(['longserviceaward@gov.bc.ca' => 'Long Service Awards'])
 //                    ->setTo($registration->preferred_email)
 //                    ->setSubject('Long Service Award Registration Completed')
 //                    ->deliver($message);
 
 
-                return $this->redirect(['action' => 'completed', $registration->id]);
-            }
-            $this->Flash->error(__('Unable to add registration.'));
+            return $this->redirect(['action' => 'completed', $registration->id]);
         }
-
-        if ($this->request->is('get')) {
-            $registration->office_province = "BC";
-            $registration->home_province = "BC";
-            $registration->supervisor_province = "BC";
-        }
-
-        $milestones = $this->Registrations->Milestones->find('list');
-        $this->set('milestones', $milestones);
-
-        $milestoneInfo = $this->Registrations->Milestones->find('all');
-        $this->set('milestoneinfo', $milestoneInfo);
-
-        $awards = $this->Registrations->Awards->find('list', [
-            'conditions' => ['Awards.active =' => 1],
-        ]);
-        $this->set('awards', $awards);
-
-        $awardInfo = $this->Registrations->Awards->find('all', [
-            'conditions' => ['Awards.active =' => 1],
-        ]);
-        $this->set('awardinfo', $awardInfo);
-
-        $ministries = $this->Registrations->Ministries->find('list', [
-            'order' => ['Ministries.name' => 'ASC']
-        ]);
-        $this->set('ministries', $ministries);
-
-        $diet = $this->Registrations->Diet->find('list');
-        $this->set('diet', $diet);
-
-        $cities = $this->Registrations->Cities->find('list', [
-            'order' => ['Cities.name' => 'ASC']
-        ]);
-        $this->set('cities', $cities);
-
-
-        $regions = $this->Registrations->Pecsfregions->find('list', [
-            'order' => ['Pecsfregions.name' => 'ASC']
-        ]);
-        $this->set('regions', $regions);
-
-        $charities = $this->Registrations->Pecsfcharities->find('all', [
-            'order' => ['Pecsfcharities.name' => 'ASC']
-        ]);
-        $this->set('charities', $charities);
-
-        $this->set('registration', $registration);
+        $this->Flash->error(__('Unable to add registration.'));
     }
 
+
+/*
+    public function register()
+    {
+
+
+
+
+
+
+
+        if ($this->request->is('post')) {
+
+        }
+
+
+
+    }
+*/
 
     public function completed ($id = null) {
         $registration = $this->Registrations->findById($id)->firstOrFail();
