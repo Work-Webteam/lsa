@@ -23,9 +23,6 @@
                                     <div class="form-group">
                                         <label for="milestone">Which milestone are you celebrating?</label>
                                         <select class="form-control" id="milestone" name="milestone">
-                                           <?php foreach($milestoneInfo as $milestone) : ?>
-                                            <option value="<?= $milestone->id ?>"><?= $milestone->name ?></option>
-                                            <?php endforeach; ?>
                                         </select>
                                     </div>
                                 </div>
