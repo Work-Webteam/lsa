@@ -7,7 +7,6 @@
         <th>Milestone</th>
         <th>Personalized</th>
         <th>Status</th>
-        <th>View</th>
         <th>Edit</th>
         <th>Delete</th>
     </tr>
@@ -26,9 +25,6 @@
             </td>
             <td>
                 <?= $award->active ? 'active' : 'inactive' ?>
-            </td>
-            <td>
-                <?= $this->Html->link('View', ['action' => 'view', $award->id], ['class' => 'btn btn-primary view', 'role' => 'button']) ?>
             </td>
             <td>
                 <?= $this->Html->link('Edit', ['action' => 'edit', $award->id], ['class' => 'btn btn-primary', 'role' => 'button']) ?>

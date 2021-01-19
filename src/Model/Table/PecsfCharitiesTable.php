@@ -2,15 +2,15 @@
 
 namespace App\Model\Table;
 
-
 use Cake\ORM\Table;
-use Cake\Validation\Validator;
 use phpDocumentor\Reflection\Types\Void_;
 
-class RegistrationperiodsTable extends Table
+class PecsfCharitiesTable extends Table
 {
     public function initialize(array $config) : Void
     {
+        $this->hasOne('Pecsfregions')
+        ->setForeignKey('id')
+        ->setBindingKey('pecsf_region_id');
     }
-
 }

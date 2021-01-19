@@ -122,11 +122,11 @@ Supervisors are able to add, view and edit registrations they have created.
 
 _Recent database changes_   Dec 2020
 
-Some new fields were added to the Accessibility and Log tables.  The lsa_install.sql and lsa_test_adminer.sql files have been updated appropriately.
+Some new fields were added to the Accessibility and Log tables.  The 02-base-data.sql and lsa_test_adminer.sql files have been updated appropriately.
 
 
 _Data Dump Files_
-lsa_install.sql – generates a starting point database.  Various support tables (such as awards, accessibility, diet, etc) are pre-populated. It should be noted that the data used for these tables was provided in early 2020 and may no longer be up to date.
+02-base-data.sql – generates a starting point database.  Various support tables (such as awards, accessibility, diet, etc) are pre-populated. It should be noted that the data used for these tables was provided in early 2020 and may no longer be up to date.
 
 lsa_test_adminer.sql – creates a database that includes registration, ceremony and rsvp info
 

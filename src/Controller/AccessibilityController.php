@@ -5,7 +5,7 @@ namespace App\Controller;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
 
-class AccessibilityController extends AppController
+class AccessibilityOptionsController extends AppController
 {
     public function initialize(): void
     {

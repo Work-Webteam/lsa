@@ -46,13 +46,10 @@ class AppController extends Controller
 
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
-
-
-
-        $_SERVER['HTTP_SM_USER'] = 'rkuyvenh';
-        $_SERVER['HTTP_SMGOV_USEREMAIL'] = 'Raymond.Kuyvenhoven@gov.bc.ca';
-        $_SERVER['HTTP_SMGOV_USERDISPLAYNAME'] = 'Kuyvenhoven, Raymond PSA:EX';
-        $_SERVER['HTTP_SMGOV_USERGUID'] = '60DCD2AF73FB44AE9345F11B71CD3495';   // admin
+       $_SERVER['HTTP_SM_USER'] = 'rkuyvenh';
+       $_SERVER['HTTP_SMGOV_USEREMAIL'] = 'Raymond.Kuyvenhoven@gov.bc.ca';
+       $_SERVER['HTTP_SMGOV_USERDISPLAYNAME'] = 'Kuyvenhoven, Raymond PSA:EX';
+       $_SERVER['HTTP_SMGOV_USERGUID'] = '60DCD2AF73FB44AE9345F11B71CD3495';   // admin
 
 //        $_SERVER['HTTP_SMGOV_USERGUID'] = '9ECC7D7FD8EE840932B9D21721251737';   // lsa admin
 
@@ -72,26 +69,26 @@ class AppController extends Controller
 //
 
         // check if user has administrative privileges
-        $this->loadModel('Userroles');
-        $users = $this->Userroles->find('all', [
-            'conditions' => ['Userroles.guid =' => $_SERVER['HTTP_SMGOV_USERGUID']],
+        $this->loadModel('UserRoles');
+        $users = $this->UserRoles->find('all', [
+            'conditions' => ['UserRoles.guid =' => $_SERVER['HTTP_SMGOV_USERGUID']],
             'limit' => 1,
         ]);
         $user = $users->first();
         if (!$user) {
             // we check for record with matching IDIR and empty GUID. We need to check empty GUID in case there is an existing
             // matching IDIR with a different GUID.
-            $users = $this->Userroles->find('all', [
+            $users = $this->UserRoles->find('all', [
                 'conditions' => [
-                    'Userroles.idir =' => $_SERVER['HTTP_SM_USER'],
-                    'Userroles.guid =' => '',
+                    'UserRole.idir =' => $_SERVER['HTTP_SM_USER'],
+                    'UserRole.guid =' => '',
                     ],
                 'limit' => 1,
             ]);
             $user = $users->first();
             if ($user) {
                 $user->guid = $_SERVER['HTTP_SMGOV_USERGUID'];
-                $this->Userroles->save($user);
+                $this->UserRoles->save($user);
             }
         }
 

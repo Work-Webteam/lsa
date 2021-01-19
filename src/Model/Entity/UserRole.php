@@ -4,7 +4,7 @@ namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
 
-class PecsfRegions extends Entity
+class UserRole extends Entity
 {
     protected $_accessible = [
         '*' => true,

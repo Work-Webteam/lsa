@@ -53,8 +53,8 @@ define('CONFIG', ROOT . DS . 'config' . DS);
  *
  * `define('WWW_ROOT', rtrim($_SERVER['DOCUMENT_ROOT'], DS) . DS);`
  */
-define('WWW_ROOT', ROOT . DS . 'webroot' . DS);
-
+//define('WWW_ROOT', ROOT . DS . 'webroot' . DS);
+define('WWW_ROOT', rtrim($_SERVER['DOCUMENT_ROOT'], DS) . DS);
 /*
  * Path to the tests directory.
  */

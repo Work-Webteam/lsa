@@ -47,15 +47,16 @@ $routes->setRouteClass(DashedRoute::class);
 
 $routes->scope('/', function (RouteBuilder $builder) {
     // Register scoped middleware for in scopes.
+    /*
     $builder->registerMiddleware('csrf', new CsrfProtectionMiddleware([
         'httpOnly' => true,
     ]));
-
+    */
     /*
      * Apply a middleware to the current route scope.
      * Requires middleware to be registered through `Application::routes()` with `registerMiddleware()`
      */
-    $builder->applyMiddleware('csrf');
+    //$builder->applyMiddleware('csrf');
 
     /*
      * Here, we are connecting '/' (base path) to a controller called 'Pages',
@@ -67,7 +68,7 @@ $routes->scope('/', function (RouteBuilder $builder) {
     /*
      * ...and connect the rest of 'Pages' controller's URLs.
      */
-    $builder->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
+    //$builder->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
 
     $builder->connect('/register', ['controller' => 'Registrations', 'action' => 'register']);
     $builder->connect('/rsvp/{id}', ['controller' => 'Registrations', 'action' => 'rsvp'])
@@ -78,7 +79,7 @@ $routes->scope('/', function (RouteBuilder $builder) {
         ]);
 
     $builder->connect('/executives', ['controller' => 'Vip', 'action' => 'index']);
-
+  //  $builder->connect('/awards/add', ['controller' => 'Awards', 'action' => 'add']);
 
 
 //    $routes->connect(

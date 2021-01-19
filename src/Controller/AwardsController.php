@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Cake\Core\Configure;
 
+
 class AwardsController extends AppController
 {
     public function index()
@@ -47,32 +48,39 @@ class AwardsController extends AppController
             $this->Flash->error(__('You are not authorized to administer Awards.'));
             $this->redirect('/');
         }
-        $award = $this->Awards->newEmptyEntity();
+
         if ($this->request->is('post')) {
-            $file = $this->request->getData('upload');
-            $award = $this->Awards->patchEntity($award, $this->request->getData());
-            if($file->getSize() > 0){
-                $fileName = $file->getClientFilename();
-                $uploadPath = 'img/awards/';
-                $uploadFile = $uploadPath . $fileName;
-                $file->moveTo($uploadFile);
-                $award->image = $fileName;
-            }
-            $award->active = true;
-            $award->options = json_encode(array());
-            if ($this->Awards->save($award)) {
-                $this->Flash->success(__('Award has been saved.'));
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('Unable to add award.' . $msg . ' - ' . $file->getClientFilename()));
+            $this->add_post();
         }
 
         // Get a list of milestones.
-        $milestones = $this->Awards->Milestones->find('list');
+        $milestones = $this->Awards->Milestones->find('all');
         // Set tags to the view context
         $this->set('milestones', $milestones);
-
+         $award = $this->Awards->newEmptyEntity();
+        //$award =  $this->getTableLocator()->newEmptyEntity();
         $this->set('award', $award);
+    }
+
+    private function add_post() {
+        $file = $this->request->getData('upload');
+
+
+        $award = $this->Awards->patchEntity($award, $this->request->getData());
+        if($file->getSize() > 0){
+            $fileName = $file->getClientFilename();
+            $uploadPath = 'img/awards/';
+            $uploadFile = $uploadPath . $fileName;
+            $file->moveTo($uploadFile);
+            $award->image = $fileName;
+        }
+        $award->active = true;
+        $award->options = json_encode(array());
+        if ($this->Awards->save($award)) {
+            $this->Flash->success(__('Award has been saved.'));
+            return $this->redirect(['action' => 'index']);
+        }
+        $this->Flash->error(__('Unable to add award.' . $msg . ' - ' . $file->getClientFilename()));
     }
 
     public function edit($id)

@@ -1,10 +1,10 @@
 <?php
-
+// src/Model/entity/Awards.php
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
 
-class Ceremonies extends Entity
+class File extends Entity
 {
     protected $_accessible = [
         '*' => true,

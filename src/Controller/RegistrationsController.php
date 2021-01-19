@@ -14,6 +14,7 @@ use Cake\ORM\Query;
 
 class RegistrationsController extends AppController
 {
+    //Displays a list of registrations based on user role's permissions
     public function index()
     {
         if ($this->checkAuthorization(array(Configure::read('Role.authenticated')))) {
@@ -68,7 +69,7 @@ class RegistrationsController extends AppController
 
     }
 
-
+    //Displays a table of registrants for export to CSV
     public function archive()
     {
         if (!$this->checkAuthorization(array(
@@ -100,7 +101,7 @@ class RegistrationsController extends AppController
         $this->set(compact('toolbar'));
     }
 
-
+    //Displays a single registration based on ID
     public function view($id = null)
     {
 //        if (!$this->checkAuthorization(array(Configure::read('Role.admin'), Configure::read('Role.lsa_admin')))) {
@@ -162,6 +163,8 @@ class RegistrationsController extends AppController
             $this->redirect(['action' => 'index']);
         }
     }
+
+    //Allows an unauthenticated user to create a registration
     public function register()
     {
         $this->viewBuilder()->setLayout('clean');
@@ -208,10 +211,14 @@ class RegistrationsController extends AppController
             'conditions' => ['Awards.active =' => 1],
         ]);
         $this->set('awardinfo', $awardInfo);
+        /*
         $ministries = $this->Registrations->Ministries->find('list', [
             'order' => ['Ministries.name' => 'ASC']
         ]);
         $this->set('ministries', $ministries);
+        $ministryInfo = $this->Registrations->Ministries->find('all');
+        */
+        $this->set('ministries', $this->Registrations->Ministries->find('all'));
         $diet = $this->Registrations->Diet->find('list');
         $this->set('diet', $diet);
         $cities = $this->Registrations->Cities->find('list', [

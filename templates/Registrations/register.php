@@ -26,7 +26,7 @@
                                     <div class="form-group">
                                         <label for="milestone">Which milestone are you celebrating?</label>
 
-                                        <select class="form-control" id="milestone" name="milestone">
+                                        <select class="form-control" id="milestone" name="milestone_id">
                                             <option selected disabled>Select Milestone</option>
                                             <?php foreach ($milestoneinfo as $mstone) : ?>
                                                 <option value="<?= $mstone->id ?>"><?= $mstone->name ?></option>
@@ -37,7 +37,7 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">In which year did you reach this milestone?</label>
-                                        <select class="form-control" id="" name="">
+                                        <select class="form-control" id="" name="registration_year">
                                             <option selected disabled>Select Year</option>
                                             <?php foreach ($award_years as $ayear) : ?>
                                                 <option value="<?= $ayear ?>"><?= $ayear ?></option>
@@ -51,14 +51,14 @@
                                     <div class="form-group">
                                         <label for="">How would you like your name to appear on your
                                             certificate?</label>
-                                        <input type="text" id="certificateName" name="certificateName" v-model="certificateName" class="form-control">
+                                        <input type="text" id="certificateName" name="certificate_name" v-model="certificateName" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-3">
                                     <p>Did you register for a Long Service Award last year, but not attend a
                                         ceremony?</p>
                                     <div class="form-group">
-                                        <input class="form-check-input" type="radio" name="" id="" value="">
+                                        <input class="form-check-input" type="radio" name="" id="" value="1">
                                         <label class="form-check-label" for="">Yes</label>
                                     </div>
                                     <div class="form-group">
@@ -70,12 +70,12 @@
                                     <div class="form-group">
                                         <p>Are you retiring this calendar year? </p>
                                         <div class="form-group">
-                                            <input class="form-check-input" type="radio" name="" id="" value="true"
+                                            <input class="form-check-input" type="radio" name="retiring_this_year" id="retiring_this_year" value="true"
                                                    v-model="isRetiringThisYear">
                                             <label class="form-check-label" for="">Yes</label>
                                         </div>
                                         <div class="form-group">
-                                            <input class="form-check-input" type="radio" name="" id="" value="false"
+                                            <input class="form-check-input" type="radio" name="retiring_this_year" id="retiring_this_year" value="false"
                                                    v-model="isRetiringThisYear">
                                             <label class="form-check-label" for="">No</label>
                                         </div>
@@ -100,25 +100,22 @@
 
                         <v-stepper-content step="3">
                             <h3 class="display-3">Your Contact Information</h3>
-
                             <div class="form-row">
-                                <div class="col-6">
+                                <div class="col-4">
                                     <div class="form-group">
                                         <label for="">Employee ID #</label>
                                         <input type="text" id="employee_id" name="employee_id" class="form-control"
                                                v-model="employeeID">
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col-6">
+                                <div class="col-4">
                                     <div class="form-group">
                                         <label for="">First Name</label>
                                         <input type="text" id="first_name" name="first_name" v-model="firstName"
                                                class="form-control" placeholder="Your First Name">
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-4">
                                     <div class="form-group">
                                         <label for="">Last Name</label>
                                         <input type="text" id="last_name" name="last_name" v-model="lastName"
@@ -126,6 +123,8 @@
                                     </div>
                                 </div>
                             </div>
+
+
                             <div class="form-row">
                                 <div class="col-6">
                                     <div class="form-group">
@@ -145,18 +144,18 @@
                                 </div>
                             </div>
                             <div class="form-row">
-                                <div class="col-12">
+                                <div class="col-6">
                                     <div class="form-group">
                                         <label for="">Current Ministry</label>
-                                        <select name="ministry_id" id="ministry_id" @change="app.ministrySelected()"
-                                                class="form-control">
+                                        <select name="ministry_id" id="ministry_id" class="form-control" v-model="ministry">
                                             <option selected default>Choose your Ministry</option>
+                                            <?php foreach ($ministries as $ministry) :?>
+                                                <option value="<?= $ministry->id ?>"><?= $ministry->name ?></option>
+                                            <?php endforeach; ?>
                                         </select>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col-12">
+                                <div class="col-6">
                                     <div class="form-group">
                                         <label for="">Current branch</label>
                                         <input type="text" id="branch" name="branch" v-model="ministryBranch"
@@ -164,49 +163,37 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-row">
-                                <div class="col-12">
-                                    <p>Are you retiring during this calendar year?</p>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="" id="" value="">
-                                        <label class="form-check-label" for="">Yes</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" id="" value="">
-                                        <label class="form-check-label" for="">No</label>
-                                    </div>
-                                </div>
-                            </div>
+
                             <div class="form-row">
                                 <h4 class="display-2">Your Office Address</h4>
                             </div>
                             <div class="form-row">
-                                <div class="col-6">
+                                <div class="col-4">
                                     <div class="form-group">
                                         <label for="">Floor/Room/Care Of</label>
-                                        <input type="text" class="form-control" placeholder="i.e. Discovery Room">
+                                        <input type="text" id="office_careof" name="office_careof" class="form-control" placeholder="i.e. Discovery Room">
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-4">
                                     <div class="form-group">
                                         <label for="">Suite</label>
-                                        <input type="text" class="form-control" placeholder="i.e. 800">
+                                        <input type="text"  id="office_suite" name="office_suite" class="form-control" placeholder="i.e. 800">
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col-12">
+                                <div class="col-4">
                                     <div class="form-group">
                                         <label for="">Street Address</label>
-                                        <input type="text" class="form-control" placeholder="i.e. 1445 10th Ave.">
+                                        <input type="text" class="form-control" id="office_postal_code" name="office_postal_code" placeholder="i.e. 1445 10th Ave.">
                                     </div>
                                 </div>
                             </div>
+
+
                             <div class="form-row">
-                                <div class="col-8">
+                                <div class="col-6">
                                     <div class="form-group">
                                         <label for="">City</label>
-                                        <select name="" id="" class="form-control">
+                                        <select name="" id="office_city" class="form-control" v-model="officeCity">
                                             <option selected disabled>Choose city</option>
                                             <?php foreach ($cities as $city) : ?>
                                                 <option value="<?= $city ?>"><?= h($city) ?></option>
@@ -214,90 +201,69 @@
                                         </select>
                                     </div>
                                 </div>
-
-                                <div class="col-4">
+                                <div class="col-2">
                                     <div class="form-group">
                                         <label for="">Postal Code</label>
-                                        <input type="text" class="form-control" placeholder="i.e. A1A 1A1">
+                                        <input type="text" class="form-control"  id="office_postal_code" name="office_postal_code" placeholder="i.e. A1A 1A1">
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-row">
-
-                            </div>
-                            <div class="form-row">
-                                <div class="col-6">
+                                <div class="col-3">
                                     <div class="form-group">
                                         <label for="">Office Phone Number</label>
-                                        <input type="text" class="form-control" placeholder="i.e. (604) 555-5555">
+                                        <input type="text" class="form-control" id="work_phone" name="work_phone" placeholder="i.e. (604) 555-5555" v-model="officePhone">
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-1">
                                     <div clas="form-group">
                                         <label for="">Extension</label>
-                                        <input type="text" class="form-control" placeholder="ie. 800">
+                                        <input type="text" class="form-control"  id="work_extension" name="work_extension" placeholder="ie. 800" v-model="officeExtension">
                                     </div>
                                 </div>
                             </div>
+                            <h4 class="display-2">Your Home Address</h4>
                             <div class="form-row">
-                                <h4 class="display-2">Your Home Address</h4>
-                            </div>
-                            <div class="form-row">
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label for="">Floor/Room/Care Of</label>
-                                        <input type="text" class="form-control" placeholder="i.e. Discovery Room">
-                                    </div>
-                                </div>
-                                <div class="col-6">
+                                <div class="col-4">
                                     <div class="form-group">
                                         <label for="">Suite</label>
-                                        <input type="text" class="form-control" placeholder="i.e. 800">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <label for="">Street Address</label>
-                                        <input type="text" class="form-control" placeholder="i.e. 1445 10th Ave.">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col-8">
-                                    <div class="form-group">
-                                        <label for="">City</label>
-                                        <select name="" id="" class="form-control">
-                                            <option selected disabled>Choose city</option>
-                                            <?php foreach ($cities as $city) : ?>
-                                                <option value="<?= $city ?>"><?= h($city) ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
+                                        <input type="text" class="form-control" id="home_suite" name="home_address" placeholder="i.e. 800" v-model="homeSuite">
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <div class="form-group">
-                                        <label for="">Postal Code</label>
-                                        <input type="text" class="form-control" placeholder="i.e. A1A 1A1">
+                                        <label for="">Street Address</label>
+                                        <input type="text" class="form-control" id="home_address" name="home_postal_code" placeholder="i.e. 1445 10th Ave." v-model="homeStreetAddress">
                                     </div>
                                 </div>
+                            </div>
 
-                            </div>
-                            <div class="form-row">
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label for="">Office Phone Number</label>
-                                        <input type="text" class="form-control" placeholder="i.e. (604) 555-5555">
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div clas="form-group">
-                                        <label for="">Extension</label>
-                                        <input type="text" class="form-control" placeholder="ie. 800">
-                                    </div>
-                                </div>
-                            </div>
+                           <div class="form-row">
+
+                               <div class="col-6">
+                                   <div class="form-group">
+                                       <label for="">City</label>
+                                       <select name="home_city" id="home_city" class="form-control" v-model="homeCity">
+                                           <option selected disabled>Choose city</option>
+                                           <?php foreach ($cities as $city) : ?>
+                                               <option value="<?= $city ?>"><?= h($city) ?></option>
+                                           <?php endforeach; ?>
+                                       </select>
+                                   </div>
+                               </div>
+                               <div class="col-2">
+                                   <div class="form-group">
+                                       <label for="">Postal Code</label>
+                                       <input type="text" class="form-control" id="home_postal_code" name="home_postal_code" placeholder="i.e. A1A 1A1" v-model="homePostalCode">
+                                   </div>
+                               </div>
+                               <div class="col-4">
+                                   <div class="form-group">
+                                       <label for="">Home Phone Number</label>
+                                       <input type="text" class="form-control"  id="home_phone" placeholder="i.e. (604) 555-5555" v-model="homePhone">
+                                   </div>
+                               </div>
+                           </div>
+
+
 
 
 
@@ -306,18 +272,40 @@
 
                         <v-stepper-content step="4">
                             <h3 class="display-3">Your Supervisor's Contact Information</h3>
+                            <div class="form-row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="supervisorFirstName">Supervisor's First Name</label>
+                                        <input type="text" class="form-control" id="supervisor_first_name" name="supervisor_first_name" placeholder="i.e. Taylor Publicservant" v-model="supervisorFirstName">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="supervisorLastName">Supervisor's Last Name</label>
+                                        <input type="text" class="form-control" id="supervisor_last_name" name="supervisor_last_name" placeholder="i.e. Taylor Publicservant" v-model="supervisorLastName">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
 
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="supervisorEmail">Supervisor's Email</label>
+                                        <input type="text" class="form-control" id="supervisor_email" name="supervisor_email" placeholder="i.e. taylor.publicservant@gov.bc.ca" v-model="supervisorEmail">
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-row">
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">Floor/Room/Care Of</label>
-                                        <input type="text" class="form-control" placeholder="i.e. Discovery Room">
+                                        <input type="text" class="form-control" id="supervisor_careof" name="supervisor_careof" placeholder="i.e. Discovery Room" v-model="supervisorMailPrefix">
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">Suite</label>
-                                        <input type="text" class="form-control" placeholder="i.e. 800">
+                                        <input type="text" class="form-control" id="supervisor_suite" name="supervisor_suite" placeholder="i.e. 800" v-model="supervisorSuite">
                                     </div>
                                 </div>
                             </div>
@@ -325,7 +313,7 @@
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label for="">Street Address</label>
-                                        <input type="text" class="form-control" placeholder="i.e. 1445 10th Ave.">
+                                        <input type="text" class="form-control" id="supervisor_address" name="supervisor_address" placeholder="i.e. 1445 10th Ave." v-model="supervisorStreetAddress">
                                     </div>
                                 </div>
                             </div>
@@ -333,7 +321,7 @@
                                 <div class="col-8">
                                     <div class="form-group">
                                         <label for="">City</label>
-                                        <select name="" id="" class="form-control">
+                                        <select name="supervisor_city" id="supervisor_city" class="form-control" v-model="supervisorCity">
                                             <option selected disabled>Choose city</option>
                                             <?php foreach ($cities as $city) : ?>
                                                 <option value="<?= $city ?>"><?= h($city) ?></option>
@@ -344,13 +332,13 @@
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label for="">Postal Code</label>
-                                        <input type="text" class="form-control" placeholder="i.e. A1A 1A1">
+                                        <input type="text" class="form-control" id="supervisor_postal_code" name="supervisor_postal_code" placeholder="i.e. A1A 1A1" v-model="supervisorPostalCode">
                                     </div>
                                 </div>
                             </div>
 
 
-                            <button class="btn btn-primary" @click="e1 = 5">Enter Supervisor's Contact Info.</button>
+                            <button class="btn btn-primary" @click="e1 = 5">Confirm Info &amp; Agree to Terms</button>
                         </v-stepper-content>
                         <v-stepper-content step="5">
                             <h3 class="display-3">Confirm Your Information</h3>
@@ -372,8 +360,7 @@
                                         <p class="confirmation-value">{{awardYear}}</p>
                                     </div>
                                     <div class="col-6">
-                                        <p class="confirmation-label">Registered last year but didn't attended</p>
-                                        <p class="confirmation-value">{{}}</p>
+                                        <p v-if="pastRegistrationNoCeremony" class="confirmation-label">I registered last year but did not attended</p>
                                     </div>
                                 </div>
                                 <form class="form-row">
@@ -487,10 +474,13 @@
                                 <div class="form-row">
                                     <div class="col-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="">
+                                            <input class="form-check-input" type="checkbox" value="" id="" checked>
                                             <label class="form-check-label" for="">
                                                 I Agree
                                             </label>
+                                        </div>
+                                        <div class="col-10">
+                                            <p class="surveyStatement">At the end of each year, a follow-up survey may be sent to collect feedback about your experience with the Long Service Awards program. By leaving this box checked, you agree to participate.</p>
                                         </div>
                                     </div>
                                     <div class="col-8">
@@ -511,7 +501,7 @@
 
                                 </div>
                                 <div class="col-4">
-                                    <button class="btn btn-primary">Confirm &amp; Agree</button>
+                                    <button type="submit" form="register" class="btn btn-primary">Confirm &amp; Agree</button>
                                 </div>
                             </div>
 
@@ -562,6 +552,8 @@
             ministryBranch: '',
             certificateName: '',
 
+            pastRegistrationNoCeremony: '',
+
             govtEmail: '',
             altEmail: '',
 
@@ -573,6 +565,7 @@
             officePhone: '',
             officeExtension: '',
 
+            homeMailPrefix: '',
             homeSuite: '',
             homeStreetAddress: '',
             homeCity: '',
@@ -587,6 +580,8 @@
             supervisorCity: '',
             supervisorPostalCode: '',
             supervisorEmail: '',
+            supervisorPhone: '',
+            supervisorExtension: '',
 
             availableAwards: '',
             availableAwardOptions: '',
@@ -665,26 +660,6 @@
                     this.supervisorEmail = "fhughes@gov.bc.ca";
                     var sel = document.getElementById("supervisor-city-id");
                 }
-            },
-
-            getMilestone: function (select_id) {
-                milestone = 0;
-                for (var i = 0; i < milestones.length; i++) {
-                    if (milestones[i].id == select_id) {
-                        milestone = milestones[i];
-                    }
-                }
-                return milestone;
-            },
-
-            getAward: function (select_id) {
-                award = 0;
-                for (var i = 0; i < awards.length; i++) {
-                    if (awards[i].id == select_id) {
-                        award = awards[i];
-                    }
-                }
-                return award;
             },
 
             getCharity: function (select_id) {
@@ -1003,42 +978,6 @@
                 }, 1000);
             },
 
-            officeCitySelected: function () {
-                var sel = document.getElementById("office-city-id");
-                if (sel.selectedIndex > 0) {
-                    this.officeCity = sel.options[sel.selectedIndex].text;
-                } else {
-                    this.officeCity = '';
-                }
-
-            },
-
-            homeCitySelected: function () {
-                var sel = document.getElementById("home-city-id");
-                if (sel.selectedIndex > 0) {
-                    this.homeCity = sel.options[sel.selectedIndex].text;
-                } else {
-                    this.homeCity = '';
-                }
-            },
-
-            supervisorCitySelected: function () {
-                var sel = document.getElementById("supervisor-city-id");
-                if (sel.selectedIndex > 0) {
-                    this.supervisorCity = sel.options[sel.selectedIndex].text;
-                } else {
-                    this.supervisorCity = '';
-                }
-            },
-
-            ministrySelected: function () {
-                var sel = document.getElementById("ministry-id");
-                if (sel.selectedIndex > 0) {
-                    this.ministry = sel.options[sel.selectedIndex].text;
-                } else {
-                    this.ministry = '';
-                }
-            },
 
             buttonMissedCeremony: function (missed) {
                 if (missed == 1) {
