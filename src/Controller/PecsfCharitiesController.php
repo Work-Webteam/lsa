@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Cake\Core\Configure;
 
-class PecsfcharitiesController extends AppController
+class PecsfCharitiesController extends AppController
 {
     public function index()
     {

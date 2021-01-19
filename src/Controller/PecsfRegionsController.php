@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Cake\Core\Configure;
 
-class PecsfregionsController extends AppController
+class PecsfRegionsController extends AppController
 {
     public function index()
     {
