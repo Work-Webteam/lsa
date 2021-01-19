@@ -127,8 +127,8 @@ class RegistrationsController extends AppController
 
             $query = $this->Registrations->RegistrationPeriods->find('all')
                 ->where([
-                    'RegistrationPeriods.open_registration <=' => date('Y-m-d H:i:s'),
-                    'RegistrationPeriods.close_registration >=' => date('Y-m-d H:i:s')
+                    'Registration_Periods.open_registration <=' => date('Y-m-d H:i:s'),
+                    'Registration_Periods.close_registration >=' => date('Y-m-d H:i:s')
                 ]);
             $registrationperiods = $query->first();
 
@@ -172,8 +172,8 @@ class RegistrationsController extends AppController
         //First, make sure registrations are open, flash an error if they're not.
         $query = $this->Registrations->RegistrationPeriods->find('all')
             ->where([
-                'Registrationperiods.open_registration <=' => date('Y-m-d H:i:s'),
-                'Registrationperiods.close_registration >=' => date('Y-m-d H:i:s')
+                'RegistrationPeriods.open_registration <=' => date('Y-m-d H:i:s'),
+                'RegistrationPeriods.close_registration >=' => date('Y-m-d H:i:s')
             ]);
         $registrationperiods = $query->first();
 
