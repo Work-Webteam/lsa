@@ -38,7 +38,7 @@
 
 </script>
 
-<form method="post">
+<?= $this->Form->create($award, ['type' => 'file']) ?>
     <div class="form-row">
         <div class="col-6">
             <div class="image-area mt-4"><img id="imageResult" src="#" alt="" class="img-fluid rounded shadow-sm mx-auto d-block"></div>
@@ -46,7 +46,7 @@
         </div>
         <div class="col-6">
             <div class="custom-file">
-                <input type="file" class="custom-file-input" id="upload" name="upload" onchange="readURL(this);">
+                <?= $this->Form->control('upload', ['type' => 'file', 'class' => 'form-control custom-file-input', 'onchange="readURL(this);"']) ?>
                 <label class="custom-file-label" for="upload">Upload image</label>
             </div>
 
@@ -57,48 +57,34 @@
     <div class="form-row">
     <div class="col-6">
         <div class="form-group">
-            <label for="name">Award Name:</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="Award Name">
+            <?= $this->Form->control('name', ['label' => 'Award Name', 'class' => 'form-control']); ?>
         </div>
         <div class="form-group">
-            <label for="milestone_id">Milestone:</label>
-            <select class="form-control" id="milestone_id" name="milestone_id">
-                <option selected disabled>Select Milestone</option>
-                <?php foreach ($milestones as $mstone): ?>
-                    <option value="<?= $mstone->id ?>"><?= $mstone->name ?></option>
-                <?php endforeach ?>
+            <?= $this->Form->control('milestone_id', ['label' => 'Milestone', 'class' => 'form-control', 'options' => $milestones]); ?>
             </select>
         </div>
         <div class="form-group">
-            <label for="abbreviation">Abbreviation:</label>
-            <input type="text" class="form-control" id="abbreviation" name="abbreviation" placeholder="Shortname">
+            <?= $this->Form->control('abbreviation', ['label' => 'Abbreviation', 'class' => 'form-control', 'placeholder' => 'Shortname']); ?>
             <small id="abbreviation-help" class="form-text text-muted">Provide a one-word description of the item</small>
         </div>
     </div>
     <div class="col-6">
         <div class="form-group">
-            <label for="description">Description:</label>
-            <textarea class="form-control" id="description" rows="3"></textarea>
+            <?= $this->Form->control('description', ['label' => 'Description', 'class' => 'form-control', 'type' => 'textarea']); ?>
         </div>
-        <p>Personalized:</p>
+
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="true" id="personalized">
-            <label class="form-check-label" for="personalized">
-                Personalization
-            </label>
+            <?= $this->Form->control('personalized', ['label' => 'Personalized', 'class' => 'form-control']);?>
         </div>
     </div>
     </div>
 
 
-    <div class="form-group">
-        <button class="btn btn-cancel">Cancel</button>
-        <button type="submit" class="btn btn-primary">Save award</button>
-    </div>
-
-
-
-
-
-</form>
-
+<?= $this->Form->button('Cancel', [
+    'type' => 'button',
+    'onclick' => 'location.href=\'/awards/view/' . $award->id . '\'',
+    'class' => 'btn btn-cancel'
+]);
+?>
+<?= $this->Form->button(__('Save Awrd'), ['class' => 'btn btn-primary']) ?>
+<?= $this->Form->end(); ?>

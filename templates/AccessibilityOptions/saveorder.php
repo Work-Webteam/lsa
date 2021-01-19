@@ -17,7 +17,7 @@
 
         <tbody class="row_position">
 
-        <?php foreach ($accessibility as $item): ?>
+        <?php foreach ($accessibilityOptions as $item): ?>
             <tr id="<?php echo $item->id ?>">
                 <?= $isadmin ? "<td>" . $item->id . "</td>" : "" ?>
                 <td class="lsa-row-handle" style="cursor:move;"><i id="drag_indicator" class="material-icons">drag_indicator</i></td>
@@ -60,7 +60,7 @@
 
 <script type="text/javascript">
 
-    var accessibility=<?php echo json_encode($accessibility); ?>;
+    var accessibilityOptions=<?php echo json_encode($accessibilityOptions); ?>;
 
 
     document.getElementById("btnSaveOrder").disabled =true;

@@ -2,12 +2,20 @@
 
 
     <h1 class="page-title">Add Registration Period</h1>
+
+
+<?=$this->Form->create($registrationperiod); ?>
+<div class="form-group">
+    <label for="registration_year">Registration Year:</label>
+    <input type="text" name="registration_year" id="registration_year" class="form-control">
+</div>
+
+<div class="form-group">
+    <label for="qualifying_years"
+</div>
+
+
 <?php
-
-
-
-echo $this->Form->create($registrationperiod);
-
 
 
 echo $this->Form->hidden('pecsf_charity2_id', ['value' => '0']);

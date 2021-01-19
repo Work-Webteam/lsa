@@ -130,7 +130,7 @@
                 <a class="dropdown-item" href="/milestones">PECSF Donations</a>
                 <a class="dropdown-item" href="/ministries">Ministries</a>
                 <a class="dropdown-item" href="/diet">Diet</a>
-                <a class="dropdown-item" href="/accessibility">Accessibility</a>
+                <a class="dropdown-item" href="/accessibilityOptions">Accessibility</a>
                 <a class="dropdown-item" href="/categories">VIP Categories</a>
                 <a class="dropdown-item" href="/cities">Cities</a>
                 <a class="dropdown-item" href="/pecsfregions">PECSF Regions</a>

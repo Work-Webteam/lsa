@@ -21,7 +21,7 @@ class AccessibilityOptionsController extends AppController
             $this->redirect('/');
         }
         $this->loadComponent('Paginator');
-        $accessibility = $this->Paginator->paginate($this->Accessibility->find('all', [
+        $accessibility = $this->Paginator->paginate($this->AccessibilityOptions->find('all', [
                'order' => ['sortorder' => 'ASC',
                            'name' => 'ASC'],
         ]));
@@ -40,7 +40,7 @@ class AccessibilityOptionsController extends AppController
             $this->Flash->error(__('You are not authorized to administer Accessibility Requirements.'));
             $this->redirect('/');
         }
-        $accessibility = $this->Accessibility->findById($id)->firstOrFail();
+        $accessibility = $this->AccessibilityOptions->findById($id)->firstOrFail();
 
         $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
         $this->set(compact('isadmin'));
@@ -53,11 +53,11 @@ class AccessibilityOptionsController extends AppController
             $this->Flash->error(__('You are not authorized to administer Accessibility Requirements.'));
             $this->redirect('/');
         }
-        $accessibility = $this->Accessibility->newEmptyEntity();
+        $accessibility = $this->AccessibilityOptions->newEmptyEntity();
         if ($this->request->is('post')) {
-            $accessibility = $this->Accessibility->patchEntity($accessibility, $this->request->getData());
-            $accessibility->sortorder = 999;
-            if ($this->Accessibility->save($accessibility)) {
+            $accessibility = $this->AccessibilityOptions->patchEntity($accessibility, $this->request->getData());
+            $AccessibilityOptions->sortorder = 999;
+            if ($this->AccessibilityOptions->save($accessibility)) {
                 $this->Flash->success(__('Accessibility Requirements has been saved.'));
                 return $this->redirect(['action' => 'index']);
             }
@@ -72,10 +72,10 @@ class AccessibilityOptionsController extends AppController
             $this->Flash->error(__('You are not authorized to administer Accessibility Requirements.'));
             $this->redirect('/');
         }
-        $accessibility = $this->Accessibility->findById($id)->firstOrFail();
+        $accessibility = $this->AccessibilityOptions->findById($id)->firstOrFail();
         if ($this->request->is(['post', 'put'])) {
-            $this->Accessibility->patchEntity($accessibility, $this->request->getData());
-            if ($this->Accessibility->save($accessibility)) {
+            $this->AccessibilityOptions->patchEntity($accessibility, $this->request->getData());
+            if ($this->AccessibilityOptions->save($accessibility)) {
                 $this->Flash->success(__('Accessibility Requirement has been updated.'));
                 return $this->redirect(['action' => 'index']);
             }
@@ -94,9 +94,9 @@ class AccessibilityOptionsController extends AppController
         }
         $this->request->allowMethod(['post', 'delete']);
 
-        $accessibility = $this->Accessibility->findById($id)->firstOrFail();
-        if ($this->Accessibility->delete($accessibility)) {
-            $this->Flash->success(__('{0} accessibility requirement has been deleted.', $accessibility->name));
+        $accessibility = $this->AccessibilityOptions->findById($id)->firstOrFail();
+        if ($this->AccessibilityOptions->delete($accessibility)) {
+            $this->Flash->success(__('{0} accessibility requirement has been deleted.', $AccessibilityOptions->name));
             return $this->redirect(['action' => 'index']);
         }
     }
@@ -108,9 +108,9 @@ class AccessibilityOptionsController extends AppController
 
             $i = 1;
             foreach ($order as $id) {
-                $accessibility = $this->Accessibility->findById($id)->firstOrFail();
-                $accessibility->sortorder = $i++;
-                $this->Accessibility->save($accessibility);
+                $accessibility = $this->AccessibilityOptions->findById($id)->firstOrFail();
+                $AccessibilityOptions->sortorder = $i++;
+                $this->AccessibilityOptions->save($accessibility);
             }
             return;
         }

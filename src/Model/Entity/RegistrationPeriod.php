@@ -4,7 +4,7 @@ namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
 
-class RegistrationPeriods extends Entity
+class RegistrationPeriod extends Entity
 {
     protected $_accessible = [
         '*' => true,

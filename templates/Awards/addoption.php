@@ -1,7 +1,6 @@
 <h1 class="page-title">Add Option</h1>
 <?php
 echo $this->Form->create();
-
 echo $this->Form->select('type', ['choice' => 'Multiple Choice', 'text' => 'Text']);
 echo $this->Form->control('name', ['label' => 'Option']);
 echo $this->Form->control('maxlength', ['label' => 'Maximum Characters (0 = unlimited)', 'default' => 0]);
