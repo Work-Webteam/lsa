@@ -481,7 +481,7 @@ class RegistrationsController extends AppController
         $diet = $this->Registrations->Diet->find('all');
         $this->set('diet', $diet);
 
-        $accessibility = $this->Registrations->Accessibility->find('all');
+        $accessibility = $this->Registrations->AccessibilityOptions->find('all');
         $this->set('accessibility', $accessibility);
 
 
@@ -682,7 +682,7 @@ class RegistrationsController extends AppController
         $diet = $this->Registrations->Diet->find('all');
         $this->set('diet', $diet);
 
-        $accessibility = $this->Registrations->Accessibility->find('all', [
+        $accessibility = $this->Registrations->AccessibilityOptions->find('all', [
             'order' => ['Accessibility.sortorder' => 'ASC',
                         'Accessibility.name' => 'ASC']
         ]);
@@ -1285,7 +1285,7 @@ class RegistrationsController extends AppController
         $diet = $this->Registrations->Diet->find('all');
         $this->set('diet', $diet);
 
-        $accessibility = $this->Registrations->Accessibility->find('all');
+        $accessibility = $this->Registrations->AccessibilityOptions->find('all');
         $this->set('accessibility', $accessibility);
 
         // now we gonna figure out the totals.
@@ -1405,7 +1405,7 @@ class RegistrationsController extends AppController
         ]);
 
 
-        $records = $this->Registrations->Accessibility->find('all');
+        $records = $this->Registrations->AccessibilityOptions->find('all');
         $accessibility = [];
         foreach ($records as $value) {
             $accessibility[$value->id] = $value;
@@ -2403,7 +2403,7 @@ class RegistrationsController extends AppController
         ]);
 
 
-        $records = $this->Registrations->Accessibility->find('all');
+        $records = $this->Registrations->AccessibilityOptions->find('all');
         $accessibility = [];
         foreach ($records as $value) {
             $accessibility[$value->id] = $value;

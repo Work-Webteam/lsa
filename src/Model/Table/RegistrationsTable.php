@@ -18,7 +18,7 @@ class RegistrationsTable extends Table
             ->setForeignKey('id')
             ->setBindingKey('award_id');
         $this->hasOne('Diet');
-        $this->hasOne('Accessibility');
+        $this->hasOne('AccessibilityOptions');
         $this->hasOne('Ministries')
             ->setForeignKey('id')
             ->setBindingKey('ministry_id');
