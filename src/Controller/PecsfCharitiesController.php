@@ -14,7 +14,7 @@ class PecsfCharitiesController extends AppController
         }
         $this->loadComponent('Paginator');
         $charities = $this->Paginator->paginate($this->PecsfCharities->find('all', [
-                'contain' => ['Pecsfregions']
+                'contain' => ['PecsfRegions']
             ]));
 
         $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
@@ -30,7 +30,7 @@ class PecsfCharitiesController extends AppController
         }
         $charity = $this->PecsfCharities->find('all', [
             'conditions' => ['Pecsfcharities.id' => $id],
-            'contain' => ['Pecsfregions']
+            'contain' => ['PecsfRegions']
         ])->firstOrFail();
 
         $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
@@ -56,7 +56,7 @@ class PecsfCharitiesController extends AppController
         }
 
         // Get a list of pecsf regions.
-        $regions = $this->PecsfCharities->Pecsfregions->find('list');
+        $regions = $this->PecsfCharities->PecsfRegions->find('list');
         // Set pecsf regions to the view context
         $this->set('regions', $regions);
 
@@ -80,7 +80,7 @@ class PecsfCharitiesController extends AppController
         }
 
         // Get a list of pecsf regions.
-        $regions = $this->PecsfCharities->Pecsfregions->find('list');
+        $regions = $this->PecsfCharities->PecsfRegions->find('list');
         // Set pecsf regions to the view context
         $this->set('regions', $regions);
 

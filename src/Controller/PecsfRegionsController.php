@@ -13,7 +13,7 @@ class PecsfRegionsController extends AppController
             $this->redirect('/');
         }
         $this->loadComponent('Paginator');
-        $pecsfregions = $this->Paginator->paginate($this->Pecsfregions->find());
+        $pecsfregions = $this->Paginator->paginate($this->PecsfRegions->find());
 
         $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
         $this->set(compact('isadmin'));
@@ -26,7 +26,7 @@ class PecsfRegionsController extends AppController
             $this->Flash->error(__('You are not authorized to administer PECSF Regions.'));
             $this->redirect('/');
         }
-        $region = $this->Pecsfregions->findById($id)->firstOrFail();
+        $region = $this->PecsfRegions->findById($id)->firstOrFail();
 
         $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
         $this->set(compact('isadmin'));
@@ -39,11 +39,11 @@ class PecsfRegionsController extends AppController
             $this->Flash->error(__('You are not authorized to administer PECSF Regions.'));
             $this->redirect('/');
         }
-        $region = $this->Pecsfregions->newEmptyEntity();
+        $region = $this->PecsfRegions->newEmptyEntity();
         if ($this->request->is('post')) {
-            $region = $this->Pecsfregions->patchEntity($region, $this->request->getData());
+            $region = $this->PecsfRegions->patchEntity($region, $this->request->getData());
 
-            if ($this->Pecsfregions->save($region)) {
+            if ($this->PecsfRegions->save($region)) {
                 $this->Flash->success(__('PECSF region has been saved.'));
                 return $this->redirect(['action' => 'index']);
             }
@@ -58,10 +58,10 @@ class PecsfRegionsController extends AppController
             $this->Flash->error(__('You are not authorized to administer PECSF Regions.'));
             $this->redirect('/');
         }
-        $region = $this->Pecsfregions->findById($id)->firstOrFail();
+        $region = $this->PecsfRegions->findById($id)->firstOrFail();
         if ($this->request->is(['post', 'put'])) {
-            $this->Pecsfregions->patchEntity($region, $this->request->getData());
-            if ($this->Pecsfregions->save($region)) {
+            $this->PecsfRegions->patchEntity($region, $this->request->getData());
+            if ($this->PecsfRegions->save($region)) {
                 $this->Flash->success(__('PECSF region has been updated.'));
                 return $this->redirect(['action' => 'index']);
             }
@@ -80,8 +80,8 @@ class PecsfRegionsController extends AppController
         }
         $this->request->allowMethod(['post', 'delete']);
 
-        $region = $this->Pecsfregions->findById($id)->firstOrFail();
-        if ($this->Pecsfregions->delete($region)) {
+        $region = $this->PecsfRegions->findById($id)->firstOrFail();
+        if ($this->PecsfRegions->delete($region)) {
             $this->Flash->success(__('{0} PECSF region has been deleted.', $region->name));
             return $this->redirect(['action' => 'index']);
         }
