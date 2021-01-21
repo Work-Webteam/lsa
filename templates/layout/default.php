@@ -125,7 +125,7 @@
                 Settings
             </a>
             <div class="dropdown-menu">
-                <a class="dropdown-item" href="/registrationperiods">Registration Periods</a>
+                <a class="dropdown-item" href="/registrationPeriods">Registration Periods</a>
                 <a class="dropdown-item" href="/awards">Awards</a>
                 <a class="dropdown-item" href="/milestones">PECSF Donations</a>
                 <a class="dropdown-item" href="/ministries">Ministries</a>
@@ -133,10 +133,10 @@
                 <a class="dropdown-item" href="/accessibilityOptions">Accessibility</a>
                 <a class="dropdown-item" href="/categories">VIP Categories</a>
                 <a class="dropdown-item" href="/cities">Cities</a>
-                <a class="dropdown-item" href="/pecsfregions">PECSF Regions</a>
-                <a class="dropdown-item" href="/pecsfcharities">PECSF Charities</a>
+                <a class="dropdown-item" href="/pecsfRegions">PECSF Regions</a>
+                <a class="dropdown-item" href="/pecsfCharities">PECSF Charities</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="/userroles">System Permissions</a>
+                <a class="dropdown-item" href="/userRoles">System Permissions</a>
                 <a class="dropdown-item" href="/registrations/archive">Archive Database</a>
                 <a class="dropdown-item" href="/log">Log</a>
             </div>

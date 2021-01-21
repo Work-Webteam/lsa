@@ -13,7 +13,7 @@ class PecsfCharitiesController extends AppController
             $this->redirect('/');
         }
         $this->loadComponent('Paginator');
-        $charities = $this->Paginator->paginate($this->Pecsfcharities->find('all', [
+        $charities = $this->Paginator->paginate($this->PecsfCharities->find('all', [
                 'contain' => ['Pecsfregions']
             ]));
 
@@ -28,7 +28,7 @@ class PecsfCharitiesController extends AppController
             $this->Flash->error(__('You are not authorized to administer PECSF Charities.'));
             $this->redirect('/');
         }
-        $charity = $this->Pecsfcharities->find('all', [
+        $charity = $this->PecsfCharities->find('all', [
             'conditions' => ['Pecsfcharities.id' => $id],
             'contain' => ['Pecsfregions']
         ])->firstOrFail();
@@ -44,11 +44,11 @@ class PecsfCharitiesController extends AppController
             $this->Flash->error(__('You are not authorized to administer PECSF Charities.'));
             $this->redirect('/');
         }
-        $charity = $this->Pecsfcharities->newEmptyEntity();
+        $charity = $this->PecsfCharities->newEmptyEntity();
         if ($this->request->is('post')) {
-            $charity = $this->Pecsfcharities->patchEntity($charity, $this->request->getData());
+            $charity = $this->PecsfCharities->patchEntity($charity, $this->request->getData());
 
-            if ($this->Pecsfcharities->save($charity)) {
+            if ($this->PecsfCharities->save($charity)) {
                 $this->Flash->success(__('PECSF charity has been saved.'));
                 return $this->redirect(['action' => 'index']);
             }
@@ -56,7 +56,7 @@ class PecsfCharitiesController extends AppController
         }
 
         // Get a list of pecsf regions.
-        $regions = $this->Pecsfcharities->Pecsfregions->find('list');
+        $regions = $this->PecsfCharities->Pecsfregions->find('list');
         // Set pecsf regions to the view context
         $this->set('regions', $regions);
 
@@ -69,10 +69,10 @@ class PecsfCharitiesController extends AppController
             $this->Flash->error(__('You are not authorized to administer PECSF Charities.'));
             $this->redirect('/');
         }
-        $charity = $this->Pecsfcharities->findById($id)->firstOrFail();
+        $charity = $this->PecsfCharities->findById($id)->firstOrFail();
         if ($this->request->is(['post', 'put'])) {
-            $this->Pecsfcharities->patchEntity($charity, $this->request->getData());
-            if ($this->Pecsfcharities->save($charity)) {
+            $this->PecsfCharities->patchEntity($charity, $this->request->getData());
+            if ($this->PecsfCharities->save($charity)) {
                 $this->Flash->success(__('PECSF charity has been updated.'));
                 return $this->redirect(['action' => 'index']);
             }
@@ -80,7 +80,7 @@ class PecsfCharitiesController extends AppController
         }
 
         // Get a list of pecsf regions.
-        $regions = $this->Pecsfcharities->Pecsfregions->find('list');
+        $regions = $this->PecsfCharities->Pecsfregions->find('list');
         // Set pecsf regions to the view context
         $this->set('regions', $regions);
 
@@ -96,8 +96,8 @@ class PecsfCharitiesController extends AppController
         }
         $this->request->allowMethod(['post', 'delete']);
 
-        $charity = $this->Pecsfcharities->findById($id)->firstOrFail();
-        if ($this->Pecsfcharities->delete($charity)) {
+        $charity = $this->PecsfCharities->findById($id)->firstOrFail();
+        if ($this->PecsfCharities->delete($charity)) {
             $this->Flash->success(__('{0} PECSF charity has been deleted.', $charity->name));
             return $this->redirect(['action' => 'index']);
         }

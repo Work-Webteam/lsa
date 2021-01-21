@@ -14,7 +14,7 @@ class RegistrationPeriodsController extends AppController
             $this->redirect('/');
         }
         $this->loadComponent('Paginator');
-        $registrationperiods = $this->Paginator->paginate($this->Registrationperiods->find('all', [
+        $registrationperiods = $this->Paginator->paginate($this->RegistrationPeriods->find('all', [
             'order' => ['Registrationperiods.open_registration' => 'DESC']
         ]));
 
@@ -29,7 +29,7 @@ class RegistrationPeriodsController extends AppController
             $this->Flash->error(__('You are not authorized to administer Registration Periods.'));
             $this->redirect('/');
         }
-        $period = $this->Registrationperiods->findById($id)->firstOrFail();
+        $period = $this->RegistrationPeriods->findById($id)->firstOrFail();
 
         $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
         $this->set(compact('isadmin'));
@@ -42,15 +42,15 @@ class RegistrationPeriodsController extends AppController
             $this->Flash->error(__('You are not authorized to administer Registration Periods.'));
             $this->redirect('/');
         }
-        $registrationperiod = $this->Registrationperiods->newEmptyEntity();
+        $registrationperiod = $this->RegistrationPeriods->newEmptyEntity();
         if ($this->request->is('post')) {
-            $registrationperiod = $this->Registrationperiods->patchEntity($registrationperiod, $this->request->getData());
+            $registrationperiod = $this->RegistrationPeriods->patchEntity($registrationperiod, $this->request->getData());
             $registrationperiod->registration_year = $this->request->getData('registration_year');
             $registrationperiod->open_registration = $this->request->getData('open_date') . " " . $this->request->getData('open_time');
             $registrationperiod->close_registration = $this->request->getData('close_date') . " " . $this->request->getData('close_time');
             $registrationperiod->open_rsvp = $this->request->getData('rsvp_open_date') . " " . $this->request->getData('rsvp_open_time');
             $registrationperiod->close_rsvp = $this->request->getData('rsvp_close_date') . " " . $this->request->getData('rsvp_close_time');
-            if ($this->Registrationperiods->save($registrationperiod)) {
+            if ($this->RegistrationPeriods->save($registrationperiod)) {
                 $this->Flash->success(__('Your registration period has been saved.'));
                 return $this->redirect(['action' => 'index']);
             }
@@ -65,15 +65,15 @@ class RegistrationPeriodsController extends AppController
             $this->Flash->error(__('You are not authorized to administer Registration Periods.'));
             $this->redirect('/');
         }
-        $registrationperiod = $this->Registrationperiods->findById($id)->firstOrFail();
+        $registrationperiod = $this->RegistrationPeriods->findById($id)->firstOrFail();
         if ($this->request->is(['post', 'put'])) {
-            $this->Registrationperiods->patchEntity($registrationperiod, $this->request->getData());
+            $this->RegistrationPeriods->patchEntity($registrationperiod, $this->request->getData());
             $registrationperiod->registration_year = $this->request->getData('registration_year');
             $registrationperiod->open_registration = $this->request->getData('open_date') . " " . $this->request->getData('open_time');
             $registrationperiod->close_registration = $this->request->getData('close_date') . " " . $this->request->getData('close_time');
             $registrationperiod->open_rsvp = $this->request->getData('rsvp_open_date') . " " . $this->request->getData('rsvp_open_time');
             $registrationperiod->close_rsvp = $this->request->getData('rsvp_close_date') . " " . $this->request->getData('rsvp_close_time');
-            if ($this->Registrationperiods->save($registrationperiod)) {
+            if ($this->RegistrationPeriods->save($registrationperiod)) {
                 $this->Flash->success(__('Registration Period has been updated.'));
                 return $this->redirect(['action' => 'index']);
             }
@@ -92,8 +92,8 @@ class RegistrationPeriodsController extends AppController
         }
         $this->request->allowMethod(['post', 'delete']);
 
-        $registrationperiod = $this->Registrationperiods->findById($id)->firstOrFail();
-        if ($this->Registrationperiods->delete($registrationperiod)) {
+        $registrationperiod = $this->RegistrationPeriods->findById($id)->firstOrFail();
+        if ($this->RegistrationPeriods->delete($registrationperiod)) {
             $this->Flash->success(__('Registration period {0} has been deleted.', $registrationperiod->registration_year));
             return $this->redirect(['action' => 'index']);
         }
