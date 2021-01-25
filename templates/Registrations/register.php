@@ -26,7 +26,7 @@
                                     <div class="form-group">
                                         <label for="milestone">Which milestone are you celebrating?</label>
 
-                                        <select class="form-control" id="milestone" name="milestone_id">
+                                        <select class="form-control" id="milestone" name="milestone_id" v-model="milestone">
                                             <option selected disabled>Select Milestone</option>
                                             <?php foreach ($milestoneinfo as $mstone) : ?>
                                                 <option value="<?= $mstone->id ?>"><?= $mstone->name ?></option>
@@ -48,7 +48,7 @@
                             </div>
                             <div class="form-row">
                                 <div class="col-6">
-                                    <div class="form-group">
+                                    <div class="form-group" v-if="milestone == 1">
                                         <label for="">How would you like your name to appear on your
                                             certificate?</label>
                                         <input type="text" id="certificateName" name="certificate_name" v-model="certificateName" class="form-control">
@@ -276,13 +276,13 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="supervisorFirstName">Supervisor's First Name</label>
-                                        <input type="text" class="form-control" id="supervisor_first_name" name="supervisor_first_name" placeholder="i.e. Taylor Publicservant" v-model="supervisorFirstName">
+                                        <input type="text" class="form-control" id="supervisor_first_name" name="supervisor_first_name" placeholder="i.e. Taylor " v-model="supervisorFirstName">
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="supervisorLastName">Supervisor's Last Name</label>
-                                        <input type="text" class="form-control" id="supervisor_last_name" name="supervisor_last_name" placeholder="i.e. Taylor Publicservant" v-model="supervisorLastName">
+                                        <input type="text" class="form-control" id="supervisor_last_name" name="supervisor_last_name" placeholder="i.e. Publicservant" v-model="supervisorLastName">
                                     </div>
                                 </div>
                             </div>
