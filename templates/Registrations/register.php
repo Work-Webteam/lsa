@@ -88,11 +88,24 @@
                             <button class="btn btn-primary" @click="e1 = 2">Select Award</button>
                         </v-stepper-content>
 
+
+
+
                         <v-stepper-content step="2">
                             <h3 class="display-3">Select Your Award</h3>
 
+                            <v-carousel v-model="model">
+                                <?php foreach ($awardinfo as $award): ?>
+                                    <v-carousel-item v-if="milestone == <?= $award->milestone_id ?>">
+                                        <v-sheet height="100%" tile>
+                                            <v-row align="center" justify="center"><div class="display-3"><?= $award->name ?></div></v-row>
+                                            <v-row align="center" justify="center"><p><?= $award->description ?></p></v-row>
+                                        </v-sheet>
+                                    </v-carousel-item>
+                                <?php endforeach ?>
+                            </v-carousel>
 
-
+                            <button class="btn btn-secondary">+ Select This Award</button>
 
                             <button class="btn btn-primary" @click="e1 = 3">Enter Contact Information</button>
                         </v-stepper-content>

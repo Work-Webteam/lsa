@@ -185,11 +185,50 @@ class RegistrationsController extends AppController
 
         //Handle post requests
         if ($this->request->is('post')) {
-            $this->register_post();
+            $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
+
+            $session = $this->getRequest()->getSession();
+            $registration->user_idir = $session->read('user.idir');
+            $registration->user_guid = $session->read('user.guid');
+
+            $registration->created = time();
+            $registration->modified = time();
+
+            $registration->registration_year = date("Y");
+            $registration->office_province = "BC";
+            $registration->home_province = "BC";
+            $registration->supervisor_province = "BC";
+            $registration->retirement_date = $this->request->getData('date');
+            $registration->retroactive = 0;
+
+            $registration->accessibility_requirements_recipient = "[]";
+            $registration->accessibility_requirements_guest = "[]";
+            $registration->dietary_requirements_recipient = "[]";
+            $registration->dietary_requirements_guest = "[]";
+
+            if (empty($registration->award_options)) {
+                $registration->award_options = '[]';
+            }
+            if ($this->Registrations->save($registration)) {
+                $this->Flash->success(__('Registration has been saved.'));
+
+                // Send email here
+                $mailer = new Mailer('default');
+
+                $message = "Congratulations, you have sucessfully registered for your Long Service Award.";
+//                $mailer->setFrom(['longserviceaward@gov.bc.ca' => 'Long Service Awards'])
+//                    ->setTo($registration->preferred_email)
+//                    ->setSubject('Long Service Award Registration Completed')
+//                    ->deliver($message);
+
+
+                return $this->redirect(['action' => 'completed', $registration->id]);
+            }
+            $this->Flash->error(__('Unable to add registration.'));
         }
 
         //Initialize new registratio object
-        //$registration = $this->Registrations->newEmptyEntity();
+        $registration = $this->Registrations->newEmptyEntity();
 
         //Initialize Arrays for Awards options, Select Menus and validation
         $list = explode(",", $registrationperiods->qualifying_years);
@@ -233,74 +272,12 @@ class RegistrationsController extends AppController
             'order' => ['Pecsfcharities.name' => 'ASC']
         ]);
         $this->set('charities', $charities);
-        //$this->set('registration', $registration);
+        $this->set('registration', $registration);
 
 
     }
 
-    private function register_post()
-    {
-        $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
 
-        $session = $this->getRequest()->getSession();
-        $registration->user_idir = $session->read('user.idir');
-        $registration->user_guid = $session->read('user.guid');
-
-        $registration->created = time();
-        $registration->modified = time();
-
-        $registration->registration_year = date("Y");
-        $registration->office_province = "BC";
-        $registration->home_province = "BC";
-        $registration->supervisor_province = "BC";
-        $registration->retirement_date = $this->request->getData('date');
-        $registration->retroactive = 0;
-
-        $registration->accessibility_requirements_recipient = "[]";
-        $registration->accessibility_requirements_guest = "[]";
-        $registration->dietary_requirements_recipient = "[]";
-        $registration->dietary_requirements_guest = "[]";
-
-        if (empty($registration->award_options)) {
-            $registration->award_options = '[]';
-        }
-        if ($this->Registrations->save($registration)) {
-            $this->Flash->success(__('Registration has been saved.'));
-
-            // Send email here
-            $mailer = new Mailer('default');
-
-            $message = "Congratulations, you have sucessfully registered for your Long Service Award.";
-//                $mailer->setFrom(['longserviceaward@gov.bc.ca' => 'Long Service Awards'])
-//                    ->setTo($registration->preferred_email)
-//                    ->setSubject('Long Service Award Registration Completed')
-//                    ->deliver($message);
-
-
-            return $this->redirect(['action' => 'completed', $registration->id]);
-        }
-        $this->Flash->error(__('Unable to add registration.'));
-    }
-
-
-/*
-    public function register()
-    {
-
-
-
-
-
-
-
-        if ($this->request->is('post')) {
-
-        }
-
-
-
-    }
-*/
 
     public function completed ($id = null) {
         $registration = $this->Registrations->findById($id)->firstOrFail();
