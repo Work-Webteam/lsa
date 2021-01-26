@@ -1,3 +1,5 @@
+<?= $this->Form->create($registration) ?>
+
 <div id="app">
     <template>
     <v-app>
@@ -83,8 +85,6 @@
                                 </div>
                             </div>
 
-
-
                             <button class="btn btn-primary" @click="e1 = 2">Select Award</button>
                         </v-stepper-content>
 
@@ -105,7 +105,132 @@
                                 <?php endforeach ?>
                             </v-carousel>
 
-                            <button class="btn btn-secondary">+ Select This Award</button>
+
+                            <div class="row">
+                                <div class="col-5"></div>
+                                <div class="col-2"><button class="btn btn-secondary">Select Award</button></div>
+                                <div class="col-5"></div>
+                            </div>
+
+                            <!-- WATCH CONTROLS -->
+                            <div class="row" v-if="selectedAward == 9">
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label for=""> Watch Size:</label>
+                                        <select name="" id="">
+                                            <option disabled selected>Select Watch Size</option>
+                                            <option>38mm face with 20mm strap</option>
+                                            <option>29mm face with 14mm strap</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label for="">Watch Colour:</label>
+                                        <select name="" id="">
+                                            <option disabled selected></option>
+                                            <option>Gold</option>
+                                            <option>Silver</option>
+                                            <option>Two-Toned (Gold &amp;s Silver)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label for="">Strap:</label>
+                                        <select name="" id="">
+                                            <option disabled selected>Choose Strap</option>
+                                            <option>Plated</option>
+                                            <option>Black Leather</option>
+                                            <option>Brown Leather</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label for="">Engraving</label>
+                                        <input type="text" name="engraving" maxlength="33" placholder="Firstname Lastname">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 35 YR BRACELET CONTROLS -->
+                            <div class="row" v-if="selectedAward == 12">
+                                <div class="form-group">
+                                    <label for="">Size</label>
+                                    <select name="" id="">
+                                        <option disabled selected>Choose Size</option>
+                                        <option>Fits 6 1/2" - 7 1/2" circumference wrists</option>
+                                        <option>Fits 7 1/2" - 8 1/2" circumference wrists</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- 45 YR BRACELET CONTROLS -->
+                            <div class="row" v-if="selectedAward == 46">
+                                <div class="form-group">
+                                    <label for="">Size</label>
+                                    <select name="" id="">
+                                        <option disabled selected>Choose Size</option>
+                                        <option>Fits 6 1/2" - 7 1/2" circumference wrists</option>
+                                        <option>Fits 7 1/2" - 8 1/2" circumference wrists</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- PECSF DONATION CONTROLS -->
+                            <div class="row" v-if="selectedAward == 49 || selectedAward == 50 || selectedAward == 51 || selectedAward == 52 || selectedAward == 53 || selectedAward == 54">
+                                <div clas="col-6">
+                                    <div class="form-group">
+                                        <label for="">Name on Donation</label>
+                                        <input type="text" maxlength="33" placeholder="Firstname Lastname" :value="firstName + ' ' + lastName">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Your Desired PECSF Region</label>
+                                        <select name="" id="" v-model="pecsfRegion">
+                                            <?php foreach ($regions as $region) : ?>
+                                            <option value="<?= $region->id ?>"><?= $region->name ?></option>
+                                            <?php endforeach ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="" id="" value="pool" v-model="donationType" checked>
+                                        <label class="form-check-label" for="">Donate to the fund-supported pool for my chosen region</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="" id="" value="single-charity" v-model="donationType">
+                                        <label class="form-check-label" for="">Donate to a specific charity</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="" id="" value="two-charities" v-model="donationType">
+                                        <label class="form-check-label" for="">Donate to two charities</label>
+                                    </div>
+                                    <div class="form-group" >
+                                        <label for="" v-if="donationType == 'single-charity'">Choose your charity</label>
+                                        <label for="" v-if="donationType == 'two-charities'">Choose your first charity</label>
+                                        <select name="" id="" v-model="pecsfCharity1">
+                                            <option selected disabled>Choose a charity</option>
+                                            <?php foreach ($charities as $charity): ?>
+                                            <option value="<?= $charity->id ?>" v-if="pecsfRegion == <?= $charity->pecsf_region_id ?>"><?= $charity->name ?></option>
+                                            <?php endforeach ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" v-if="donationType == 'two-charities'">
+                                        <label for="">Choose your second charity</label>
+                                        <select name="" id="" v-model="pecsfCharity1">
+                                            <option selected disabled>Choose a charity</option>
+                                            <?php foreach ($charities as $charity): ?>
+                                                <option value="<?= $charity->id ?>" v-if="pecsfRegion == <?= $charity->pecsf_region_id ?>"><?= $charity->name ?></option>
+                                            <?php endforeach ?>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+
+                                //Donation Option
+                                //Charities Chosen
+                            </div>
 
                             <button class="btn btn-primary" @click="e1 = 3">Enter Contact Information</button>
                         </v-stepper-content>
@@ -529,7 +654,7 @@
     </v-app>
 </template>
 </div>
-
+<?= $this->Form->end(); ?>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -635,7 +760,9 @@
             inputDonationType: false,
             inputCharity1: false,
             inputCharity2: false,
-            testShow: false
+            testShow: false,
+
+            donationType: false,
         },
 
         methods: {
@@ -674,7 +801,7 @@
                     var sel = document.getElementById("supervisor-city-id");
                 }
             },
-
+            /*
             getCharity: function (select_id) {
                 charity = 0;
                 for (var i = 0; i < allCharities.length; i++) {
@@ -714,6 +841,7 @@
                     this.inputCharity2 = true;
                 }
             },
+            */
 
             selectAwardOptions: function (select_id) {
                 award = this.getAward(select_id);
