@@ -264,12 +264,12 @@ class RegistrationsController extends AppController
             'order' => ['Cities.name' => 'ASC']
         ]);
         $this->set('cities', $cities);
-        $regions = $this->Registrations->Pecsfregions->find('list', [
-            'order' => ['Pecsfregions.name' => 'ASC']
+        $regions = $this->Registrations->PecsfRegions->find('list', [
+            'order' => ['PecsfRegions.name' => 'ASC']
         ]);
         $this->set('regions', $regions);
-        $charities = $this->Registrations->Pecsfcharities->find('all', [
-            'order' => ['Pecsfcharities.name' => 'ASC']
+        $charities = $this->Registrations->PecsfCharities->find('all', [
+            'order' => ['PecsfCharities.name' => 'ASC']
         ]);
         $this->set('charities', $charities);
         $this->set('registration', $registration);
@@ -426,13 +426,13 @@ class RegistrationsController extends AppController
         ]);
         $this->set('ministries', $ministries);
 
-        $regions = $this->Registrations->Pecsfregions->find('list', [
-            'order' => ['Pecsfregions.name' => 'ASC']
+        $regions = $this->Registrations->PecsfRegions->find('list', [
+            'order' => ['PecsfRegions.name' => 'ASC']
         ]);
         $this->set('regions', $regions);
 
-        $charities = $this->Registrations->Pecsfcharities->find('all', [
-            'order' => ['Pecsfcharities.name' => 'ASC']
+        $charities = $this->Registrations->PecsfCharities->find('all', [
+            'order' => ['PecsfCharities.name' => 'ASC']
         ]);
         $this->set('charities', $charities);
 
