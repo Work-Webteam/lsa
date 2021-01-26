@@ -85,7 +85,7 @@
                                 </div>
                             </div>
 
-                            <button class="btn btn-primary" @click="e1 = 2">Select Award</button>
+                            <button class="btn btn-primary" @click.prevent="e1 = 2">Select Award</button>
                         </v-stepper-content>
 
 
@@ -232,7 +232,7 @@
                                 //Charities Chosen
                             </div>
 
-                            <button class="btn btn-primary" @click="e1 = 3">Enter Contact Information</button>
+                            <button class="btn btn-primary" @click.prevent="e1 = 3">Enter Contact Information</button>
                         </v-stepper-content>
 
 
@@ -405,7 +405,7 @@
 
 
 
-                            <button class="btn btn-primary" @click="e1 = 4">Enter Supervisor's Contact Info.</button>
+                            <button class="btn btn-primary" @click.prevent="e1 = 4">Enter Supervisor's Contact Info.</button>
                         </v-stepper-content>
 
                         <v-stepper-content step="4">
@@ -476,7 +476,7 @@
                             </div>
 
 
-                            <button class="btn btn-primary" @click="e1 = 5">Confirm Info &amp; Agree to Terms</button>
+                            <button class="btn btn-primary" @click.prevent="e1 = 5">Confirm Info &amp; Agree to Terms</button>
                         </v-stepper-content>
                         <v-stepper-content step="5">
                             <h3 class="display-3">Confirm Your Information</h3>
@@ -506,7 +506,7 @@
 
                                     </div>
                                     <div class="col-3">
-                                        <button class="btn btn-secondary" @click="e1 = 1">Edit this Section</button>
+                                        <button class="btn btn-secondary" @click.prevent="e1 = 1">Edit this Section</button>
                                     </div>
                                 </form>
                             </div>
@@ -588,7 +588,7 @@
                                         </div>
                                     </div>
                                     <div class="form-row">
-                                        <button class="btn btn-secondary" @click="e1 = 4">Edit this Section</button>
+                                        <button class="btn btn-secondary" @click.prevent="e1 = 4">Edit this Section</button>
                                     </div>
                                 </div>
                             <div class="confirmation-group">
