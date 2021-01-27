@@ -27,7 +27,6 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="milestone">Which milestone are you celebrating?</label>
-
                                         <select class="form-control" id="milestone_id" name="milestone_id" v-model="milestone">
                                             <option selected disabled>Select Milestone</option>
                                             <?php foreach ($milestoneinfo as $mstone) : ?>
@@ -39,7 +38,7 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">In which year did you reach this milestone?</label>
-                                        <select class="form-control" id="" name="registration_year">
+                                        <select class="form-control" id="registration_year" name="registration_year">
                                             <option selected disabled>Select Year</option>
                                             <?php foreach ($award_years as $ayear) : ?>
                                                 <option value="<?= $ayear ?>"><?= $ayear ?></option>
@@ -51,35 +50,33 @@
                             <div class="form-row">
                                 <div class="col-6">
                                     <div class="form-group" v-if="milestone == 1">
-                                        <label for="">How would you like your name to appear on your
-                                            certificate?</label>
+                                        <label for="">How would you like your name to appear on your certificate?</label>
                                         <input type="text" id="certificateName" name="certificate_name" v-model="certificateName" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-3">
-                                    <p>Did you register for a Long Service Award last year, but not attend a
-                                        ceremony?</p>
+                                    <p>Did you register for a Long Service Award last year, but not attend a ceremony?</p>
                                     <div class="form-group">
-                                        <input class="form-check-input" type="radio" name="" id="" value="1">
-                                        <label class="form-check-label" for="">Yes</label>
+                                        <input class="form-check-input" type="radio" name="retroactive" id="retroactive" value="1">
+                                        <label class="form-check-label" for="retroactive">Yes</label>
                                     </div>
                                     <div class="form-group">
-                                        <input class="form-check-input" type="radio" name="" id="" value="">
-                                        <label class="form-check-label" for="">No</label>
+                                        <input class="form-check-input" type="radio" name="retroactive" id="retroactive" checked value="0">
+                                        <label class="form-check-label" for="retroactive">No</label>
                                     </div>
                                 </div>
                                 <div class="col-3">
                                     <div class="form-group">
                                         <p>Are you retiring this calendar year? </p>
                                         <div class="form-group">
-                                            <input class="form-check-input" type="radio" name="retiring_this_year" id="retiring_this_year" value="true"
+                                            <input class="form-check-input" type="radio" name="retiring_this_year" id="retiring_this_year" value="1"
                                                    v-model="isRetiringThisYear">
-                                            <label class="form-check-label" for="">Yes</label>
+                                            <label class="form-check-label" for="retiring_this_year">Yes</label>
                                         </div>
                                         <div class="form-group">
-                                            <input class="form-check-input" type="radio" name="retiring_this_year" id="retiring_this_year" value="false"
-                                                   v-model="isRetiringThisYear">
-                                            <label class="form-check-label" for="">No</label>
+                                            <input class="form-check-input" type="radio" name="retiring_this_year" id="retiring_this_year" value="0"
+                                                   checked v-model="isRetiringThisYear">
+                                            <label class="form-check-label" for="retiring_this_year">No</label>
                                         </div>
                                     </div>
                                 </div>
@@ -98,14 +95,27 @@
                                 <?php foreach ($awardinfo as $award): ?>
                                     <v-carousel-item awardID="<?= $award->id ?>" v-if="milestone == <?= $award->milestone_id ?>">
                                         <v-sheet height="100%" tile>
+                                            <v-img src="/img/awards/<?= $award->image ?>" max-height="200"></v-img>
                                             <v-row align="center" justify="center"><div class="display-3"><?= $award->name ?></div></v-row>
-                                            <v-row align="center" justify="center"><p><?= $award->description ?></p></v-row>
+                                            <v-row align="center" justify="center" ><v-spacer></v-spacer><v-col cols="8"><p><?= $award->description ?></p></v-col><v-spacer></v-spacer></v-row>
                                             <v-row align="center" justify="center"><button @click.prevent="selectedAward = <?= $award->id ?>" class="btn btn-secondary">Select Award</button></v-row>
                                         </v-sheet>
                                     </v-carousel-item>
                                 <?php endforeach ?>
                             </v-carousel>
+                            <!-- Award selection confirmation -->
+                            <div class="row" v-if="selectedAward != 0">
+                                <div class="col-4"></div>
 
+                               <div class="col-4">
+                                   <div class="form-group">
+                                       <h3 class="">You have selected your award.</h3>
+                                   </div>
+                               </div>
+                                <div class="col-4">
+
+                                </div>
+                            </div>
 
                             <!-- WATCH CONTROLS -->
                             <div class="row" v-if="selectedAward == 9">
@@ -225,7 +235,19 @@
 
                             </div>
                             <input type="hidden" name="award_id" id="award_id" v-model="selectedAward">
-                            <button class="btn btn-primary" @click.prevent="e1 = 3">Enter Contact Information</button>
+                            <div class="row">
+                                <div class="col-3">
+                                    <button class="btn btn-secondary" @click.prevent="e1 = 1">Back to Milestone</button>
+                                </div>
+                                <div class="col-6">
+
+                                </div>
+                                <div class="col-3">
+                                    <button class="btn btn-primary" @click.prevent="e1 = 3">Enter Contact Information</button>
+                                </div>
+                            </div>
+
+
                         </v-stepper-content>
 
 
@@ -235,22 +257,19 @@
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label for="">Employee ID #</label>
-                                        <input type="text" id="employee_id" name="employee_id" class="form-control"
-                                               v-model="employeeID">
+                                        <input type="text" id="employee_id" name="employee_id" class="form-control" placeholder="123456" v-model="employeeID">
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label for="">First Name</label>
-                                        <input type="text" id="first_name" name="first_name" v-model="firstName"
-                                               class="form-control" placeholder="Your First Name">
+                                        <input type="text" id="first_name" name="first_name" v-model="firstName" class="form-control" placeholder="Your First Name">
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label for="">Last Name</label>
-                                        <input type="text" id="last_name" name="last_name" v-model="lastName"
-                                               class="form-control" placeholder="Your Last Name">
+                                        <input type="text" id="last_name" name="last_name" v-model="lastName" class="form-control" placeholder="Your Last Name">
                                     </div>
                                 </div>
                             </div>
@@ -260,17 +279,13 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">Government email address</label>
-                                        <input type="email" id="preferred_email" name="preferred_email"
-                                               v-model="govtEmail" class="form-control"
-                                               placeholder="i.e. taylor.publicservant@gov.bc.ca">
+                                        <input type="email" id="preferred_email" name="preferred_email" v-model="govtEmail" class="form-control" placeholder="i.e. taylor.publicservant@gov.bc.ca">
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">Alternate email address</label>
-                                        <input type="email" id="alternate_email" name="alternate_email"
-                                               v-model="altEmail" class="form-control"
-                                               placeholder="i.e. taylor_publicservant@gmail.com">
+                                        <input type="email" id="alternate_email" name="alternate_email" v-model="altEmail" class="form-control" placeholder="i.e. taylor_publicservant@gmail.com">
                                     </div>
                                 </div>
                             </div>
@@ -396,9 +411,19 @@
 
 
 
+                            <div class="row">
+                                <div class="col-3">
+                                    <button class="btn btn-secondary" @click.prevent="e1 = 2">Back to Select Award</button>
+                                </div>
+                                <div class="col-6">
+
+                                </div>
+                                <div class="col-3">
+                                    <button class="btn btn-primary" @click.prevent="e1 = 4">Enter Supervisor's Contact Info.</button>
+                                </div>
+                            </div>
 
 
-                            <button class="btn btn-primary" @click.prevent="e1 = 4">Enter Supervisor's Contact Info.</button>
                         </v-stepper-content>
 
                         <v-stepper-content step="4">
@@ -672,8 +697,8 @@
         vuetify: new Vuetify(),
         data: {
             e1: 1,
-            isRetiringThisYear: false,
-            milestone: '',
+            isRetiringThisYear: 0,
+            milestone: 'Select Milestone',
             awardYear: '',
 
             employeeID: '',
@@ -691,7 +716,7 @@
             officeMailPrefix: '',
             officeSuite: '',
             officeStreetAddress: '',
-            officeCity: '',
+            officeCity: 'Select A City',
             officePostalCode: '',
             officePhone: '',
             officeExtension: '',
@@ -699,7 +724,7 @@
             homeMailPrefix: '',
             homeSuite: '',
             homeStreetAddress: '',
-            homeCity: '',
+            homeCity: 'Select A City',
             homePostalCode: '',
             homePhone: '',
 
@@ -708,7 +733,7 @@
             supervisorMailPrefix: '',
             supervisorSuite: '',
             supervisorStreetAddress: '',
-            supervisorCity: '',
+            supervisorCity: 'Select A City',
             supervisorPostalCode: '',
             supervisorEmail: '',
             supervisorPhone: '',
