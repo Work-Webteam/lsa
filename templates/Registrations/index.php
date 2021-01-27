@@ -54,7 +54,7 @@
                 { data: "first_name", title: "First Name" },
                 { data: "ministry.name", title: "Ministry" },
                 { data: "branch", title: "Branch", orderable: false, visible: false },
-                { data: "qualifying_year", title: "Award Year", orderable: true },
+                { data: "qualifying_year", defaultContent: "<em>Not Set</em>", title: "Award Year", orderable: true },
                 { data: "milestone.name", title: "Years of Service" },
                 { data: "award.name", title: "Award", defaultContent: "PECSF Donation" },
                 { data: "office_city.name", title: "Office City", visible: false },

@@ -38,7 +38,7 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">In which year did you reach this milestone?</label>
-                                        <select class="form-control" id="registration_year" name="registration_year">
+                                        <select class="form-control" id="qualifying_year" name="qualifying_year">
                                             <option selected disabled>Select Year</option>
                                             <?php foreach ($award_years as $ayear) : ?>
                                                 <option value="<?= $ayear ?>"><?= $ayear ?></option>
