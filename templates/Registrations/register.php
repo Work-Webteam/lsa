@@ -28,7 +28,7 @@
                                     <div class="form-group">
                                         <label for="milestone">Which milestone are you celebrating?</label>
 
-                                        <select class="form-control" id="milestone" name="milestone_id" v-model="milestone">
+                                        <select class="form-control" id="milestone_id" name="milestone_id" v-model="milestone">
                                             <option selected disabled>Select Milestone</option>
                                             <?php foreach ($milestoneinfo as $mstone) : ?>
                                                 <option value="<?= $mstone->id ?>"><?= $mstone->name ?></option>
@@ -94,30 +94,25 @@
                         <v-stepper-content step="2">
                             <h3 class="display-3">Select Your Award</h3>
 
-                            <v-carousel v-model="model">
+                            <v-carousel v-on:change="highlightedAward = servicesCarouselItems[$event].awardid">
                                 <?php foreach ($awardinfo as $award): ?>
-                                    <v-carousel-item v-if="milestone == <?= $award->milestone_id ?>">
+                                    <v-carousel-item awardID="<?= $award->id ?>" v-if="milestone == <?= $award->milestone_id ?>">
                                         <v-sheet height="100%" tile>
                                             <v-row align="center" justify="center"><div class="display-3"><?= $award->name ?></div></v-row>
                                             <v-row align="center" justify="center"><p><?= $award->description ?></p></v-row>
+                                            <v-row align="center" justify="center"><button @click.prevent="selectedAward = <?= $award->id ?>" class="btn btn-secondary">Select Award</button></v-row>
                                         </v-sheet>
                                     </v-carousel-item>
                                 <?php endforeach ?>
                             </v-carousel>
 
 
-                            <div class="row">
-                                <div class="col-5"></div>
-                                <div class="col-2"><button class="btn btn-secondary">Select Award</button></div>
-                                <div class="col-5"></div>
-                            </div>
-
                             <!-- WATCH CONTROLS -->
                             <div class="row" v-if="selectedAward == 9">
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label for=""> Watch Size:</label>
-                                        <select name="" id="">
+                                        <select class="form-control" name="" id="">
                                             <option disabled selected>Select Watch Size</option>
                                             <option>38mm face with 20mm strap</option>
                                             <option>29mm face with 14mm strap</option>
@@ -127,7 +122,7 @@
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label for="">Watch Colour:</label>
-                                        <select name="" id="">
+                                        <select class="form-control" name="" id="">
                                             <option disabled selected></option>
                                             <option>Gold</option>
                                             <option>Silver</option>
@@ -138,7 +133,7 @@
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label for="">Strap:</label>
-                                        <select name="" id="">
+                                        <select  class="form-control" name="" id="">
                                             <option disabled selected>Choose Strap</option>
                                             <option>Plated</option>
                                             <option>Black Leather</option>
@@ -149,7 +144,7 @@
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label for="">Engraving</label>
-                                        <input type="text" name="engraving" maxlength="33" placholder="Firstname Lastname">
+                                        <input class="form-control" type="text" name="engraving" maxlength="33" :placeholder="firstName + ' ' + lastName">
                                     </div>
                                 </div>
                             </div>
@@ -158,7 +153,7 @@
                             <div class="row" v-if="selectedAward == 12">
                                 <div class="form-group">
                                     <label for="">Size</label>
-                                    <select name="" id="">
+                                    <select  class="form-control" name="" id="">
                                         <option disabled selected>Choose Size</option>
                                         <option>Fits 6 1/2" - 7 1/2" circumference wrists</option>
                                         <option>Fits 7 1/2" - 8 1/2" circumference wrists</option>
@@ -170,7 +165,7 @@
                             <div class="row" v-if="selectedAward == 46">
                                 <div class="form-group">
                                     <label for="">Size</label>
-                                    <select name="" id="">
+                                    <select class="form-control" name="" id="">
                                         <option disabled selected>Choose Size</option>
                                         <option>Fits 6 1/2" - 7 1/2" circumference wrists</option>
                                         <option>Fits 7 1/2" - 8 1/2" circumference wrists</option>
@@ -183,11 +178,11 @@
                                 <div clas="col-6">
                                     <div class="form-group">
                                         <label for="">Name on Donation</label>
-                                        <input type="text" maxlength="33" placeholder="Firstname Lastname" :value="firstName + ' ' + lastName">
+                                        <input class="form-control" type="text" maxlength="33" placeholder="Firstname Lastname" :value="firstName + ' ' + lastName">
                                     </div>
-                                    <div class="form-group">
+                                    <div  class="form-group">
                                         <label for="">Your Desired PECSF Region</label>
-                                        <select name="" id="" v-model="pecsfRegion">
+                                        <select class="form-control" name="" id="" v-model="pecsfRegion">
                                             <?php foreach ($regions as $region) : ?>
                                             <option value="<?= $region->id ?>"><?= $region->name ?></option>
                                             <?php endforeach ?>
@@ -208,7 +203,7 @@
                                     <div class="form-group" >
                                         <label for="" v-if="donationType == 'single-charity'">Choose your charity</label>
                                         <label for="" v-if="donationType == 'two-charities'">Choose your first charity</label>
-                                        <select name="" id="" v-model="pecsfCharity1">
+                                        <select class="form-control"  name="" id="" v-model="pecsfCharity1">
                                             <option selected disabled>Choose a charity</option>
                                             <?php foreach ($charities as $charity): ?>
                                             <option value="<?= $charity->id ?>" v-if="pecsfRegion == <?= $charity->pecsf_region_id ?>"><?= $charity->name ?></option>
@@ -217,7 +212,7 @@
                                     </div>
                                     <div class="form-group" v-if="donationType == 'two-charities'">
                                         <label for="">Choose your second charity</label>
-                                        <select name="" id="" v-model="pecsfCharity1">
+                                        <select class="form-control" name="" id="" v-model="pecsfCharity1">
                                             <option selected disabled>Choose a charity</option>
                                             <?php foreach ($charities as $charity): ?>
                                                 <option value="<?= $charity->id ?>" v-if="pecsfRegion == <?= $charity->pecsf_region_id ?>"><?= $charity->name ?></option>
@@ -228,10 +223,8 @@
 
 
 
-                                //Donation Option
-                                //Charities Chosen
                             </div>
-
+                            <input type="hidden" name="award_id" id="award_id" v-model="selectedAward">
                             <button class="btn btn-primary" @click.prevent="e1 = 3">Enter Contact Information</button>
                         </v-stepper-content>
 
@@ -321,7 +314,7 @@
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label for="">Street Address</label>
-                                        <input type="text" class="form-control" id="office_postal_code" name="office_postal_code" placeholder="i.e. 1445 10th Ave.">
+                                        <input type="text" class="form-control" id="office_address" name="office_address" placeholder="i.e. 1445 10th Ave.">
                                     </div>
                                 </div>
                             </div>
@@ -331,10 +324,10 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">City</label>
-                                        <select name="" id="office_city" class="form-control" v-model="officeCity">
+                                        <select name="office_city_id" id="office_city_id" class="form-control" v-model="officeCity">
                                             <option selected disabled>Choose city</option>
                                             <?php foreach ($cities as $city) : ?>
-                                                <option value="<?= $city ?>"><?= h($city) ?></option>
+                                                <option value="<?= $city->id ?>"><?= h($city->name) ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
@@ -362,14 +355,14 @@
                             <div class="form-row">
                                 <div class="col-4">
                                     <div class="form-group">
-                                        <label for="">Suite</label>
-                                        <input type="text" class="form-control" id="home_suite" name="home_address" placeholder="i.e. 800" v-model="homeSuite">
+                                        <label for="home_suite">Suite</label>
+                                        <input type="text" class="form-control" id="home_suite" name="home_suite" placeholder="i.e. 800" v-model="homeSuite">
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label for="">Street Address</label>
-                                        <input type="text" class="form-control" id="home_address" name="home_postal_code" placeholder="i.e. 1445 10th Ave." v-model="homeStreetAddress">
+                                        <input type="text" class="form-control" id="home_address" name="home_address" placeholder="i.e. 1445 10th Ave." v-model="homeStreetAddress">
                                     </div>
                                 </div>
                             </div>
@@ -379,10 +372,10 @@
                                <div class="col-6">
                                    <div class="form-group">
                                        <label for="">City</label>
-                                       <select name="home_city" id="home_city" class="form-control" v-model="homeCity">
+                                       <select name="home_city_id" id="home_city_id" class="form-control" v-model="homeCity">
                                            <option selected disabled>Choose city</option>
                                            <?php foreach ($cities as $city) : ?>
-                                               <option value="<?= $city ?>"><?= h($city) ?></option>
+                                               <option value="<?= $city->id ?>"><?= h($city->name) ?></option>
                                            <?php endforeach; ?>
                                        </select>
                                    </div>
@@ -396,7 +389,7 @@
                                <div class="col-4">
                                    <div class="form-group">
                                        <label for="">Home Phone Number</label>
-                                       <input type="text" class="form-control"  id="home_phone" placeholder="i.e. (604) 555-5555" v-model="homePhone">
+                                       <input type="text" class="form-control" name="home_phone" id="home_phone" placeholder="i.e. (604) 555-5555" v-model="homePhone">
                                    </div>
                                </div>
                            </div>
@@ -459,10 +452,10 @@
                                 <div class="col-8">
                                     <div class="form-group">
                                         <label for="">City</label>
-                                        <select name="supervisor_city" id="supervisor_city" class="form-control" v-model="supervisorCity">
+                                        <select name="supervisor_city_id" id="supervisor_city_id" class="form-control" v-model="supervisorCity">
                                             <option selected disabled>Choose city</option>
                                             <?php foreach ($cities as $city) : ?>
-                                                <option value="<?= $city ?>"><?= h($city) ?></option>
+                                                <option value="<?= $city->id ?>"><?= h($city->name) ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
@@ -639,7 +632,7 @@
 
                                 </div>
                                 <div class="col-4">
-                                    <button type="submit" form="register" class="btn btn-primary">Confirm &amp; Agree</button>
+                                    <button type="submit" class="btn btn-primary">Confirm &amp; Agree</button>
                                 </div>
                             </div>
 
@@ -762,7 +755,10 @@
             inputCharity2: false,
             testShow: false,
 
+            selectedAward: 0,
+            pecsfRegion: 0,
             donationType: false,
+            highlightedAward: 1
         },
 
         methods: {
@@ -1092,31 +1088,8 @@
 
 
             selectCurrentAward: function () {
+                this.CurrentAward = this.highlightedAward;
 
-                award = this.currentAwards[this.currentAwardIndex];
-
-                // store award id in hidden field so it gets saved on submit
-                $('input[name=award_id]').val(award.id);
-
-                // $('#lsa-award-'+ app.selectedAward).css('background-color', 'transparent');
-                $('#lsa-award-card').css('background-color', 'lightblue');
-                app.awardName = award.name;
-                app.awardDescription = award.description;
-                app.awardImage = award.image;
-
-                // check if it is a donation
-                if (award.id == 0) {
-                    app.selectCharityOptions();
-                } else {
-                    app.selectAwardOptions(award.id);
-                }
-
-                this.selectedAward = award.id;
-
-                app.awardConfirmed = true;
-                $('html, body').animate({
-                    scrollTop: $("#employeeAnchor").offset().top
-                }, 1000);
             },
 
 

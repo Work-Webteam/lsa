@@ -182,6 +182,8 @@ class RegistrationsController extends AppController
             return $this->redirect('/');
         }
 
+        //Initialize new registration object
+        $registration = $this->Registrations->newEmptyEntity();
 
         //Handle post requests
         if ($this->request->is('post')) {
@@ -227,8 +229,7 @@ class RegistrationsController extends AppController
             $this->Flash->error(__('Unable to add registration.'));
         }
 
-        //Initialize new registratio object
-        $registration = $this->Registrations->newEmptyEntity();
+
 
         //Initialize Arrays for Awards options, Select Menus and validation
         $list = explode(",", $registrationperiods->qualifying_years);
@@ -258,12 +259,12 @@ class RegistrationsController extends AppController
         $ministryInfo = $this->Registrations->Ministries->find('all');
         */
         $this->set('ministries', $this->Registrations->Ministries->find('all'));
+
+        /* TODO : Check to verify this can be removed
         $diet = $this->Registrations->Diet->find('list');
         $this->set('diet', $diet);
-        $cities = $this->Registrations->Cities->find('list', [
-            'order' => ['Cities.name' => 'ASC']
-        ]);
-        $this->set('cities', $cities);
+        */
+        $this->set('cities', $this->Registrations->Cities->find('all'));
         $regions = $this->Registrations->PecsfRegions->find('list', [
             'order' => ['PecsfRegions.name' => 'ASC']
         ]);
