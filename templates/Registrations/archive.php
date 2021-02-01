@@ -54,7 +54,7 @@
                 },
                 { data: "ministry.name", title: "Ministry" },
                 { data: "branch", title: "Branch" },
-                { data: "qualifying_year", title: "Award Year"},
+                { data: "registration_year", title: "Registration Year"},
                 { data: "milestone.name", title: "Year of Service" },
                 { data: "award.name", title: "Award", defaultContent: "PECSF Donation" },
                 { data: "office_city.name", title: "Office City", visible: true },
