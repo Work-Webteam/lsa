@@ -15,10 +15,12 @@
 
 
     <?php foreach ($charities as $key => $charity): ?>
+
+
         <tr>
             <?= $isadmin ? "<td>" . $charity->id . "</td>" : "" ?>
             <td>
-                <?= $charity->pecsfregion->name ?>
+                <?= $charity->region->name ?>
             </td>
             <td>
                 <?= $charity->vendor_code ?>

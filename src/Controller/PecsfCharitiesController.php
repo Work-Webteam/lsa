@@ -29,7 +29,7 @@ class PecsfCharitiesController extends AppController
             $this->redirect('/');
         }
         $charity = $this->PecsfCharities->find('all', [
-            'conditions' => ['Pecsfcharities.id' => $id],
+            'conditions' => ['PecsfCharities.id' => $id],
             'contain' => ['PecsfRegions']
         ])->firstOrFail();
 

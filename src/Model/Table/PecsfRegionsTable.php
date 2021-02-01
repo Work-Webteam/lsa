@@ -9,6 +9,6 @@ class PecsfRegionsTable extends Table
 {
     public function initialize(array $config) : Void
     {
-
+        $this->belongsTo('PecsfCharities');
     }
 }
