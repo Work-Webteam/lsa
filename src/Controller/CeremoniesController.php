@@ -84,10 +84,15 @@ class CeremoniesController extends AppController
         }
         $ceremony = $this->Ceremonies->newEmptyEntity();
         if ($this->request->is('post')) {
+
+
+
             $ceremony = $this->Ceremonies->patchEntity($ceremony, $this->request->getData());
-            $ceremony->registration_year = date("Y");
-            $ceremony->date = $this->request->getData('ceremony_date') . " " . $this->request->getData('ceremony_time');
-            $ceremony->attending = json_encode(array());
+           //$ceremony->registration_year = date("Y");
+            $ceremony->date = date("Y-m-d H:i:s", strtotime($this->request->getData('date')));
+
+            //$ceremony->date = $this->request->getData('ceremony_date') . " " . $this->request->getData('ceremony_time');
+           //$ceremony->attending = json_encode(array());
             if ($this->Ceremonies->save($ceremony)) {
                 $this->Flash->success(__('Your ceremony has been saved.'));
                 return $this->redirect(['action' => 'index']);

@@ -31,6 +31,7 @@
     </table>
 </div>
 
+<button class="btn btn-primary" data-toggle="modal" data-target="#waitlistModal">Add To Waitlist</button>
 
 <?php
 /*
@@ -41,6 +42,67 @@ echo $this->Form->button('Cancel', array(
 ));
 */
 ?>
+
+
+
+
+<div class="modal fade" id="waitlistModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Registrant to Waiting List</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table striped">
+                    <thead>
+                        <th>Last Name</th>
+                        <th>First Name</th>
+                        <th>Ceremony</th>
+                        <th>-</th>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($registrants as $registrant) : ?>
+                            <form method="post">
+                            <tr>
+                                <td><?= $registrant->last_name ?></td>
+                                <td><?= $registrant->first_name ?></td>
+                                <td>
+                                    <select class="form-control" name="ceremony_id" id="ceremony_id">
+
+                                        <option disabled selected>Select a Ceremony</option>
+                                        <?php foreach ($ceremonies as $ceremony) :?>
+                                            <option value="<?= $ceremony->id?>"><?= $ceremony->date ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="hidden" name="registrant_id" value="<?= $registrant->id ?>">
+                                    <button class="button btn-primary">Add to Waitlist</button>
+                                </td>
+                            </tr>
+                            </form>
+                        <?php endforeach ?>
+                    </tbody>
+                </table>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
 
 
 <script>
@@ -63,10 +125,11 @@ echo $this->Form->button('Cancel', array(
             waiting[i].optionsDisplay = "";
             for (j = 0; j < options.length; j++) {
                 if (i > 0) {
-                    waiting[i].optionsDisplay += "<BR>";
+                    waiting[i].optionsDisplay += "<br>";
                 }
                 waiting[i].optionsDisplay += "- " + options[j];
             }
+            //If the award ID is 0 that's inferred to be a PECSF donation (this isn't a safe assumption)
             if (waiting[i].award_id == 0) {
                 if (waiting[i].pecsf_donation) {
                     waiting[i].award = {id: 0, name: "PECSF Donation", abbreviation: "PESCF"};

@@ -55,7 +55,7 @@
                                     </div>
                                 </div>
                                 <div class="col-3">
-                                    <p>Did you register for a Long Service Award last year, but not attend a ceremony?</p>
+                                    <p>Did you register for a Long Service Award in 2019?</p>
                                     <div class="form-group">
                                         <input class="form-check-input" type="radio" name="retroactive" id="retroactive" value="1">
                                         <label class="form-check-label" for="retroactive">Yes</label>

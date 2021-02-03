@@ -2507,6 +2507,18 @@ class RegistrationsController extends AppController
             $this->redirect('/');
         }
 
+        if ($this->request->is('post')):
+            //Retrieve registrant by ID
+            $registrant = $this->Registrations->get($this->request->getData('registrant_id'));
+            $registrant->ceremony_id = $this->request->getData('ceremony_id');
+            $registrant->waitinglist = 1;
+            $registrationsTable = $this->getTableLocator()->get('Registrations');
+            if (!($registrationsTable->save($registrant))) {
+                //throw an exception
+            }
+        endif;
+
+
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
         $conditions['Registrations.waitinglist ='] = 1;
@@ -2529,10 +2541,11 @@ class RegistrationsController extends AppController
             ],
         ]);
 
-
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
         $conditions['Registrations.waitinglist ='] = 0;
+
+        $this->set('ceremonies', $this->getTableLocator()->get('Ceremonies')->find('all'));
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -2551,6 +2564,10 @@ class RegistrationsController extends AppController
                 'Ceremonies',
             ],
         ]);
+
+        $this->set('registrants', $this->Registrations->find('all'));
+
+
 
         $waiturl = Router::url(array('controller'=>'Registrations','action'=>'wait'));
         $this->set(compact('waiturl'));
