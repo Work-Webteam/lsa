@@ -4,11 +4,11 @@
 <?= $this->Html->link('Add Ceremony', ['action' => 'add'], ['class' => 'btn btn-primary data-tables-action add-item']) ?>
 <table class="table table-striped">
     <tr>
-        <!--<?= $isadmin ? "<th>Ignore</th>" : "" ?>
-        <th>Registration Year</th>-->
+        <?= $isadmin ? "<th>Ignore</th>" : "" ?>
+        <!--<th>Registration Year</th>-->
         <th>Ceremony Night</th>
         <th>Date</th>
-        <th colspan=1>Recipients</th>
+        <th colspan=1>Attendees</th>
         <th colspan=3>Admin</th>
         <th colspan=1>Assign Presentation IDs</th>
 </tr>

@@ -27,7 +27,7 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="milestone">Which milestone are you celebrating?</label>
-                                        <select class="form-control" id="milestone_id" name="milestone_id" v-model="milestone">
+                                        <select class="form-control with-arrow" id="milestone_id" name="milestone_id" v-model="milestone">
                                             <option selected disabled>Select Milestone</option>
                                             <?php foreach ($milestoneinfo as $mstone) : ?>
                                                 <option value="<?= $mstone->id ?>"><?= $mstone->name ?></option>
@@ -38,12 +38,24 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">In which year did you reach this milestone?</label>
-                                        <select class="form-control" id="award_year" name="award_year">
+                                        <select class="form-control with-arrow" id="award_year" name="award_year" model="award_year_first">
                                             <option selected disabled>Select Year</option>
-                                            <?php foreach ($award_years as $ayear) : ?>
-                                                <option value="<?= $ayear ?>"><?= $ayear ?></option>
-                                            <?php endforeach ?>
+
+                                                <option value="">2021</option>
+                                                <option value="">2020</option>
+                                                <option value="">2019</option>
+
+                                            <option disabled>──────────</option>
+
+                                                <?php foreach ($award_years as $ayear) : ?>
+                                                    <option value="<?= $ayear ?>"><?= $ayear ?></option>
+                                                <?php endforeach ?>
+
+
+
                                         </select>
+
+
                                     </div>
                                 </div>
                             </div>
@@ -56,11 +68,11 @@
                                 </div>
                                 <div class="col-3">
                                     <p>Did you register for a Long Service Award in 2019?</p>
-                                    <div class="form-group">
+                                    <div class="form-group checkbox-group">
                                         <input class="form-check-input" type="radio" name="retroactive" id="retroactive" value="1">
                                         <label class="form-check-label" for="retroactive">Yes</label>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group checkbox-group">
                                         <input class="form-check-input" type="radio" name="retroactive" id="retroactive" checked value="0">
                                         <label class="form-check-label" for="retroactive">No</label>
                                     </div>
@@ -68,15 +80,20 @@
                                 <div class="col-3">
                                     <div class="form-group">
                                         <p>Are you retiring this calendar year? </p>
-                                        <div class="form-group">
+                                        <div class="form-group checkbox-group">
                                             <input class="form-check-input" type="radio" name="retiring_this_year" id="retiring_this_year" value="1"
                                                    v-model="isRetiringThisYear">
                                             <label class="form-check-label" for="retiring_this_year">Yes</label>
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group checkbox-group">
                                             <input class="form-check-input" type="radio" name="retiring_this_year" id="retiring_this_year" value="0"
                                                    checked v-model="isRetiringThisYear">
                                             <label class="form-check-label" for="retiring_this_year">No</label>
+                                        </div>
+
+                                        <div class="form-group" v-if="isRetiringThisYear == 1">
+                                            <label for="retirement_date">Date of Retirement:</label>
+                                            <input type="date" name="retirement_date">
                                         </div>
                                     </div>
                                 </div>
@@ -293,7 +310,7 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">Current Ministry</label>
-                                        <select name="ministry_id" id="ministry_id" class="form-control" v-model="ministry">
+                                        <select name="ministry_id" id="ministry_id" class="form-control with-arrow" v-model="ministry">
                                             <option selected default>Choose your Ministry</option>
                                             <?php foreach ($ministries as $ministry) :?>
                                                 <option value="<?= $ministry->id ?>"><?= $ministry->name ?></option>
@@ -339,7 +356,7 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">City</label>
-                                        <select name="office_city_id" id="office_city_id" class="form-control" v-model="officeCity">
+                                        <select name="office_city_id" id="office_city_id" class="form-control with-arrow" v-model="officeCity">
                                             <option selected disabled>Choose city</option>
                                             <?php foreach ($cities as $city) : ?>
                                                 <option value="<?= $city->id ?>"><?= h($city->name) ?></option>
@@ -387,7 +404,7 @@
                                <div class="col-6">
                                    <div class="form-group">
                                        <label for="">City</label>
-                                       <select name="home_city_id" id="home_city_id" class="form-control" v-model="homeCity">
+                                       <select name="home_city_id" id="home_city_id" class="form-control with-arrow" v-model="homeCity">
                                            <option selected disabled>Choose city</option>
                                            <?php foreach ($cities as $city) : ?>
                                                <option value="<?= $city->id ?>"><?= h($city->name) ?></option>
@@ -477,7 +494,7 @@
                                 <div class="col-8">
                                     <div class="form-group">
                                         <label for="">City</label>
-                                        <select name="supervisor_city_id" id="supervisor_city_id" class="form-control" v-model="supervisorCity">
+                                        <select name="supervisor_city_id" id="supervisor_city_id" class="form-control with-arrow" v-model="supervisorCity">
                                             <option selected disabled>Choose city</option>
                                             <?php foreach ($cities as $city) : ?>
                                                 <option value="<?= $city->id ?>"><?= h($city->name) ?></option>

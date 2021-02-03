@@ -28,3 +28,13 @@ footer {
     background-color: colours.$ui-05;
     margin-top: 6rem;
 }
+
+
+select.with-arrow {
+    -moz-appearance: auto;
+    -webkit-appearance: auto;
+}
+
+.checkbox-group {
+    padding-left: 2em;
+}
