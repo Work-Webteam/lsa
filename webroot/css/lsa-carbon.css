@@ -374,4 +374,29 @@ select.with-arrow {
   padding-left: 2em;
 }
 
+h3.award-title {
+  margin-top: 0.5em;
+}
+
+p.confirmationValue {
+  border-bottom: 1px solid;
+  border-color: #7A3073;
+  background-color: #FFFFFF;
+  font-size: 22px;
+  padding-top: 0.3em;
+  padding-bottom: 0.3em;
+  padding-left: 0.1em;
+}
+
+div.confirmationGroup {
+  padding-left: 1em;
+  margin-top: 1em;
+}
+
+div.confirmationGroup h4 {
+  padding-left: 1em;
+  padding-top: 1em;
+  padding-bottom: 1.5em;
+}
+
 /*# sourceMappingURL=lsa-carbon.css.map */

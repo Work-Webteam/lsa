@@ -4,7 +4,7 @@
     <template>
     <v-app>
         <v-main>
-            <v-container>
+            <v-container class="grey lighten-2">
                 <v-stepper v-model="e1">
                     <v-stepper-header>
                         <v-stepper-step :complete="e1 > 1" step="1"> Milestone</v-stepper-step>
@@ -21,8 +21,21 @@
                     </v-stepper-header>
 
                     <v-stepper-items>
-                        <v-stepper-content step="1">
+                        <v-stepper-content class="grey lighten-3" step="1">
                             <h3 class="display-3">Milestone</h3>
+                            <div class="row" v-if="errorsStep1.length">
+                                <div class="col-3">
+                                    &nbsp;
+                                </div>
+                                <div class="col-6">
+                                    <v-alert type="error">There are errors.
+                                        <ul>
+                                            <li v-for="error in errorsStep1">{{error}}</li>
+                                        </ul>
+                                    </v-alert>
+                                </div>
+                                <div class="col-3"></div>
+                            </div>
                             <div class="form-row">
                                 <div class="col-6">
                                     <div class="form-group">
@@ -38,20 +51,18 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">In which year did you reach this milestone?</label>
-                                        <select class="form-control with-arrow" id="award_year" name="award_year" model="award_year_first">
+                                        <select class="form-control with-arrow" id="award_year" name="award_year" v-model="award_year">
                                             <option selected disabled>Select Year</option>
 
-                                                <option value="">2021</option>
-                                                <option value="">2020</option>
-                                                <option value="">2019</option>
+                                                <option value="2021">2021</option>
+                                                <option value="2020">2020</option>
+                                                <option value="2019">2019</option>
 
                                             <option disabled>──────────</option>
 
                                                 <?php foreach ($award_years as $ayear) : ?>
                                                     <option value="<?= $ayear ?>"><?= $ayear ?></option>
                                                 <?php endforeach ?>
-
-
 
                                         </select>
 
@@ -99,29 +110,45 @@
                                 </div>
                             </div>
 
-                            <button class="btn btn-primary" @click.prevent="e1 = 2">Select Award</button>
+                            <button class="btn btn-primary" @click.prevent="validateStep1()">Select Award</button>
                         </v-stepper-content>
 
 
 
 
-                        <v-stepper-content step="2">
+                        <v-stepper-content class="grey lighten-3" step="2">
                             <h3 class="display-3">Select Your Award</h3>
-
+                            <div class="row" v-if="errorsStep2.length">
+                                <div class="col-3">
+                                    &nbsp;
+                                </div>
+                                <div class="col-6">
+                                    <v-alert type="error">There are errors.
+                                        <ul>
+                                            <li v-for="error in errorsStep2">{{error}}</li>
+                                        </ul>
+                                    </v-alert>
+                                </div>
+                                <div class="col-3"></div>
+                            </div>
                             <v-carousel v-on:change="highlightedAward = servicesCarouselItems[$event].awardid">
                                 <?php foreach ($awardinfo as $award): ?>
                                     <v-carousel-item awardID="<?= $award->id ?>" v-if="milestone == <?= $award->milestone_id ?>">
                                         <v-sheet height="100%" tile>
-                                            <v-img src="/img/awards/<?= $award->image ?>" max-height="200"></v-img>
-                                            <v-row align="center" justify="center"><div class="display-3"><?= $award->name ?></div></v-row>
-                                            <v-row align="center" justify="center" ><v-spacer></v-spacer><v-col cols="8"><p><?= $award->description ?></p></v-col><v-spacer></v-spacer></v-row>
-                                            <v-row align="center" justify="center"><button @click.prevent="selectedAward = <?= $award->id ?>" class="btn btn-secondary">Select Award</button></v-row>
+                                            <v-row>
+                                                <v-col><v-img src="/img/awards/<?= $award->image ?>"></v-img></v-col>
+                                                <v-col>
+                                                    <v-row align="center" justify="center"><h3 class="display-3 award-title"><?= $award->name ?></h3></v-row>
+                                                    <v-row align="center" justify="center" ><v-spacer></v-spacer><v-col cols="8"><p><?= $award->description ?></p></v-col><v-spacer></v-spacer></v-row>
+                                                    <v-row align="center" justify="center"><button @click.prevent="selectAward( <?= $award->id ?> )" class="btn btn-secondary">Select Award</button></v-row></v-col>
+                                            </v-row>
+
                                         </v-sheet>
                                     </v-carousel-item>
                                 <?php endforeach ?>
                             </v-carousel>
                             <!-- Award selection confirmation -->
-                            <div class="row" v-if="selectedAward != 0">
+                            <div class="row" v-if="selectedAward != -1">
                                 <div class="col-4"></div>
 
                                <div class="col-4">
@@ -202,7 +229,8 @@
 
                             <!-- PECSF DONATION CONTROLS -->
                             <div class="row" v-if="selectedAward == 49 || selectedAward == 50 || selectedAward == 51 || selectedAward == 52 || selectedAward == 53 || selectedAward == 54">
-                                <div clas="col-6">
+
+                                <div class="col-6">
                                     <div class="form-group">
                                         <label for="">Name on Donation</label>
                                         <input class="form-control" type="text" maxlength="33" placeholder="Firstname Lastname" :value="firstName + ' ' + lastName">
@@ -260,7 +288,7 @@
 
                                 </div>
                                 <div class="col-3">
-                                    <button class="btn btn-primary" @click.prevent="e1 = 3">Enter Contact Information</button>
+                                    <button id="award-button" class="btn btn-primary" @click.prevent="validateStep2()">Enter Contact Information</button>
                                 </div>
                             </div>
 
@@ -268,8 +296,21 @@
                         </v-stepper-content>
 
 
-                        <v-stepper-content step="3">
+                        <v-stepper-content class="grey lighten-3" step="3">
                             <h3 class="display-3">Your Contact Information</h3>
+                            <div class="row" v-if="errorsStep3.length">
+                                <div class="col-3">
+                                    &nbsp;
+                                </div>
+                                <div class="col-6">
+                                    <v-alert type="error">There are errors.
+                                        <ul>
+                                            <li v-for="error in errorsStep3">{{error}}</li>
+                                        </ul>
+                                    </v-alert>
+                                </div>
+                                <div class="col-3"></div>
+                            </div>
                             <div class="form-row">
                                 <div class="col-4">
                                     <div class="form-group">
@@ -296,13 +337,13 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">Government email address</label>
-                                        <input type="email" id="preferred_email" name="preferred_email" v-model="govtEmail" class="form-control" placeholder="i.e. taylor.publicservant@gov.bc.ca">
+                                        <input type="email" id="preferred_email" name="preferred_email" v-model="govtEmail" class="form-control email-input" placeholder="i.e. taylor.publicservant@gov.bc.ca">
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">Alternate email address</label>
-                                        <input type="email" id="alternate_email" name="alternate_email" v-model="altEmail" class="form-control" placeholder="i.e. taylor_publicservant@gmail.com">
+                                        <input type="email" id="alternate_email" name="alternate_email" v-model="altEmail" class="form-control email-input" placeholder="i.e. taylor_publicservant@gmail.com">
                                     </div>
                                 </div>
                             </div>
@@ -311,7 +352,7 @@
                                     <div class="form-group">
                                         <label for="">Current Ministry</label>
                                         <select name="ministry_id" id="ministry_id" class="form-control with-arrow" v-model="ministry">
-                                            <option selected default>Choose your Ministry</option>
+                                            <option selected default disabled>Select Ministry</option>
                                             <?php foreach ($ministries as $ministry) :?>
                                                 <option value="<?= $ministry->id ?>"><?= $ministry->name ?></option>
                                             <?php endforeach; ?>
@@ -367,13 +408,13 @@
                                 <div class="col-2">
                                     <div class="form-group">
                                         <label for="">Postal Code</label>
-                                        <input type="text" class="form-control"  id="office_postal_code" name="office_postal_code" placeholder="i.e. A1A 1A1">
+                                        <input type="text" class="form-control postal-code-input"  id="office_postal_code" name="office_postal_code" placeholder="i.e. A1A 1A1">
                                     </div>
                                 </div>
                                 <div class="col-3">
                                     <div class="form-group">
                                         <label for="">Office Phone Number</label>
-                                        <input type="text" class="form-control" id="work_phone" name="work_phone" placeholder="i.e. (604) 555-5555" v-model="officePhone">
+                                        <input type="text" class="form-control phone-input" id="work_phone" name="work_phone" placeholder="i.e. (604) 555-5555" v-model="officePhone">
                                     </div>
                                 </div>
                                 <div class="col-1">
@@ -415,13 +456,13 @@
                                <div class="col-2">
                                    <div class="form-group">
                                        <label for="">Postal Code</label>
-                                       <input type="text" class="form-control" id="home_postal_code" name="home_postal_code" placeholder="i.e. A1A 1A1" v-model="homePostalCode">
+                                       <input type="text" class="form-control postal-code-input" id="home_postal_code" name="home_postal_code" placeholder="i.e. A1A 1A1" v-model="homePostalCode">
                                    </div>
                                </div>
                                <div class="col-4">
                                    <div class="form-group">
                                        <label for="">Home Phone Number</label>
-                                       <input type="text" class="form-control" name="home_phone" id="home_phone" placeholder="i.e. (604) 555-5555" v-model="homePhone">
+                                       <input type="text" class="form-control phone-input" name="home_phone" id="home_phone" placeholder="i.e. (604) 555-5555" v-model="homePhone">
                                    </div>
                                </div>
                            </div>
@@ -436,15 +477,28 @@
 
                                 </div>
                                 <div class="col-3">
-                                    <button class="btn btn-primary" @click.prevent="e1 = 4">Enter Supervisor's Contact Info.</button>
+                                    <button class="btn btn-primary" @click.prevent="validateStep3()">Enter Supervisor's Contact Info.</button>
                                 </div>
                             </div>
 
 
                         </v-stepper-content>
 
-                        <v-stepper-content step="4">
+                        <v-stepper-content class="grey lighten-3" step="4">
                             <h3 class="display-3">Your Supervisor's Contact Information</h3>
+                            <div class="row" v-if="errorsStep4.length">
+                                <div class="col-3">
+                                    &nbsp;
+                                </div>
+                                <div class="col-6">
+                                    <v-alert type="error">There are errors.
+                                        <ul>
+                                            <li v-for="error in errorsStep4">{{error}}</li>
+                                        </ul>
+                                    </v-alert>
+                                </div>
+                                <div class="col-3"></div>
+                            </div>
                             <div class="form-row">
                                 <div class="col-6">
                                     <div class="form-group">
@@ -464,7 +518,7 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="supervisorEmail">Supervisor's Email</label>
-                                        <input type="text" class="form-control" id="supervisor_email" name="supervisor_email" placeholder="i.e. taylor.publicservant@gov.bc.ca" v-model="supervisorEmail">
+                                        <input type="text" class="form-control email-input" id="supervisor_email" name="supervisor_email" placeholder="i.e. taylor.publicservant@gov.bc.ca" v-model="supervisorEmail">
                                     </div>
                                 </div>
                             </div>
@@ -505,129 +559,157 @@
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label for="">Postal Code</label>
-                                        <input type="text" class="form-control" id="supervisor_postal_code" name="supervisor_postal_code" placeholder="i.e. A1A 1A1" v-model="supervisorPostalCode">
+                                        <input type="text" class="form-control postal-code-input" id="supervisor_postal_code" name="supervisor_postal_code" placeholder="i.e. A1A 1A1" v-model="supervisorPostalCode">
                                     </div>
                                 </div>
                             </div>
 
+                            <div class="row">
+                                <div class="col-3">
 
-                            <button class="btn btn-primary" @click.prevent="e1 = 5">Confirm Info &amp; Agree to Terms</button>
+                                        <button class="btn btn-secondary" @click.prevent="e1 = 3">Back to Your Info</button>
+
+                                </div>
+                                <div class="col-6"></div>
+                                <div class="col-3">
+                                    <button class="btn btn-primary" @click.prevent="validateStep4()">Confirm Info &amp; Agree to Terms</button>
+                                </div>
+                            </div>
+
+
+
                         </v-stepper-content>
-                        <v-stepper-content step="5">
+
+                        <v-stepper-content class="grey lighten-3" step="5">
                             <h3 class="display-3">Confirm Your Information</h3>
-                            <div class="confirmation-group">
+                            <div class="confirmationGroup grey lighten-2">
                                 <h4>Milestone</h4>
                                 <div class="form-row">
                                     <div class="col-6">
-                                        <p class="confirmation-label">Milestone reached:</p>
-                                        <p class="confirmation-value">{{milestone}}</p>
+                                        <p><small>Milestone reached:</small></p>
+                                        <p class="confirmationValue">{{milestone}}</p>
                                     </div>
                                     <div class="col-6">
-                                        <p class="confirmation-label">Name on certificate</p>
-                                        <p class="confirmation-value">{{certificateName}}</p>
+                                        <p><small>Name on certificate</small></p>
+                                        <p class="confirmationValue">{{certificateName}}</p>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="col-6">
-                                        <p class="confirmation-label">Year milestone reached:</p>
-                                        <p class="confirmation-value">{{awardYear}}</p>
+                                        <p><small>Year milestone reached:</small></p>
+                                        <p class="confirmationValue">{{award_year}}</p>
                                     </div>
                                     <div class="col-6">
                                         <p v-if="pastRegistrationNoCeremony" class="confirmation-label">I registered last year but did not attended</p>
                                     </div>
                                 </div>
-                                <form class="form-row">
+                                <div class="form-row">
                                     <div class="col-9">
 
                                     </div>
                                     <div class="col-3">
                                         <button class="btn btn-secondary" @click.prevent="e1 = 1">Edit this Section</button>
                                     </div>
-                                </form>
-                            </div>
-                            <div class="confirmation-group">
-                                <h4>Award &amp; Options</h4>
+                                </div>
 
                             </div>
-                            <div class="confirmation-group">
+                            <div class="confirmationGroup grey lighten-2">
+                                <h4>Award &amp; Options</h4>
+                                <div class="form-row">
+                                    <div class="col-9">
+
+                                    </div>
+                                    <div class="col-3">
+                                        <button class="btn btn-secondary" @click.prevent="e1 = 2">Edit this Section</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="confirmationGroup grey lighten-2">
                                 <h4>Your Contact Information</h4>
                                 <div class="form-row">
                                     <div class="col-6">
-                                        <p class="confirmation-label">Your Name</p>
-                                        <p class="confirmation-value">{{firstName}} {{lastName}}</p>
+                                        <p><small>Your Name</small></p>
+                                        <p class="confirmationValue">{{firstName}} {{lastName}}</p>
                                     </div>
                                     <div class="col-6">
-                                        <p class="confirmation-label">Your Employee ID #</p>
-                                        <p class="confirmation-value">{{employeeID}}</p>
+                                        <p><small>Your Employee ID #</small></p>
+                                        <p class="confirmationValue">{{employeeID}}</p>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="col-6">
-                                        <p class="confirmation-label">Your Government email address</p>
-                                        <p class="confirmation-value">{{govtEmail}}</p>
+                                        <p><small>Your Government email address</small></p>
+                                        <p class="confirmationValue">{{govtEmail}}</p>
                                     </div>
                                     <div class="col-6">
-                                        <p class="confirmation-label">Your alternate email address</p>
-                                        <p class="confirmation-value">{{altEmail}}</p>
+                                        <p><small>Your alternate email address</small></p>
+                                        <p class="confirmationValue">{{altEmail}}</p>
                                     </div>
                                 </div>
 
                                 <div class="form-row">
                                     <div class="col-6">
-                                        <p class="confirmation-label">Your current Ministry</p>
-                                        <p class="confirmation-value">{{ministry}}</p>
+                                        <p><small>Your current Ministry</small></p>
+                                        <p class="confirmationValue">{{ministry}}</p>
                                     </div>
                                     <div class="col-6">
-                                        <p class="confirmation-label">Your current branch</p>
-                                        <p class="confirmation-value">{{ministryBranch}}</p>
+                                        <p><small>Your current branch</small></p>
+                                        <p class="confirmationValue">{{ministryBranch}}</p>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="col-6">
-                                        <p class="confirmation-label">Your Office Address</p>
-                                        <p class="confirmation-value">{{officeMailPrefix}}</p>
-                                        <p class="confirmation-value">{{officeSuite}} {{officeStreetAddress}}</p>
-                                        <p class="confirmation-value">{{officeCity}}, BC</p>
-                                        <p class="confirmation-value">{{officePostalCode}}</p>
+                                        <p><small>Your Office Address</small></p>
+                                        <p class="confirmationValue">{{officeMailPrefix}}</p>
+                                        <p class="confirmationValue">{{officeSuite}} {{officeStreetAddress}}</p>
+                                        <p class="confirmationValue">{{officeCity}}, BC</p>
+                                        <p class="confirmationValue">{{officePostalCode}}</p>
                                     </div>
                                     <div class="col-6">
-                                        <p class="confirmation-label">Your Home Address</p>
-                                        <p class="confirmation-value">{{homeSuite}}</p>
-                                        <p class="confirmation-value">{{homeStreetAddress}}</p>
-                                        <p class="confirmation-value">{{homeCity}}</p>
-                                        <p class="confirmation-value">{{homePostalCode}}</p>
-                                    </div>
-                                    <div class="form-row">
-                                        <button class="btn btn-secondary" @click="e1 = 3">Edit this Section</button>
+                                        <p><small>Your Home Address</small></p>
+                                        <p class="confirmationValue">{{homeSuite}}</p>
+                                        <p class="confirmationValue">{{homeStreetAddress}}</p>
+                                        <p class="confirmationValue">{{homeCity}}</p>
+                                        <p class="confirmationValue">{{homePostalCode}}</p>
                                     </div>
                                 </div>
-                                <div class="confirmation-group">
-                                    <h4>Your Supervisor&apos;s Contact Information</h4>
-                                    <div class="form-row">
-                                        <div class="col-6">
-                                            <p class="confirmation-label">Supervisor&apos;s Name</p>
-                                            <p class="confirmation-value">{{firstName}} {{lastName}}</p>
-                                        </div>
-                                        <div class="col-6">
-                                            <p class="confirmation-label">Supervisor&apos;s Email</p>
-                                            <p class="confirmation-value">{{employeeID}}</p>
-                                        </div>
-                                    </div
-                                    <div class="form-row">
-                                        <div class="col-6">
-                                        <p class="confirmation-label">Supervisor&apos;s Office Address</p>
-                                        <p class="confirmation-value">{{officeMailPrefix}}</p>
-                                        <p class="confirmation-value">{{officeSuite}} {{officeStreetAddress}}</p>
-                                        <p class="confirmation-value">{{officeCity}}, BC</p>
-                                        <p class="confirmation-value">{{officePostalCode}}</p>
-                                        </div>
+                                <div class="form-row">
+                                        <div class="col-9"></div>
+                                        <div class="col-3"><button class="btn btn-secondary" @click="e1 = 3">Edit this Section</button></div>
+                                </div>
+                            </div>
+
+                            <div class="confirmationGroup grey lighten-2">
+                                <h4>Your Supervisor&apos;s Contact Information</h4>
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <p><small>Supervisor&apos;s Name</small></p>
+                                        <p class="confirmationValue">{{supervisorFirstName}} {{supervisorLastName}}</p>
                                     </div>
-                                    <div class="form-row">
-                                        <button class="btn btn-secondary" @click.prevent="e1 = 4">Edit this Section</button>
+                                    <div class="col-6">
+                                        <p><small>Supervisor&apos;s Email</small></p>
+                                        <p class="confirmationValue">{{supervisorEmail}}</p>
                                     </div>
                                 </div>
-                            <div class="confirmation-group">
-                                <h4>LSA Survey Participation</h4>
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <p><small>Supervisor&apos;s Office Address</small></p>
+                                        <p class="confirmationValue">{{supervisorMailPrefix}}</p>
+                                        <p class="confirmationValue">{{supervisorSuite}} {{supervisorStreetAddress}}</p>
+                                        <p class="confirmationValue">{{supervisorCity}}, BC</p>
+                                        <p class="confirmationValue">{{supervisorPostalCode}}</p>
+                                    </div>
+                                    <div class="col-6"></div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-9"></div>
+                                    <div class="col-3"><button class="btn btn-secondary" @click.prevent="e1 = 4">Edit this Section</button></div>
+                                </div>
+                            </div>
+
+
+                            <div class="confirmationGroup grey lighten-2">
+                                <h4>Survey Participation &amp; Consent</h4>
                                 <div class="form-row">
                                     <div class="col-2">
                                         <div class="form-check">
@@ -638,12 +720,10 @@
                                         </div>
                                     </div>
                                     <div class="col-8">
-
+                                        <p class="surveyStatement">At the end of each year, a follow-up survey may be sent to collect feedback about your experience with the Long Service Awards program. By leaving this box checked, you agree to participate.</p>
                                     </div>
+                                    <div class="col-2"></div>
                                 </div>
-                            </div>
-                            <div class="confirmation-group">
-                                <h4>Declaration &amp; Notice of Collection, Consent &amp; Authorize</h4>
                                 <div class="form-row">
                                     <div class="col-2">
                                         <div class="form-check">
@@ -652,31 +732,30 @@
                                                 I Agree
                                             </label>
                                         </div>
-                                        <div class="col-10">
-                                            <p class="surveyStatement">At the end of each year, a follow-up survey may be sent to collect feedback about your experience with the Long Service Awards program. By leaving this box checked, you agree to participate.</p>
-                                        </div>
                                     </div>
                                     <div class="col-8">
-                                        <div class="form-group">
-                                            <p class="collectionStatement">I declare, to the best of my knowledge and consistent with the Long Service Awards eligibility guidelines (which I have reviewed) that as of
-                                                December 31, 2021, I will have worked for the BC Public Service for 25, 30, 35, 40, 45 or 50 years and I am therefore eligible for a Long Service Award. By providing my
-                                                personal information, I am allowing the BC Public Service Agency to use and disclose this information for the planning and delivery of the Long Service Award recognition events.
-                                                This personal information is required to process your application for the Long Service Awards and is collected in accordance with section 26(c) of the Freedom of Information and
-                                                Protection of Privacy Act (FOIPPA).
-                                                Questions about the collection, use or disclosure of this information, can be directed to: LongServiceAwards@gov.bc.ca, 1st Floor, 563 Superior Street, Victoria BC, V8V 0C5.</p>
-                                            </p>
-                                        </div>
+                                        <p class="collectionStatement">I declare, to the best of my knowledge and consistent with the Long Service Awards eligibility guidelines (which I have reviewed) that as of
+                                            December 31, 2021, I will have worked for the BC Public Service for 25, 30, 35, 40, 45 or 50 years and I am therefore eligible for a Long Service Award. By providing my
+                                            personal information, I am allowing the BC Public Service Agency to use and disclose this information for the planning and delivery of the Long Service Award recognition events.
+                                            This personal information is required to process your application for the Long Service Awards and is collected in accordance with section 26(c) of the Freedom of Information and
+                                            Protection of Privacy Act (FOIPPA).
+                                            Questions about the collection, use or disclosure of this information, can be directed to: LongServiceAwards@gov.bc.ca, 1st Floor, 563 Superior Street, Victoria BC, V8V 0C5.</p>
+                                        </p>
+                                    </div>
+                                    <div class="col-2"></div>
+                                </div>
+                            </div>
+                                <div class="form-row">
+                                    <div class="col-3">
+                                        <button class="btn btn-secondary" @click.prevent="e1 = 4">Back to Supervisor Info</button>
+                                    </div>
+                                    <div class="col-6">
+                                    </div>
+                                    <div class="col-3">
+                                        <button type="submit" class="btn btn-primary">Confirm &amp; Agree</button>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col-8">
 
-                                </div>
-                                <div class="col-4">
-                                    <button type="submit" class="btn btn-primary">Confirm &amp; Agree</button>
-                                </div>
-                            </div>
 
                         </v-stepper-content>
 
@@ -701,9 +780,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js" type="text/javascript"></script>
 <script
     src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/smooth-scroll/16.1.0/smooth-scroll.min.js"></script>
-<!-- Special JavaScript just for Registration form -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/4.0.9/jquery.inputmask.bundle.min.js" integrity="sha512-VpQwrlvKqJHKtIvpL8Zv6819FkTJyE1DoVNH0L2RLn8hUPjRjkS/bCYurZs0DX9Ybwu9oHRHdBZR9fESaq8Z8A==" crossorigin="anonymous"></script><!-- Special JavaScript just for Registration form -->
 <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
 
@@ -716,12 +793,12 @@
             e1: 1,
             isRetiringThisYear: 0,
             milestone: 'Select Milestone',
-            awardYear: '',
+            award_year: 'Select Year',
 
             employeeID: '',
             firstName: '',
             lastName: '',
-            ministry: '',
+            ministry: 'Select Ministry',
             ministryBranch: '',
             certificateName: '',
 
@@ -765,7 +842,7 @@
             currentAwardIndex: 0,
             currentAwards: [],
 
-            selectedAward: -1,
+        selectedAward: -1,
             awardName: '',
             awardDescription: '',
             awardOptions: [],
@@ -776,13 +853,11 @@
             donationCharity1: '',
             donationCharity2: '',
 
-            errorsEmployee: '',
-            errorsOffice: '',
-            errorsHome: '',
-            errorsSupervisor: '',
-            errorsOptions: '',
+            errorsStep1: [],
+            errorsStep2: [],
+            errorsStep3: [],
+            errorsStep4: [],
 
-            selectAward: false,
             awardSelected: false,
             awardConfirmed: false,
             identifyingInfoInput: false,
@@ -797,7 +872,6 @@
             inputCharity2: false,
             testShow: false,
 
-            selectedAward: 0,
             pecsfRegion: 0,
             donationType: false,
             highlightedAward: 1
@@ -805,39 +879,10 @@
 
         methods: {
 
-            populateTestData: function () {
 
-                if (this.employeeID == '99999') {
-                    this.firstName = "Homer";
-                    this.lastName = "Simpson";
-                    sel = document.getElementById("ministry-id");
-                    sel.selectedIndex = 16;
-                    this.ministry = sel.options[sel.selectedIndex].text;
-                    this.ministryBranch = "Branch 13";
-                    this.govtEmail = "hsimpson@gov.bc.ca";
-                    this.isRetiringThisYear = false;
-
-                    this.officeStreetAddress = "123 Office Street";
-                    var sel = document.getElementById("office-city-id");
-                    sel.selectedIndex = 1997;
-                    this.officeCity = sel.options[sel.selectedIndex].text;
-                    this.officePostalCode = "V8V 4R6";
-                    this.officePhone = "(250) 555-5476";
-
-                    this.homeStreetAddress = "565 Home Street";
-                    var sel = document.getElementById("home-city-id");
-                    sel.selectedIndex = 1997;
-                    this.homeCity = sel.options[sel.selectedIndex].text;
-                    this.homePostalCode = "V8V 4R6";
-                    this.homePhone = "(250) 555-0772";
-
-                    this.supervisorFirstName = "Franklin";
-                    this.supervisorLastName = "Hughes";
-                    this.supervisorStreetAddress = "123 Office Street";
-                    this.supervisorPostalCode = "V8V 4R6";
-                    this.supervisorEmail = "fhughes@gov.bc.ca";
-                    var sel = document.getElementById("supervisor-city-id");
-                }
+            selectAward: function(awardid) {
+                this.selectedAward = awardid;
+                this.$vuetify.goTo('#award-button');
             },
             /*
             getCharity: function (select_id) {
@@ -880,6 +925,129 @@
                 }
             },
             */
+            validateStep1 : function () {
+                this.errorsStep1 = [];
+                //Did they put in a milestone year?
+                if (this.milestone == 'Select Milestone') {
+                    this.errorsStep1.push('You must select a milestone.');
+                }
+                //Did they indicate a qualifying year?
+                if (this.award_year == 0) {
+                    this.errorsStep1.push('You must select a qualifying year.');
+                }
+
+                if (this.errorsStep1.length == 0) {
+                    this.e1 = 2;
+                }
+
+            },
+            validateStep2 : function () {
+                this.errorsStep2 = [];
+                //Did they select an award?
+                if (this.selectedAward == -1) {
+                    this.errorsStep2.push('You must select an award');
+                }
+
+                //Did they indicate an award that requires options?
+
+
+                if (this.errorsStep2.length == 0) {
+                    this.e1 = 3;
+                }
+            },
+            validateStep3 : function () {
+               //Did include an employee number?
+                if (this.employeeID.length < 5 || this.employeeID.length > 10) {
+                    this.errorsStep3.push('You must input a valid employee number');
+                }
+               //Did they include their first name?
+                if (this.firstName.length < 2 || this.firstName.length > 50) {
+                    this.errorsStep3.push('You must input your first name.');
+                }
+               //Did they include their last name?
+                if (this.lastName.length < 2 || this.lastName.length > 50) {
+                    this.errorsStep3.push('You must input your last name');
+                }
+               //Did they include their gov email address?
+                if (this.govtEmail.length < 6 ) {
+                    this.errorsStep3.push('You must input your government email address');
+                }
+               //Did they specify their ministry?
+                if (this.ministry == 'Select Ministry') {
+                    this.errorsStep3.push('You must select your ministry');
+                }
+               //Did they indicate their current branch?
+                if (this.ministryBranch == '') {
+                    this.errorsStep3.push('You must input your branch');
+                }
+               //Did they include an office street address?
+                if (this.officeStreetAddress.length < 4) {
+                    this.errorsStep3.push('You must input your office address');
+                }
+               //Did they include an office city?
+                if (this.officeCity == 'Select A City') {
+                    this.errorsStep3.push('You must select your office city');
+                }
+               //Did they include a postal code?
+                if (this.officePostalCode.length != 7) {
+                    this.errorsStep3.push('You must input your office postal code');
+                }
+               //Did they include a phone number?
+                if (this.officePhone.length != 13) {
+                    this.errorsStep3.push('You must input your office phone number');
+                }
+               //Did they include a home street address?
+                if (this.homeStreetAddress.length < 4) {
+                    this.errorsStep3.push('You must input your home address');
+                }
+               //Did they include a home city?
+                if (this.homeCity == 'Select A City') {
+                    this.errorsStep3.push('You must input your home city');
+                }
+               //Did they include a home postal code?
+                if (this.homePostalCode.length != 7) {
+                    this.errorsStep3.push('You must input your home postal code');
+                }
+               //Did they include a home phone number?
+                if (this.homePhone.length != 13) {
+                    this.errorsStep3.push('You must input your home phone number');
+                }
+
+                if (this.errorsStep3.length == 0) {
+                    this.e1 = 4;
+                }
+            },
+            validateStep4 : function () {
+                this.errorsStep4 = [];
+                //Did they include a supervisor first name
+                if (this.supervisorFirstName.length < 2 || this.supervisorFirstName.length > 50) {
+                    this.errorsStep4.push('You must input your supervisor\'s first name');
+                }
+                //Did they include a supervisor surname
+                if (this.supervisorLastName.length < 2 || this.supervisorLastName.length > 50) {
+                    this.errorsStep4.push('You must input your supervisor\'s last name')
+                }
+                //Did they include a supervisor email
+                if (this.supervisorEmail.length < 6) {
+                    this.errorsStep4.push('You must input your supervisor\'s government email address');
+                }
+                //Did they include a supervisor street address
+                if (this.supervisorStreetAddress.length < 4) {
+                    this.errorsStep4.push('You must input your supervisor\'s office address');
+                }
+                //Did they include a supervisor city
+                if (this.supervisorCity == 'Select A City') {
+                    this.errorsStep4.push('You must input your supervisor\'s office city');
+                }
+                //Did they include a supervisor postal code
+                if (this.supervisorPostalCode.length != 7) {
+                    this.errorsStep4.push('You must input your supervisor\'s office postal code')
+                }
+
+                if (this.errorsStep4.lenght == 0) {
+                    this.e1 = 5;
+                }
+            },
 
             selectAwardOptions: function (select_id) {
                 award = this.getAward(select_id);
@@ -1474,6 +1642,7 @@
     });
 
 
+
     function isEmail(email) {
         var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
         return regex.test(email);
@@ -1496,5 +1665,27 @@
 
     Vue.config.devtools = true;
 
+
+</script>
+<script>
+    $(document).ready(function(){
+        $('.phone-input').inputmask('(999) 999 - 9999');
+        $('.postal-code-input').inputmask('A9A 9A9');
+        $('.extension-input').inputmask('9[999]');
+        $('.email-input').inputmask({
+            mask: "*{1,20}[.*{1,20}][.*{1,20}][.*{1,20}]@*{1,20}[.*{2,6}][.*{1,2}]",
+            greedy: false,
+            onBeforePaste: function (pastedValue, opts) {
+                pastedValue = pastedValue.toLowerCase();
+                return pastedValue.replace("mailto:", "");
+            },
+            definitions: {
+                '*': {
+                    validator: "[0-9A-Za-z!#$%&'*+/=?^_`{|}~\-]",
+                    casing: "lower"
+                }
+            }
+        });
+    })
 
 </script>
