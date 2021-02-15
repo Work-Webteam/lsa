@@ -133,7 +133,7 @@
                             </div>
                             <v-carousel v-on:change="highlightedAward = servicesCarouselItems[$event].awardid">
                                 <?php foreach ($awardinfo as $award): ?>
-                                    <v-carousel-item awardID="<?= $award->id ?>" v-if="milestone == <?= $award->milestone_id ?>">
+                                    <v-carousel-item awardID="<?= $award->id ?>" v-if="milestone == <?= $award->milestone_id; ?>">
                                         <v-sheet height="100%" tile>
                                             <v-row>
                                                 <v-col><v-img src="/img/awards/<?= $award->image ?>"></v-img></v-col>
@@ -165,8 +165,8 @@
                             <div class="row" v-if="selectedAward == 9">
                                 <div class="col-4">
                                     <div class="form-group">
-                                        <label for=""> Watch Size:</label>
-                                        <select class="form-control" name="" id="">
+                                        <label for="watch_size"> Watch Size:</label>
+                                        <select class="form-control" name="watch_size" id="watch_size" v-model="watchSize">
                                             <option disabled selected>Select Watch Size</option>
                                             <option>38mm face with 20mm strap</option>
                                             <option>29mm face with 14mm strap</option>
@@ -175,8 +175,8 @@
                                 </div>
                                 <div class="col-4">
                                     <div class="form-group">
-                                        <label for="">Watch Colour:</label>
-                                        <select class="form-control" name="" id="">
+                                        <label for="watch_colour">Watch Colour:</label>
+                                        <select class="form-control" name="watch_colour" id="watch_colour" v-model="watchColour">
                                             <option disabled selected></option>
                                             <option>Gold</option>
                                             <option>Silver</option>
@@ -186,8 +186,8 @@
                                 </div>
                                 <div class="col-4">
                                     <div class="form-group">
-                                        <label for="">Strap:</label>
-                                        <select  class="form-control" name="" id="">
+                                        <label for="strap_type">Strap:</label>
+                                        <select  class="form-control" name="strap_type" id="strap_type" v-model="strapType">
                                             <option disabled selected>Choose Strap</option>
                                             <option>Plated</option>
                                             <option>Black Leather</option>
@@ -197,8 +197,8 @@
                                 </div>
                                 <div class="col-4">
                                     <div class="form-group">
-                                        <label for="">Engraving</label>
-                                        <input class="form-control" type="text" name="engraving" maxlength="33" :placeholder="firstName + ' ' + lastName">
+                                        <label for="watch_engraving">Engraving</label>
+                                        <input class="form-control" type="text" name="watch_engraving" maxlength="33" :placeholder="firstName + ' ' + lastName" v-model="watchEngraving">
                                     </div>
                                 </div>
                             </div>
@@ -206,8 +206,8 @@
                             <!-- 35 YR BRACELET CONTROLS -->
                             <div class="row" v-if="selectedAward == 12">
                                 <div class="form-group">
-                                    <label for="">Size</label>
-                                    <select  class="form-control" name="" id="">
+                                    <label for="bracelet_size">Size</label>
+                                    <select  class="form-control" name="bracelet_size" id="bracelet_size" v-model="braceletSize">
                                         <option disabled selected>Choose Size</option>
                                         <option>Fits 6 1/2" - 7 1/2" circumference wrists</option>
                                         <option>Fits 7 1/2" - 8 1/2" circumference wrists</option>
@@ -218,8 +218,8 @@
                             <!-- 45 YR BRACELET CONTROLS -->
                             <div class="row" v-if="selectedAward == 46">
                                 <div class="form-group">
-                                    <label for="">Size</label>
-                                    <select class="form-control" name="" id="">
+                                    <label for="bracelet_size">Size</label>
+                                    <select class="form-control" name="bracelet_size" id="bracelet_size" v-model="braceletSize">
                                         <option disabled selected>Choose Size</option>
                                         <option>Fits 6 1/2" - 7 1/2" circumference wrists</option>
                                         <option>Fits 7 1/2" - 8 1/2" circumference wrists</option>
@@ -615,9 +615,40 @@
                             </div>
                             <div class="confirmationGroup grey lighten-2">
                                 <h4>Award &amp; Options</h4>
+                                <?php foreach ($awardinfo as $award): ?>
+                                    <div class="form-row" v-if="awardSelected == <?= $award->id ?>">
+                                        <div class="col-6">
+                                            <v-img src="/img/awards/<?= $award->image ?>"></v-img>
+                                        </div>
+                                        <div class="col-6">
+                                           <p class=""confirmationValue"><?= $award->name ?></p>
+
+                                            <p v-if="awardSelected == 9"><small>Watch Size</small></p>
+                                            <p v-if="awardSelected == 9" class="confirmationValue">{{watchSize}}</p>
+
+                                            <p v-if="awardSelected == 9"><small>Watch Colour</small></p>
+                                            <p v-if="awardSelected == 9" class="confirmationValue">{{watchColour}}</p>
+
+                                            <p v-if="awardSelected == 9"><small>Strap Type</small></p>
+                                            <p v-if="awardSelected == 9" class="confirmationValue">{{strapType}}</p>
+
+                                            <p v-if="awardSelected == 9"><small>Engraving</small></p>
+                                            <p v-if="awardSelected == 9" class="confirmationValue">{{watchEngraving}}</p>
+
+                                            <p v-if="awardSelected == 12 || awardSelected == 46"><small>Bracelet Size</small></p>
+                                            <p v-if="awardSelected == 12 || awardSelected == 46" class="confirmationValue">{{braceletSize}}</p>
+
+
+                                        </div>
+                                    </div>
+
+
+                                <?php endforeach; ?>
+
+
+
                                 <div class="form-row">
                                     <div class="col-9">
-
                                     </div>
                                     <div class="col-3">
                                         <button class="btn btn-secondary" @click.prevent="e1 = 2">Edit this Section</button>
@@ -857,6 +888,12 @@
             errorsStep2: [],
             errorsStep3: [],
             errorsStep4: [],
+
+            watchColour: null,
+            watchSize: null,
+            strapType: null,
+            watchEngraving: null,
+            braceletSize: null,
 
             awardSelected: false,
             awardConfirmed: false,

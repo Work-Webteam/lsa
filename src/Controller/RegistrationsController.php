@@ -35,7 +35,7 @@ class RegistrationsController extends AppController
         $edit = true;
         $toolbar = true;
 
-        // if Ministry Contact only list registrations from their ministry
+        // if Ministry Contact, only list registrations from their ministry
         if ($this->checkAuthorization(Configure::read('Role.ministry_contact'))) {
             $session = $this->getRequest()->getSession();
             $conditions['Registrations.ministry_id ='] = $session->read("user.ministry");
@@ -43,7 +43,7 @@ class RegistrationsController extends AppController
             $toolbar = false;
         }
 
-        // if Supervisor role only list registrations they created
+        // if Supervisor role, only list registrations they created
         if ($this->checkAuthorization(Configure::read('Role.supervisor'))) {
             $session = $this->getRequest()->getSession();
             $conditions['Registrations.user_guid ='] = $session->read("user.guid");
@@ -251,7 +251,7 @@ class RegistrationsController extends AppController
             'conditions' => ['Awards.active =' => 1],
         ]);
         $this->set('awardinfo', $awardInfo);
-        /*
+        /* TODO: Check to verify this can be removed
         $ministries = $this->Registrations->Ministries->find('list', [
             'order' => ['Ministries.name' => 'ASC']
         ]);
@@ -275,6 +275,35 @@ class RegistrationsController extends AppController
         $this->set('charities', $charities);
         $this->set('registration', $registration);
 
+
+    }
+
+
+    //This should be dynamic based on the options encoded in the award options JSON in
+    //the awards table
+    private function getAwardOptionsJSON() {
+        //Magic Numbers!
+        $bulova_watch_id = 9;
+        $bracelet_35_id = 12;
+        $bracelet_45_id = 29;
+
+        switch($this->request->getData('award_id')) {
+            case $bulova_watch_id:
+                $options['watch_size']      = $this->request->getData('watch_size');
+                $options['watch_colour']    = $this->request>getData('watch_colour');
+                $options['strap_type']      = $this->request->getData('strap_type');
+                break;
+            case $bracelet_35_id:
+                $options['bracelet_size']   = $this->request->getData('braceletSize');
+                break;
+            case $bracelet_45_id:
+                $options['bracelet_size']   = $this->request->getData('braceletSize');
+                break;
+            default:
+                $options = array();
+                break;
+        }
+        return json_encode($options);
 
     }
 
@@ -2460,6 +2489,7 @@ class RegistrationsController extends AppController
     }
 
 
+
     public function reportministryrecipients()
     {
 
@@ -2499,6 +2529,9 @@ class RegistrationsController extends AppController
 
 
 
+    /* Creates a dashboard for protocol to see which registrants are on a waiting list for any ceremony.
+       Accepts post requests to add registrants to the waiting list for a ceremony
+    */
 
     public function reportwaitinglist()
     {
