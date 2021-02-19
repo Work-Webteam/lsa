@@ -203,6 +203,11 @@ class RegistrationsController extends AppController
             $registration->retirement_date = $this->request->getData('date');
             $registration->retroactive = 0;
 
+            $registration->award_options = $this->getAwardOptionsJSON();
+
+            $registration = $this->handlePECSFDonation($registration);
+
+
             $registration->accessibility_requirements_recipient = "[]";
             $registration->accessibility_requirements_guest = "[]";
             $registration->dietary_requirements_recipient = "[]";
@@ -286,6 +291,7 @@ class RegistrationsController extends AppController
         $bulova_watch_id = 9;
         $bracelet_35_id = 12;
         $bracelet_45_id = 29;
+        $options        = '';
 
         switch($this->request->getData('award_id')) {
             case $bulova_watch_id:
@@ -307,6 +313,61 @@ class RegistrationsController extends AppController
 
     }
 
+    private function handlePECSFDonation($registration) {
+        $pecsf_25_id    = 49;
+        $pecsf_30_id    = 50;
+        $pecsf_35_id    = 51;
+        $pecsf_40_id    = 52;
+        $pecsf_45_id    = 53;
+        $pecsf_50_id    = 54;
+        $award_id       = $this->request->getData('award_id');
+
+        switch ($award_id) {
+            case $pecsf_25_id:
+                $donationTotal = 75;
+                break;
+            case $pecsf_30_id:
+                $donationTotal = 150;
+                break;
+            case $pecsf_35_id:
+                $donationTotal = 300;
+                break;
+            case $pecsf_40_id:
+                $donationTotal = 400;
+                break;
+            case $pecsf_45_id:
+                $donationTotal = 450;
+                break;
+            case $pecsf_50_id:
+                $donationTotal = 500;
+                break;
+            default:
+                $registration->pecsf_donation = 0;
+                return $registration;
+        }
+        //if Pool is select save region
+        if ($this->request->getData('donation_type') == 'pool') :
+            $registration->pecsf_donation       = 1;
+            $registration->pecsf_region_id      = $this->request->getData('pecsf_region');
+            $registration->pecsf_amount1        = $donationTotal;
+        else:
+            //If a 2nd charity is defined, split the total between them.
+            if (is_numeric($this->request->getData('pecsfCharity2'))) :
+                $registration->pecsf_donation     = 1;
+                $registration->pecsf_charity1_id  = $this->request->getData('pecsf_charity_1');
+                $registration->pecsf_amount1      = $donationTotal / 2;
+                $registration->pecsf_charity2_id  = $this->request->getData('pecsf_charity_2');
+                $registration->pecsf_amount2      = $donationTotal / 2;
+            else:
+                $registration->pecsf_donation   = 1;
+                $registration->pecsf_charity1_id = $this->request->getData('pecsf_charity_1');
+                $registration->pecsf_amount1    = $donationTotal;
+            endif;
+        endif;
+
+        return $registration;
+
+    }
 
 
     public function completed ($id = null) {

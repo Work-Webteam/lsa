@@ -236,29 +236,29 @@
                                         <input class="form-control" type="text" maxlength="33" placeholder="Firstname Lastname" :value="firstName + ' ' + lastName">
                                     </div>
                                     <div  class="form-group">
-                                        <label for="">Your Desired PECSF Region</label>
-                                        <select class="form-control" name="" id="" v-model="pecsfRegion">
+                                        <label for="pecsf_region">Your Desired PECSF Region</label>
+                                        <select class="form-control" name="pecsf_region" id="pecsf_region" v-model="pecsfRegion">
                                             <?php foreach ($regions as $region) : ?>
                                             <option value="<?= $region->id ?>"><?= $region->name ?></option>
                                             <?php endforeach ?>
                                         </select>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="" id="" value="pool" v-model="donationType" checked>
+                                        <input class="form-check-input" type="radio" name="donation_type" id="donation_type" value="pool" v-model="donationType" checked>
                                         <label class="form-check-label" for="">Donate to the fund-supported pool for my chosen region</label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="" id="" value="single-charity" v-model="donationType">
+                                        <input class="form-check-input" type="radio" name="donation_type" id="donation_type" value="single-charity" v-model="donationType">
                                         <label class="form-check-label" for="">Donate to a specific charity</label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="" id="" value="two-charities" v-model="donationType">
+                                        <input class="form-check-input" type="radio" name="donation_type" id="donation_type" value="two-charities" v-model="donationType">
                                         <label class="form-check-label" for="">Donate to two charities</label>
                                     </div>
                                     <div class="form-group" >
-                                        <label for="" v-if="donationType == 'single-charity'">Choose your charity</label>
-                                        <label for="" v-if="donationType == 'two-charities'">Choose your first charity</label>
-                                        <select class="form-control"  name="" id="" v-model="pecsfCharity1">
+                                        <label for="pecsf_charity_1" v-if="donationType == 'single-charity'">Choose your charity</label>
+                                        <label for="pecsf_charity_1" v-if="donationType == 'two-charities'">Choose your first charity</label>
+                                        <select class="form-control"  name="pecsf_charity_1" id="pecsf_charity_1" v-model="pecsfCharity1">
                                             <option selected disabled>Choose a charity</option>
                                             <?php foreach ($charities as $charity): ?>
                                             <option value="<?= $charity->id ?>" v-if="pecsfRegion == <?= $charity->pecsf_region_id ?>"><?= $charity->name ?></option>
@@ -266,8 +266,8 @@
                                         </select>
                                     </div>
                                     <div class="form-group" v-if="donationType == 'two-charities'">
-                                        <label for="">Choose your second charity</label>
-                                        <select class="form-control" name="" id="" v-model="pecsfCharity1">
+                                        <label for="pecsf_charity_2">Choose your second charity</label>
+                                        <select class="form-control" name="pecsf_charity_2" id="pecsf_charity_2" v-model="pecsfCharity2">
                                             <option selected disabled>Choose a charity</option>
                                             <?php foreach ($charities as $charity): ?>
                                                 <option value="<?= $charity->id ?>" v-if="pecsfRegion == <?= $charity->pecsf_region_id ?>"><?= $charity->name ?></option>
