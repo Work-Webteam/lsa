@@ -408,13 +408,13 @@
                                 <div class="col-2">
                                     <div class="form-group">
                                         <label for="">Postal Code</label>
-                                        <input type="text" class="form-control postal-code-input"  id="office_postal_code" name="office_postal_code" placeholder="i.e. A1A 1A1">
+                                        <input type="text" class="form-control"  id="office_postal_code" name="office_postal_code" placeholder="i.e. A1A 1A1">
                                     </div>
                                 </div>
                                 <div class="col-3">
                                     <div class="form-group">
                                         <label for="">Office Phone Number</label>
-                                        <input type="text" class="form-control phone-input" id="work_phone" name="work_phone" placeholder="i.e. (604) 555-5555" v-model="officePhone">
+                                        <input type="text" class="form-control" id="work_phone" name="work_phone" placeholder="i.e. (604) 555-5555" v-model="officePhone">
                                     </div>
                                 </div>
                                 <div class="col-1">
@@ -456,13 +456,13 @@
                                <div class="col-2">
                                    <div class="form-group">
                                        <label for="">Postal Code</label>
-                                       <input type="text" class="form-control postal-code-input" id="home_postal_code" name="home_postal_code" placeholder="i.e. A1A 1A1" v-model="homePostalCode">
+                                       <input type="text" class="form-control" id="home_postal_code" name="home_postal_code" placeholder="i.e. A1A 1A1" v-model="homePostalCode">
                                    </div>
                                </div>
                                <div class="col-4">
                                    <div class="form-group">
                                        <label for="">Home Phone Number</label>
-                                       <input type="text" class="form-control phone-input" name="home_phone" id="home_phone" placeholder="i.e. (604) 555-5555" v-model="homePhone">
+                                       <input type="text" class="form-control" name="home_phone" id="home_phone" placeholder="i.e. (604) 555-5555" v-model="homePhone">
                                    </div>
                                </div>
                            </div>
@@ -559,7 +559,7 @@
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label for="">Postal Code</label>
-                                        <input type="text" class="form-control postal-code-input" id="supervisor_postal_code" name="supervisor_postal_code" placeholder="i.e. A1A 1A1" v-model="supervisorPostalCode">
+                                        <input type="text" class="form-control" id="supervisor_postal_code" name="supervisor_postal_code" placeholder="i.e. A1A 1A1" v-model="supervisorPostalCode">
                                     </div>
                                 </div>
                             </div>
@@ -810,7 +810,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/4.0.9/jquery.inputmask.bundle.min.js" integrity="sha512-VpQwrlvKqJHKtIvpL8Zv6819FkTJyE1DoVNH0L2RLn8hUPjRjkS/bCYurZs0DX9Ybwu9oHRHdBZR9fESaq8Z8A==" crossorigin="anonymous"></script><!-- Special JavaScript just for Registration form -->
 <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue-the-mask/0.11.1/vue-the-mask.min.js" integrity="sha512-qXurwUG9teY1KFtbBifUHInCiNK/POQqJeFRSoaHg1pHEB1tBUlFKRsfPzm1D6b6ueeQOCKldvXYCtOsPURrcw==" crossorigin="anonymous"></script>
 
 <script>
     var app = new Vue({
@@ -860,22 +860,13 @@
             supervisorPhone: '',
             supervisorExtension: '',
 
-            availableAwards: '',
-            availableAwardOptions: '',
 
-            currentAwardName: '',
-            currentAwardImage: '',
-            currentAwardDescription: '',
-            currentAwardIndex: 0,
-            currentAwards: [],
-
-        selectedAward: -1,
+            selectedAward: -1,
             awardName: '',
             awardDescription: '',
             awardOptions: [],
             awardImage: '',
 
-            availableCharities: [],
             donationRegion: '',
             donationCharity1: '',
             donationCharity2: '',
@@ -917,47 +908,7 @@
                 this.selectedAward = awardid;
                 this.$vuetify.goTo('#award-button');
             },
-            /*
-            getCharity: function (select_id) {
-                charity = 0;
-                for (var i = 0; i < allCharities.length; i++) {
-                    if (allCharities[i].id == select_id) {
-                        charity = allCharities[i];
-                    }
-                }
-                return charity;
-            },
 
-            selectCharityOptions: function () {
-                $("#donation-1").modal('show');
-                this.selectedAward = 0;
-            },
-
-            regionSelected: function () {
-                this.donationRegion = $('#selectedregion :selected').text();
-
-                this.availableCharities = [];
-                for (var i = 0; i < allCharities.length; i++) {
-                    if (allCharities[i].pecsf_region_id == $('#selectedregion').val()) {
-                        this.availableCharities.push(allCharities[i]);
-                    }
-                }
-                this.inputDonationType = true;
-            },
-
-            donationTypeSelected: function () {
-                if ($("input:radio[name ='selectDonationType']:checked").val() == 0) {
-                    this.inputCharity1 = false;
-                    this.inputCharity2 = false;
-                } else if ($("input:radio[name ='selectDonationType']:checked").val() == 1) {
-                    this.inputCharity1 = true;
-                    this.inputCharity2 = false;
-                } else if ($("input:radio[name ='selectDonationType']:checked").val() == 2) {
-                    this.inputCharity1 = true;
-                    this.inputCharity2 = true;
-                }
-            },
-            */
             validateStep1 : function () {
                 this.errorsStep1 = [];
                 //Did they put in a milestone year?
@@ -1082,622 +1033,9 @@
                 }
             },
 
-            selectAwardOptions: function (select_id) {
-                award = this.getAward(select_id);
-
-                options = JSON.parse(award.options);
-                if (options.length > 0) {
-                    if (this.selectedAward != award.id) {
-                        jQuery('#formAwardOptions').empty();
-
-                        availableOptions = "";
-                        options.forEach((element, index, array) => {
-                            availableOptions += "<p>" + element.name + "</p>";
-                            if (element.type == "choice") {
-                                input = '<label for="award-option-' + index + '">' + element.name + '</label>';
-                                input += '<select id="award-option-' + index + '" requires="required">';
-                                input += '<option value>- select option -</option>';
-
-                                for (var i = 0; i < element.values.length; i++) {
-                                    optionValue = element.values[i];
-                                    input += '<option value="' + i + '">' + element.values[i] + '</option>';
-                                }
-
-                                input += '</select>';
-                                jQuery('#formAwardOptions').append(input);
-                            }
-                            if (element.type == "text") {
-                                input = '<label for="award-option-' + index + '">' + element.name + '</label>';
-                                input += '<input type="text" id="award-option-' + index + '">';
-                                jQuery('#formAwardOptions').append(input);
-                            }
-                        });
-                    }
-                    $("#awardName").html(award.name);
-                    $("#award-1").modal('show');
-                }
-                this.selectedAward = award.id;
-            },
-
-            processOptions: function () {
-                if (this.selectedAward == 0) {
-                    this.processDonationOptions();
-                } else {
-                    this.processAwardOptions();
-                }
-            },
-
-            processDonationOptions: function () {
-
-                for (var i = 0; i < milestones.length; i++) {
-                    if (milestones[i].id == $('#milestone-id').val()) {
-                        milestone = milestones[i];
-                    }
-                }
-
-                errors = [];
-
-                $('input[name=pecsf_donation]').val(1);
-
-
-                $('input[name=pecsf_name]').val($('input[name=donorName').val());
-
-                this.awardOptions = [];
-                $('#donation-type').css("border-color", clrDefault);
-                if ($("input:radio[name ='selectDonationType']:checked").val() == 0) {
-                    amount = milestone.donation;
-                    this.awardOptions.push(this.currencyFormat(amount) + " Donation - PECSF Region Charity Fund");
-                    $('input[name=pecsf_amount1]').val(amount);
-                    $('input[name=pecsf_donation_type]').val(0);
-                } else if ($("input:radio[name ='selectDonationType']:checked").val() == 1) {
-                    if ($('#selectedCharity1').val() == 0) {
-                        errors.push("Charity is required");
-                        $('#selectedCharity1').css("border-color", clrError);
-                    } else {
-                        amount = milestone.donation;
-                        charity = this.getCharity($('#selectedCharity1').val());
-                        this.awardOptions.push(this.currencyFormat(amount) + " Donation - (" + charity.vendor_code + ") " + charity.name);
-                        $('#selectedCharity1').css("border-color", clrDefault);
-                        $('input[name=pecsf_charity1_id]').val(charity.id);
-                        $('input[name=pecsf_amount1]').val(amount);
-                    }
-                    $('input[name=pecsf_donation_type]').val(1);
-                } else if ($("input:radio[name ='selectDonationType']:checked").val() == 2) {
-                    amount = milestone.donation / 2;
-
-                    if ($('#selectedCharity1').val() == 0) {
-                        errors.push("First Charity is required");
-                        $('#selectedCharity1').css("border-color", clrError);
-                    } else {
-                        charity = this.getCharity($('#selectedCharity1').val());
-                        this.awardOptions.push(this.currencyFormat(amount) + " Donation - (" + charity.vendor_code + ") " + charity.name);
-                        $('#selectedCharity1').css("border-color", clrDefault);
-                        $('input[name=pecsf_charity1_id]').val(charity.id);
-                        $('input[name=pecsf_amount1]').val(amount);
-                    }
-
-                    if ($('#selectedCharity2').val() == 0) {
-                        errors.push("Second Charity is required");
-                        $('#selectedCharity2').css("border-color", clrError);
-                    } else {
-                        charity = this.getCharity($('#selectedCharity2').val());
-                        this.awardOptions.push(this.currencyFormat(amount) + " Donation - (" + charity.vendor_code + ") " + charity.name);
-                        $('#selectedCharity2').css("border-color", clrDefault);
-                        $('input[name=pecsf_charity2_id]').val(charity.id);
-                        $('input[name=pecsf_amount2]').val(amount);
-                    }
-                    $('input[name=pecsf_donation_type]').val(2);
-                } else {
-                    if (this.inputDonationType) {
-                        errors.push('Please select the type of donation.');
-                        $('#donation-type').css("border-color", clrError);
-                    }
-                }
-
-                if (document.getElementById("selectedregion").selectedIndex == 0) {
-                    errors.push('Region is required');
-                    $('#selectedregion').css("border-color", clrError);
-                } else {
-                    $('#selectedregion').css("border-color", clrDefault);
-                    $('input[name=pecsf_region_id]').val($('#selectedregion').val());
-                }
-
-                if (errors.length == 0) {
-                    $('input[name=award_options]').val(JSON.stringify(this.awardOptions));
-                    $("#donation-1").modal('hide');
-                    this.errorsOptions = '';
-                } else {
-                    this.errorsOptions = '<ul>';
-                    for (var i = 0; i < errors.length; i++) {
-                        this.errorsOptions += '<li>' + errors[i] + '</li>';
-                    }
-                    this.errorsOptions += '</ul>';
-                }
-
-            },
-
-
-            processAwardOptions: function () {
-                award = this.getAward(this.selectedAward);
-                options = JSON.parse(award.options);
-
-                errors = [];
-
-                this.awardOptions = [];
-                for (i = 0; i < options.length; i++) {
-                    console.log(options[i]);
-                    if (options[i].type == "choice") {
-                        var sel = document.getElementById("award-option-" + i);
-                        if (sel.selectedIndex == 0) {
-                            errors.push(options[i].name + " is required");
-                        } else {
-                            this.awardOptions.push(options[i].name + ": " + sel.options[sel.selectedIndex].text);
-                        }
-                    }
-                    if (options[i].type == "text") {
-                        var field = document.getElementById("award-option-" + i);
-                        if (field.value) {
-                            if (field.value.length <= options[i].maxlength) {
-                                this.awardOptions.push(options[i].name + ": " + field.value);
-                            } else {
-                                errors.push(options[i].name + " may not contain more than " + options[i].maxlength + " characters.");
-                            }
-                        } else {
-                            errors.push(options[i].name + " is required");
-                        }
-                    }
-                }
-
-                if (errors.length == 0) {
-                    $('input[name=award_options]').val(JSON.stringify(this.awardOptions));
-                    $("#award-1").modal('hide');
-                    this.errorsOptions = '';
-
-                    // Reset PECSF Donation values in case user previous selected PECSF donation option
-                    $('input[name=pecsf_region_id]').val(0);
-                    $('input[name=pecsf_donation]').val(0);
-                    $('input[name=pecsf_donation_type]').val(0);
-                    $('input[name=pecsf_charity1_id]').val(0);
-                    $('input[name=pecsf_amount1]').val(0);
-                    $('input[name=pecsf_charity2_id]').val(0);
-                    $('input[name=pecsf_amount2]').val(0);
-                } else {
-                    this.errorsOptions = '<ul>';
-                    for (var i = 0; i < errors.length; i++) {
-                        this.errorsOptions += '<li>' + errors[i] + '</li>';
-                    }
-                    this.errorsOptions += '</ul>';
-                }
-            },
-
-            milestoneSelected: function (milestone) {
-                this.exposeAwardSelector(milestone);
-
-                var sel = document.getElementById("milestone-id");
-                this.milestone = sel.options[sel.selectedIndex].text;
-
-                this.currentAwards = [];
-                var donation = {
-                    id: 0,
-                    name: "PECSF Donation",
-                    description: "Instead of choosing an award from the catalogue, you can opt to make a charitable donation via the Provincial Employees Community Services Fund. A framed certificate of service, signed by the Premier of British Columbia, will be presented to you noting your charitable contribution.",
-                    image: "25_pecsf.jpg"
-                };
-
-                this.currentAwards.push(donation);
-
-                for (var i = 0; i < awards.length; i++) {
-                    if (awards[i].milestone_id == milestone) {
-                        this.currentAwards.push(awards[i]);
-                    }
-                }
-
-                this.currentAwardIndex = 0;
-                this.updateAwardDisplay(this.currentAwardIndex);
-
-                var record = this.getMilestone(milestone);
-                this.milestonePersonalized = record.personalized;
-                if (record.personalized) {
-                    $('input[name=certificate_name]').val("");
-                }
-            },
-
-            showPreviousAward: function () {
-                this.currentAwardIndex--;
-                if (this.currentAwardIndex < 0) {
-                    this.currentAwardIndex = this.currentAwards.length - 1;
-                }
-                this.updateAwardDisplay(this.currentAwardIndex);
-            },
-
-            showNextAward: function () {
-                this.currentAwardIndex++;
-                if (this.currentAwardIndex >= this.currentAwards.length) {
-                    this.currentAwardIndex = 0;
-                }
-                this.updateAwardDisplay(this.currentAwardIndex);
-            },
-
-            updateAwardDisplay: function (awardIndex) {
-                this.currentAwardName = this.currentAwards[awardIndex].name;
-                this.currentAwardImage = this.currentAwards[awardIndex].image;
-                this.currentAwardDescription = nl2br(this.currentAwards[awardIndex].description);
-                if (this.selectedAward == this.currentAwards[awardIndex].id) {
-                    $('#lsa-award-card').css('background-color', 'lightblue');
-                } else {
-                    $('#lsa-award-card').css('background-color', 'transparent');
-                }
-            },
-
-
-            selectCurrentAward: function () {
-                this.CurrentAward = this.highlightedAward;
-
-            },
-
-
-            buttonMissedCeremony: function (missed) {
-                if (missed == 1) {
-                    this.selectAward = false;
-                    this.showIdentifyingInfoInputs();
-                } else {
-                    this.selectAward = true;
-                }
-            },
-
-            buttonRetirementClick: function (retiring) {
-                $('input[name=retiring_this_year]').val(retiring);
-                if (retiring == 1) {
-                    this.exposeRetirementDatePicker();
-                } else {
-                    this.setRetirementStatusKnown();
-                }
-                $('html, body').animate({
-                    scrollTop: $("#employeeAnchor").offset().top
-                }, 1000);
-            },
-
-            exposeRetirementDatePicker: function () {
-                this.isRetiringThisYear = true;
-                this.retirementStatusKnown = true;
-            },
-
-            setRetirementStatusKnown: function () {
-                this.isRetiringThisYear = false;
-                this.retirementStatusKnown = true;
-            },
-
-            exposeAwardSelector: function (milestone) {
-                this.milestoneKnown = true;
-            },
-
-            showIdentifyingInfoInputs: function () {
-                this.awardConfirmed = true;
-            },
-
-            showOfficeAddressInput: function () {
-
-                errors = this.checkIdentifyingInfo();
-                if (errors.length == 0) {
-                    $('html, body').animate({
-                        scrollTop: $("#officeAnchor").offset().top
-                    }, 1000);
-
-                    this.identifyingInfoInput = true;
-                    this.errorsEmployee = '';
-                } else {
-
-                    this.errorsEmployee = '<ul>';
-                    for (var i = 0; i < errors.length; i++) {
-                        this.errorsEmployee += '<li>' + errors[i] + '</li>';
-                    }
-                    this.errorsEmployee += '</ul>';
-                }
-            },
-
-            showHomeAddressInput: function () {
-
-                errors = this.checkOfficeAddressInput();
-                if (errors.length == 0) {
-                    $('html, body').animate({
-                        scrollTop: $("#homeAnchor").offset().top
-                    }, 1000);
-                    this.officeAddressInput = true;
-                    this.errorsOffice = '';
-                } else {
-                    this.errorsOffice = '<ul>';
-                    for (var i = 0; i < errors.length; i++) {
-                        this.errorsOffice += '<li>' + errors[i] + '</li>';
-                    }
-                    this.errorsOffice += '</ul>';
-                }
-            },
-
-            showSupervisorInput: function () {
-                errors = this.checkHomeAddressInput();
-                if (errors.length == 0) {
-                    $('html, body').animate({
-                        scrollTop: $("#supervisorAnchor").offset().top
-                    }, 1000);
-                    this.homeAddressInput = true;
-                    this.errorsHome = '';
-                } else {
-                    this.errorsHome = '<ul>';
-                    for (var i = 0; i < errors.length; i++) {
-                        this.errorsHome += '<li>' + errors[i] + '</li>';
-                    }
-                    this.errorsHome += '</ul>';
-                }
-            },
-
-            showConfirmation: function () {
-                errors = this.checkSupervisorInput();
-                if (errors.length == 0) {
-                    $('html, body').animate({
-                        scrollTop: $("#confirmationAnchor").offset().top
-                    }, 1000);
-                    this.supervisorInput = true;
-                    this.errorsSupervisor = '';
-                } else {
-                    this.errorsSupervisor = '<ul>';
-                    for (var i = 0; i < errors.length; i++) {
-                        this.errorsSupervisor += '<li>' + errors[i] + '</li>';
-                    }
-                    this.errorsSupervisor += '</ul>';
-                }
-            },
-
-            showDeclaration: function () {
-                this.informationConfirmed = true;
-                $('html, body').animate({
-                    scrollTop: $("#declarationAnchor").offset().top
-                }, 1000);
-            },
-
-            currencyFormat: function (num) {
-                return '$' + parseFloat(num).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
-            },
-
-            checkIdentifyingInfo: function () {
-
-                var error = [];
-
-                if (!this.employeeID) {
-                    $('#employee-id').css("border-color", clrError);
-                    error.push('Employee ID is required');
-                } else {
-                    $('#employee-id').css("border-color", clrDefault);
-                }
-
-                if (!this.firstName) {
-                    $('#first-name').css("border-color", clrError);
-                    error.push('Employee first name is required');
-                } else {
-                    $('#first-name').css("border-color", clrDefault);
-                }
-
-                if (!this.lastName) {
-                    $('#last-name').css("border-color", clrError);
-                    error.push('Employee last name is required');
-                } else {
-                    $('#last-name').css("border-color", clrDefault);
-                }
-
-                if (!this.ministry) {
-                    $('#ministry-id').css("border-color", clrError);
-                    error.push('Ministry is required');
-                } else {
-                    $('#ministry-id').css("border-color", clrDefault);
-                }
-
-                if (!this.ministryBranch) {
-                    $('#branch').css("border-color", clrError);
-                    error.push('Branch is required');
-                } else {
-                    $('#branch').css("border-color", clrDefault);
-                }
-
-                if (!this.govtEmail) {
-                    $('#preferred-email').css("border-color", clrError);
-                    error.push('Government Email is required.');
-                } else {
-                    if (!isEmail(this.govtEmail)) {
-                        $('#preferred-email').css("border-color", clrError);
-                        error.push('Government Email invalid format');
-                    } else {
-                        $('#preferred-email').css("border-color", clrDefault);
-                    }
-                }
-
-                if (this.altEmail) {
-                    if (!isEmail(this.altEmail)) {
-                        $('#alternate-email').css("border-color", clrError);
-                        error.push('Alternate Email invalid format');
-                    } else {
-                        $('#alternate-email').css("border-color", clrDefault);
-                    }
-                }
-
-                return error;
-            },
-
-            checkOfficeAddressInput: function () {
-
-                var error = [];
-
-                if (!this.officeStreetAddress) {
-                    $('#office-address').css("border-color", clrError);
-                    error.push('Office Address is required');
-                } else {
-                    $('#office-address').css("border-color", clrDefault);
-                }
-
-                if (!this.officeCity) {
-                    $('#office-city-id').css("border-color", clrError);
-                    error.push('Office City is required');
-                } else {
-                    $('#office-city-id').css("border-color", clrDefault);
-                }
-
-                if (!this.officePostalCode) {
-                    $('#office-postal-code').css("border-color", clrError);
-                    error.push('Office Postal Code is required');
-                } else {
-                    if (!isPostalCode(this.officePostalCode)) {
-                        $('#office-postal-code').css("border-color", clrError);
-                        error.push('Office Postal Code invalid format (A1A 1A1)');
-                    } else {
-                        $('#office-postal-code').css("border-color", clrDefault);
-                    }
-                }
-
-                if (!this.officePhone) {
-                    $('#work-phone').css("border-color", clrError);
-                    error.push('Office Phone number is required');
-                } else {
-                    if (!isPhone(this.officePhone)) {
-                        $('#work-phone').css("border-color", clrError);
-                        error.push('Office Phone number invalid format (###) ###-####');
-                    } else {
-                        $('#work-phone').css("border-color", clrDefault);
-                    }
-                }
-
-                return error;
-            },
-
-            checkHomeAddressInput: function () {
-
-                var error = [];
-
-                if (!this.homeStreetAddress) {
-                    $('#home-address').css("border-color", clrError);
-                    error.push('Home Address is required');
-                } else {
-                    $('#home-address').css("border-color", clrDefault);
-                }
-
-                if (!this.homeCity) {
-                    $('#home-city-id').css("border-color", clrError);
-                    error.push('Home City is required');
-                } else {
-                    $('#home-city-id').css("border-color", clrDefault);
-                }
-
-                if (!this.homePostalCode) {
-                    $('#home-postal-code').css("border-color", clrError);
-                    error.push('Home Postal Code is required');
-                } else {
-                    if (!isPostalCode(this.homePostalCode)) {
-                        $('#home-postal-code').css("border-color", clrError);
-                        error.push('Home Postal Code invalid format (A1A 1A1)');
-                    } else {
-                        $('#home-postal-code').css("border-color", clrDefault);
-                    }
-                }
-
-                if (!this.homePhone) {
-                    $('#home-phone').css("border-color", clrError);
-                    error.push('Home Phone number is required');
-                } else {
-                    if (!isPhone(this.homePhone)) {
-                        $('#home-phone').css("border-color", clrError);
-                        error.push('Home Phone number invalid format (###) ###-####');
-                    } else {
-                        $('#home-phone').css("border-color", clrDefault);
-                    }
-                }
-
-                return error;
-            },
-
-
-            checkSupervisorInput: function () {
-
-                var error = [];
-
-                if (!this.supervisorFirstName) {
-                    $('#supervisor-first-name').css("border-color", clrError);
-                    error.push('Supervisor First Name is required');
-                } else {
-                    $('#supervisor-first-name').css("border-color", clrDefault);
-                }
-
-                if (!this.supervisorLastName) {
-                    $('#supervisor-last-name').css("border-color", clrError);
-                    error.push('Supervisor last name is required');
-                } else {
-                    $('#supervisor-last-name').css("border-color", clrDefault);
-                }
-
-                if (!this.supervisorStreetAddress) {
-                    $('#supervisor-address').css("border-color", clrError);
-                    error.push('Supervisor Address is required');
-                } else {
-                    $('#supervisor-address').css("border-color", clrDefault);
-                }
-
-                if (!this.supervisorCity) {
-                    $('#supervisor-city-id').css("border-color", clrError);
-                    error.push('Supervisor City is required');
-                } else {
-                    $('#supervisor-city-id').css("border-color", clrDefault);
-                }
-
-                if (!this.supervisorPostalCode) {
-                    $('#supervisor-postal-code').css("border-color", clrError);
-                    error.push('Supervisor Postal Code is required');
-                } else {
-                    if (!isPostalCode(this.supervisorPostalCode)) {
-                        $('#supervisor-postal-code').css("border-color", clrError);
-                        error.push('Supervisor Postal Code invalid format (A1A 1A1)');
-                    } else {
-                        $('#supervisor-postal-code').css("border-color", clrDefault);
-                    }
-                }
-
-                if (!this.supervisorEmail) {
-                    $('#supervisor-email').css("border-color", clrError);
-                    error.push('Supervisor Email is required');
-                } else {
-                    if (!isEmail(this.supervisorEmail)) {
-                        $('#supervisor-email').css("border-color", clrError);
-                        error.push('Supervisor Email invalid format');
-                    } else {
-                        $('#supervisor-email').css("border-color", clrDefault);
-                    }
-                }
-
-                return error;
-            },
-
         }
     });
-
-
-
-    function isEmail(email) {
-        var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-        return regex.test(email);
-    }
-
-    function isPhone(phone) {
-        var regex = /\(([0-9]{3})\) ([0-9]{3})-([0-9]{4})/;
-        return regex.test(phone);
-    }
-
-    function isPostalCode(code) {
-        var regex = /^[ABCEGHJ-NPRSTVXY][0-9][ABCEGHJ-NPRSTV-Z] [0-9][ABCEGHJ-NPRSTV-Z][0-9]$/;
-        return regex.test(code);
-    }
-
-    function nl2br(str, is_xhtml) {
-        var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
-        return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
-    }
-
     Vue.config.devtools = true;
-
 
 </script>
 <script>
