@@ -337,13 +337,13 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">Government email address</label>
-                                        <input type="email" id="preferred_email" name="preferred_email" v-model="govtEmail" class="form-control email-input" placeholder="i.e. taylor.publicservant@gov.bc.ca">
+                                        <input type="email" id="preferred_email" name="preferred_email" v-model="govtEmail" class="form-control email-input" placeholder="i.e. taylor.publicservant@gov.bc.ca" @change="filterGovtEmail">
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">Alternate email address</label>
-                                        <input type="email" id="alternate_email" name="alternate_email" v-model="altEmail" class="form-control email-input" placeholder="i.e. taylor_publicservant@gmail.com">
+                                        <input type="email" id="alternate_email" name="alternate_email" v-model="altEmail" class="form-control email-input" placeholder="i.e. taylor_publicservant@gmail.com" @change="filterAltEmail">
                                     </div>
                                 </div>
                             </div>
@@ -351,7 +351,7 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">Current Ministry</label>
-                                        <select name="ministry_id" id="ministry_id" class="form-control with-arrow" v-model="ministry">
+                                        <select name="ministry_id" id="ministry_id" class="form-control with-arrow" v-model="ministry" @change="setMinistryName">
                                             <option selected default disabled>Select Ministry</option>
                                             <?php foreach ($ministries as $ministry) :?>
                                                 <option value="<?= $ministry->id ?>"><?= $ministry->name ?></option>
@@ -397,7 +397,7 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">City</label>
-                                        <select name="office_city_id" id="office_city_id" class="form-control with-arrow" v-model="officeCity">
+                                        <select name="office_city_id" id="office_city_id" class="form-control with-arrow" v-model="officeCity" @change="setOfficeCityName">
                                             <option selected disabled>Choose city</option>
                                             <?php foreach ($cities as $city) : ?>
                                                 <option value="<?= $city->id ?>"><?= h($city->name) ?></option>
@@ -408,19 +408,19 @@
                                 <div class="col-2">
                                     <div class="form-group">
                                         <label for="">Postal Code</label>
-                                        <input type="text" class="form-control"  id="office_postal_code" name="office_postal_code" placeholder="i.e. A1A 1A1">
+                                        <input type="text" class="form-control"  id="office_postal_code" name="office_postal_code" placeholder="i.e. A1A 1A1" v-model="officePostalCode" @change="filterOfficePostalCode">
                                     </div>
                                 </div>
                                 <div class="col-3">
                                     <div class="form-group">
                                         <label for="">Office Phone Number</label>
-                                        <input type="text" class="form-control" id="work_phone" name="work_phone" placeholder="i.e. (604) 555-5555" v-model="officePhone">
+                                        <input type="text" class="form-control" id="work_phone" name="work_phone" placeholder="i.e. (604) 555-5555" v-model="officePhone" @change="filterOfficePhoneNumber">
                                     </div>
                                 </div>
                                 <div class="col-1">
                                     <div clas="form-group">
                                         <label for="">Extension</label>
-                                        <input type="text" class="form-control"  id="work_extension" name="work_extension" placeholder="ie. 800" v-model="officeExtension">
+                                        <input type="text" class="form-control extension-input"  id="work_extension" name="work_extension" placeholder="ie. 800" v-model="officeExtension" @change="filterOfficeExtension">
                                     </div>
                                 </div>
                             </div>
@@ -445,7 +445,7 @@
                                <div class="col-6">
                                    <div class="form-group">
                                        <label for="">City</label>
-                                       <select name="home_city_id" id="home_city_id" class="form-control with-arrow" v-model="homeCity">
+                                       <select name="home_city_id" id="home_city_id" class="form-control with-arrow" v-model="homeCity" @change="setHomeCityName">
                                            <option selected disabled>Choose city</option>
                                            <?php foreach ($cities as $city) : ?>
                                                <option value="<?= $city->id ?>"><?= h($city->name) ?></option>
@@ -456,13 +456,13 @@
                                <div class="col-2">
                                    <div class="form-group">
                                        <label for="">Postal Code</label>
-                                       <input type="text" class="form-control" id="home_postal_code" name="home_postal_code" placeholder="i.e. A1A 1A1" v-model="homePostalCode">
+                                       <input type="text" class="form-control" id="home_postal_code" name="home_postal_code" placeholder="i.e. A1A 1A1" v-model="homePostalCode" @change="filterHomePostalCode">
                                    </div>
                                </div>
                                <div class="col-4">
                                    <div class="form-group">
                                        <label for="">Home Phone Number</label>
-                                       <input type="text" class="form-control" name="home_phone" id="home_phone" placeholder="i.e. (604) 555-5555" v-model="homePhone">
+                                       <input type="text" class="form-control" name="home_phone" id="home_phone" placeholder="i.e. (604) 555-5555" v-model="homePhone" @change="filterHomePhoneNumber">
                                    </div>
                                </div>
                            </div>
@@ -518,7 +518,7 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="supervisorEmail">Supervisor's Email</label>
-                                        <input type="text" class="form-control email-input" id="supervisor_email" name="supervisor_email" placeholder="i.e. taylor.publicservant@gov.bc.ca" v-model="supervisorEmail">
+                                        <input type="text" class="form-control email-input" id="supervisor_email" name="supervisor_email" placeholder="i.e. taylor.publicservant@gov.bc.ca" v-model="supervisorEmail" @change="filterSupervisorEmail">
                                     </div>
                                 </div>
                             </div>
@@ -548,7 +548,7 @@
                                 <div class="col-8">
                                     <div class="form-group">
                                         <label for="">City</label>
-                                        <select name="supervisor_city_id" id="supervisor_city_id" class="form-control with-arrow" v-model="supervisorCity">
+                                        <select name="supervisor_city_id" id="supervisor_city_id" class="form-control with-arrow" v-model="supervisorCity" @change="setSupervisorCityName">
                                             <option selected disabled>Choose city</option>
                                             <?php foreach ($cities as $city) : ?>
                                                 <option value="<?= $city->id ?>"><?= h($city->name) ?></option>
@@ -559,7 +559,7 @@
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label for="">Postal Code</label>
-                                        <input type="text" class="form-control" id="supervisor_postal_code" name="supervisor_postal_code" placeholder="i.e. A1A 1A1" v-model="supervisorPostalCode">
+                                        <input type="text" class="form-control" id="supervisor_postal_code" name="supervisor_postal_code" placeholder="i.e. A1A 1A1" v-model="supervisorPostalCode" @change="filterSupervisorPostalCode">
                                     </div>
                                 </div>
                             </div>
@@ -681,7 +681,7 @@
                                 <div class="form-row">
                                     <div class="col-6">
                                         <p><small>Your current Ministry</small></p>
-                                        <p class="confirmationValue">{{ministry}}</p>
+                                        <p class="confirmationValue">{{ministryName}}</p>
                                     </div>
                                     <div class="col-6">
                                         <p><small>Your current branch</small></p>
@@ -693,14 +693,14 @@
                                         <p><small>Your Office Address</small></p>
                                         <p class="confirmationValue">{{officeMailPrefix}}</p>
                                         <p class="confirmationValue">{{officeSuite}} {{officeStreetAddress}}</p>
-                                        <p class="confirmationValue">{{officeCity}}, BC</p>
+                                        <p class="confirmationValue">{{officeCityName}}, BC</p>
                                         <p class="confirmationValue">{{officePostalCode}}</p>
                                     </div>
                                     <div class="col-6">
                                         <p><small>Your Home Address</small></p>
                                         <p class="confirmationValue">{{homeSuite}}</p>
                                         <p class="confirmationValue">{{homeStreetAddress}}</p>
-                                        <p class="confirmationValue">{{homeCity}}</p>
+                                        <p class="confirmationValue">{{homeCityName}}</p>
                                         <p class="confirmationValue">{{homePostalCode}}</p>
                                     </div>
                                 </div>
@@ -727,7 +727,7 @@
                                         <p><small>Supervisor&apos;s Office Address</small></p>
                                         <p class="confirmationValue">{{supervisorMailPrefix}}</p>
                                         <p class="confirmationValue">{{supervisorSuite}} {{supervisorStreetAddress}}</p>
-                                        <p class="confirmationValue">{{supervisorCity}}, BC</p>
+                                        <p class="confirmationValue">{{supervisorCityName}}, BC</p>
                                         <p class="confirmationValue">{{supervisorPostalCode}}</p>
                                     </div>
                                     <div class="col-6"></div>
@@ -807,12 +807,13 @@
 
 
 <!-- Registration Form-specific JavaScripts -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/4.0.9/jquery.inputmask.bundle.min.js" integrity="sha512-VpQwrlvKqJHKtIvpL8Zv6819FkTJyE1DoVNH0L2RLn8hUPjRjkS/bCYurZs0DX9Ybwu9oHRHdBZR9fESaq8Z8A==" crossorigin="anonymous"></script><!-- Special JavaScript just for Registration form -->
-<script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/4.0.9/jquery.inputmask.bundle.min.js" integrity="sha512-VpQwrlvKqJHKtIvpL8Zv6819FkTJyE1DoVNH0L2RLn8hUPjRjkS/bCYurZs0DX9Ybwu9oHRHdBZR9fESaq8Z8A==" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-the-mask/0.11.1/vue-the-mask.min.js" integrity="sha512-qXurwUG9teY1KFtbBifUHInCiNK/POQqJeFRSoaHg1pHEB1tBUlFKRsfPzm1D6b6ueeQOCKldvXYCtOsPURrcw==" crossorigin="anonymous"></script>
 
 <script>
+
+
     var app = new Vue({
         el: "#app",
         vuetify: new Vuetify(),
@@ -826,6 +827,7 @@
             firstName: '',
             lastName: '',
             ministry: 'Select Ministry',
+            ministryName : '',
             ministryBranch: '',
             certificateName: '',
 
@@ -838,6 +840,7 @@
             officeSuite: '',
             officeStreetAddress: '',
             officeCity: 'Select A City',
+            officeCityName: '',
             officePostalCode: '',
             officePhone: '',
             officeExtension: '',
@@ -846,6 +849,7 @@
             homeSuite: '',
             homeStreetAddress: '',
             homeCity: 'Select A City',
+            homeCityName: '',
             homePostalCode: '',
             homePhone: '',
 
@@ -855,6 +859,7 @@
             supervisorSuite: '',
             supervisorStreetAddress: '',
             supervisorCity: 'Select A City',
+            supervisorCityName : '',
             supervisorPostalCode: '',
             supervisorEmail: '',
             supervisorPhone: '',
@@ -900,9 +905,75 @@
             donationType: false,
             highlightedAward: 1
         },
-
         methods: {
 
+            filterOfficePhoneNumber : function () {
+               this.officePhone         = Inputmask.format(this.officePhone, {"mask" : "(999) 999-9999"});
+            },
+            filterHomePhoneNumber : function () {
+                this.homePhone          = Inputmask.format(this.homePhone, {"mask" : "(999) 999-9999"});
+            },
+            filterOfficePostalCode : function () {
+                this.officePostalCode   = Inputmask.format(this.officePostalCode, {"mask" : "A9A 9A9"});
+            },
+            filterHomePostalCode : function () {
+                this.homePostalCode     = Inputmask.format(this.homePostalCode, {"mask" : "A9A 9A9"});
+            },
+            filterSupervisorPostalCode : function () {
+                this.supervisorPostalCode = Inputmask.format(this.supervisorPostalCode, {"mask" : "A9A 9A9"});
+            },
+            filterOfficeExtension : function () {
+                this.officeExtension = Inputmask.format(this.officeExtension, {"mask": "9[999]"});
+            },
+            filterGovtEmail : function () {
+                this.govtEmail = this.filterEmail(this.govtEmail);
+            },
+            filterAltEmail : function () {
+                this.altEmail = this.filterEmail(this.altEmail);
+            },
+            filterSupervisorEmail : function () {
+                this.supervisorEmail = this.filterEmail(this.supervisorEmail);
+            },
+            filterEmail : function (emailString) {
+                return Inputmask.format(emailString, {
+                    mask: "*{1,20}[.*{1,20}][.*{1,20}][.*{1,20}]@*{1,20}[.*{2,6}][.*{1,2}]",
+                    greedy: false,
+                    onBeforePaste: function (pastedValue, opts) {
+                        pastedValue = pastedValue.toLowerCase();
+                        return pastedValue.replace("mailto:", "");
+                    },
+                    definitions: {
+                        '*': {
+                            validator: "[0-9A-Za-z!#$%&'*+/=?^_`{|}~\-]",
+                            casing: "lower"
+                        }
+                    }
+                });
+            },
+
+
+
+            //TODO: Reduce the redundant functions to a single parameterized function call.
+            setMinistryName : function(e) {
+               if (e.target.options.selectedIndex > -1) {
+                   this.ministryName = e.target.options[e.target.options.selectedIndex].text
+               }
+             },
+            setOfficeCityName : function(e) {
+                if (e.target.options.selectedIndex > -1) {
+                    this.officeCityName = e.target.options[e.target.options.selectedIndex].text
+                }
+            },
+            setHomeCityName : function (e) {
+                if (e.target.options.selectedIndex > -1) {
+                    this.homeCityName = e.target.options[e.target.options.selectedIndex].text
+                }
+            },
+            setSupervisorCityName : function (e) {
+                if (e.target.options.selectedIndex > -1) {
+                    this.homeCityName = e.target.options[e.target.options.selectedIndex].text
+                }
+            },
 
             selectAward: function(awardid) {
                 this.selectedAward = awardid;
@@ -1028,35 +1099,17 @@
                     this.errorsStep4.push('You must input your supervisor\'s office postal code')
                 }
 
-                if (this.errorsStep4.lenght == 0) {
+                if (this.errorsStep4.length == 0) {
                     this.e1 = 5;
                 }
             },
+
 
         }
     });
     Vue.config.devtools = true;
 
-</script>
-<script>
-    $(document).ready(function(){
-        $('.phone-input').inputmask('(999) 999 - 9999');
-        $('.postal-code-input').inputmask('A9A 9A9');
-        $('.extension-input').inputmask('9[999]');
-        $('.email-input').inputmask({
-            mask: "*{1,20}[.*{1,20}][.*{1,20}][.*{1,20}]@*{1,20}[.*{2,6}][.*{1,2}]",
-            greedy: false,
-            onBeforePaste: function (pastedValue, opts) {
-                pastedValue = pastedValue.toLowerCase();
-                return pastedValue.replace("mailto:", "");
-            },
-            definitions: {
-                '*': {
-                    validator: "[0-9A-Za-z!#$%&'*+/=?^_`{|}~\-]",
-                    casing: "lower"
-                }
-            }
-        });
-    })
+
 
 </script>
+
