@@ -375,19 +375,19 @@
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label for="">Floor/Room/Care Of</label>
-                                        <input type="text" id="office_careof" name="office_careof" class="form-control" placeholder="i.e. Discovery Room">
+                                        <input type="text" id="office_careof" name="office_careof" class="form-control" v-model="officeMailPrefix" placeholder="i.e. Discovery Room">
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label for="">Suite</label>
-                                        <input type="text"  id="office_suite" name="office_suite" class="form-control" placeholder="i.e. 800">
+                                        <input type="text"  id="office_suite" name="office_suite" class="form-control" v-model="officeSuite" placeholder="i.e. 800">
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label for="">Street Address</label>
-                                        <input type="text" class="form-control" id="office_address" name="office_address" placeholder="i.e. 1445 10th Ave.">
+                                        <input type="text" class="form-control" id="office_address" name="office_address" v-model="officeStreetAddress" placeholder="i.e. 1445 10th Ave.">
                                     </div>
                                 </div>
                             </div>
@@ -1048,7 +1048,7 @@
                     this.errorsStep3.push('You must input your office postal code');
                 }
                //Did they include a phone number?
-                if (this.officePhone.length != 13) {
+                if (this.officePhone.length > 16 || this.officePhone.length < 9) {
                     this.errorsStep3.push('You must input your office phone number');
                 }
                //Did they include a home street address?
@@ -1064,7 +1064,7 @@
                     this.errorsStep3.push('You must input your home postal code');
                 }
                //Did they include a home phone number?
-                if (this.homePhone.length != 13) {
+                if (this.homePhone.length > 16 || this.homePhone.length < 9) {
                     this.errorsStep3.push('You must input your home phone number');
                 }
 
