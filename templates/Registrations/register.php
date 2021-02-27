@@ -706,7 +706,7 @@
                                 </div>
                                 <div class="form-row">
                                         <div class="col-9"></div>
-                                        <div class="col-3"><button class="btn btn-secondary" @click="e1 = 3">Edit this Section</button></div>
+                                        <div class="col-3"><button class="btn btn-secondary" @click.prevent="e1 = 3">Edit this Section</button></div>
                                 </div>
                             </div>
 
