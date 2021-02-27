@@ -80,11 +80,11 @@
                                 <div class="col-3">
                                     <p>Did you register for a Long Service Award in 2019?</p>
                                     <div class="form-group checkbox-group">
-                                        <input class="form-check-input" type="radio" name="retroactive" id="retroactive" value="1">
+                                        <input class="form-check-input" type="radio" name="retroactive" id="retroactive" value="1" v-model="isRetroactive">
                                         <label class="form-check-label" for="retroactive">Yes</label>
                                     </div>
                                     <div class="form-group checkbox-group">
-                                        <input class="form-check-input" type="radio" name="retroactive" id="retroactive" checked value="0">
+                                        <input class="form-check-input" type="radio" name="retroactive" id="retroactive" checked value="0" v-model="isRetroactive">
                                         <label class="form-check-label" for="retroactive">No</label>
                                     </div>
                                 </div>
@@ -104,7 +104,7 @@
 
                                         <div class="form-group" v-if="isRetiringThisYear == 1">
                                             <label for="retirement_date">Date of Retirement:</label>
-                                            <input type="date" name="retirement_date">
+                                            <input type="date" class="form-control" name="retirement_date" id="retirement_date" v-model="retirementDate">
                                         </div>
                                     </div>
                                 </div>
@@ -589,7 +589,7 @@
                                         <p><small>Milestone reached:</small></p>
                                         <p class="confirmationValue">{{milestone}}</p>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-6" v-if="milestone == 1">
                                         <p><small>Name on certificate</small></p>
                                         <p class="confirmationValue">{{certificateName}}</p>
                                     </div>
@@ -600,7 +600,8 @@
                                         <p class="confirmationValue">{{award_year}}</p>
                                     </div>
                                     <div class="col-6">
-                                        <p v-if="pastRegistrationNoCeremony" class="confirmation-label">I registered last year but did not attended</p>
+                                        <p v-if="isRetroactive" class="confirmationValue">I registered last year but did not attended</p>
+                                        <p v-if="isRetiringThisYear" class="confirmationValue">I am retiring this year on {{retirementDate}} </p>
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -616,12 +617,12 @@
                             <div class="confirmationGroup grey lighten-2">
                                 <h4>Award &amp; Options</h4>
                                 <?php foreach ($awardinfo as $award): ?>
-                                    <div class="form-row" v-if="awardSelected == <?= $award->id ?>">
+                                    <div class="form-row" v-if="selectedAward == <?= $award->id ?>">
                                         <div class="col-6">
                                             <v-img src="/img/awards/<?= $award->image ?>"></v-img>
                                         </div>
                                         <div class="col-6">
-                                           <p class=""confirmationValue"><?= $award->name ?></p>
+                                           <p class="confirmationValue"><?= $award->name ?></p>
 
                                             <p v-if="awardSelected == 9"><small>Watch Size</small></p>
                                             <p v-if="awardSelected == 9" class="confirmationValue">{{watchSize}}</p>
@@ -700,7 +701,7 @@
                                         <p><small>Your Home Address</small></p>
                                         <p class="confirmationValue">{{homeSuite}}</p>
                                         <p class="confirmationValue">{{homeStreetAddress}}</p>
-                                        <p class="confirmationValue">{{homeCityName}}</p>
+                                        <p class="confirmationValue">{{homeCityName}}, BC</p>
                                         <p class="confirmationValue">{{homePostalCode}}</p>
                                     </div>
                                 </div>
@@ -744,8 +745,8 @@
                                 <div class="form-row">
                                     <div class="col-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="">
-                                            <label class="form-check-label" for="">
+                                            <input class="form-check-input" type="checkbox" value="1" name="survey_participation" id="survey_participation" checked v-model="isOptedIn">
+                                            <label class="form-check-label" for="survey_participation">
                                                 I Agree
                                             </label>
                                         </div>
@@ -758,8 +759,8 @@
                                 <div class="form-row">
                                     <div class="col-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="" checked>
-                                            <label class="form-check-label" for="">
+                                            <input class="form-check-input" type="checkbox" value="true" name="declaration" id="declaration" v-model="isDeclared">
+                                            <label class="form-check-label" for="declaration">
                                                 I Agree
                                             </label>
                                         </div>
@@ -783,7 +784,7 @@
                                     <div class="col-6">
                                     </div>
                                     <div class="col-3">
-                                        <button type="submit" class="btn btn-primary">Confirm &amp; Agree</button>
+                                        <button type="submit" class="btn btn-primary" :disabled="isDeclared == false">Submit Registration</button>
                                     </div>
                                 </div>
 
@@ -819,22 +820,34 @@
         vuetify: new Vuetify(),
         data: {
             e1: 1,
-            isRetiringThisYear: 0,
             milestone: 'Select Milestone',
             award_year: 'Select Year',
+            isRetiringThisYear: 0,
+            retirementDate: '',
+            certificateName: '',
+            isRetroactive: 0,
+
 
             employeeID: '',
             firstName: '',
             lastName: '',
-            ministry: 'Select Ministry',
-            ministryName : '',
-            ministryBranch: '',
-            certificateName: '',
 
-            pastRegistrationNoCeremony: '',
+            selectedAward: -1,
+            awardName: '',
+            awardDescription: '',
+            awardOptions: [],
+            awardImage: '',
+
+            donationRegion: '',
+            donationCharity1: '',
+            donationCharity2: '',
 
             govtEmail: '',
             altEmail: '',
+
+            ministry: 'Select Ministry',
+            ministryName : '',
+            ministryBranch: '',
 
             officeMailPrefix: '',
             officeSuite: '',
@@ -865,16 +878,8 @@
             supervisorPhone: '',
             supervisorExtension: '',
 
-
-            selectedAward: -1,
-            awardName: '',
-            awardDescription: '',
-            awardOptions: [],
-            awardImage: '',
-
-            donationRegion: '',
-            donationCharity1: '',
-            donationCharity2: '',
+            isDeclared: false,
+            isOptedIn: 1,
 
             errorsStep1: [],
             errorsStep2: [],
@@ -971,7 +976,7 @@
             },
             setSupervisorCityName : function (e) {
                 if (e.target.options.selectedIndex > -1) {
-                    this.homeCityName = e.target.options[e.target.options.selectedIndex].text
+                    this.supervisorCityName = e.target.options[e.target.options.selectedIndex].text
                 }
             },
 
@@ -1098,7 +1103,6 @@
                 if (this.supervisorPostalCode.length != 7) {
                     this.errorsStep4.push('You must input your supervisor\'s office postal code')
                 }
-
                 if (this.errorsStep4.length == 0) {
                     this.e1 = 5;
                 }
