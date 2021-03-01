@@ -32,7 +32,7 @@ class UserRolesController extends AppController
             $this->redirect('/');
         }
         $userrole = $this->UserRoles->find('all', [
-            'conditions' => ['Userroles.id' => $id],
+            'conditions' => ['UserRoles.id' => $id],
             'contain' => [
                 'Roles',
                 'Ministries',
