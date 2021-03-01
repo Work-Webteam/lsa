@@ -233,7 +233,7 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">Name on Donation</label>
-                                        <input class="form-control" type="text" maxlength="33" placeholder="Firstname Lastname" :value="firstName + ' ' + lastName">
+                                        <input class="form-control" type="text" maxlength="33" placeholder="Firstname Lastname">
                                     </div>
                                     <div  class="form-group">
                                         <label for="pecsf_region">Your Desired PECSF Region</label>
@@ -258,10 +258,10 @@
                                     <div class="form-group" >
                                         <label for="pecsf_charity_1" v-if="donationType == 'single-charity'">Choose your charity</label>
                                         <label for="pecsf_charity_1" v-if="donationType == 'two-charities'">Choose your first charity</label>
-                                        <select class="form-control"  name="pecsf_charity_1" id="pecsf_charity_1" v-model="pecsfCharity1">
+                                        <select class="form-control"  v-if="donationType != 'pool'" name="pecsf_charity_1" id="pecsf_charity_1" v-model="pecsfCharity1">
                                             <option selected disabled>Choose a charity</option>
                                             <?php foreach ($charities as $charity): ?>
-                                            <option value="<?= $charity->id ?>" v-if="pecsfRegion == <?= $charity->pecsf_region_id ?>"><?= $charity->name ?></option>
+                                            <option value="<?= $charity->id ?>" v-if="pecsfRegion == <?= $charity->pecsf_region_id; ?>"><?= $charity->name ?></option>
                                             <?php endforeach ?>
                                         </select>
                                     </div>
@@ -270,7 +270,7 @@
                                         <select class="form-control" name="pecsf_charity_2" id="pecsf_charity_2" v-model="pecsfCharity2">
                                             <option selected disabled>Choose a charity</option>
                                             <?php foreach ($charities as $charity): ?>
-                                                <option value="<?= $charity->id ?>" v-if="pecsfRegion == <?= $charity->pecsf_region_id ?>"><?= $charity->name ?></option>
+                                                <option value="<?= $charity->id ?>" v-if="pecsfRegion == <?= $charity->pecsf_region_id; ?>"><?= $charity->name ?></option>
                                             <?php endforeach ?>
                                         </select>
                                     </div>
@@ -624,20 +624,20 @@
                                         <div class="col-6">
                                            <p class="confirmationValue"><?= $award->name ?></p>
 
-                                            <p v-if="awardSelected == 9"><small>Watch Size</small></p>
-                                            <p v-if="awardSelected == 9" class="confirmationValue">{{watchSize}}</p>
+                                            <p v-if="selectedAward == 9"><small>Watch Size</small></p>
+                                            <p v-if="selectedAward == 9" class="confirmationValue">{{watchSize}}</p>
 
-                                            <p v-if="awardSelected == 9"><small>Watch Colour</small></p>
-                                            <p v-if="awardSelected == 9" class="confirmationValue">{{watchColour}}</p>
+                                            <p v-if="selectedAward == 9"><small>Watch Colour</small></p>
+                                            <p v-if="selectedAward == 9" class="confirmationValue">{{watchColour}}</p>
 
-                                            <p v-if="awardSelected == 9"><small>Strap Type</small></p>
-                                            <p v-if="awardSelected == 9" class="confirmationValue">{{strapType}}</p>
+                                            <p v-if="selectedAward == 9"><small>Strap Type</small></p>
+                                            <p v-if="selectedAward == 9" class="confirmationValue">{{strapType}}</p>
 
-                                            <p v-if="awardSelected == 9"><small>Engraving</small></p>
-                                            <p v-if="awardSelected == 9" class="confirmationValue">{{watchEngraving}}</p>
+                                            <p v-if="selectedAward == 9"><small>Engraving</small></p>
+                                            <p v-if="selectedAward == 9" class="confirmationValue">{{watchEngraving}}</p>
 
-                                            <p v-if="awardSelected == 12 || awardSelected == 46"><small>Bracelet Size</small></p>
-                                            <p v-if="awardSelected == 12 || awardSelected == 46" class="confirmationValue">{{braceletSize}}</p>
+                                            <p v-if="selectedAward == 12 || selectedAward == 46"><small>Bracelet Size</small></p>
+                                            <p v-if="selectedAward == 12 || selectedAward == 46" class="confirmationValue">{{braceletSize}}</p>
 
 
                                         </div>
