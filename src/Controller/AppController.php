@@ -96,14 +96,29 @@ class AppController extends Controller
         $session->write('user.guid', $_SERVER['HTTP_SMGOV_USERGUID']);
         $session->write('user.name', $_SERVER['HTTP_SMGOV_USERDISPLAYNAME']);
         $session->write('user.email', $_SERVER['HTTP_SMGOV_USEREMAIL']);
-
         if ($user) {
             $session->write('user.role', $user->role_id);
             $session->write('user.ministry', $user->ministry_id);
         }
         else {
+            // This is not a known user.
             $session->write('user.role', 0);
             $session->write('user.ministry', 0);
+            // Prepare a new user entity.
+            $new_user = $this->UserRoles->newEmptyEntity();
+            var_dump($new_user);
+            // Populate new user record.
+            $new_user->idir = $_SERVER['HTTP_SM_USER'];
+            $new_user->guid = $_SERVER['HTTP_SMGOV_USERGUID'];
+            // Role 7 is the authenticated role.
+            $new_user->role_id = 7;
+            // For now we will save this as 1 - but in the future we should check the record
+            // vs. the list we have for a match.
+            $new_user->ministry_id = 1;
+            // Save new user to db.
+            $this->UserRoles->save($new_user);
+            // This user should be redirected to register, it is the only place for auth users.
+            $this->redirect("/register");
         }
 
         /*
