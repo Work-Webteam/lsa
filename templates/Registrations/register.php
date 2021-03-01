@@ -40,7 +40,7 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="milestone">Which milestone are you celebrating?</label>
-                                        <select class="form-control with-arrow" id="milestone_id" name="milestone_id" v-model="milestone">
+                                        <select class="form-control with-arrow" id="milestone_id" name="milestone_id" v-model="milestone" @change="setMilestoneName">
                                             <option selected disabled>Select Milestone</option>
                                             <?php foreach ($milestoneinfo as $mstone) : ?>
                                                 <option value="<?= $mstone->id ?>"><?= $mstone->name ?></option>
@@ -587,7 +587,7 @@
                                 <div class="form-row">
                                     <div class="col-6">
                                         <p><small>Milestone reached:</small></p>
-                                        <p class="confirmationValue">{{milestone}}</p>
+                                        <p class="confirmationValue">{{milestoneName}}</p>
                                     </div>
                                     <div class="col-6" v-if="milestone == 1">
                                         <p><small>Name on certificate</small></p>
@@ -821,6 +821,7 @@
         data: {
             e1: 1,
             milestone: 'Select Milestone',
+            milestoneName: '',
             award_year: 'Select Year',
             isRetiringThisYear: 0,
             retirementDate: '',
@@ -959,6 +960,11 @@
 
 
             //TODO: Reduce the redundant functions to a single parameterized function call.
+            setMilestoneName : function(e) {
+                if (e.target.options.selectedIndex > -1) {
+                    this.milestoneName = e.target.options[e.target.options.selectedIndex].text
+                }
+            }
             setMinistryName : function(e) {
                if (e.target.options.selectedIndex > -1) {
                    this.ministryName = e.target.options[e.target.options.selectedIndex].text
