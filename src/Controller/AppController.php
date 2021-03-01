@@ -42,8 +42,6 @@ class AppController extends Controller
      */
     public function initialize(): void
     {
-        var_dump($_SERVER);
-
         parent::initialize();
 
         $this->loadComponent('RequestHandler');
