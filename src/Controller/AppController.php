@@ -46,10 +46,10 @@ class AppController extends Controller
 
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
-       $_SERVER['HTTP_SM_USER'] = 'rkuyvenh';
-       $_SERVER['HTTP_SMGOV_USEREMAIL'] = 'Raymond.Kuyvenhoven@gov.bc.ca';
-       $_SERVER['HTTP_SMGOV_USERDISPLAYNAME'] = 'Kuyvenhoven, Raymond PSA:EX';
-       $_SERVER['HTTP_SMGOV_USERGUID'] = '60DCD2AF73FB44AE9345F11B71CD3495';   // admin
+       //$_SERVER['HTTP_SM_USER'] = 'rkuyvenh';
+       //$_SERVER['HTTP_SMGOV_USEREMAIL'] = 'Raymond.Kuyvenhoven@gov.bc.ca';
+       //$_SERVER['HTTP_SMGOV_USERDISPLAYNAME'] = 'Kuyvenhoven, Raymond PSA:EX';
+       //$_SERVER['HTTP_SMGOV_USERGUID'] = '60DCD2AF73FB44AE9345F11B71CD3495';   // admin
 
 //        $_SERVER['HTTP_SMGOV_USERGUID'] = '9ECC7D7FD8EE840932B9D21721251737';   // lsa admin
 
@@ -67,7 +67,6 @@ class AppController extends Controller
 //        $_SERVER['HTTP_SM_USER'] = 'rsharples';
 //        $_SERVER['HTTP_SMGOV_USERGUID'] = '3BC010F8C876571F3D29DB46012A326B';   // recipient
 //
-
         // check if user has administrative privileges
         $this->loadModel('UserRoles');
         $users = $this->UserRoles->find('all', [
@@ -80,8 +79,8 @@ class AppController extends Controller
             // matching IDIR with a different GUID.
             $users = $this->UserRoles->find('all', [
                 'conditions' => [
-                    'UserRole.idir =' => $_SERVER['HTTP_SM_USER'],
-                    'UserRole.guid =' => '',
+                    'UserRoles.idir =' => $_SERVER['HTTP_SM_USER'],
+                    'UserRoles.guid =' => '',
                     ],
                 'limit' => 1,
             ]);

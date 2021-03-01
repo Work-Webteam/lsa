@@ -15,7 +15,7 @@ class RegistrationPeriodsController extends AppController
         }
         $this->loadComponent('Paginator');
         $registrationperiods = $this->Paginator->paginate($this->RegistrationPeriods->find('all', [
-            'order' => ['Registrationperiods.open_registration' => 'DESC']
+            'order' => ['RegistrationPeriods.open_registration' => 'DESC']
         ]));
 
         $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
