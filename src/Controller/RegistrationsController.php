@@ -419,8 +419,8 @@ class RegistrationsController extends AppController
             $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
 
             $registration->modified = time();
-            // TODO:  What is the purpose of this?
-            if ($this->request->getData('invite_sent'));
+            // TODO:  What is the purpose of this? Commenting out for now.
+            //if ($this->request->getData('invite_sent'));
             if (empty($registration->invite_sent)) {
                 $registration->invite_sent = NULL;
             }
