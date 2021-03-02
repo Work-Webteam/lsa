@@ -964,7 +964,7 @@
                 if (e.target.options.selectedIndex > -1) {
                     this.milestoneName = e.target.options[e.target.options.selectedIndex].text
                 }
-            }
+            },
             setMinistryName : function(e) {
                if (e.target.options.selectedIndex > -1) {
                    this.ministryName = e.target.options[e.target.options.selectedIndex].text
