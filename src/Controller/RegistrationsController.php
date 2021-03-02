@@ -11,7 +11,7 @@ class RegistrationsController extends AppController
     //Displays a list of registrations based on user role's permissions
     public function index()
     {
-        if ($this->checkAuthorization(array(Configure::read('Role.authenticated')))) {
+        if ($this->checkAuthorization(array(Configure::read('Role.authenticated_user')))) {
             $this->Flash->error(__('You are not authorized to administer Registrations.'));
             $this->redirect('/register');
         }
@@ -70,7 +70,7 @@ class RegistrationsController extends AppController
             Configure::read('Role.admin'),
             Configure::read('Role.lsa_admin')))) {
             $this->Flash->error(__('You are not authorized to view this page.'));
-            $this->redirect('/');
+            $this->redirect('/register');
         }
 
         $conditions = array();
@@ -99,9 +99,9 @@ class RegistrationsController extends AppController
     public function view($id = null)
     {
 //        if (!$this->checkAuthorization(array(Configure::read('Role.admin'), Configure::read('Role.lsa_admin')))) {
-        if ($this->checkAuthorization(array(Configure::read('Role.authenticated')))) {
+        if ($this->checkAuthorization(array(Configure::read('Role.authenticated_user')))) {
                 $this->Flash->error(__('You are not authorized to view this page.'));
-                $this->redirect('/');
+                $this->redirect('/register');
             }
 //        }
         $registration = $this->Registrations->find('all', [
