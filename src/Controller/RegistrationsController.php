@@ -27,7 +27,7 @@ class RegistrationsController extends AppController
                 'RegistrationPeriods.open_registration <= ' => date('Y-m-d H:i:s'),
                 'RegistrationPeriods.close_registration >= ' => date('Y-m-d H:i:s')
             ]);
-        $registrationperiods = $query->first();
+        $registration_periods = $query->first();
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
@@ -39,7 +39,7 @@ class RegistrationsController extends AppController
         if ($this->checkAuthorization(Configure::read('Role.ministry_contact'))) {
             $session = $this->getRequest()->getSession();
             $conditions['Registrations.ministry_id ='] = $session->read("user.ministry");
-            $edit = !empty($registrationperiods);
+            $edit = !empty($registration_periods);
             $toolbar = false;
         }
 
@@ -47,7 +47,7 @@ class RegistrationsController extends AppController
         if ($this->checkAuthorization(Configure::read('Role.supervisor'))) {
             $session = $this->getRequest()->getSession();
             $conditions['Registrations.user_guid ='] = $session->read("user.guid");
-            $edit = !empty($registrationperiods);
+            $edit = !empty($registration_periods);
             $toolbar = false;
         }
 
@@ -130,7 +130,7 @@ class RegistrationsController extends AppController
                     'Registration_Periods.open_registration <=' => date('Y-m-d H:i:s'),
                     'Registration_Periods.close_registration >=' => date('Y-m-d H:i:s')
                 ]);
-            $registrationperiods = $query->first();
+            $registration_periods = $query->first();
 
             if ($this->checkAuthorization(array(
                 Configure::read('Role.ministry_contact'),
@@ -140,7 +140,7 @@ class RegistrationsController extends AppController
                         $this->Flash->error(__('You are not authorized to edit this Registration.'));
                         $this->redirect('/registrations');
                     }
-                    if (!$registrationperiods) {
+                    if (!$registration_periods) {
                         $this->Flash->error(__('You may no longer edit this Registration.'));
                         $this->redirect('/');
                     }
@@ -149,7 +149,7 @@ class RegistrationsController extends AppController
                         $this->Flash->error(__('You are not authorized to edit this Registration.'));
                         $this->redirect('/registrations');
                     }
-                    if (!$registrationperiods) {
+                    if (!$registration_periods) {
                         $this->Flash->error(__('You may no longer edit this Registration.'));
                         $this->redirect('/');
                     }
@@ -175,9 +175,9 @@ class RegistrationsController extends AppController
                 'RegistrationPeriods.open_registration <=' => date('Y-m-d H:i:s'),
                 'RegistrationPeriods.close_registration >=' => date('Y-m-d H:i:s')
             ]);
-        $registrationperiods = $query->first();
+        $registration_periods = $query->first();
 
-        if (empty($registrationperiods)) {
+        if (empty($registration_periods)) {
             $this->Flash->error(__('Long Service Awards are not currently open for registration.'));
             return $this->redirect('/');
         }
@@ -222,7 +222,7 @@ class RegistrationsController extends AppController
                 // Send email here
                 $mailer = new Mailer('default');
 
-                $message = "Congratulations, you have sucessfully registered for your Long Service Award.";
+                $message = "Congratulations, you have successfully registered for your Long Service Award.";
 //                $mailer->setFrom(['longserviceaward@gov.bc.ca' => 'Long Service Awards'])
 //                    ->setTo($registration->preferred_email)
 //                    ->setSubject('Long Service Award Registration Completed')
@@ -237,7 +237,7 @@ class RegistrationsController extends AppController
 
 
         //Initialize Arrays for Awards options, Select Menus and validation
-        $list = explode(",", $registrationperiods->qualifying_years);
+        $list = explode(",", $registration_periods->qualifying_years);
         $award_years = [];
         foreach ($list as $year) {
             $award_years[$year] = $year;
@@ -300,8 +300,6 @@ class RegistrationsController extends AppController
                 $options['strap_type']      = $this->request->getData('strap_type');
                 break;
             case $bracelet_35_id:
-                $options['bracelet_size']   = $this->request->getData('braceletSize');
-                break;
             case $bracelet_45_id:
                 $options['bracelet_size']   = $this->request->getData('braceletSize');
                 break;
@@ -352,6 +350,7 @@ class RegistrationsController extends AppController
             $registration->pecsf_amount1        = $donationTotal;
         else:
             //If a 2nd charity is defined, split the total between them.
+            // TODO: I believe this can be refactored to an  "elseif/else in parent construct.
             if (is_numeric($this->request->getData('pecsfCharity2'))) :
                 $registration->pecsf_donation     = 1;
                 $registration->pecsf_charity1_id  = $this->request->getData('pecsf_charity_1');
@@ -386,9 +385,6 @@ class RegistrationsController extends AppController
 
     public function edit($id)
     {
-
-
-
         if ($this->request->referer() == "/registrations/exportspecialrequirements" ||
             $this->request->referer() == "/registrations/reportawards") {
             $return_path = $this->request->referer();
@@ -423,6 +419,7 @@ class RegistrationsController extends AppController
             $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
 
             $registration->modified = time();
+            // TODO:  What is the purpose of this?
             if ($this->request->getData('invite_sent'));
             if (empty($registration->invite_sent)) {
                 $registration->invite_sent = NULL;
@@ -431,7 +428,6 @@ class RegistrationsController extends AppController
             if (empty($registration->photo_sent)) {
                 $registration->photo_sent = NULL;
             }
-
 
             if ($this->Registrations->save($registration)) {
 
@@ -563,7 +559,7 @@ class RegistrationsController extends AppController
                 'RegistrationPeriods.open_registration <=' => date('Y-m-d H:i:s'),
                 'RegistrationPeriods.close_registration >=' => date('Y-m-d H:i:s')
             ]);
-        $registrationperiods = $query->first();
+        $registration_periods = $query->first();
 
         if ($this->checkAuthorization(array(
             Configure::read('Role.authenticated'),
@@ -580,7 +576,7 @@ class RegistrationsController extends AppController
                     $this->Flash->error(__('You are not authorized to edit this Registration.'));
                     $this->redirect('/registrations');
                 }
-                if (!$registrationperiods) {
+                if (!$registration_periods) {
                     $this->Flash->error(__('You may no longer edit this Registration.'));
                     $this->redirect('/');
                 }
@@ -590,7 +586,7 @@ class RegistrationsController extends AppController
                     $this->Flash->error(__('You are not authorized to edit this Registration.'));
                     $this->redirect('/registrations');
                 }
-                if (!$registrationperiods) {
+                if (!$registration_periods) {
                     $this->Flash->error(__('You may no longer edit this Registration.'));
                     $this->redirect('/');
                 }
@@ -618,6 +614,7 @@ class RegistrationsController extends AppController
             $log->old_value = $old;
         }
         $log->new_value = $new;
+        // TODO:  Should this be a Try/Catch?
         if ($this->Registrations->Log->save($log)) {
         }
     }
@@ -632,15 +629,12 @@ class RegistrationsController extends AppController
             ->where([
                 'RegistrationPeriods.registration_year =' => date('Y')
             ]);
-        $regperiod = $query->first();
+        $reg_period = $query->first();
 
-        if (date('Y-m-d', strtotime($regperiod->close_rsvp)) < date('Y-m-d H:i:s')) {
+        if (date('Y-m-d', strtotime($reg_period->close_rsvp)) < date('Y-m-d H:i:s')) {
             $this->Flash->error(__('The deadline to RSVP has passed.'));
             $this->redirect('/');
         }
-
-
-
 
         $registration = $this->Registrations->find('all', [
             'conditions' => array(
@@ -757,7 +751,7 @@ class RegistrationsController extends AppController
 
         $this->set('accessibility', $accessibility);
 
-        $this->set('regperiod', $regperiod);
+        $this->set('regperiod', $reg_period);
 
         $this->set('registration', $registration);
 
@@ -832,7 +826,6 @@ class RegistrationsController extends AppController
             $milestones[$record->id] = $record;
         }
 
-        $ctr = 0;
         $awards = [];
         foreach ($registrations as $registration) {
             // generate key
@@ -861,10 +854,8 @@ class RegistrationsController extends AppController
             if ($registration->created > $awards[$key]->lastupdate) {
                 $awards[$key]->lastupdate = $registration->created;
             }
-            if (isset($registration->log[0]->timestamp)) {
-                if ($registration->log[0]->timestamp > $awards[$key]->lastupdate) {
-                    $awards[$key]->lastupdate = $registration->log[0]->timestamp;
-                }
+            if (isset($registration->log[0]->timestamp) && $registration->log[0]->timestamp > $awards[$key]->lastupdate) {
+                $awards[$key]->lastupdate = $registration->log[0]->timestamp;
             }
 
         }
@@ -982,10 +973,7 @@ class RegistrationsController extends AppController
 
 //        $this->set(compact('milestones'));
 
-
-
     }
-
 
     public function reportministrysummary() {
         if (!$this->checkAuthorization(array(
@@ -1020,7 +1008,6 @@ class RegistrationsController extends AppController
         }
         $this->set('milestones', $milestones);
 
-
         $list = $this->Registrations->Ministries->find('all', [
             'order' => ['Ministries.name' => 'ASC']
         ]);
@@ -1041,9 +1028,6 @@ class RegistrationsController extends AppController
             $ministries[] = $ministry;
         }
 
-//        echo "<pre>";
-//        echo print_r($ministries, true);
-//        echo "</pre>";
         foreach ($registrations as $registration) {
             $ministry_key = $this->findInArray($ministries, $registration->ministry_id);
             $milestone_key = $this->findInArray($milestones, $registration->milestone_id);
@@ -1110,8 +1094,6 @@ class RegistrationsController extends AppController
         $this->set(compact('registrations'));
     }
 
-
-
     public function editpresentationids($id)
     {
         if (!$this->checkAuthorization(array(
@@ -1125,7 +1107,6 @@ class RegistrationsController extends AppController
         $isadmin = $this->checkAuthorization(Configure::read('Role.admin'));
         $this->set(compact('isadmin'));
 
-
         $conditions = array();
         $conditions['Registrations.ceremony_id ='] = $id;
 
@@ -1133,7 +1114,6 @@ class RegistrationsController extends AppController
             'conditions' => $conditions,
             'order' => ['Registrations.last_name' => 'ASC'],
         ]);
-
 
         if ($this->request->is(['post', 'put'])) {
             foreach ($recipients as $key => $recipient) {
@@ -1151,7 +1131,6 @@ class RegistrationsController extends AppController
         }
         $this->set('recipients', $recipients);
     }
-
 
     public function attendingrecipients($id) {
         if (!$this->checkAuthorization(array(
@@ -1197,9 +1176,7 @@ class RegistrationsController extends AppController
         $attending = json_decode($ceremony->attending, true);
 
         foreach ($attending as $key => $item) {
-
             // find registrants who match this criteria
-
             $conditions = array();
             $conditions['Registrations.registration_year ='] = date('Y');
             $conditions['Registrations.ministry_id ='] = $item['ministry'];
@@ -1284,10 +1261,7 @@ class RegistrationsController extends AppController
         ]);
 
         $ctr = 0;
-        $list = [];
         foreach ($registrations as $registration) {
-            $list[] = $registration;
-
             $name = $registration->first_name . " "  . $registration->last_name;
             $date = date("F d, Y", strtotime($ceremony->date));
 
@@ -1310,15 +1284,10 @@ class RegistrationsController extends AppController
             $ctr++;
         }
 
-
         $this->Flash->success(__('Invites Sent (' . $ctr . ')'));
 
         return $this->redirect(['action' => 'attendingrecipients', $id]);
     }
-
-
-
-
 
 
     public function ceremonysummary($id) {
@@ -1330,8 +1299,6 @@ class RegistrationsController extends AppController
             $this->Flash->error(__('You are not authorized to view this page.'));
             $this->redirect('/');
         }
-
-
 
         $conditions = array();
         $conditions['Registrations.ceremony_id ='] = $id;
@@ -1348,7 +1315,6 @@ class RegistrationsController extends AppController
         $this->set('ceremony', $ceremony);
 
         $this->set('recipients', $recipients);
-
 
         $diet = $this->Registrations->Diet->find('all');
         $this->set('diet', $diet);
@@ -1396,22 +1362,22 @@ class RegistrationsController extends AppController
                 $totals->diet++;
             }
             $requirements = json_decode($recipient->accessibility_requirements_recipient, true);
-            foreach ($requirements as $id) {
-                $totals->access_requirements[$id]->total++;
+            foreach ($requirements as $req_id) {
+                $totals->access_requirements[$req_id]->total++;
             }
             $requirements = json_decode($recipient->accessibility_requirements_guest, true);
-            foreach ($requirements as $id) {
-                $totals->access_requirements[$id]->total++;
+            foreach ($requirements as $req_id) {
+                $totals->access_requirements[$req_id]->total++;
             }
 
             $requirements = json_decode($recipient->dietary_requirements_recipient, true);
-            foreach ($requirements as $id) {
-                $totals->diet_requirements[$id]->total++;
+            foreach ($requirements as $req_id) {
+                $totals->diet_requirements[$req_id]->total++;
             }
 
             $requirements = json_decode($recipient->dietary_requirements_guest, true);
-            foreach ($requirements as $id) {
-                $totals->diet_requirements[$id]->total++;
+            foreach ($requirements as $req_id) {
+                $totals->diet_requirements[$req_id]->total++;
             }
 
 
@@ -1427,7 +1393,6 @@ class RegistrationsController extends AppController
             if (isset($recipient->dietary_guest_other) && !empty($recipient->dietary_guest_other)) {
                 $totals->diet_notes[] = $recipient->dietary_guest_other;
             }
-
         }
 
         $this->set('totals', $totals);
@@ -1461,7 +1426,6 @@ class RegistrationsController extends AppController
             $this->redirect('/');
         }
 
-
         $conditions = array();
         $conditions['Registrations.ceremony_id ='] = $id;
         $conditions['Registrations.attending ='] = true;
@@ -1471,7 +1435,6 @@ class RegistrationsController extends AppController
             'conditions' => $conditions,
             'order' => ['Registrations.last_name' => 'ASC'],
         ]);
-
 
         $records = $this->Registrations->AccessibilityOptions->find('all');
         $accessibility = [];
@@ -1505,13 +1468,10 @@ class RegistrationsController extends AppController
 
         $this->set(compact('recipients'));
 
-
         $this->set('ceremony_id', $id);
 
         $ceremony = $this->Registrations->Ceremonies->findById($id)->firstOrFail();
         $this->set('ceremony', $ceremony);
-
-
     }
 
 
@@ -1537,13 +1497,11 @@ class RegistrationsController extends AppController
             'order' => ['Registrations.last_name' => 'ASC'],
         ]);
 
-
         $records = $this->Registrations->Diet->find('all');
         $diet = [];
         foreach ($records as $value) {
             $diet[$value->id] = $value;
         }
-
 
         $temp = [];
         foreach ($recipients as $key => $value) {
@@ -1567,18 +1525,14 @@ class RegistrationsController extends AppController
             $temp[$key] = $value;
         }
 
-
         $recipients = $temp;
 
         $this->set(compact('recipients'));
-
 
         $this->set('ceremony_id', $id);
 
         $ceremony = $this->Registrations->Ceremonies->findById($id)->firstOrFail();
         $this->set('ceremony', $ceremony);
-
-
     }
 
 
@@ -1599,7 +1553,8 @@ class RegistrationsController extends AppController
             $conditions['Registrations.attending ='] = true;
         }
         else {
-            $conditions['Registrations.attending ='] = true;
+            // TODO: Not sure what the purpose of this was - commenting out top line.
+            //$conditions['Registrations.attending ='] = true;
             $conditions['Registrations.attending ='] = false;
         }
         $conditions['Registrations.waitinglist ='] = 0;
@@ -1617,7 +1572,6 @@ class RegistrationsController extends AppController
             ],
         ]);
 
-
         $this->set(compact('recipients'));
 
         $this->set('attending', $attending);
@@ -1626,10 +1580,7 @@ class RegistrationsController extends AppController
 
         $ceremony = $this->Registrations->Ceremonies->findById($id)->firstOrFail();
         $this->set('ceremony', $ceremony);
-
-
     }
-
 
 
     public function ceremonyawardssummary($id, $attending = false)
@@ -1677,8 +1628,6 @@ class RegistrationsController extends AppController
 
         $ceremony = $this->Registrations->Ceremonies->findById($id)->firstOrFail();
         $this->set('ceremony', $ceremony);
-
-
     }
 
 
@@ -1817,7 +1766,6 @@ class RegistrationsController extends AppController
         $today = date("M d, Y");
         $this->set(compact('today'));
 
-
         $list = [];
         foreach ($recipients as $recipient) {
             if (isset($recipient->log[0]->timestamp)) {
@@ -1844,7 +1792,6 @@ class RegistrationsController extends AppController
             $this->redirect('/');
         }
 
-
         // TODO pull personalized milestone ids
         $milestones = $this->Registrations->Milestones->find('list', [
             'conditions' => [
@@ -1860,7 +1807,6 @@ class RegistrationsController extends AppController
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
         $conditions['Registrations.milestone_id IN '] = $milestone_id;
-
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -1879,13 +1825,11 @@ class RegistrationsController extends AppController
             ],
         ]);
 
-
         $year = date('Y');
         $this->set(compact('year'));
 
         $today = date("M d, Y");
         $this->set(compact('today'));
-
 
         $list = [];
         foreach ($recipients as $recipient) {
@@ -1913,7 +1857,6 @@ class RegistrationsController extends AppController
             $this->Flash->error(__('You are not authorized to view this page.'));
             $this->redirect('/');
         }
-
 
         $award_id = 0;
 
@@ -2026,7 +1969,6 @@ class RegistrationsController extends AppController
                 }
             ],
         ]);
-
 
         $year = date('Y');
         $this->set(compact('year'));
@@ -2169,10 +2111,8 @@ class RegistrationsController extends AppController
             if ($recipient->created > $totals[$i]->lastupdate) {
                 $totals[$i]->lastupdate = $recipient->created;
             }
-            if (isset($recipient->log[0]->timestamp)) {
-                if ($recipient->log[0]->timestamp > $totals[$i]->lastupdate) {
-                    $totals[$i]->lastupdate = $recipient->log[0]->timestamp;
-                }
+            if (isset($recipient->log[0]->timestamp) && $recipient->log[0]->timestamp > $totals[$i]->lastupdate) {
+                $totals[$i]->lastupdate = $recipient->log[0]->timestamp;
             }
 
         }
@@ -2217,7 +2157,6 @@ class RegistrationsController extends AppController
             ],
         ]);
 
-
         $this->set(compact('recipients'));
 
         $this->set('attending', $attending);
@@ -2226,7 +2165,6 @@ class RegistrationsController extends AppController
 
         $ceremony = $this->Registrations->Ceremonies->findById($id)->firstOrFail();
         $this->set('ceremony', $ceremony);
-
 
     }
 
@@ -2261,7 +2199,6 @@ class RegistrationsController extends AppController
                 'Ceremonies',
             ],
         ]);
-
 
         $this->set(compact('recipients'));
 
@@ -2378,7 +2315,6 @@ class RegistrationsController extends AppController
             }
         }
 
-
         // load VIP model so we add VIP numbers to report. Not ideal, but this is the simplest way to accomplish this.
         $this->loadModel('Vip');
 
@@ -2424,15 +2360,11 @@ class RegistrationsController extends AppController
             }
         }
 
-
         $this->loadModel('Registrations');
-
 
         $this->set(compact('milestones'));
 
         $this->set(compact('results'));
-
-
     }
 
 
@@ -2448,8 +2380,6 @@ class RegistrationsController extends AppController
         }
 
         $edit = true;
-
-//        ["or" => ["description =" => "Attending YES","description =" => "Attending NO"]]
 
         $conditions = array();
         $conditions['Registrations.attending ='] = 1;
@@ -2482,7 +2412,6 @@ class RegistrationsController extends AppController
         foreach ($records as $value) {
             $diet[$value->id] = $value;
         }
-
 
         $list = [];
         foreach ($recipients as $key => $recipient) {
@@ -2550,7 +2479,6 @@ class RegistrationsController extends AppController
     }
 
 
-
     public function reportministryrecipients()
     {
 
@@ -2581,18 +2509,13 @@ class RegistrationsController extends AppController
             ],
         ]);
 
-
         $this->set(compact('recipients'));
-
     }
 
-
-
-
-
-    /* Creates a dashboard for protocol to see which registrants are on a waiting list for any ceremony.
-       Accepts post requests to add registrants to the waiting list for a ceremony
-    */
+    /**
+     * Creates a dashboard for protocol to see which registrants are on a waiting list for any ceremony.
+     * Accepts post requests to add registrants to the waiting list for a ceremony
+     */
 
     public function reportwaitinglist()
     {
@@ -2661,8 +2584,6 @@ class RegistrationsController extends AppController
 
         $this->set('registrants', $this->Registrations->find('all'));
 
-
-
         $waiturl = Router::url(array('controller'=>'Registrations','action'=>'wait'));
         $this->set(compact('waiturl'));
 
@@ -2672,7 +2593,6 @@ class RegistrationsController extends AppController
 
 
     public function wait(){
-        echo "<pre>here</pre>";
         if( $this->request->is('ajax') ) {
             $id = $this->request->getData('id');
 
@@ -2689,7 +2609,6 @@ class RegistrationsController extends AppController
     public function reportpivot($attending = 0)
     {
 
-
         if (!$this->checkAuthorization(array(
             Configure::read('Role.admin'),
             Configure::read('Role.lsa_admin'),
@@ -2703,9 +2622,9 @@ class RegistrationsController extends AppController
                 'RegistrationPeriods.open_registration <= ' => date('Y-m-d H:i:s'),
                 'RegistrationPeriods.close_registration >= ' => date('Y-m-d H:i:s')
             ]);
-        $registrationperiod = $query->first();
+        $registration_period = $query->first();
 
-        $years = explode(",", $registrationperiod->qualifying_years);
+        $years = explode(",", $registration_period->qualifying_years);
 
         $milestones = $this->Registrations->Milestones->find('all');
 
@@ -2736,8 +2655,6 @@ class RegistrationsController extends AppController
             ],
         ]);
 
-
-
         $results = [];
         foreach ($recipients as $recipient) {
             $i = $this->findCeremonyMinistry($results, $recipient->ceremony_id, $recipient->ministry_id);
@@ -2766,14 +2683,13 @@ class RegistrationsController extends AppController
             $results[$i]->total++;
         }
 
-
         $this->set(compact('results'));
 
         $this->set(compact('title'));
 
         $this->set(compact('years'));
         $this->set(compact('milestones'));
-        $this->set(compact('registrationperiod'));
+        $this->set(compact('registration_period'));
 
         $this->set(compact('recipients'));
 
@@ -2803,7 +2719,6 @@ class RegistrationsController extends AppController
     public function createPDF($reg_id, $name, $date) {
 
         require_once(ROOT . DS . 'vendor' . DS . 'fpdf' . DS . 'fpdf.php');
-
 
         // Create handle for new PDF document
         $pdf = new \FPDF('P', 'pt', array(610,675));
@@ -2837,12 +2752,10 @@ class RegistrationsController extends AppController
         //$pdf->Text(250, 100, $username);
 
         // Now set our marker to the date field5pudGr@vy1
-        //
         $pdf->SetY(375);
         // Add date
         $pdf->Cell(0,0,$date,0,1,'C');
         //$pdf->Text(60,300, $date);
-
         // Save to file string Output([string dest [, string name [, boolean isUTF8]]])
         $pdf->Output('F', $filepath);
         // Should be destroyed in output, but we can crush it here just in case
@@ -2859,7 +2772,6 @@ class RegistrationsController extends AppController
 
         // Send email here
         $mailer = new Mailer('default');
-
 
         $message = <<<EOT
 <html>
@@ -2944,7 +2856,6 @@ class RegistrationsController extends AppController
 EOT;
 
         // send to primary and secondary email (if provided)
-
         $mailer->setFrom(['longserviceaward@gov.bc.ca' => 'Long Service Awards'])
             ->setTo($email)
             ->setSubject('Your Long Service Awards Invitation')
@@ -2956,9 +2867,5 @@ EOT;
                 ]
             ])
             ->deliver($message);
-
     }
-
 }
-
-
