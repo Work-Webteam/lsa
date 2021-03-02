@@ -208,7 +208,6 @@ class VipController extends AppController
     }
 
 
-
     public function exportbadges($id, $attending = true)
     {
 
@@ -258,7 +257,6 @@ class VipController extends AppController
 
         $ceremony = $this->Vip->Ceremonies->findById($id)->firstOrFail();
         $this->set('ceremony', $ceremony);
-
 
     }
 
@@ -315,7 +313,6 @@ class VipController extends AppController
         $this->set('ceremony', $ceremony);
 
     }
-
 
 }
 

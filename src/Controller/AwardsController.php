@@ -71,22 +71,16 @@ class AwardsController extends AppController
                 $this->Flash->success(__('Award has been saved.'));
                 return $this->redirect(['action' => 'index']);
             } else {
-                $this->Flash->error(__('Unable to add award.' . $msg . ' - ' . $file->getClientFilename()));
+                $this->Flash->error(__('Unable to add award.' . ' - ' . $file->getClientFilename()));
             }
         endif;
 
-
         $this->set('award', $award);
-
-
-
-
         // Get a list of milestones.
         $milestones = $this->Awards->Milestones->find('list');
         // Set tags to the view context
         $this->set('milestones', $milestones);
          //$award =  $this->getTableLocator()->newEmptyEntity();
-
     }
 
 
@@ -100,8 +94,7 @@ class AwardsController extends AppController
         if ($this->request->is(['post', 'put'])) {
             $file = $this->request->getData('upload');
             $award = $this->Awards->patchEntity($award, $this->request->getData());
-            if($file->getSize() > 0)
-            {
+            if($file->getSize() > 0) {
                 $fileName = $file->getClientFilename();
                 $uploadPath = 'img/awards/';
                 $uploadFile = $uploadPath . $fileName;
@@ -172,7 +165,6 @@ class AwardsController extends AppController
             }
             $this->Flash->error(__('Unable to add option.'));
         }
-
         $this->set('award', $award);
     }
 
@@ -297,6 +289,5 @@ class AwardsController extends AppController
             return $this->redirect(['action' => 'view/'.$award->id]);
         }
     }
-
 
 }

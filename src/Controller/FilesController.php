@@ -4,7 +4,7 @@ namespace App\Controller;
 
 class FilesController extends AppController
 {
-    public function initialize(){
+    public function initialize():void{
         parent::initialize();
 
         // Include the FlashComponent
@@ -20,11 +20,12 @@ class FilesController extends AppController
     public function index(){
         $uploadData = '';
         if ($this->request->is('post')) {
-            if(!empty($this->request->data['file']['name'])){
-                $fileName = $this->request->data['file']['name'];
+            $file_array = $this->request->getData();
+            if(!empty($file_array['file']['name'])){
+                $fileName = $file_array['file']['name'];
                 $uploadPath = 'img/awards/';
                 $uploadFile = $uploadPath.$fileName;
-                if(move_uploaded_file($this->request->data['file']['tmp_name'],$uploadFile)){
+                if(move_uploaded_file($file_array['file']['tmp_name'],$uploadFile)){
                     $uploadData = $this->Files->newEntity();
                     $uploadData->name = $fileName;
                     $uploadData->path = $uploadPath;
