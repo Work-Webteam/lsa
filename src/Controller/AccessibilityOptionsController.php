@@ -96,7 +96,7 @@ class AccessibilityOptionsController extends AppController
 
         $accessibility = $this->AccessibilityOptions->findById($id)->firstOrFail();
         if ($this->AccessibilityOptions->delete($accessibility)) {
-            $this->Flash->success(__('{0} accessibility requirement has been deleted.', $AccessibilityOptions->name));
+            $this->Flash->success(__('{0} accessibility requirement has been deleted.', $this->AccessibilityOptions->name));
             return $this->redirect(['action' => 'index']);
         }
     }
@@ -109,7 +109,7 @@ class AccessibilityOptionsController extends AppController
             $i = 1;
             foreach ($order as $id) {
                 $accessibility = $this->AccessibilityOptions->findById($id)->firstOrFail();
-                $AccessibilityOptions->sortorder = $i++;
+                $this->AccessibilityOptions->sortorder = $i++;
                 $this->AccessibilityOptions->save($accessibility);
             }
             return;
