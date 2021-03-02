@@ -11,11 +11,10 @@ class RegistrationsController extends AppController
     //Displays a list of registrations based on user role's permissions
     public function index()
     {
-        if ($this->checkAuthorization(array(Configure::read('Role.authenticated_user')))) {
-            $this->Flash->error(__('You are not authorized to administer Registrations.'));
-            $this->redirect('/register');
+        if ($this->checkAuthorization(Configure::read('Role.anonymous'))) {
+            $this->Flash->error(__('You are not authorized to view this page.'));
+            $this->redirect('/');
         }
-
         $query = $this->Registrations->RegistrationPeriods->find('all')
             ->where([
                 'RegistrationPeriods.open_registration <= ' => date('Y-m-d H:i:s'),
@@ -37,8 +36,8 @@ class RegistrationsController extends AppController
             $toolbar = false;
         }
 
-        // if Supervisor role, only list registrations they created
-        if ($this->checkAuthorization(Configure::read('Role.supervisor'))) {
+        // if Supervisor role, or authenticated user role, only list registrations they created.
+        if ($this->checkAuthorization(Configure::read('Role.supervisor')) || $this->checkAuthorization(Configure::read('Role.authenticated_user'))) {
             $session = $this->getRequest()->getSession();
             $conditions['Registrations.user_guid ='] = $session->read("user.guid");
             $edit = !empty($registration_periods);
@@ -70,7 +69,7 @@ class RegistrationsController extends AppController
             Configure::read('Role.admin'),
             Configure::read('Role.lsa_admin')))) {
             $this->Flash->error(__('You are not authorized to view this page.'));
-            $this->redirect('/register');
+            $this->redirect('/');
         }
 
         $conditions = array();
@@ -98,12 +97,10 @@ class RegistrationsController extends AppController
     //Displays a single registration based on ID
     public function view($id = null)
     {
-//        if (!$this->checkAuthorization(array(Configure::read('Role.admin'), Configure::read('Role.lsa_admin')))) {
-        if ($this->checkAuthorization(array(Configure::read('Role.authenticated_user')))) {
-                $this->Flash->error(__('You are not authorized to view this page.'));
-                $this->redirect('/register');
-            }
-//        }
+        if ($this->checkAuthorization(Configure::read('Role.anonymous'))) {
+            $this->Flash->error(__('You are not authorized to view this page.'));
+            $this->redirect('/');
+        }
         $registration = $this->Registrations->find('all', [
             'conditions' => array(
                 'Registrations.id' => $id
@@ -128,8 +125,10 @@ class RegistrationsController extends AppController
 
             if ($this->checkAuthorization(array(
                 Configure::read('Role.ministry_contact'),
-                Configure::read('Role.supervisor')))) {
-                if ($this->checkAuthorization(Configure::read('Role.supervisor'))) {
+                Configure::read('Role.supervisor'),
+                Configure::read('Role.authenticated_user')
+            ))) {
+                if ($this->checkAuthorization(Configure::read('Role.supervisor')) || $this->checkAuthorization(Configure::read('Role.authenticated_user'))) {
                     if (!$this->checkGUID($registration->user_guid)) {
                         $this->Flash->error(__('You are not authorized to edit this Registration.'));
                         $this->redirect('/registrations');
