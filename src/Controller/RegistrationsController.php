@@ -56,6 +56,13 @@ class RegistrationsController extends AppController
             ],
         ]);
 
+        if ($this->checkAuthorization(Configure::read('Role.authenticated_user'))){
+            $has_reg = $registrations->first();
+            if($has_reg === NULL) {
+                $this->redirect('/register');
+            }
+        }
+
         $this->set(compact('registrations'));
         $this->set(compact('edit'));
         $this->set(compact('toolbar'));
