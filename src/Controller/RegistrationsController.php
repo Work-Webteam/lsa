@@ -174,7 +174,27 @@ class RegistrationsController extends AppController
             $this->Flash->error(__('Long Service Awards are not currently open for registration.'));
             return $this->redirect('/');
         }
-
+        //  Non-priv'd users should not reach /register page a second time.
+        // Lets redirect them home, where they will only see their prev applications.
+        if ($this->checkAuthorization(Configure::read('Role.authenticated_user'))) {
+            $session = $this->getRequest()->getSession();
+            $conditions['Registrations.user_guid ='] = $session->read("user.guid");
+            $registrations = $this->Registrations->find('all', [
+                'conditions' => $conditions,
+                'contain' => [
+                    'Milestones',
+                    'Ministries',
+                    'Awards',
+                    'OfficeCity',
+                    'HomeCity',
+                    'SupervisorCity'
+                ],
+            ]);
+            $has_reg = $registrations->first();
+            if(isset($has_reg)) {
+                $this->redirect('/');
+            }
+        }
         //Initialize new registration object
         $registration = $this->Registrations->newEmptyEntity();
 
