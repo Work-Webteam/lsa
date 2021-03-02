@@ -90,9 +90,9 @@ class AppController extends Controller
             $new_user->guid = $_SERVER['HTTP_SMGOV_USERGUID'];
             // Role 7 is the authenticated role.
             $new_user->role_id = 7;
-            // For now we will save this as 1 - but in the future we should check the record
+            // For now we will save this as 99 (Unassigned in the DB) - but in the future we should check the record
             // vs. the list we have for a match.
-            $new_user->ministry_id = 1;
+            $new_user->ministry_id = 99;
             // Save new user to db.
             $this->UserRoles->save($new_user);
             // This user should be redirected to register, it is the only place for reg auth users.
