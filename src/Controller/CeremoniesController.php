@@ -37,7 +37,6 @@ class CeremoniesController extends AppController
         foreach ($list as $value) {
             $milestones[$value->id] = $value->name;
         }
-//dump($milestones);
         $attending = json_decode($ceremony->attending, true);
 
         foreach ($attending as $key => $item) {
@@ -181,7 +180,6 @@ class CeremoniesController extends AppController
                 );
                 $attending = json_decode($ceremony->attending, true);
                 $attending[] = $new;
-                debug($attending);
                 $ceremony->attending = json_encode($attending);
             }
             if ($this->Ceremonies->save($ceremony)) {
@@ -212,8 +210,6 @@ class CeremoniesController extends AppController
         }
         $temp[-1] = "Vancouver/Victoria";
         $this->set('cities', $temp);
-
-
         $this->set('ceremony', $ceremony);
     }
 
@@ -221,7 +217,6 @@ class CeremoniesController extends AppController
 
     public function editattending($id, $key)
     {
-
         if (!$this->checkAuthorization(array(
             Configure::read('Role.admin'),
             Configure::read('Role.lsa_admin'),
@@ -230,9 +225,7 @@ class CeremoniesController extends AppController
             $this->redirect('/');
         }
         $ceremony = $this->Ceremonies->findById($id)->firstOrFail();
-
         $milestones = $this->Ceremonies->Milestones->find('all');
-
 
         if ($this->request->is(['post', 'put'])) {
             $ministry_id = $this->request->getData('ministry_id');
@@ -277,12 +270,10 @@ class CeremoniesController extends AppController
         $attending = json_decode($ceremony->attending, true);
         $this->set('attending', $attending[$key]);
 
-
         $ministries = $this->Ceremonies->Ministries->find('list', [
             'order' => ['Ministries.name' => 'ASC']
         ]);
         $this->set('ministries', $ministries);
-
 
         $this->set('milestones', $milestones);
 
@@ -294,18 +285,15 @@ class CeremoniesController extends AppController
             ]);
 
         $temp = array();
-        foreach($cities as $key => $city) {
-            $temp[$key] = $city;
+        foreach($cities as $k => $city) {
+            $temp[$k] = $city;
         }
         $temp[-1] = "Vancouver/Victoria";
 
         $this->set('cities', $temp);
 
-
         $this->set('ceremony', $ceremony);
     }
-
-
 
         public function deleteattending($id, $key)
     {
