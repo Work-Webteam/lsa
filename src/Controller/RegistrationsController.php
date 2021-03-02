@@ -264,7 +264,7 @@ class RegistrationsController extends AppController
         $this->set('diet', $diet);
         */
         $this->set('cities', $this->Registrations->Cities->find('all'));
-        $regions = $this->Registrations->PecsfRegions->find('list', [
+        $regions = $this->Registrations->PecsfRegions->find('all', [
             'order' => ['PecsfRegions.name' => 'ASC']
         ]);
         $this->set('regions', $regions);
@@ -285,12 +285,12 @@ class RegistrationsController extends AppController
         $bulova_watch_id = 9;
         $bracelet_35_id = 12;
         $bracelet_45_id = 29;
-        $options        = '';
+        $options        = array();
 
         switch($this->request->getData('award_id')) {
             case $bulova_watch_id:
                 $options['watch_size']      = $this->request->getData('watch_size');
-                $options['watch_colour']    = $this->request>getData('watch_colour');
+                $options['watch_colour']    = $this->request->getData('watch_colour');
                 $options['strap_type']      = $this->request->getData('strap_type');
                 break;
             case $bracelet_35_id:
@@ -379,14 +379,17 @@ class RegistrationsController extends AppController
 
     public function edit($id)
     {
+        //If the referer is the special requirements export, put the user back in awards report
         if ($this->request->referer() == "/registrations/exportspecialrequirements" ||
             $this->request->referer() == "/registrations/reportawards") {
             $return_path = $this->request->referer();
         }
+        //Default redirect
         else {
             $return_path = "/registrations";
         }
 
+        //Get registration and all its attached tables
         $registration = $this->Registrations->find('all', [
             'conditions' => array(
                 'Registrations.id' => $id
@@ -406,24 +409,39 @@ class RegistrationsController extends AppController
             $this->redirect($return_path);
         }
 
-        if ($this->request->is(['post', 'put'])) {
+
+        //On form submit...
+        if ($this->request->is(['post', 'put'])) :
 
             $old = clone($registration);
 
+            //Push data to fields
             $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
 
+            //Handle Award Options
+            $registration->award_options = $this->getAwardOptionsJSON();
+            $registration = $this->handlePECSFDonation($registration);
+
+            //Update registration modified date
             $registration->modified = time();
-            // TODO:  What is the purpose of this? Commenting out for now.
-            //if ($this->request->getData('invite_sent'));
+
+            //Set invite_sent to null if the request data is empty
+            //(this seems weird and possibly unnecessary)
+            if ($this->request->getData('invite_sent'));
             if (empty($registration->invite_sent)) {
                 $registration->invite_sent = NULL;
             }
+
+            //Set photo_sent to null if the request data is empty
+            //(this seems weird and possibly unnecessary)
             $registration->photo_sent = $this->request->getData('photo_sent');
             if (empty($registration->photo_sent)) {
                 $registration->photo_sent = NULL;
             }
 
             if ($this->Registrations->save($registration)) {
+                //If the save goes through without error, check and log the changes.
+                //TODO: There has to be a generic logging service that could replicate this w/o maintenance headache - JV
 
                 if ($registration->milestone_id <> $old->milestone_id) {
                     $milestone = $this->Registrations->Milestones->findById($registration->milestone_id)->firstOrFail();
@@ -471,14 +489,14 @@ class RegistrationsController extends AppController
                     $this->logChanges($registration->id, "DIET", "CHANGE", $description, $old, $new);
                 }
 
-
                 $this->Flash->success(__('Registration has been updated.'));
                 return $this->redirect($registration->return_path);
             }
             $this->Flash->error(__('Unable to update registration.'));
+        endif; //End of POST/PUT-only logic.
 
-        }
-
+        //Load variables for form
+        //TODO: I suspect many of these are redundant and/or could be optimized - JV
 
         $milestones = $this->Registrations->Milestones->find('list');
         $this->set('milestones', $milestones);
@@ -486,16 +504,8 @@ class RegistrationsController extends AppController
         $milestoneInfo = $this->Registrations->Milestones->find('all');
         $this->set('milestoneinfo', $milestoneInfo);
 
-        $awards = $this->Registrations->Awards->find('list', [
-            'conditions' => ['Awards.active =' => 1],
-        ]);
+        $awards = $this->Registrations->Awards->find('all');
         $this->set('awards', $awards);
-
-        $awardInfo = $this->Registrations->Awards->find('all', [
-            'conditions' => ['Awards.active =' => 1],
-        ]);
-        $this->set('awardinfo', $awardInfo);
-
 
         $cities = $this->Registrations->Cities->find('list', [
             'order' => ['Cities.name' => 'ASC']
@@ -555,6 +565,10 @@ class RegistrationsController extends AppController
             ]);
         $registration_periods = $query->first();
 
+
+        //Authorization check
+        //TODO: Check to see if we can hoist this to the top of the method - JV
+        //TODO: We probably want to do authorization at the routing level where possible - JV
         if ($this->checkAuthorization(array(
             Configure::read('Role.authenticated'),
             Configure::read('Role.ministry_contact'),
@@ -593,7 +607,7 @@ class RegistrationsController extends AppController
 
     }
 
-
+    //TODO: Check to see if this method should be public, I suspect not - JV
     public function logChanges($id, $type, $operation, $description, $old = NULL, $new = NULL) {
         $log = $this->Registrations->Log->newEmptyEntity();
         $session = $this->getRequest()->getSession();

@@ -40,7 +40,7 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="milestone">Which milestone are you celebrating?</label>
-                                        <select class="form-control with-arrow" id="milestone_id" name="milestone_id" v-model="milestone">
+                                        <select class="form-control with-arrow" id="milestone_id" name="milestone_id" v-model="milestone" @change="setMilestoneName">
                                             <option selected disabled>Select Milestone</option>
                                             <?php foreach ($milestoneinfo as $mstone) : ?>
                                                 <option value="<?= $mstone->id ?>"><?= $mstone->name ?></option>
@@ -80,11 +80,11 @@
                                 <div class="col-3">
                                     <p>Did you register for a Long Service Award in 2019?</p>
                                     <div class="form-group checkbox-group">
-                                        <input class="form-check-input" type="radio" name="retroactive" id="retroactive" value="1">
+                                        <input class="form-check-input" type="radio" name="retroactive" id="retroactive" value="1" v-model="isRetroactive">
                                         <label class="form-check-label" for="retroactive">Yes</label>
                                     </div>
                                     <div class="form-group checkbox-group">
-                                        <input class="form-check-input" type="radio" name="retroactive" id="retroactive" checked value="0">
+                                        <input class="form-check-input" type="radio" name="retroactive" id="retroactive" checked value="0" v-model="isRetroactive">
                                         <label class="form-check-label" for="retroactive">No</label>
                                     </div>
                                 </div>
@@ -104,7 +104,7 @@
 
                                         <div class="form-group" v-if="isRetiringThisYear == 1">
                                             <label for="retirement_date">Date of Retirement:</label>
-                                            <input type="date" name="retirement_date">
+                                            <input type="date" class="form-control" name="retirement_date" id="retirement_date" v-model="retirementDate">
                                         </div>
                                     </div>
                                 </div>
@@ -233,7 +233,7 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">Name on Donation</label>
-                                        <input class="form-control" type="text" maxlength="33" placeholder="Firstname Lastname" :value="firstName + ' ' + lastName">
+                                        <input class="form-control" type="text" maxlength="33" placeholder="Firstname Lastname">
                                     </div>
                                     <div  class="form-group">
                                         <label for="pecsf_region">Your Desired PECSF Region</label>
@@ -258,10 +258,10 @@
                                     <div class="form-group" >
                                         <label for="pecsf_charity_1" v-if="donationType == 'single-charity'">Choose your charity</label>
                                         <label for="pecsf_charity_1" v-if="donationType == 'two-charities'">Choose your first charity</label>
-                                        <select class="form-control"  name="pecsf_charity_1" id="pecsf_charity_1" v-model="pecsfCharity1">
+                                        <select class="form-control"  v-if="donationType != 'pool'" name="pecsf_charity_1" id="pecsf_charity_1" v-model="pecsfCharity1">
                                             <option selected disabled>Choose a charity</option>
                                             <?php foreach ($charities as $charity): ?>
-                                            <option value="<?= $charity->id ?>" v-if="pecsfRegion == <?= $charity->pecsf_region_id ?>"><?= $charity->name ?></option>
+                                            <option value="<?= $charity->id ?>" v-if="pecsfRegion == <?= $charity->pecsf_region_id; ?>"><?= $charity->name ?></option>
                                             <?php endforeach ?>
                                         </select>
                                     </div>
@@ -270,7 +270,7 @@
                                         <select class="form-control" name="pecsf_charity_2" id="pecsf_charity_2" v-model="pecsfCharity2">
                                             <option selected disabled>Choose a charity</option>
                                             <?php foreach ($charities as $charity): ?>
-                                                <option value="<?= $charity->id ?>" v-if="pecsfRegion == <?= $charity->pecsf_region_id ?>"><?= $charity->name ?></option>
+                                                <option value="<?= $charity->id ?>" v-if="pecsfRegion == <?= $charity->pecsf_region_id; ?>"><?= $charity->name ?></option>
                                             <?php endforeach ?>
                                         </select>
                                     </div>
@@ -337,13 +337,13 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">Government email address</label>
-                                        <input type="email" id="preferred_email" name="preferred_email" v-model="govtEmail" class="form-control email-input" placeholder="i.e. taylor.publicservant@gov.bc.ca">
+                                        <input type="email" id="preferred_email" name="preferred_email" v-model="govtEmail" class="form-control email-input" placeholder="i.e. taylor.publicservant@gov.bc.ca" @change="filterGovtEmail">
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">Alternate email address</label>
-                                        <input type="email" id="alternate_email" name="alternate_email" v-model="altEmail" class="form-control email-input" placeholder="i.e. taylor_publicservant@gmail.com">
+                                        <input type="email" id="alternate_email" name="alternate_email" v-model="altEmail" class="form-control email-input" placeholder="i.e. taylor_publicservant@gmail.com" @change="filterAltEmail">
                                     </div>
                                 </div>
                             </div>
@@ -351,7 +351,7 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">Current Ministry</label>
-                                        <select name="ministry_id" id="ministry_id" class="form-control with-arrow" v-model="ministry">
+                                        <select name="ministry_id" id="ministry_id" class="form-control with-arrow" v-model="ministry" @change="setMinistryName">
                                             <option selected default disabled>Select Ministry</option>
                                             <?php foreach ($ministries as $ministry) :?>
                                                 <option value="<?= $ministry->id ?>"><?= $ministry->name ?></option>
@@ -375,19 +375,19 @@
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label for="">Floor/Room/Care Of</label>
-                                        <input type="text" id="office_careof" name="office_careof" class="form-control" placeholder="i.e. Discovery Room">
+                                        <input type="text" id="office_careof" name="office_careof" class="form-control" v-model="officeMailPrefix" placeholder="i.e. Discovery Room">
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label for="">Suite</label>
-                                        <input type="text"  id="office_suite" name="office_suite" class="form-control" placeholder="i.e. 800">
+                                        <input type="text"  id="office_suite" name="office_suite" class="form-control" v-model="officeSuite" placeholder="i.e. 800">
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label for="">Street Address</label>
-                                        <input type="text" class="form-control" id="office_address" name="office_address" placeholder="i.e. 1445 10th Ave.">
+                                        <input type="text" class="form-control" id="office_address" name="office_address" v-model="officeStreetAddress" placeholder="i.e. 1445 10th Ave.">
                                     </div>
                                 </div>
                             </div>
@@ -397,7 +397,7 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">City</label>
-                                        <select name="office_city_id" id="office_city_id" class="form-control with-arrow" v-model="officeCity">
+                                        <select name="office_city_id" id="office_city_id" class="form-control with-arrow" v-model="officeCity" @change="setOfficeCityName">
                                             <option selected disabled>Choose city</option>
                                             <?php foreach ($cities as $city) : ?>
                                                 <option value="<?= $city->id ?>"><?= h($city->name) ?></option>
@@ -408,19 +408,19 @@
                                 <div class="col-2">
                                     <div class="form-group">
                                         <label for="">Postal Code</label>
-                                        <input type="text" class="form-control postal-code-input"  id="office_postal_code" name="office_postal_code" placeholder="i.e. A1A 1A1">
+                                        <input type="text" class="form-control"  id="office_postal_code" name="office_postal_code" placeholder="i.e. A1A 1A1" v-model="officePostalCode" @change="filterOfficePostalCode">
                                     </div>
                                 </div>
                                 <div class="col-3">
                                     <div class="form-group">
                                         <label for="">Office Phone Number</label>
-                                        <input type="text" class="form-control phone-input" id="work_phone" name="work_phone" placeholder="i.e. (604) 555-5555" v-model="officePhone">
+                                        <input type="text" class="form-control" id="work_phone" name="work_phone" placeholder="i.e. (604) 555-5555" v-model="officePhone" @change="filterOfficePhoneNumber">
                                     </div>
                                 </div>
                                 <div class="col-1">
                                     <div clas="form-group">
                                         <label for="">Extension</label>
-                                        <input type="text" class="form-control"  id="work_extension" name="work_extension" placeholder="ie. 800" v-model="officeExtension">
+                                        <input type="text" class="form-control extension-input"  id="work_extension" name="work_extension" placeholder="ie. 800" v-model="officeExtension" @change="filterOfficeExtension">
                                     </div>
                                 </div>
                             </div>
@@ -445,7 +445,7 @@
                                <div class="col-6">
                                    <div class="form-group">
                                        <label for="">City</label>
-                                       <select name="home_city_id" id="home_city_id" class="form-control with-arrow" v-model="homeCity">
+                                       <select name="home_city_id" id="home_city_id" class="form-control with-arrow" v-model="homeCity" @change="setHomeCityName">
                                            <option selected disabled>Choose city</option>
                                            <?php foreach ($cities as $city) : ?>
                                                <option value="<?= $city->id ?>"><?= h($city->name) ?></option>
@@ -456,13 +456,13 @@
                                <div class="col-2">
                                    <div class="form-group">
                                        <label for="">Postal Code</label>
-                                       <input type="text" class="form-control postal-code-input" id="home_postal_code" name="home_postal_code" placeholder="i.e. A1A 1A1" v-model="homePostalCode">
+                                       <input type="text" class="form-control" id="home_postal_code" name="home_postal_code" placeholder="i.e. A1A 1A1" v-model="homePostalCode" @change="filterHomePostalCode">
                                    </div>
                                </div>
                                <div class="col-4">
                                    <div class="form-group">
                                        <label for="">Home Phone Number</label>
-                                       <input type="text" class="form-control phone-input" name="home_phone" id="home_phone" placeholder="i.e. (604) 555-5555" v-model="homePhone">
+                                       <input type="text" class="form-control" name="home_phone" id="home_phone" placeholder="i.e. (604) 555-5555" v-model="homePhone" @change="filterHomePhoneNumber">
                                    </div>
                                </div>
                            </div>
@@ -518,7 +518,7 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="supervisorEmail">Supervisor's Email</label>
-                                        <input type="text" class="form-control email-input" id="supervisor_email" name="supervisor_email" placeholder="i.e. taylor.publicservant@gov.bc.ca" v-model="supervisorEmail">
+                                        <input type="text" class="form-control email-input" id="supervisor_email" name="supervisor_email" placeholder="i.e. taylor.publicservant@gov.bc.ca" v-model="supervisorEmail" @change="filterSupervisorEmail">
                                     </div>
                                 </div>
                             </div>
@@ -548,7 +548,7 @@
                                 <div class="col-8">
                                     <div class="form-group">
                                         <label for="">City</label>
-                                        <select name="supervisor_city_id" id="supervisor_city_id" class="form-control with-arrow" v-model="supervisorCity">
+                                        <select name="supervisor_city_id" id="supervisor_city_id" class="form-control with-arrow" v-model="supervisorCity" @change="setSupervisorCityName">
                                             <option selected disabled>Choose city</option>
                                             <?php foreach ($cities as $city) : ?>
                                                 <option value="<?= $city->id ?>"><?= h($city->name) ?></option>
@@ -559,7 +559,7 @@
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label for="">Postal Code</label>
-                                        <input type="text" class="form-control postal-code-input" id="supervisor_postal_code" name="supervisor_postal_code" placeholder="i.e. A1A 1A1" v-model="supervisorPostalCode">
+                                        <input type="text" class="form-control" id="supervisor_postal_code" name="supervisor_postal_code" placeholder="i.e. A1A 1A1" v-model="supervisorPostalCode" @change="filterSupervisorPostalCode">
                                     </div>
                                 </div>
                             </div>
@@ -587,9 +587,9 @@
                                 <div class="form-row">
                                     <div class="col-6">
                                         <p><small>Milestone reached:</small></p>
-                                        <p class="confirmationValue">{{milestone}}</p>
+                                        <p class="confirmationValue">{{milestoneName}}</p>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-6" v-if="milestone == 1">
                                         <p><small>Name on certificate</small></p>
                                         <p class="confirmationValue">{{certificateName}}</p>
                                     </div>
@@ -600,7 +600,8 @@
                                         <p class="confirmationValue">{{award_year}}</p>
                                     </div>
                                     <div class="col-6">
-                                        <p v-if="pastRegistrationNoCeremony" class="confirmation-label">I registered last year but did not attended</p>
+                                        <p v-if="isRetroactive" class="confirmationValue">I registered last year but did not attended</p>
+                                        <p v-if="isRetiringThisYear" class="confirmationValue">I am retiring this year on {{retirementDate}} </p>
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -616,27 +617,27 @@
                             <div class="confirmationGroup grey lighten-2">
                                 <h4>Award &amp; Options</h4>
                                 <?php foreach ($awardinfo as $award): ?>
-                                    <div class="form-row" v-if="awardSelected == <?= $award->id ?>">
+                                    <div class="form-row" v-if="selectedAward == <?= $award->id ?>">
                                         <div class="col-6">
                                             <v-img src="/img/awards/<?= $award->image ?>"></v-img>
                                         </div>
                                         <div class="col-6">
-                                           <p class=""confirmationValue"><?= $award->name ?></p>
+                                           <p class="confirmationValue"><?= $award->name ?></p>
 
-                                            <p v-if="awardSelected == 9"><small>Watch Size</small></p>
-                                            <p v-if="awardSelected == 9" class="confirmationValue">{{watchSize}}</p>
+                                            <p v-if="selectedAward == 9"><small>Watch Size</small></p>
+                                            <p v-if="selectedAward == 9" class="confirmationValue">{{watchSize}}</p>
 
-                                            <p v-if="awardSelected == 9"><small>Watch Colour</small></p>
-                                            <p v-if="awardSelected == 9" class="confirmationValue">{{watchColour}}</p>
+                                            <p v-if="selectedAward == 9"><small>Watch Colour</small></p>
+                                            <p v-if="selectedAward == 9" class="confirmationValue">{{watchColour}}</p>
 
-                                            <p v-if="awardSelected == 9"><small>Strap Type</small></p>
-                                            <p v-if="awardSelected == 9" class="confirmationValue">{{strapType}}</p>
+                                            <p v-if="selectedAward == 9"><small>Strap Type</small></p>
+                                            <p v-if="selectedAward == 9" class="confirmationValue">{{strapType}}</p>
 
-                                            <p v-if="awardSelected == 9"><small>Engraving</small></p>
-                                            <p v-if="awardSelected == 9" class="confirmationValue">{{watchEngraving}}</p>
+                                            <p v-if="selectedAward == 9"><small>Engraving</small></p>
+                                            <p v-if="selectedAward == 9" class="confirmationValue">{{watchEngraving}}</p>
 
-                                            <p v-if="awardSelected == 12 || awardSelected == 46"><small>Bracelet Size</small></p>
-                                            <p v-if="awardSelected == 12 || awardSelected == 46" class="confirmationValue">{{braceletSize}}</p>
+                                            <p v-if="selectedAward == 12 || selectedAward == 46"><small>Bracelet Size</small></p>
+                                            <p v-if="selectedAward == 12 || selectedAward == 46" class="confirmationValue">{{braceletSize}}</p>
 
 
                                         </div>
@@ -681,7 +682,7 @@
                                 <div class="form-row">
                                     <div class="col-6">
                                         <p><small>Your current Ministry</small></p>
-                                        <p class="confirmationValue">{{ministry}}</p>
+                                        <p class="confirmationValue">{{ministryName}}</p>
                                     </div>
                                     <div class="col-6">
                                         <p><small>Your current branch</small></p>
@@ -693,20 +694,20 @@
                                         <p><small>Your Office Address</small></p>
                                         <p class="confirmationValue">{{officeMailPrefix}}</p>
                                         <p class="confirmationValue">{{officeSuite}} {{officeStreetAddress}}</p>
-                                        <p class="confirmationValue">{{officeCity}}, BC</p>
+                                        <p class="confirmationValue">{{officeCityName}}, BC</p>
                                         <p class="confirmationValue">{{officePostalCode}}</p>
                                     </div>
                                     <div class="col-6">
                                         <p><small>Your Home Address</small></p>
                                         <p class="confirmationValue">{{homeSuite}}</p>
                                         <p class="confirmationValue">{{homeStreetAddress}}</p>
-                                        <p class="confirmationValue">{{homeCity}}</p>
+                                        <p class="confirmationValue">{{homeCityName}}, BC</p>
                                         <p class="confirmationValue">{{homePostalCode}}</p>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                         <div class="col-9"></div>
-                                        <div class="col-3"><button class="btn btn-secondary" @click="e1 = 3">Edit this Section</button></div>
+                                        <div class="col-3"><button class="btn btn-secondary" @click.prevent="e1 = 3">Edit this Section</button></div>
                                 </div>
                             </div>
 
@@ -727,7 +728,7 @@
                                         <p><small>Supervisor&apos;s Office Address</small></p>
                                         <p class="confirmationValue">{{supervisorMailPrefix}}</p>
                                         <p class="confirmationValue">{{supervisorSuite}} {{supervisorStreetAddress}}</p>
-                                        <p class="confirmationValue">{{supervisorCity}}, BC</p>
+                                        <p class="confirmationValue">{{supervisorCityName}}, BC</p>
                                         <p class="confirmationValue">{{supervisorPostalCode}}</p>
                                     </div>
                                     <div class="col-6"></div>
@@ -744,8 +745,8 @@
                                 <div class="form-row">
                                     <div class="col-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="">
-                                            <label class="form-check-label" for="">
+                                            <input class="form-check-input" type="checkbox" value="1" name="survey_participation" id="survey_participation" checked v-model="isOptedIn">
+                                            <label class="form-check-label" for="survey_participation">
                                                 I Agree
                                             </label>
                                         </div>
@@ -758,8 +759,8 @@
                                 <div class="form-row">
                                     <div class="col-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="" checked>
-                                            <label class="form-check-label" for="">
+                                            <input class="form-check-input" type="checkbox" value="true" name="declaration" id="declaration" v-model="isDeclared">
+                                            <label class="form-check-label" for="declaration">
                                                 I Agree
                                             </label>
                                         </div>
@@ -783,7 +784,7 @@
                                     <div class="col-6">
                                     </div>
                                     <div class="col-3">
-                                        <button type="submit" class="btn btn-primary">Confirm &amp; Agree</button>
+                                        <button type="submit" class="btn btn-primary" :disabled="isDeclared == false">Submit Registration</button>
                                     </div>
                                 </div>
 
@@ -807,37 +808,53 @@
 
 
 <!-- Registration Form-specific JavaScripts -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/4.0.9/jquery.inputmask.bundle.min.js" integrity="sha512-VpQwrlvKqJHKtIvpL8Zv6819FkTJyE1DoVNH0L2RLn8hUPjRjkS/bCYurZs0DX9Ybwu9oHRHdBZR9fESaq8Z8A==" crossorigin="anonymous"></script><!-- Special JavaScript just for Registration form -->
-<script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/4.0.9/jquery.inputmask.bundle.min.js" integrity="sha512-VpQwrlvKqJHKtIvpL8Zv6819FkTJyE1DoVNH0L2RLn8hUPjRjkS/bCYurZs0DX9Ybwu9oHRHdBZR9fESaq8Z8A==" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue-the-mask/0.11.1/vue-the-mask.min.js" integrity="sha512-qXurwUG9teY1KFtbBifUHInCiNK/POQqJeFRSoaHg1pHEB1tBUlFKRsfPzm1D6b6ueeQOCKldvXYCtOsPURrcw==" crossorigin="anonymous"></script>
 
 <script>
+
+
     var app = new Vue({
         el: "#app",
         vuetify: new Vuetify(),
         data: {
             e1: 1,
-            isRetiringThisYear: 0,
             milestone: 'Select Milestone',
+            milestoneName: '',
             award_year: 'Select Year',
+            isRetiringThisYear: 0,
+            retirementDate: '',
+            certificateName: '',
+            isRetroactive: 0,
+
 
             employeeID: '',
             firstName: '',
             lastName: '',
-            ministry: 'Select Ministry',
-            ministryBranch: '',
-            certificateName: '',
 
-            pastRegistrationNoCeremony: '',
+            selectedAward: -1,
+            awardName: '',
+            awardDescription: '',
+            awardOptions: [],
+            awardImage: '',
+
+            donationRegion: '',
+            donationCharity1: '',
+            donationCharity2: '',
 
             govtEmail: '',
             altEmail: '',
+
+            ministry: 'Select Ministry',
+            ministryName : '',
+            ministryBranch: '',
 
             officeMailPrefix: '',
             officeSuite: '',
             officeStreetAddress: '',
             officeCity: 'Select A City',
+            officeCityName: '',
             officePostalCode: '',
             officePhone: '',
             officeExtension: '',
@@ -846,6 +863,7 @@
             homeSuite: '',
             homeStreetAddress: '',
             homeCity: 'Select A City',
+            homeCityName: '',
             homePostalCode: '',
             homePhone: '',
 
@@ -855,30 +873,14 @@
             supervisorSuite: '',
             supervisorStreetAddress: '',
             supervisorCity: 'Select A City',
+            supervisorCityName : '',
             supervisorPostalCode: '',
             supervisorEmail: '',
             supervisorPhone: '',
             supervisorExtension: '',
 
-            availableAwards: '',
-            availableAwardOptions: '',
-
-            currentAwardName: '',
-            currentAwardImage: '',
-            currentAwardDescription: '',
-            currentAwardIndex: 0,
-            currentAwards: [],
-
-        selectedAward: -1,
-            awardName: '',
-            awardDescription: '',
-            awardOptions: [],
-            awardImage: '',
-
-            availableCharities: [],
-            donationRegion: '',
-            donationCharity1: '',
-            donationCharity2: '',
+            isDeclared: false,
+            isOptedIn: 1,
 
             errorsStep1: [],
             errorsStep2: [],
@@ -909,55 +911,86 @@
             donationType: false,
             highlightedAward: 1
         },
-
         methods: {
 
+            filterOfficePhoneNumber : function () {
+               this.officePhone         = Inputmask.format(this.officePhone, {"mask" : "(999) 999-9999"});
+            },
+            filterHomePhoneNumber : function () {
+                this.homePhone          = Inputmask.format(this.homePhone, {"mask" : "(999) 999-9999"});
+            },
+            filterOfficePostalCode : function () {
+                this.officePostalCode   = Inputmask.format(this.officePostalCode, {"mask" : "A9A 9A9"});
+            },
+            filterHomePostalCode : function () {
+                this.homePostalCode     = Inputmask.format(this.homePostalCode, {"mask" : "A9A 9A9"});
+            },
+            filterSupervisorPostalCode : function () {
+                this.supervisorPostalCode = Inputmask.format(this.supervisorPostalCode, {"mask" : "A9A 9A9"});
+            },
+            filterOfficeExtension : function () {
+                this.officeExtension = Inputmask.format(this.officeExtension, {"mask": "9[999]"});
+            },
+            filterGovtEmail : function () {
+                this.govtEmail = this.filterEmail(this.govtEmail);
+            },
+            filterAltEmail : function () {
+                this.altEmail = this.filterEmail(this.altEmail);
+            },
+            filterSupervisorEmail : function () {
+                this.supervisorEmail = this.filterEmail(this.supervisorEmail);
+            },
+            filterEmail : function (emailString) {
+                return Inputmask.format(emailString, {
+                    mask: "*{1,20}[.*{1,20}][.*{1,20}][.*{1,20}]@*{1,20}[.*{2,6}][.*{1,2}]",
+                    greedy: false,
+                    onBeforePaste: function (pastedValue, opts) {
+                        pastedValue = pastedValue.toLowerCase();
+                        return pastedValue.replace("mailto:", "");
+                    },
+                    definitions: {
+                        '*': {
+                            validator: "[0-9A-Za-z!#$%&'*+/=?^_`{|}~\-]",
+                            casing: "lower"
+                        }
+                    }
+                });
+            },
+
+
+
+            //TODO: Reduce the redundant functions to a single parameterized function call.
+            setMilestoneName : function(e) {
+                if (e.target.options.selectedIndex > -1) {
+                    this.milestoneName = e.target.options[e.target.options.selectedIndex].text
+                }
+            },
+            setMinistryName : function(e) {
+               if (e.target.options.selectedIndex > -1) {
+                   this.ministryName = e.target.options[e.target.options.selectedIndex].text
+               }
+             },
+            setOfficeCityName : function(e) {
+                if (e.target.options.selectedIndex > -1) {
+                    this.officeCityName = e.target.options[e.target.options.selectedIndex].text
+                }
+            },
+            setHomeCityName : function (e) {
+                if (e.target.options.selectedIndex > -1) {
+                    this.homeCityName = e.target.options[e.target.options.selectedIndex].text
+                }
+            },
+            setSupervisorCityName : function (e) {
+                if (e.target.options.selectedIndex > -1) {
+                    this.supervisorCityName = e.target.options[e.target.options.selectedIndex].text
+                }
+            },
 
             selectAward: function(awardid) {
                 this.selectedAward = awardid;
                 this.$vuetify.goTo('#award-button');
             },
-            /*
-            getCharity: function (select_id) {
-                charity = 0;
-                for (var i = 0; i < allCharities.length; i++) {
-                    if (allCharities[i].id == select_id) {
-                        charity = allCharities[i];
-                    }
-                }
-                return charity;
-            },
 
-            selectCharityOptions: function () {
-                $("#donation-1").modal('show');
-                this.selectedAward = 0;
-            },
-
-            regionSelected: function () {
-                this.donationRegion = $('#selectedregion :selected').text();
-
-                this.availableCharities = [];
-                for (var i = 0; i < allCharities.length; i++) {
-                    if (allCharities[i].pecsf_region_id == $('#selectedregion').val()) {
-                        this.availableCharities.push(allCharities[i]);
-                    }
-                }
-                this.inputDonationType = true;
-            },
-
-            donationTypeSelected: function () {
-                if ($("input:radio[name ='selectDonationType']:checked").val() == 0) {
-                    this.inputCharity1 = false;
-                    this.inputCharity2 = false;
-                } else if ($("input:radio[name ='selectDonationType']:checked").val() == 1) {
-                    this.inputCharity1 = true;
-                    this.inputCharity2 = false;
-                } else if ($("input:radio[name ='selectDonationType']:checked").val() == 2) {
-                    this.inputCharity1 = true;
-                    this.inputCharity2 = true;
-                }
-            },
-            */
             validateStep1 : function () {
                 this.errorsStep1 = [];
                 //Did they put in a milestone year?
@@ -1026,7 +1059,7 @@
                     this.errorsStep3.push('You must input your office postal code');
                 }
                //Did they include a phone number?
-                if (this.officePhone.length != 13) {
+                if (this.officePhone.length > 16 || this.officePhone.length < 9) {
                     this.errorsStep3.push('You must input your office phone number');
                 }
                //Did they include a home street address?
@@ -1042,7 +1075,7 @@
                     this.errorsStep3.push('You must input your home postal code');
                 }
                //Did they include a home phone number?
-                if (this.homePhone.length != 13) {
+                if (this.homePhone.length > 16 || this.homePhone.length < 9) {
                     this.errorsStep3.push('You must input your home phone number');
                 }
 
@@ -1076,649 +1109,17 @@
                 if (this.supervisorPostalCode.length != 7) {
                     this.errorsStep4.push('You must input your supervisor\'s office postal code')
                 }
-
-                if (this.errorsStep4.lenght == 0) {
+                if (this.errorsStep4.length == 0) {
                     this.e1 = 5;
                 }
             },
 
-            selectAwardOptions: function (select_id) {
-                award = this.getAward(select_id);
-
-                options = JSON.parse(award.options);
-                if (options.length > 0) {
-                    if (this.selectedAward != award.id) {
-                        jQuery('#formAwardOptions').empty();
-
-                        availableOptions = "";
-                        options.forEach((element, index, array) => {
-                            availableOptions += "<p>" + element.name + "</p>";
-                            if (element.type == "choice") {
-                                input = '<label for="award-option-' + index + '">' + element.name + '</label>';
-                                input += '<select id="award-option-' + index + '" requires="required">';
-                                input += '<option value>- select option -</option>';
-
-                                for (var i = 0; i < element.values.length; i++) {
-                                    optionValue = element.values[i];
-                                    input += '<option value="' + i + '">' + element.values[i] + '</option>';
-                                }
-
-                                input += '</select>';
-                                jQuery('#formAwardOptions').append(input);
-                            }
-                            if (element.type == "text") {
-                                input = '<label for="award-option-' + index + '">' + element.name + '</label>';
-                                input += '<input type="text" id="award-option-' + index + '">';
-                                jQuery('#formAwardOptions').append(input);
-                            }
-                        });
-                    }
-                    $("#awardName").html(award.name);
-                    $("#award-1").modal('show');
-                }
-                this.selectedAward = award.id;
-            },
-
-            processOptions: function () {
-                if (this.selectedAward == 0) {
-                    this.processDonationOptions();
-                } else {
-                    this.processAwardOptions();
-                }
-            },
-
-            processDonationOptions: function () {
-
-                for (var i = 0; i < milestones.length; i++) {
-                    if (milestones[i].id == $('#milestone-id').val()) {
-                        milestone = milestones[i];
-                    }
-                }
-
-                errors = [];
-
-                $('input[name=pecsf_donation]').val(1);
-
-
-                $('input[name=pecsf_name]').val($('input[name=donorName').val());
-
-                this.awardOptions = [];
-                $('#donation-type').css("border-color", clrDefault);
-                if ($("input:radio[name ='selectDonationType']:checked").val() == 0) {
-                    amount = milestone.donation;
-                    this.awardOptions.push(this.currencyFormat(amount) + " Donation - PECSF Region Charity Fund");
-                    $('input[name=pecsf_amount1]').val(amount);
-                    $('input[name=pecsf_donation_type]').val(0);
-                } else if ($("input:radio[name ='selectDonationType']:checked").val() == 1) {
-                    if ($('#selectedCharity1').val() == 0) {
-                        errors.push("Charity is required");
-                        $('#selectedCharity1').css("border-color", clrError);
-                    } else {
-                        amount = milestone.donation;
-                        charity = this.getCharity($('#selectedCharity1').val());
-                        this.awardOptions.push(this.currencyFormat(amount) + " Donation - (" + charity.vendor_code + ") " + charity.name);
-                        $('#selectedCharity1').css("border-color", clrDefault);
-                        $('input[name=pecsf_charity1_id]').val(charity.id);
-                        $('input[name=pecsf_amount1]').val(amount);
-                    }
-                    $('input[name=pecsf_donation_type]').val(1);
-                } else if ($("input:radio[name ='selectDonationType']:checked").val() == 2) {
-                    amount = milestone.donation / 2;
-
-                    if ($('#selectedCharity1').val() == 0) {
-                        errors.push("First Charity is required");
-                        $('#selectedCharity1').css("border-color", clrError);
-                    } else {
-                        charity = this.getCharity($('#selectedCharity1').val());
-                        this.awardOptions.push(this.currencyFormat(amount) + " Donation - (" + charity.vendor_code + ") " + charity.name);
-                        $('#selectedCharity1').css("border-color", clrDefault);
-                        $('input[name=pecsf_charity1_id]').val(charity.id);
-                        $('input[name=pecsf_amount1]').val(amount);
-                    }
-
-                    if ($('#selectedCharity2').val() == 0) {
-                        errors.push("Second Charity is required");
-                        $('#selectedCharity2').css("border-color", clrError);
-                    } else {
-                        charity = this.getCharity($('#selectedCharity2').val());
-                        this.awardOptions.push(this.currencyFormat(amount) + " Donation - (" + charity.vendor_code + ") " + charity.name);
-                        $('#selectedCharity2').css("border-color", clrDefault);
-                        $('input[name=pecsf_charity2_id]').val(charity.id);
-                        $('input[name=pecsf_amount2]').val(amount);
-                    }
-                    $('input[name=pecsf_donation_type]').val(2);
-                } else {
-                    if (this.inputDonationType) {
-                        errors.push('Please select the type of donation.');
-                        $('#donation-type').css("border-color", clrError);
-                    }
-                }
-
-                if (document.getElementById("selectedregion").selectedIndex == 0) {
-                    errors.push('Region is required');
-                    $('#selectedregion').css("border-color", clrError);
-                } else {
-                    $('#selectedregion').css("border-color", clrDefault);
-                    $('input[name=pecsf_region_id]').val($('#selectedregion').val());
-                }
-
-                if (errors.length == 0) {
-                    $('input[name=award_options]').val(JSON.stringify(this.awardOptions));
-                    $("#donation-1").modal('hide');
-                    this.errorsOptions = '';
-                } else {
-                    this.errorsOptions = '<ul>';
-                    for (var i = 0; i < errors.length; i++) {
-                        this.errorsOptions += '<li>' + errors[i] + '</li>';
-                    }
-                    this.errorsOptions += '</ul>';
-                }
-
-            },
-
-
-            processAwardOptions: function () {
-                award = this.getAward(this.selectedAward);
-                options = JSON.parse(award.options);
-
-                errors = [];
-
-                this.awardOptions = [];
-                for (i = 0; i < options.length; i++) {
-                    console.log(options[i]);
-                    if (options[i].type == "choice") {
-                        var sel = document.getElementById("award-option-" + i);
-                        if (sel.selectedIndex == 0) {
-                            errors.push(options[i].name + " is required");
-                        } else {
-                            this.awardOptions.push(options[i].name + ": " + sel.options[sel.selectedIndex].text);
-                        }
-                    }
-                    if (options[i].type == "text") {
-                        var field = document.getElementById("award-option-" + i);
-                        if (field.value) {
-                            if (field.value.length <= options[i].maxlength) {
-                                this.awardOptions.push(options[i].name + ": " + field.value);
-                            } else {
-                                errors.push(options[i].name + " may not contain more than " + options[i].maxlength + " characters.");
-                            }
-                        } else {
-                            errors.push(options[i].name + " is required");
-                        }
-                    }
-                }
-
-                if (errors.length == 0) {
-                    $('input[name=award_options]').val(JSON.stringify(this.awardOptions));
-                    $("#award-1").modal('hide');
-                    this.errorsOptions = '';
-
-                    // Reset PECSF Donation values in case user previous selected PECSF donation option
-                    $('input[name=pecsf_region_id]').val(0);
-                    $('input[name=pecsf_donation]').val(0);
-                    $('input[name=pecsf_donation_type]').val(0);
-                    $('input[name=pecsf_charity1_id]').val(0);
-                    $('input[name=pecsf_amount1]').val(0);
-                    $('input[name=pecsf_charity2_id]').val(0);
-                    $('input[name=pecsf_amount2]').val(0);
-                } else {
-                    this.errorsOptions = '<ul>';
-                    for (var i = 0; i < errors.length; i++) {
-                        this.errorsOptions += '<li>' + errors[i] + '</li>';
-                    }
-                    this.errorsOptions += '</ul>';
-                }
-            },
-
-            milestoneSelected: function (milestone) {
-                this.exposeAwardSelector(milestone);
-
-                var sel = document.getElementById("milestone-id");
-                this.milestone = sel.options[sel.selectedIndex].text;
-
-                this.currentAwards = [];
-                var donation = {
-                    id: 0,
-                    name: "PECSF Donation",
-                    description: "Instead of choosing an award from the catalogue, you can opt to make a charitable donation via the Provincial Employees Community Services Fund. A framed certificate of service, signed by the Premier of British Columbia, will be presented to you noting your charitable contribution.",
-                    image: "25_pecsf.jpg"
-                };
-
-                this.currentAwards.push(donation);
-
-                for (var i = 0; i < awards.length; i++) {
-                    if (awards[i].milestone_id == milestone) {
-                        this.currentAwards.push(awards[i]);
-                    }
-                }
-
-                this.currentAwardIndex = 0;
-                this.updateAwardDisplay(this.currentAwardIndex);
-
-                var record = this.getMilestone(milestone);
-                this.milestonePersonalized = record.personalized;
-                if (record.personalized) {
-                    $('input[name=certificate_name]').val("");
-                }
-            },
-
-            showPreviousAward: function () {
-                this.currentAwardIndex--;
-                if (this.currentAwardIndex < 0) {
-                    this.currentAwardIndex = this.currentAwards.length - 1;
-                }
-                this.updateAwardDisplay(this.currentAwardIndex);
-            },
-
-            showNextAward: function () {
-                this.currentAwardIndex++;
-                if (this.currentAwardIndex >= this.currentAwards.length) {
-                    this.currentAwardIndex = 0;
-                }
-                this.updateAwardDisplay(this.currentAwardIndex);
-            },
-
-            updateAwardDisplay: function (awardIndex) {
-                this.currentAwardName = this.currentAwards[awardIndex].name;
-                this.currentAwardImage = this.currentAwards[awardIndex].image;
-                this.currentAwardDescription = nl2br(this.currentAwards[awardIndex].description);
-                if (this.selectedAward == this.currentAwards[awardIndex].id) {
-                    $('#lsa-award-card').css('background-color', 'lightblue');
-                } else {
-                    $('#lsa-award-card').css('background-color', 'transparent');
-                }
-            },
-
-
-            selectCurrentAward: function () {
-                this.CurrentAward = this.highlightedAward;
-
-            },
-
-
-            buttonMissedCeremony: function (missed) {
-                if (missed == 1) {
-                    this.selectAward = false;
-                    this.showIdentifyingInfoInputs();
-                } else {
-                    this.selectAward = true;
-                }
-            },
-
-            buttonRetirementClick: function (retiring) {
-                $('input[name=retiring_this_year]').val(retiring);
-                if (retiring == 1) {
-                    this.exposeRetirementDatePicker();
-                } else {
-                    this.setRetirementStatusKnown();
-                }
-                $('html, body').animate({
-                    scrollTop: $("#employeeAnchor").offset().top
-                }, 1000);
-            },
-
-            exposeRetirementDatePicker: function () {
-                this.isRetiringThisYear = true;
-                this.retirementStatusKnown = true;
-            },
-
-            setRetirementStatusKnown: function () {
-                this.isRetiringThisYear = false;
-                this.retirementStatusKnown = true;
-            },
-
-            exposeAwardSelector: function (milestone) {
-                this.milestoneKnown = true;
-            },
-
-            showIdentifyingInfoInputs: function () {
-                this.awardConfirmed = true;
-            },
-
-            showOfficeAddressInput: function () {
-
-                errors = this.checkIdentifyingInfo();
-                if (errors.length == 0) {
-                    $('html, body').animate({
-                        scrollTop: $("#officeAnchor").offset().top
-                    }, 1000);
-
-                    this.identifyingInfoInput = true;
-                    this.errorsEmployee = '';
-                } else {
-
-                    this.errorsEmployee = '<ul>';
-                    for (var i = 0; i < errors.length; i++) {
-                        this.errorsEmployee += '<li>' + errors[i] + '</li>';
-                    }
-                    this.errorsEmployee += '</ul>';
-                }
-            },
-
-            showHomeAddressInput: function () {
-
-                errors = this.checkOfficeAddressInput();
-                if (errors.length == 0) {
-                    $('html, body').animate({
-                        scrollTop: $("#homeAnchor").offset().top
-                    }, 1000);
-                    this.officeAddressInput = true;
-                    this.errorsOffice = '';
-                } else {
-                    this.errorsOffice = '<ul>';
-                    for (var i = 0; i < errors.length; i++) {
-                        this.errorsOffice += '<li>' + errors[i] + '</li>';
-                    }
-                    this.errorsOffice += '</ul>';
-                }
-            },
-
-            showSupervisorInput: function () {
-                errors = this.checkHomeAddressInput();
-                if (errors.length == 0) {
-                    $('html, body').animate({
-                        scrollTop: $("#supervisorAnchor").offset().top
-                    }, 1000);
-                    this.homeAddressInput = true;
-                    this.errorsHome = '';
-                } else {
-                    this.errorsHome = '<ul>';
-                    for (var i = 0; i < errors.length; i++) {
-                        this.errorsHome += '<li>' + errors[i] + '</li>';
-                    }
-                    this.errorsHome += '</ul>';
-                }
-            },
-
-            showConfirmation: function () {
-                errors = this.checkSupervisorInput();
-                if (errors.length == 0) {
-                    $('html, body').animate({
-                        scrollTop: $("#confirmationAnchor").offset().top
-                    }, 1000);
-                    this.supervisorInput = true;
-                    this.errorsSupervisor = '';
-                } else {
-                    this.errorsSupervisor = '<ul>';
-                    for (var i = 0; i < errors.length; i++) {
-                        this.errorsSupervisor += '<li>' + errors[i] + '</li>';
-                    }
-                    this.errorsSupervisor += '</ul>';
-                }
-            },
-
-            showDeclaration: function () {
-                this.informationConfirmed = true;
-                $('html, body').animate({
-                    scrollTop: $("#declarationAnchor").offset().top
-                }, 1000);
-            },
-
-            currencyFormat: function (num) {
-                return '$' + parseFloat(num).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
-            },
-
-            checkIdentifyingInfo: function () {
-
-                var error = [];
-
-                if (!this.employeeID) {
-                    $('#employee-id').css("border-color", clrError);
-                    error.push('Employee ID is required');
-                } else {
-                    $('#employee-id').css("border-color", clrDefault);
-                }
-
-                if (!this.firstName) {
-                    $('#first-name').css("border-color", clrError);
-                    error.push('Employee first name is required');
-                } else {
-                    $('#first-name').css("border-color", clrDefault);
-                }
-
-                if (!this.lastName) {
-                    $('#last-name').css("border-color", clrError);
-                    error.push('Employee last name is required');
-                } else {
-                    $('#last-name').css("border-color", clrDefault);
-                }
-
-                if (!this.ministry) {
-                    $('#ministry-id').css("border-color", clrError);
-                    error.push('Ministry is required');
-                } else {
-                    $('#ministry-id').css("border-color", clrDefault);
-                }
-
-                if (!this.ministryBranch) {
-                    $('#branch').css("border-color", clrError);
-                    error.push('Branch is required');
-                } else {
-                    $('#branch').css("border-color", clrDefault);
-                }
-
-                if (!this.govtEmail) {
-                    $('#preferred-email').css("border-color", clrError);
-                    error.push('Government Email is required.');
-                } else {
-                    if (!isEmail(this.govtEmail)) {
-                        $('#preferred-email').css("border-color", clrError);
-                        error.push('Government Email invalid format');
-                    } else {
-                        $('#preferred-email').css("border-color", clrDefault);
-                    }
-                }
-
-                if (this.altEmail) {
-                    if (!isEmail(this.altEmail)) {
-                        $('#alternate-email').css("border-color", clrError);
-                        error.push('Alternate Email invalid format');
-                    } else {
-                        $('#alternate-email').css("border-color", clrDefault);
-                    }
-                }
-
-                return error;
-            },
-
-            checkOfficeAddressInput: function () {
-
-                var error = [];
-
-                if (!this.officeStreetAddress) {
-                    $('#office-address').css("border-color", clrError);
-                    error.push('Office Address is required');
-                } else {
-                    $('#office-address').css("border-color", clrDefault);
-                }
-
-                if (!this.officeCity) {
-                    $('#office-city-id').css("border-color", clrError);
-                    error.push('Office City is required');
-                } else {
-                    $('#office-city-id').css("border-color", clrDefault);
-                }
-
-                if (!this.officePostalCode) {
-                    $('#office-postal-code').css("border-color", clrError);
-                    error.push('Office Postal Code is required');
-                } else {
-                    if (!isPostalCode(this.officePostalCode)) {
-                        $('#office-postal-code').css("border-color", clrError);
-                        error.push('Office Postal Code invalid format (A1A 1A1)');
-                    } else {
-                        $('#office-postal-code').css("border-color", clrDefault);
-                    }
-                }
-
-                if (!this.officePhone) {
-                    $('#work-phone').css("border-color", clrError);
-                    error.push('Office Phone number is required');
-                } else {
-                    if (!isPhone(this.officePhone)) {
-                        $('#work-phone').css("border-color", clrError);
-                        error.push('Office Phone number invalid format (###) ###-####');
-                    } else {
-                        $('#work-phone').css("border-color", clrDefault);
-                    }
-                }
-
-                return error;
-            },
-
-            checkHomeAddressInput: function () {
-
-                var error = [];
-
-                if (!this.homeStreetAddress) {
-                    $('#home-address').css("border-color", clrError);
-                    error.push('Home Address is required');
-                } else {
-                    $('#home-address').css("border-color", clrDefault);
-                }
-
-                if (!this.homeCity) {
-                    $('#home-city-id').css("border-color", clrError);
-                    error.push('Home City is required');
-                } else {
-                    $('#home-city-id').css("border-color", clrDefault);
-                }
-
-                if (!this.homePostalCode) {
-                    $('#home-postal-code').css("border-color", clrError);
-                    error.push('Home Postal Code is required');
-                } else {
-                    if (!isPostalCode(this.homePostalCode)) {
-                        $('#home-postal-code').css("border-color", clrError);
-                        error.push('Home Postal Code invalid format (A1A 1A1)');
-                    } else {
-                        $('#home-postal-code').css("border-color", clrDefault);
-                    }
-                }
-
-                if (!this.homePhone) {
-                    $('#home-phone').css("border-color", clrError);
-                    error.push('Home Phone number is required');
-                } else {
-                    if (!isPhone(this.homePhone)) {
-                        $('#home-phone').css("border-color", clrError);
-                        error.push('Home Phone number invalid format (###) ###-####');
-                    } else {
-                        $('#home-phone').css("border-color", clrDefault);
-                    }
-                }
-
-                return error;
-            },
-
-
-            checkSupervisorInput: function () {
-
-                var error = [];
-
-                if (!this.supervisorFirstName) {
-                    $('#supervisor-first-name').css("border-color", clrError);
-                    error.push('Supervisor First Name is required');
-                } else {
-                    $('#supervisor-first-name').css("border-color", clrDefault);
-                }
-
-                if (!this.supervisorLastName) {
-                    $('#supervisor-last-name').css("border-color", clrError);
-                    error.push('Supervisor last name is required');
-                } else {
-                    $('#supervisor-last-name').css("border-color", clrDefault);
-                }
-
-                if (!this.supervisorStreetAddress) {
-                    $('#supervisor-address').css("border-color", clrError);
-                    error.push('Supervisor Address is required');
-                } else {
-                    $('#supervisor-address').css("border-color", clrDefault);
-                }
-
-                if (!this.supervisorCity) {
-                    $('#supervisor-city-id').css("border-color", clrError);
-                    error.push('Supervisor City is required');
-                } else {
-                    $('#supervisor-city-id').css("border-color", clrDefault);
-                }
-
-                if (!this.supervisorPostalCode) {
-                    $('#supervisor-postal-code').css("border-color", clrError);
-                    error.push('Supervisor Postal Code is required');
-                } else {
-                    if (!isPostalCode(this.supervisorPostalCode)) {
-                        $('#supervisor-postal-code').css("border-color", clrError);
-                        error.push('Supervisor Postal Code invalid format (A1A 1A1)');
-                    } else {
-                        $('#supervisor-postal-code').css("border-color", clrDefault);
-                    }
-                }
-
-                if (!this.supervisorEmail) {
-                    $('#supervisor-email').css("border-color", clrError);
-                    error.push('Supervisor Email is required');
-                } else {
-                    if (!isEmail(this.supervisorEmail)) {
-                        $('#supervisor-email').css("border-color", clrError);
-                        error.push('Supervisor Email invalid format');
-                    } else {
-                        $('#supervisor-email').css("border-color", clrDefault);
-                    }
-                }
-
-                return error;
-            },
 
         }
     });
-
-
-
-    function isEmail(email) {
-        var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-        return regex.test(email);
-    }
-
-    function isPhone(phone) {
-        var regex = /\(([0-9]{3})\) ([0-9]{3})-([0-9]{4})/;
-        return regex.test(phone);
-    }
-
-    function isPostalCode(code) {
-        var regex = /^[ABCEGHJ-NPRSTVXY][0-9][ABCEGHJ-NPRSTV-Z] [0-9][ABCEGHJ-NPRSTV-Z][0-9]$/;
-        return regex.test(code);
-    }
-
-    function nl2br(str, is_xhtml) {
-        var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
-        return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
-    }
-
     Vue.config.devtools = true;
 
 
-</script>
-<script>
-    $(document).ready(function(){
-        $('.phone-input').inputmask('(999) 999 - 9999');
-        $('.postal-code-input').inputmask('A9A 9A9');
-        $('.extension-input').inputmask('9[999]');
-        $('.email-input').inputmask({
-            mask: "*{1,20}[.*{1,20}][.*{1,20}][.*{1,20}]@*{1,20}[.*{2,6}][.*{1,2}]",
-            greedy: false,
-            onBeforePaste: function (pastedValue, opts) {
-                pastedValue = pastedValue.toLowerCase();
-                return pastedValue.replace("mailto:", "");
-            },
-            definitions: {
-                '*': {
-                    validator: "[0-9A-Za-z!#$%&'*+/=?^_`{|}~\-]",
-                    casing: "lower"
-                }
-            }
-        });
-    })
 
 </script>
+
