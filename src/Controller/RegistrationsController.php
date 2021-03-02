@@ -4,13 +4,7 @@ namespace App\Controller;
 
 use Cake\Core\Configure;
 use Cake\Routing\Router;
-use Cake\Error\Debugger;
 use Cake\Mailer\Mailer;
-use DateTime;
-use Cake\Database\Expression\QueryExpression;
-use Cake\ORM\Query;
-
-
 
 class RegistrationsController extends AppController
 {
@@ -19,7 +13,7 @@ class RegistrationsController extends AppController
     {
         if ($this->checkAuthorization(array(Configure::read('Role.authenticated')))) {
             $this->Flash->error(__('You are not authorized to administer Registrations.'));
-            $this->redirect('/');
+            $this->redirect('/register');
         }
 
         $query = $this->Registrations->RegistrationPeriods->find('all')
