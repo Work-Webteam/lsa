@@ -453,7 +453,7 @@ class RegistrationsController extends AppController
 
             //Set invite_sent to null if the request data is empty
             //(this seems weird and possibly unnecessary)
-            if ($this->request->getData('invite_sent'));
+            if ($this->request->getData('invite_sent')); //TODO: Do we need this line? I can't see what it does. No variable has been assigned.
             if (empty($registration->invite_sent)) {
                 $registration->invite_sent = NULL;
             }
