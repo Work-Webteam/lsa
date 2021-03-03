@@ -1,4 +1,36 @@
-<div class="container" id="app">
+
+
+<div class="container" id="app" data-spy="scroll" data-target="#registrantNav" data-offset="0">
+    <?php if ($isadmin) : ?>
+
+            <nav id="registrantNav" class="navbar navbar-light bg-light sticky-top">
+                <ul class="nav nav-pills">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#processInfo" >Process</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#ceremonyInfo">Ceremony</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#awardInfo">Award</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#employeeInfo">Employee</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#workContact">Work Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#supervisorInfo">Supervisor</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#personalContact">Personal Contact</a>
+                    </li>
+                </ul>
+            </nav>
+
+    <?php endif; ?>
+
     <h1 class="display-2"><?= $registration->first_name . " " . $registration->last_name ?></h1>
 
     <?php
@@ -16,9 +48,8 @@
 
     <?php if ($isadmin) : ?>
 
-        <div class="row"> <h2>Process Information</h2></div>
 
-
+        <div class="row"> <h2 id="processInfo">Process Information</h2></div>
         <div class="row">
             <div class="col-2">
                 <?= $this->Form->control('registration_year', ['label' => 'Registration Year', 'class' => 'form-control']); ?>
@@ -69,7 +100,7 @@
             </div>
         </div>
 
-        <div class="row">  <h2>Ceremony Information</h2></div>
+        <div class="row">  <h2 id="ceremonyInfo">Ceremony Information</h2></div>
 
 
 
@@ -216,7 +247,7 @@
             <div class="col-9">
 
             </div>
-            <div class="col-3">
+            <div id="awardInfo" class="col-3">
                 <?php
                 echo $this->Form->button(__('Save Registration'), [
                     'class' => 'btn btn-primary'
@@ -234,7 +265,131 @@
 
     <?php endif; //END Admin-only inputs ?>
 
-    <div class="row"> <h2>Employee Information</h2></div>
+    <div class="row"> <h2 >Award Information</h2></div>
+
+    <div class="row">
+        <div class="col-4">
+            <?= $this->Form->control('milestone_id', ['options' => $milestones, 'class'=> 'form-control','v-model' => 'selectedMilestone']); ?>
+            <?= $this->Form->hidden('award_id', ['value' => 0, 'v-model' => 'selectedAward']);?>
+        </div>
+        <div class="col-8">
+            <div class="form-group">
+                <label for="award_id">Select Award</label>
+                <select name="award_id" id="award_id" v-model="selectedAward" class="form-control">
+                    <?php foreach ($awards as $award): ?>
+                        <option value="<?= $award->id ?>" v-if="selectedMilestone == <?= $award->milestone_id; ?>"><?= $award->name ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <!-- WATCH CONTROLS -->
+            <div v-if="selectedAward == watchID">
+                <div class="form-group">
+                    <label for="watch_size"> Watch Size:</label>
+                    <select class="form-control" name="watch_size" id="watch_size">
+                        <option disabled selected>Select Watch Size</option>
+                        <option>38mm face with 20mm strap</option>
+                        <option>29mm face with 14mm strap</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="watch_colour">Watch Colour:</label>
+                    <select class="form-control" name="watch_colour" id="watch_colour">
+                        <option disabled selected></option>
+                        <option>Gold</option>
+                        <option>Silver</option>
+                        <option>Two-Toned (Gold &amp;s Silver)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="strap_type">Strap:</label>
+                    <select  class="form-control" name="strap_type" id="strap_type">
+                        <option disabled selected>Choose Strap</option>
+                        <option>Plated</option>
+                        <option>Black Leather</option>
+                        <option>Brown Leather</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="watch_engraving">Engraving</label>
+                    <input class="form-control" type="text" name="watch_engraving" maxlength="33">
+                </div>
+            </div>
+
+            <!-- 35 YR BRACELET CONTROLS -->
+            <div v-if="selectedAward == bracelet35ID">
+                <div class="form-group">
+                    <label for="bracelet_size">Size</label>
+                    <select  class="form-control" name="bracelet_size" id="bracelet_size">
+                        <option disabled selected>Choose Size</option>
+                        <option>Fits 6 1/2" - 7 1/2" circumference wrists</option>
+                        <option>Fits 7 1/2" - 8 1/2" circumference wrists</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 45 YR BRACELET CONTROLS -->
+            <div v-if="selectedAward == bracelet45ID">
+                <div class="form-group">
+                    <label for="bracelet_size">Size</label>
+                    <select class="form-control" name="bracelet_size" id="bracelet_size">
+                        <option disabled selected>Choose Size</option>
+                        <option>Fits 6 1/2" - 7 1/2" circumference wrists</option>
+                        <option>Fits 7 1/2" - 8 1/2" circumference wrists</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- PECSF DONATION CONTROLS -->
+            <div v-if="selectedAward == pecsf25ID || selectedAward == pecsf30ID || selectedAward == pecsf35ID || selectedAward == pecsf40ID || selectedAward == pecsf45ID || selectedAward == pecsf50ID">
+
+                <div class="form-group">
+                    <label for="">Name on Donation</label>
+                    <input class="form-control" type="text" maxlength="33" placeholder="Firstname Lastname">
+                </div>
+                <div  class="form-group">
+                    <label for="pecsf_region">Your Desired PECSF Region</label>
+                    <select class="form-control" name="pecsf_region" id="pecsf_region" v-model="pecsfRegion">
+                        <?php foreach ($regions as $region) : ?>
+                            <option value="<?= $region->id ?>"><?= $region->name ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="donation_type" id="donation_type" value="pool" v-model="donationType" checked>
+                    <label class="form-check-label" for="">Donate to the fund-supported pool for my chosen region</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="donation_type" id="donation_type" value="single-charity" v-model="donationType">
+                    <label class="form-check-label" for="">Donate to a specific charity</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="donation_type" id="donation_type" value="two-charities" v-model="donationType">
+                    <label class="form-check-label" for="">Donate to two charities</label>
+                </div>
+                <div class="form-group" >
+                    <label for="pecsf_charity_1" v-if="donationType == 'single-charity'">Choose your charity</label>
+                    <label for="pecsf_charity_1" v-if="donationType == 'two-charities'">Choose your first charity</label>
+                    <select class="form-control"  name="pecsf_charity_1" v-if="donationType != 'pool'" id="pecsf_charity_1" v-model="pecsfCharity1">
+                        <option selected disabled>Choose a charity</option>
+                        <?php foreach ($charities as $charity): ?>
+                            <option value="<?= $charity->id ?>" v-if="pecsfRegion == <?= $charity->pecsf_region_id; ?>"><?= $charity->name ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
+                <div class="form-group" v-if="donationType == 'two-charities'">
+                    <label for="pecsf_charity_2">Choose your second charity</label>
+                    <select class="form-control" name="pecsf_charity_2" id="pecsf_charity_2" v-model="pecsfCharity2">
+                        <option selected disabled>Choose a charity</option>
+                        <?php foreach ($charities as $charity): ?>
+                            <option value="<?= $charity->id ?>" v-if="pecsfRegion == <?= $charity->pecsf_region_id; ?>"><?= $charity->name ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+
+    <div class="row"> <h2 id="employeeInfo">Employee Information</h2></div>
 
 
 
@@ -266,19 +421,7 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-4">
-
-        </div>
-        <div class="col-4">
-
-        </div>
-        <div class="col-4">
-
-        </div>
-    </div>
-
-    <div class="row"> <h2>Work Contact Information</h2></div>
+    <div class="row"> <h2 id="workContact">Work Contact Information</h2></div>
 
 
     <div class="row">
@@ -291,9 +434,6 @@
         <div class="col-4">
             <?= $this->Form->control('work_extension', ['label' => 'Phone Extension', 'class' => 'form-control']); ?>
         </div>
-    </div>
-
-    <div class="row">
         <div class="col-4">
             <?= $this->Form->control('office_careof', ['label' => 'Floor/ Room / Care Of', 'class' => 'form-control']); ?>
         </div>
@@ -302,11 +442,7 @@
         </div>
         <div class="col-4">
             <?= $this->Form->control('office_address', ['label' => 'Address', 'class' => 'form-control']); ?>
-
         </div>
-    </div>
-
-    <div class="row">
         <div class="col-4">
             <?= $this->Form->control('office_city_id', ['label' => 'City', 'options' => $cities, 'empty' => '- select city -', 'class' => 'form-control']); ?>
         </div>
@@ -314,11 +450,10 @@
             <?= $this->Form->control('office_postal_code', ['label' => 'Postal Code', 'class' => 'form-control']); ?>
         </div>
         <div class="col-4">
-
         </div>
     </div>
 
-    <div class="row"> <h2>Supervisor Information</h2></div>
+    <div class="row"><h2 id="supervisorInfo">Supervisor Information</h2></div>
 
     <div class="row">
         <div class="col-4">
@@ -330,9 +465,7 @@
         <div class="col-4">
             <?= $this->Form->control('supervisor_email', ['label' => 'Supervisor Email', 'class' => 'form-control']); ?>
         </div>
-    </div>
 
-    <div class="row">
         <div class="col-4">
             <?= $this->Form->control('supervisor_careof', ['label' => 'Floor / Room / Care Of', 'class' => 'form-control']); ?>
         </div>
@@ -342,9 +475,6 @@
         <div class="col-4">
             <?= $this->Form->control('supervisor_address', ['label' => 'Address', 'class' => 'form-control']); ?>
         </div>
-    </div>
-
-    <div class="row">
         <div class="col-4">
             <?= $this->Form->control('supervisor_city_id', ['label' => 'City', 'class' => 'form-control', 'options' => $cities, 'empty' => '- select city -']); ?>
         </div>
@@ -352,12 +482,11 @@
             <?= $this->Form->control('supervisor_postal_code', ['label' => 'Postal Code', 'class' => 'form-control',]); ?>
         </div>
         <div class="col-4">
-
         </div>
     </div>
 
 
-   <div class="row"><h2>Personal Contact Information</h2></div>
+   <div class="row"><h2 id="personalContact">Personal Contact Information</h2></div>
 
     <div class="row">
         <div class="col-4">
@@ -367,10 +496,7 @@
             <?= $this->Form->control('home_phone', ['label' => 'Phone', 'class' => 'form-control']); ?>
         </div>
         <div class="col-4">
-
         </div>
-    </div>
-    <div class="row">
         <div class="col-4">
             <?= $this->Form->control('home_suite', ['label' => 'Suite', 'class' => 'form-control']); ?>
         </div>
@@ -380,139 +506,15 @@
         <div class="col-4">
             <?= $this->Form->control('home_city_id', ['label' => 'City', 'options' => $cities, 'empty' => '- select city -', 'class' => 'form-control']); ?>
         </div>
-    </div>
-    <div class="row">
         <div class="col-4">
             <?= $this->Form->control('home_postal_code', ['label' => 'Postal Code', 'class' => 'form-control']); ?>
         </div>
     </div>
 
-    <div class="row"> <h2>Award Information</h2></div>
 
-    <div class="row">
-        <div class="col-4">
-            <?= $this->Form->control('milestone_id', ['options' => $milestones, 'class'=> 'form-control','v-model' => 'selectedMilestone']); ?>
-            <?= $this->Form->hidden('award_id', ['value' => 0, 'v-model' => 'selectedAward']);?>
-        </div>
-        <div class="col-8">
-            <div class="form-group">
-            <label for="award_id">Select Award</label>
-            <select name="award_id" id="award_id" v-model="selectedAward" class="form-control">
-                <?php foreach ($awards as $award): ?>
-                    <option value="<?= $award->id ?>" v-if="selectedMilestone == <?= $award->milestone_id; ?>"><?= $award->name ?></option>
-                <?php endforeach; ?>
-            </select>
-            </div>
-            <!-- WATCH CONTROLS -->
-            <div v-if="selectedAward == watchID">
-                    <div class="form-group">
-                        <label for="watch_size"> Watch Size:</label>
-                        <select class="form-control" name="watch_size" id="watch_size">
-                            <option disabled selected>Select Watch Size</option>
-                            <option>38mm face with 20mm strap</option>
-                            <option>29mm face with 14mm strap</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="watch_colour">Watch Colour:</label>
-                        <select class="form-control" name="watch_colour" id="watch_colour">
-                            <option disabled selected></option>
-                            <option>Gold</option>
-                            <option>Silver</option>
-                            <option>Two-Toned (Gold &amp;s Silver)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="strap_type">Strap:</label>
-                        <select  class="form-control" name="strap_type" id="strap_type">
-                            <option disabled selected>Choose Strap</option>
-                            <option>Plated</option>
-                            <option>Black Leather</option>
-                            <option>Brown Leather</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="watch_engraving">Engraving</label>
-                        <input class="form-control" type="text" name="watch_engraving" maxlength="33">
-                    </div>
-            </div>
-
-            <!-- 35 YR BRACELET CONTROLS -->
-            <div v-if="selectedAward == bracelet35ID">
-                <div class="form-group">
-                    <label for="bracelet_size">Size</label>
-                    <select  class="form-control" name="bracelet_size" id="bracelet_size">
-                        <option disabled selected>Choose Size</option>
-                        <option>Fits 6 1/2" - 7 1/2" circumference wrists</option>
-                        <option>Fits 7 1/2" - 8 1/2" circumference wrists</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- 45 YR BRACELET CONTROLS -->
-            <div v-if="selectedAward == bracelet45ID">
-                <div class="form-group">
-                    <label for="bracelet_size">Size</label>
-                    <select class="form-control" name="bracelet_size" id="bracelet_size">
-                        <option disabled selected>Choose Size</option>
-                        <option>Fits 6 1/2" - 7 1/2" circumference wrists</option>
-                        <option>Fits 7 1/2" - 8 1/2" circumference wrists</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- PECSF DONATION CONTROLS -->
-            <div v-if="selectedAward == pecsf25ID || selectedAward == pecsf30ID || selectedAward == pecsf35ID || selectedAward == pecsf40ID || selectedAward == pecsf45ID || selectedAward == pecsf50ID">
-
-                    <div class="form-group">
-                        <label for="">Name on Donation</label>
-                        <input class="form-control" type="text" maxlength="33" placeholder="Firstname Lastname">
-                    </div>
-                    <div  class="form-group">
-                        <label for="pecsf_region">Your Desired PECSF Region</label>
-                        <select class="form-control" name="pecsf_region" id="pecsf_region" v-model="pecsfRegion">
-                            <?php foreach ($regions as $region) : ?>
-                                <option value="<?= $region->id ?>"><?= $region->name ?></option>
-                            <?php endforeach ?>
-                        </select>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="donation_type" id="donation_type" value="pool" v-model="donationType" checked>
-                        <label class="form-check-label" for="">Donate to the fund-supported pool for my chosen region</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="donation_type" id="donation_type" value="single-charity" v-model="donationType">
-                        <label class="form-check-label" for="">Donate to a specific charity</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="donation_type" id="donation_type" value="two-charities" v-model="donationType">
-                        <label class="form-check-label" for="">Donate to two charities</label>
-                    </div>
-                    <div class="form-group" >
-                        <label for="pecsf_charity_1" v-if="donationType == 'single-charity'">Choose your charity</label>
-                        <label for="pecsf_charity_1" v-if="donationType == 'two-charities'">Choose your first charity</label>
-                        <select class="form-control"  name="pecsf_charity_1" v-if="donationType != 'pool'" id="pecsf_charity_1" v-model="pecsfCharity1">
-                            <option selected disabled>Choose a charity</option>
-                            <?php foreach ($charities as $charity): ?>
-                                <option value="<?= $charity->id ?>" v-if="pecsfRegion == <?= $charity->pecsf_region_id; ?>"><?= $charity->name ?></option>
-                            <?php endforeach ?>
-                        </select>
-                    </div>
-                    <div class="form-group" v-if="donationType == 'two-charities'">
-                        <label for="pecsf_charity_2">Choose your second charity</label>
-                        <select class="form-control" name="pecsf_charity_2" id="pecsf_charity_2" v-model="pecsfCharity2">
-                            <option selected disabled>Choose a charity</option>
-                            <?php foreach ($charities as $charity): ?>
-                                <option value="<?= $charity->id ?>" v-if="pecsfRegion == <?= $charity->pecsf_region_id; ?>"><?= $charity->name ?></option>
-                            <?php endforeach ?>
-                        </select>
-                    </div>
-            </div>
-    </div>
 
     <div class="row">
         <div class="col-9">
-
         </div>
         <div class="col-3">
             <?php
@@ -529,14 +531,13 @@
             ?>
         </div>
     </div>
-
+    </div>
 
 
 <script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script crossorigin="anonymous"
-        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script crossorigin="anonymous"
-        src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js" integrity="sha512-XKa9Hemdy1Ui3KSGgJdgMyYlUg1gM+QhL6cnlyTe2qzMCYm4nAZ1PsVerQzTTXzonUR+dmswHqgJPuwCq1MaAg==" crossorigin="anonymous"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/smooth-scroll/16.1.0/smooth-scroll.min.js"></script>
 
