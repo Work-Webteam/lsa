@@ -99,7 +99,6 @@ class AppController extends Controller
                 // If placeholder ministry does not exist create it.
                 $newMinistry  = $this->Ministries->newEmptyEntity();
                 $newMinistry->set(array(
-                    "id=>99",
                     "name=>Unassigned",
                     "name_shortform=>Unassigned"
                 ));
