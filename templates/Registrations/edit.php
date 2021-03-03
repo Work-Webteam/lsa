@@ -15,7 +15,7 @@
     ?>
 
     <?php if ($isadmin) : ?>
-
+        <?php var_dump($isadmin) ?>
         <div class="row"> <h2>Process Information</h2></div>
 
 

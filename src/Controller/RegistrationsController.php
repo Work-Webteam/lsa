@@ -596,16 +596,25 @@ class RegistrationsController extends AppController
         //TODO: Check to see if we can hoist this to the top of the method - JV
         //TODO: We probably want to do authorization at the routing level where possible - JV
         if ($this->checkAuthorization(array(
-            Configure::read('Role.authenticated'),
+            Configure::read('Role.anonymous'),
+            Configure::read('Role.authenticated_user'),
             Configure::read('Role.ministry_contact'),
             Configure::read('Role.supervisor')))) {
-            if ($this->checkAuthorization(Configure::read('Role.authenticated'))) {
+            if ($this->checkAuthorization(Configure::read('Role.anonymous'))) {
+                $this->Flash->error(__('You are not authorized to edit this Registration.'));
+                $this->redirect('/');
+            }
+            elseif ($this->checkAuthorization(Configure::read('Role.authenticated_user'))) {
                 if (!$this->checkGUID($registration->user_guid)) {
                     $this->Flash->error(__('You are not authorized to edit this Registration.'));
+                    $this->redirect('/registrations');
+                }
+                if (!$registration_periods) {
+                    $this->Flash->error(__('You may no longer edit this Registration.'));
                     $this->redirect('/');
                 }
             }
-            else if ($this->checkAuthorization(Configure::read('Role.supervisor'))) {
+            elseif ($this->checkAuthorization(Configure::read('Role.supervisor'))) {
                 if (!$this->checkGUID($registration->user_guid)) {
                     $this->Flash->error(__('You are not authorized to edit this Registration.'));
                     $this->redirect('/registrations');
@@ -634,7 +643,7 @@ class RegistrationsController extends AppController
     }
 
     //TODO: Check to see if this method should be public, I suspect not - JV
-    public function logChanges($id, $type, $operation, $description, $old = NULL, $new = NULL) {
+    protected function logChanges($id, $type, $operation, $description, $old = NULL, $new = NULL) {
         $log = $this->Registrations->Log->newEmptyEntity();
         $session = $this->getRequest()->getSession();
         $log->user_idir = $session->read('user.idir');
@@ -1667,7 +1676,7 @@ class RegistrationsController extends AppController
 
     public function ceremonytotals()
     {
-        if ($this->checkAuthorization(array(Configure::read('Role.authenticated')))) {
+        if ($this->checkAuthorization(array(Configure::read('Role.anonymous')))) {
             $this->Flash->error(__('You are not authorized to administer Registrations.'));
             $this->redirect('/');
         }
@@ -1977,7 +1986,7 @@ class RegistrationsController extends AppController
     public function reportawardtotalsceremony()
     {
 
-        if ($this->checkAuthorization(array(Configure::read('Role.authenticated')))) {
+        if ($this->checkAuthorization(array(Configure::read('Role.anonymous')))) {
             $this->Flash->error(__('You are not authorized to administer Registrations.'));
             $this->redirect('/');
         }
@@ -2079,7 +2088,7 @@ class RegistrationsController extends AppController
     public function reportawardtotalsmilestone()
     {
 
-        if ($this->checkAuthorization(array(Configure::read('Role.authenticated')))) {
+        if ($this->checkAuthorization(array(Configure::read('Role.anonymous')))) {
             $this->Flash->error(__('You are not authorized to administer Registrations.'));
             $this->redirect('/');
         }
@@ -2553,7 +2562,7 @@ class RegistrationsController extends AppController
 
     public function reportwaitinglist()
     {
-        if ($this->checkAuthorization(array(Configure::read('Role.authenticated')))) {
+        if ($this->checkAuthorization(array(Configure::read('Role.anonymous')))) {
             $this->Flash->error(__('You are not authorized to administer Registrations.'));
             $this->redirect('/');
         }
