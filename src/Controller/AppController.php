@@ -81,8 +81,6 @@ class AppController extends Controller
         }
         else {
             // This is not a known user.
-            $session->write('user.role', 0);
-            $session->write('user.ministry', 0);
             // Prepare a new user entity.
             $new_user = $this->UserRoles->newEmptyEntity();
             // Populate new user record.
@@ -90,16 +88,37 @@ class AppController extends Controller
             $new_user->guid = $_SERVER['HTTP_SMGOV_USERGUID'];
             // Role 7 is the authenticated role.
             $new_user->role_id = 7;
-            // For now we will save this as 1 - but in the future we should check the record
+            // For now we will save this as Unassigned ministry - but in the future we should check the record
             // vs. the list we have for a match.
-            $new_user->ministry_id = 1;
+            $this->loadModel('Ministries');
+            // Get the ministry id
+            $placeholderMinistryId = $this->Ministries->findByName('Unassigned')->First();
+            if(isset($placeholderMinistryId->id)) {
+                $ministryId = $placeholderMinistryId->id;
+            } else {
+                // If placeholder ministry does not exist create it.
+                $newMinistry  = $this->Ministries->newEmptyEntity();
+                $newMinistry->set(array(
+                    "name=>Unassigned",
+                    "name_shortform=>Unassigned"
+                ));
+                // Save the entity.
+                $savedMinistry = $this->Ministries->save($newMinistry);
+                // If our save fails, set to 0 which will get caught as an error.
+                $ministryId = $savedMinistry->id ?? 0;
+            }
+            $new_user->set('ministry_id',  $ministryId);
             // Save new user to db.
             $this->UserRoles->save($new_user);
+            // Now we can set them as an authenticated user.
+            $session->write('user.role', 7);
+            $session->write('user.ministry', $ministryId);
             // This user should be redirected to register, it is the only place for reg auth users.
             $this->redirect("/register");
         }
 
-        /*
+
+        /**
          * Enable the following component for recommended CakePHP security settings.
          * see https://book.cakephp.org/4/en/controllers/components/security.html
          */

@@ -56,6 +56,13 @@ class RegistrationsController extends AppController
             ],
         ]);
 
+        if ($this->checkAuthorization(Configure::read('Role.authenticated_user'))){
+            $has_reg = $registrations->first();
+            if($has_reg === NULL) {
+                $this->redirect('/register');
+            }
+        }
+
         $this->set(compact('registrations'));
         $this->set(compact('edit'));
         $this->set(compact('toolbar'));
@@ -446,7 +453,7 @@ class RegistrationsController extends AppController
 
             //Set invite_sent to null if the request data is empty
             //(this seems weird and possibly unnecessary)
-            if ($this->request->getData('invite_sent'));
+            if ($this->request->getData('invite_sent')); //TODO: Do we need this line? I can't see what it does. No variable has been assigned.
             if (empty($registration->invite_sent)) {
                 $registration->invite_sent = NULL;
             }
@@ -589,16 +596,25 @@ class RegistrationsController extends AppController
         //TODO: Check to see if we can hoist this to the top of the method - JV
         //TODO: We probably want to do authorization at the routing level where possible - JV
         if ($this->checkAuthorization(array(
-            Configure::read('Role.authenticated'),
+            Configure::read('Role.anonymous'),
+            Configure::read('Role.authenticated_user'),
             Configure::read('Role.ministry_contact'),
             Configure::read('Role.supervisor')))) {
-            if ($this->checkAuthorization(Configure::read('Role.authenticated'))) {
+            if ($this->checkAuthorization(Configure::read('Role.anonymous'))) {
+                $this->Flash->error(__('You are not authorized to edit this Registration.'));
+                $this->redirect('/');
+            }
+            elseif ($this->checkAuthorization(Configure::read('Role.authenticated_user'))) {
                 if (!$this->checkGUID($registration->user_guid)) {
                     $this->Flash->error(__('You are not authorized to edit this Registration.'));
+                    $this->redirect('/registrations');
+                }
+                if (!$registration_periods) {
+                    $this->Flash->error(__('You may no longer edit this Registration.'));
                     $this->redirect('/');
                 }
             }
-            else if ($this->checkAuthorization(Configure::read('Role.supervisor'))) {
+            elseif ($this->checkAuthorization(Configure::read('Role.supervisor'))) {
                 if (!$this->checkGUID($registration->user_guid)) {
                     $this->Flash->error(__('You are not authorized to edit this Registration.'));
                     $this->redirect('/registrations');
@@ -627,7 +643,7 @@ class RegistrationsController extends AppController
     }
 
     //TODO: Check to see if this method should be public, I suspect not - JV
-    public function logChanges($id, $type, $operation, $description, $old = NULL, $new = NULL) {
+    protected function logChanges($id, $type, $operation, $description, $old = NULL, $new = NULL) {
         $log = $this->Registrations->Log->newEmptyEntity();
         $session = $this->getRequest()->getSession();
         $log->user_idir = $session->read('user.idir');
@@ -1660,7 +1676,7 @@ class RegistrationsController extends AppController
 
     public function ceremonytotals()
     {
-        if ($this->checkAuthorization(array(Configure::read('Role.authenticated')))) {
+        if ($this->checkAuthorization(array(Configure::read('Role.anonymous')))) {
             $this->Flash->error(__('You are not authorized to administer Registrations.'));
             $this->redirect('/');
         }
@@ -1970,7 +1986,7 @@ class RegistrationsController extends AppController
     public function reportawardtotalsceremony()
     {
 
-        if ($this->checkAuthorization(array(Configure::read('Role.authenticated')))) {
+        if ($this->checkAuthorization(array(Configure::read('Role.anonymous')))) {
             $this->Flash->error(__('You are not authorized to administer Registrations.'));
             $this->redirect('/');
         }
@@ -2072,7 +2088,7 @@ class RegistrationsController extends AppController
     public function reportawardtotalsmilestone()
     {
 
-        if ($this->checkAuthorization(array(Configure::read('Role.authenticated')))) {
+        if ($this->checkAuthorization(array(Configure::read('Role.anonymous')))) {
             $this->Flash->error(__('You are not authorized to administer Registrations.'));
             $this->redirect('/');
         }
@@ -2546,7 +2562,7 @@ class RegistrationsController extends AppController
 
     public function reportwaitinglist()
     {
-        if ($this->checkAuthorization(array(Configure::read('Role.authenticated')))) {
+        if ($this->checkAuthorization(array(Configure::read('Role.anonymous')))) {
             $this->Flash->error(__('You are not authorized to administer Registrations.'));
             $this->redirect('/');
         }
