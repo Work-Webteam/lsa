@@ -6,7 +6,7 @@
         <v-main>
             <v-container class="grey lighten-2">
                 <v-stepper v-model="e1">
-                    <v-stepper-header>
+                    <v-stepper-header id="carousel-top">
                         <v-stepper-step :complete="e1 > 1" step="1"> Milestone</v-stepper-step>
                         <v-divider></v-divider>
                         <v-stepper-step :complete="e1 > 2" step="2"> Award</v-stepper-step>
@@ -288,7 +288,7 @@
 
                                 </div>
                                 <div class="col-3">
-                                    <button id="award-button" class="btn btn-primary" @click.prevent="validateStep2()">Enter Contact Information</button>
+                                    <button id="award-button" class="btn btn-primary" @click.prevent="validateStep2()" >Enter Contact Information</button>
                                 </div>
                             </div>
 
@@ -991,6 +991,9 @@
                 this.$vuetify.goTo('#award-button');
             },
 
+
+
+
             validateStep1 : function () {
                 this.errorsStep1 = [];
                 //Did they put in a milestone year?
@@ -1016,6 +1019,8 @@
 
                 //Did they indicate an award that requires options?
 
+
+                this.$vuetify.goTo('#carousel-top')
 
                 if (this.errorsStep2.length == 0) {
                     this.e1 = 3;
