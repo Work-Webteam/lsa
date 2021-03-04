@@ -240,13 +240,13 @@ class RegistrationsController extends AppController
                 $this->Flash->success(__('Registration has been saved.'));
 
                 // Send email here
-                $mailer = new Mailer('default');
+                $mailer = new Mailer('govSmtp');
 
                 $message = "Congratulations, you have successfully registered for your Long Service Award.";
-//                $mailer->setFrom(['longserviceaward@gov.bc.ca' => 'Long Service Awards'])
-//                    ->setTo($registration->preferred_email)
-//                    ->setSubject('Long Service Award Registration Completed')
-//                    ->deliver($message);
+                $mailer->setFrom(['longserviceaward@gov.bc.ca' => 'Long Service Awards'])
+                    ->setTo($registration->preferred_email)
+                    ->setSubject('Long Service Award Registration Completed')
+                    ->deliver($message);
 
 
                 return $this->redirect(['action' => 'completed', $registration->id]);
@@ -2814,8 +2814,8 @@ class RegistrationsController extends AppController
         $rsvp_url = "/rsvp/" . $id;
 
         // Send email here
-        $mailer = new Mailer('default');
-
+        $mailer = new Mailer('govSmtp');
+        // TODO: This template should be separated out as per instructions here:
         $message = <<<EOT
 <html>
 <head>

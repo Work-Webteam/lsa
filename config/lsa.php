@@ -18,7 +18,7 @@ return [
 
     'Test' => [
         'mode' => true,
-        'email' => 'raymond.kuyvenhoven@gov.bc.ca',
+        'email' => 'thayne.werdal@gov.bc.ca',
     ],
 
     'LSA' => [
