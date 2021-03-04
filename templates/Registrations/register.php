@@ -73,7 +73,7 @@
                             <div class="form-row">
                                 <div class="col-6">
                                     <div class="form-group" v-if="milestone == 1">
-                                        <label for="">How would you like your name to appear on your certificate?</label>
+                                        <label for="">All 25 year awards come with a framed certificate of service signed by the Premier of British Columbia. How would you like your name to appear on your certificate?</label>
                                         <input type="text" id="certificateName" name="certificate_name" v-model="certificateName" class="form-control">
                                     </div>
                                 </div>
