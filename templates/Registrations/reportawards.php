@@ -47,25 +47,22 @@ echo $this->Form->button('Cancel', array(
 
     $(document).ready(function() {
 
-        console.log("year: " + year);
-
         for (i = 0; i < recipients.length; i++) {
-            options = JSON.parse(recipients[i].award_options)
+            options = JSON.parse(recipients[i].award_options);
             recipients[i].optionsDisplay = "";
-            for (j = 0; j < options.length; j++) {
-                if (i > 0) {
-                    recipients[i].optionsDisplay += "<BR>";
-                }
-                recipients[i].optionsDisplay += "- " + options[j];
+            if (!$.isEmptyObject(options)) {
+                let award_options = '';
+               $.each(options, function(key, value) {
+                    award_options += "<strong>" + key + "</strong>: " + value + ". <br>";
+                });
+                recipients[i].optionsDisplay += award_options;
             }
             if (recipients[i].award_id == 0) {
                 recipients[i].award = { id: 0, name: "PECSF Donation" };
             }
         }
 
-        console.log(recipients);
-
-        var cols;
+       var cols;
             cols = [
                 { data: "id", title: "Edit", orderable: false, render: function( data, type, row, meta) {
                         if (edit) {
@@ -77,11 +74,9 @@ echo $this->Form->button('Cancel', array(
                         return link;
                     }
                 },
-                {data: "ceremony.night", title: "Ceremony", orderData: [1, 2, 5], orderSequence: ["asc"] },
                 {data: "ministry.name", title: "Ministry", orderable: false },
                 {data: "last_name", title: "Last Name", orderable: false },
                 {data: "first_name", title: "First Name", orderable: false },
-                {data: "presentation_number", title: "Presentation ID", orderData: [1, 5], orderSequence: ["asc"] },
                 {data: "award.name", title: "Award", orderable: false },
                 {data: "optionsDisplay", title: "Options", orderable: false },
             ];

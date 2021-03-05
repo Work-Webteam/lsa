@@ -1744,8 +1744,8 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
-        $conditions['Registrations.ceremony_id >'] = 0;
-        $conditions['Registrations.waitinglist ='] = 0;
+        //$conditions['Registrations.ceremony_id >'] = 0;
+        //$conditions['Registrations.waitinglist ='] = 0;
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
