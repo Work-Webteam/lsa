@@ -54,12 +54,6 @@
                                         <select class="form-control with-arrow" id="award_year" name="award_year" v-model="award_year">
                                             <option selected disabled>Select Year</option>
 
-                                                <option value="2021">2021</option>
-                                                <option value="2020">2020</option>
-                                                <option value="2019">2019</option>
-
-                                            <option disabled>──────────</option>
-
                                                 <?php foreach ($award_years as $ayear) : ?>
                                                     <option value="<?= $ayear ?>"><?= $ayear ?></option>
                                                 <?php endforeach ?>

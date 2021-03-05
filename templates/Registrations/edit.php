@@ -540,19 +540,19 @@
                 ['confirm' => 'Are you sure? This cannot be undone.','class' => 'btn btn-primary delete', 'role' => 'button'])
             ?>
         </div>
-        <div class="col-3">
+        <div class="col-4"></div>
+        <div class="col-5">
             <button class="btn btn-primary" @click.prevent="validateForm">Check Form</button>
-            <?php
-            echo $this->Form->button(__('Save Registration'), [
+            <?= $this->Form->button(__('Save Registration'), [
                 'class' => 'btn btn-primary',
                 ':disabled' => 'formIsValid == false'
-            ]);
-            echo $this->Form->button('Cancel', array(
+            ]) ?>
+            <?= $this->Form->button('Cancel', array(
                 'type' => 'button',
                 'onclick' => 'location.href="' . $registration->return_path . '"',
                 'class' => 'btn btn-secondary'
-            ));
-            echo $this->Form->end();
+            )) ?>
+           <?= $this->Form->end(); ?>
             ?>
         </div>
     </div>
