@@ -80,7 +80,7 @@
                                 <div class="col-3">
                                     <p>Did you register for a Long Service Award in 2019?</p>
                                     <div class="form-group checkbox-group">
-                                        <input class="form-check-input" type="radio" name="retroactive" id="retroactive" value="1" v-model="isRetroactive">
+                                        <input class="form-check-input" type="radio" name="retroactive" id="retroactive" value="1" v-model="isRetroactive" @click="setAwardYear(2019)">
                                         <label class="form-check-label" for="retroactive">Yes</label>
                                     </div>
                                     <div class="form-group checkbox-group">
@@ -690,6 +690,8 @@
                                 </div>
                                 <div class="form-row">
                                     <div class="col-6">
+                                        <p><small>Your Office Phone #</small></p>
+                                        <p class="confirmationValue" v-text="officePhone"></p>
                                         <p><small>Your Office Address</small></p>
                                         <p class="confirmationValue">{{officeMailPrefix}}</p>
                                         <p class="confirmationValue">{{officeSuite}} {{officeStreetAddress}}</p>
@@ -697,6 +699,8 @@
                                         <p class="confirmationValue">{{officePostalCode}}</p>
                                     </div>
                                     <div class="col-6">
+                                        <p><small>Your Home Phone #</small></p>
+                                        <p class="confirmationValue" v-text="homePhone">{{homePhone}}</p>
                                         <p><small>Your Home Address</small></p>
                                         <p class="confirmationValue">{{homeSuite}}</p>
                                         <p class="confirmationValue">{{homeStreetAddress}}</p>
@@ -913,19 +917,19 @@
         methods: {
 
             filterOfficePhoneNumber : function () {
-               this.officePhone         = Inputmask.format(this.officePhone, {"mask" : "(999) 999-9999"});
+               this.officePhone         = Inputmask.format(this.officePhone, {"mask" : "(999) 999-9999", "placeholder": ""});
             },
             filterHomePhoneNumber : function () {
-                this.homePhone          = Inputmask.format(this.homePhone, {"mask" : "(999) 999-9999"});
+                this.homePhone          = Inputmask.format(this.homePhone, {"mask" : "(999) 999-9999" , "placeholder": ""});
             },
             filterOfficePostalCode : function () {
-                this.officePostalCode   = Inputmask.format(this.officePostalCode, {"mask" : "A9A 9A9"});
+                this.officePostalCode   = Inputmask.format(this.officePostalCode, {"mask" : "A9A 9A9", "placeholder": ""});
             },
             filterHomePostalCode : function () {
-                this.homePostalCode     = Inputmask.format(this.homePostalCode, {"mask" : "A9A 9A9"});
+                this.homePostalCode     = Inputmask.format(this.homePostalCode, {"mask" : "A9A 9A9", "placeholder": ""});
             },
             filterSupervisorPostalCode : function () {
-                this.supervisorPostalCode = Inputmask.format(this.supervisorPostalCode, {"mask" : "A9A 9A9"});
+                this.supervisorPostalCode = Inputmask.format(this.supervisorPostalCode, {"mask" : "A9A 9A9", "placeholder": ""});
             },
             filterOfficeExtension : function () {
                 this.officeExtension = Inputmask.format(this.officeExtension, {"mask": "9[999]"});
@@ -955,6 +959,7 @@
                     }
                 });
             },
+
 
 
 
@@ -1004,6 +1009,12 @@
                     this.errorsStep1.push('You must select a qualifying year.');
                 }
 
+                //Did they reach this milestone in 2021 but also say they registered for an LSA in 2019
+                if (this.isRetroactive && (this.award_year > 2019)) {
+                    this.errorsStep1.push('Please ensure your milestone information is correct.');
+                }
+
+
                 if (this.errorsStep1.length == 0) {
                     this.e1 = 2;
                 }
@@ -1026,6 +1037,7 @@
                 }
             },
             validateStep3 : function () {
+                this.errorsStep3 = [];
                //Did include an employee number?
                 if (this.employeeID.length < 5 || this.employeeID.length > 10) {
                     this.errorsStep3.push('You must input a valid employee number');

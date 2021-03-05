@@ -55,7 +55,7 @@
                 <?= $this->Form->control('registration_year', ['label' => 'Registration Year', 'class' => 'form-control']); ?>
             </div>
             <div class="col-2">
-                <?= $this->Form->control('qualifying_year', ['label' => 'Award Year', 'class' => 'form-control']); ?>
+                <?= $this->Form->control('award_year', ['label' => 'Award Year', 'class' => 'form-control']); ?>
             </div>
             <div class="col-2">
                 <?= $this->Form->control('award_received', ['type' => 'checkbox', 'class' => 'form-control']); ?>
@@ -514,7 +514,12 @@
 
 
     <div class="row">
-        <div class="col-9">
+        <div class="col-3">
+            <?= $this->Form->postLink(
+                'Delete',
+                ['action' => 'delete', $registration->id],
+                ['confirm' => 'Are you sure? This cannot be undone.','class' => 'btn btn-primary delete', 'role' => 'button'])
+            ?>
         </div>
         <div class="col-3">
             <?php
@@ -542,6 +547,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/smooth-scroll/16.1.0/smooth-scroll.min.js"></script>
 
 <script type="text/javascript">
+
+
 
     var app = new Vue({
         el: '#app',
