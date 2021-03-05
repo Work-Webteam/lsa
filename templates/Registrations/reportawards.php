@@ -39,6 +39,7 @@ echo $this->Form->button('Cancel', array(
 
 
 <script>
+    // Get all recipients as object.
     var recipients=<?php echo json_encode($recipients); ?>;
     var edit = true;
     var toolbar = true;
@@ -46,17 +47,20 @@ echo $this->Form->button('Cancel', array(
     var year =<?php echo $year; ?>;
 
     $(document).ready(function() {
-
+        // Check for award options.
         for (i = 0; i < recipients.length; i++) {
             options = JSON.parse(recipients[i].award_options);
+            // We want to create a string from the options object if there is one.
             recipients[i].optionsDisplay = "";
             if (!$.isEmptyObject(options)) {
-                let award_options = '';
+                // We have an object, so lets pull out all the parts and save it to a string.
                $.each(options, function(key, value) {
-                    award_options += "<strong>" + key + "</strong>: " + value + ". <br>";
+                   // Strong is here to stylize our individual strings to make them easier to read.
+                   // This could also be done with a class if prefered.
+                    recipients[i].optionDisplay += "<strong>" + key + "</strong>: " + value + ". <br>";
                 });
-                recipients[i].optionsDisplay += award_options;
             }
+            // If this is a pecsf award, note that here.
             if (recipients[i].award_id == 0) {
                 recipients[i].award = { id: 0, name: "PECSF Donation" };
             }
