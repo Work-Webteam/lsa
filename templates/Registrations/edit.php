@@ -46,6 +46,23 @@
     echo $this->Form->hidden('dietary_requirements_guest');
     ?>
 
+    <div class="row" v-if="editFormErrors">
+        <div class="col-3">
+            &nbsp;
+        </div>
+        <div class="col-6">
+            <v-alert type="error">There are errors.
+                <ul>
+                    <li v-if="errorsStep1.length" v-for="error in errorsStep1">{{error}}</li>
+                    <li v-if="errorsStep2.length" v-for="error in errorsStep2">{{error}}</li>
+                    <li v-if="errorsStep3.length" v-for="error in errorsStep3">{{error}}</li>
+                    <li v-if="errorsStep4.length" v-for="error in errorsStep4">{{error}}</li>
+                </ul>
+            </v-alert>
+        </div>
+        <div class="col-3"></div>
+    </div>
+
     <?php if ($isadmin) : ?>
 
 
@@ -55,7 +72,7 @@
                 <?= $this->Form->control('registration_year', ['label' => 'Registration Year', 'class' => 'form-control']); ?>
             </div>
             <div class="col-2">
-                <?= $this->Form->control('award_year', ['label' => 'Award Year', 'class' => 'form-control']); ?>
+                <?= $this->Form->control('award_year', ['label' => 'Award Year', 'class' => 'form-control', 'v-model' => 'award_year']); ?>
             </div>
             <div class="col-2">
                 <?= $this->Form->control('award_received', ['type' => 'checkbox', 'class' => 'form-control']); ?>
@@ -72,7 +89,7 @@
         </div>
         <div class="row">
             <div class="col-2">
-                <?= $this->Form->control('survey_participation', ['type' => 'checkbox', 'class' => 'form-control']); ?>
+                <?= $this->Form->control('survey_participation', ['type' => 'checkbox', 'class' => 'form-control', 'v-model' => 'isOptedIn']); ?>
             </div>
             <div class="col-2">
                 <?= $this->Form->control('invite_sent', ['type' => 'checkbox', 'class' => 'form-control']); ?>
@@ -90,7 +107,7 @@
 
         <div class="row">
             <div class="col-4">
-                <?= $this->Form->control('certificate_name', ['class' => 'form-control']); ?>
+                <?= $this->Form->control('certificate_name', ['class' => 'form-control', 'v-model' => 'certificateName']); ?>
             </div>
             <div class="col-4">
                 <?= $this->Form->control('award_instructions', ['label' => 'Award Instructions', 'type' => 'textarea', 'class' => 'form-control']); ?>
@@ -244,13 +261,15 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-9">
+            <div class="col-8">
 
             </div>
-            <div id="awardInfo" class="col-3">
+            <div id="awardInfo" class="col-4">
+                <button class="btn btn-primary" @click.prevent="validateForm">Check Form</button>
                 <?php
                 echo $this->Form->button(__('Save Registration'), [
-                    'class' => 'btn btn-primary'
+                    'class' => 'btn btn-primary',
+                    ':disabled' => 'formIsValid == false'
                 ]);
                 echo '&nbsp;';
                 echo $this->Form->button('Cancel', array(
@@ -397,21 +416,21 @@
 
         <div class="col-4">
             <div class="form-group">
-                <?= $this->Form->control('employee_id', ['type'=> 'text', 'class' => 'form-control', 'label' => 'Employee ID', 'value' => $registration->employee_id]); ?>
+                <?= $this->Form->control('employee_id', ['type'=> 'text', 'class' => 'form-control', 'label' => 'Employee ID', 'value' => $registration->employee_id , 'v-model' => 'employeeID']); ?>
             </div>
         </div>
         <div class="col-4">
             <div class="form-group">
-                <?= $this->Form->control('first_name', ['class' => 'form-control', 'label' => 'First Name']); ?>
+                <?= $this->Form->control('first_name', ['class' => 'form-control', 'label' => 'First Name', 'v-model' => 'firstName']); ?>
             </div>
         </div>
         <div class="col-4">
-            <?= $this->Form->control('last_name', ['class' => 'form-control', 'label' => 'Last Name']); ?>
+            <?= $this->Form->control('last_name', ['class' => 'form-control', 'label' => 'Last Name', 'v-model' => 'lastName']); ?>
         </div>
     </div>
     <div class="row">
         <div class="col-4">
-            <?= $this->Form->control('ministry_id', ['type' => 'select', 'options' => $ministries, 'class' => 'form-control', 'label' => 'Member Organization', 'empty' => '- select ministry -']); ?>
+            <?= $this->Form->control('ministry_id', ['type' => 'select', 'options' => $ministries, 'class' => 'form-control', 'label' => 'Member Organization', 'empty' => '- select ministry -', 'v-model' => 'ministry']); ?>
         </div>
         <div class="col-4">
             <?= $this->Form->control('branch', ['label' => 'Branch', 'class' => 'form-control']); ?>
@@ -426,28 +445,28 @@
 
     <div class="row">
         <div class="col-4">
-            <?= $this->Form->control('preferred_email', ['label' => 'Government Email', 'class' => 'form-control']); ?>
+            <?= $this->Form->control('preferred_email', ['label' => 'Government Email', 'class' => 'form-control', 'v-model' => 'govtEmail']); ?>
         </div>
         <div class="col-4">
-            <?= $this->Form->control('work_phone', ['label' => 'Phone', 'class' => 'form-control']); ?>
+            <?= $this->Form->control('work_phone', ['label' => 'Phone', 'class' => 'form-control', 'v-model' => 'officePhone']); ?>
         </div>
         <div class="col-4">
-            <?= $this->Form->control('work_extension', ['label' => 'Phone Extension', 'class' => 'form-control']); ?>
+            <?= $this->Form->control('work_extension', ['label' => 'Phone Extension', 'class' => 'form-control', 'v-model' => 'officeExtension' ]); ?>
         </div>
         <div class="col-4">
-            <?= $this->Form->control('office_careof', ['label' => 'Floor/ Room / Care Of', 'class' => 'form-control']); ?>
+            <?= $this->Form->control('office_careof', ['label' => 'Floor/ Room / Care Of', 'class' => 'form-control', 'v-model' => 'officeMailPrefix']); ?>
         </div>
         <div class="col-4">
-            <?= $this->Form->control('office_suite', ['label' => 'Suite', 'class' => 'form-control']); ?>
+            <?= $this->Form->control('office_suite', ['label' => 'Suite', 'class' => 'form-control', 'v-model' => 'officeSuite']); ?>
         </div>
         <div class="col-4">
-            <?= $this->Form->control('office_address', ['label' => 'Address', 'class' => 'form-control']); ?>
+            <?= $this->Form->control('office_address', ['label' => 'Address', 'class' => 'form-control', 'v-model' => 'officeStreetAddress']); ?>
         </div>
         <div class="col-4">
-            <?= $this->Form->control('office_city_id', ['label' => 'City', 'options' => $cities, 'empty' => '- select city -', 'class' => 'form-control']); ?>
+            <?= $this->Form->control('office_city_id', ['label' => 'City', 'options' => $cities, 'empty' => '- select city -', 'class' => 'form-control', 'v-model' => 'officeCity']); ?>
         </div>
         <div class="col-4">
-            <?= $this->Form->control('office_postal_code', ['label' => 'Postal Code', 'class' => 'form-control']); ?>
+            <?= $this->Form->control('office_postal_code', ['label' => 'Postal Code', 'class' => 'form-control', 'v-model' => 'officePostalCode']); ?>
         </div>
         <div class="col-4">
         </div>
@@ -457,29 +476,29 @@
 
     <div class="row">
         <div class="col-4">
-            <?= $this->Form->control('supervisor_first_name', ['label' => 'Supervisor First Name', 'class' => 'form-control']); ?>
+            <?= $this->Form->control('supervisor_first_name', ['label' => 'Supervisor First Name', 'class' => 'form-control', 'v-model' => 'supervisorFirstName']); ?>
         </div>
         <div class="col-4">
-            <?= $this->Form->control('supervisor_last_name', ['label' => 'Supervisor Last Name', 'class' => 'form-control']); ?>
+            <?= $this->Form->control('supervisor_last_name', ['label' => 'Supervisor Last Name', 'class' => 'form-control', 'v-model' => 'supervisorLastName']); ?>
         </div>
         <div class="col-4">
-            <?= $this->Form->control('supervisor_email', ['label' => 'Supervisor Email', 'class' => 'form-control']); ?>
+            <?= $this->Form->control('supervisor_email', ['label' => 'Supervisor Email', 'class' => 'form-control', 'v-model' => 'supervisorEmail']); ?>
         </div>
 
         <div class="col-4">
-            <?= $this->Form->control('supervisor_careof', ['label' => 'Floor / Room / Care Of', 'class' => 'form-control']); ?>
+            <?= $this->Form->control('supervisor_careof', ['label' => 'Floor / Room / Care Of', 'class' => 'form-control', 'v-model' => 'supervisorMailPrefix']); ?>
         </div>
         <div class="col-4">
-            <?= $this->Form->control('supervisor_suite', ['label' => 'Suite', 'class' => 'form-control']); ?>
+            <?= $this->Form->control('supervisor_suite', ['label' => 'Suite', 'class' => 'form-control', 'v-model' => 'supervisorSuite']); ?>
         </div>
         <div class="col-4">
-            <?= $this->Form->control('supervisor_address', ['label' => 'Address', 'class' => 'form-control']); ?>
+            <?= $this->Form->control('supervisor_address', ['label' => 'Address', 'class' => 'form-control', 'v-model' => 'supervisorStreetAddress']); ?>
         </div>
         <div class="col-4">
-            <?= $this->Form->control('supervisor_city_id', ['label' => 'City', 'class' => 'form-control', 'options' => $cities, 'empty' => '- select city -']); ?>
+            <?= $this->Form->control('supervisor_city_id', ['label' => 'City', 'class' => 'form-control', 'options' => $cities, 'empty' => '- select city -', 'v-model' => 'supervisorCity']); ?>
         </div>
         <div class="col-4">
-            <?= $this->Form->control('supervisor_postal_code', ['label' => 'Postal Code', 'class' => 'form-control',]); ?>
+            <?= $this->Form->control('supervisor_postal_code', ['label' => 'Postal Code', 'class' => 'form-control', 'v-model' => 'supervisorPostalCode']); ?>
         </div>
         <div class="col-4">
         </div>
@@ -490,24 +509,24 @@
 
     <div class="row">
         <div class="col-4">
-            <?= $this->Form->control('alternate_email', ['label' => 'Home Email', 'class' => 'form-control']); ?>
+            <?= $this->Form->control('alternate_email', ['label' => 'Home Email', 'class' => 'form-control', 'v-model' => 'altEmail']); ?>
         </div>
         <div class="col-4">
-            <?= $this->Form->control('home_phone', ['label' => 'Phone', 'class' => 'form-control']); ?>
+            <?= $this->Form->control('home_phone', ['label' => 'Phone', 'class' => 'form-control', 'v-model' => 'homePhone']); ?>
         </div>
         <div class="col-4">
         </div>
         <div class="col-4">
-            <?= $this->Form->control('home_suite', ['label' => 'Suite', 'class' => 'form-control']); ?>
+            <?= $this->Form->control('home_suite', ['label' => 'Suite', 'class' => 'form-control', 'v-model' => 'homeSuite']); ?>
         </div>
         <div class="col-4">
-            <?= $this->Form->control('home_address', ['label' => 'Address', 'class' => 'form-control']); ?>
+            <?= $this->Form->control('home_address', ['label' => 'Address', 'class' => 'form-control', 'v-model' => 'homeStreetAddress']); ?>
         </div>
         <div class="col-4">
-            <?= $this->Form->control('home_city_id', ['label' => 'City', 'options' => $cities, 'empty' => '- select city -', 'class' => 'form-control']); ?>
+            <?= $this->Form->control('home_city_id', ['label' => 'City', 'options' => $cities, 'empty' => '- select city -', 'class' => 'form-control', 'v-model' => 'homeCity']); ?>
         </div>
         <div class="col-4">
-            <?= $this->Form->control('home_postal_code', ['label' => 'Postal Code', 'class' => 'form-control']); ?>
+            <?= $this->Form->control('home_postal_code', ['label' => 'Postal Code', 'class' => 'form-control', 'v-model' => 'homePostalCode']); ?>
         </div>
     </div>
 
@@ -522,11 +541,12 @@
             ?>
         </div>
         <div class="col-3">
+            <button class="btn btn-primary" @click.prevent="validateForm">Check Form</button>
             <?php
             echo $this->Form->button(__('Save Registration'), [
-                'class' => 'btn btn-primary'
+                'class' => 'btn btn-primary',
+                ':disabled' => 'formIsValid == false'
             ]);
-            echo '&nbsp;';
             echo $this->Form->button('Cancel', array(
                 'type' => 'button',
                 'onclick' => 'location.href="' . $registration->return_path . '"',
@@ -537,7 +557,7 @@
         </div>
     </div>
     </div>
-
+</div>
 
 <script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script crossorigin="anonymous"
@@ -545,46 +565,78 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/smooth-scroll/16.1.0/smooth-scroll.min.js"></script>
+    <!-- Registration Form-specific JavaScripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/4.0.9/jquery.inputmask.bundle.min.js" integrity="sha512-VpQwrlvKqJHKtIvpL8Zv6819FkTJyE1DoVNH0L2RLn8hUPjRjkS/bCYurZs0DX9Ybwu9oHRHdBZR9fESaq8Z8A==" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+
+<script src="/js/registration/registration-info.js"></script>
 
 <script type="text/javascript">
+    app.certificateName        = "THIS IS A NAME";
 
+app.selectedAward        = <?= $registration->award_id ?>;
+app.selectedMilestone    = <?= $registration->milestone_id ?>;
+app.pecsfRegion          = <?= is_null($registration->pecsf_region_id)   ? 'null' : $registration->pecsf_region_id ?>;
+app.donationType         = <?= is_null($registration->donationType)      ? 'null' : $registration->donationType ?>;
+app.pecsfCharity1        = <?= is_null($registration->pecsfCharity1)     ? 'null' : $registration->pecsfCharity1 ?>;
+app.pecsfCharity2        = <?= is_null($registration->pecsfCharity2)     ? 'null' : $registration->pecsfCharity2 ?>;
 
+app.accessRecipientSelections   = <?= is_null($registration->accessibility_requirements_recipient) ? 'null' : $registration->accessibility_requirements_recipient ?>;
+app.accessGuestSelections       = <?= is_null($registration->accessibility_requirements_guest) ? 'null' : $registration->accessibility_requirements_guest ?>;
+app.dietRecipientSelections     = <?= is_null($registration->dietary_requirements_recipient) ? 'null' : $registration->dietary_requirements_recipient; ?>;
+app.dietGuestSelections         = <?= is_null($registration->dietary_requirements_guest) ? 'null' : $registration->dietary_requirements_guest ?>;
 
-    var app = new Vue({
-        el: '#app',
-        data : {
-            selectedAward:      <?= $registration->award_id ?>,
-            originalAward:      <?= $registration->award_id ?>,
-            selectedMilestone:  <?= $registration->milestone_id ?>,
+app.milestone              = <?= $registration->milestone_id ?>;
+app.award_year             = '<?= $registration->award_year ?>';
+app.isRetiringThisYear     = <?= $registration->retiring_this_year   ? 'true' : 'false' ?>;
+app.retirementDate         = '<?= is_null($registration->retirement_date)       ? 'null' : $registration->retirement_date ?>';
+app.certificateName        = <?= is_null($registration->certificate_name)     ? 'null' : $registration->certificate_name ?>;
 
-            //MAGIC NUMBERS
-            //IDs of Awards with options
-            watchID: 9,
-            bracelet35ID: 12,
-            bracelet45ID: 46,
-            pecsf25ID: 49,
-            pecsf30ID: 50,
-            pecsf35ID: 51,
-            pecsf40ID: 52,
-            pecsf45ID: 53,
-            pecsf50ID: 54,
+app.isRetroactive          = <?= $registration->retroactive ? 'true' : 'false' ?>;
 
-            pecsfRegion: '',
-            donationType: 'pool',
-            pecsfCharity1: '',
-            pecsfCharity2: '',
+app.employeeID             = <?= $registration->employee_id ?>;
+app.firstName              = '<?= $registration->first_name ?>';
+app.lastName               = '<?= $registration->last_name ?>';
 
-            accessRecipientSelections:  <?= $registration->accessibility_requirements_recipient ?>,
-            accessGuestSelections :     <?= $registration->accessibility_requirements_guest ?>,
-            dietRecipientSelections:    <?= $registration->dietary_requirements_recipient; ?>,
-            dietGuestSelections:        <?= $registration->dietary_requirements_guest; ?>,
+app.selectedAward          = <?= $registration->award_id ?>;
 
-            errorsOptions: '',
+app.donationRegion         = <?= is_null($registration->pecsf_region_id)    ? 'null' : $registration->pecsf_region_id ?>;
+app.donationCharity1       = <?= is_null($registration->pecsf_charity1_id)  ? 'null' : $registration->pecsf_charity1_id ?>;
+app.donationCharity2       = <?= is_null($registration->pecsf_charity2_id)  ? 'null' : $registration->pecsf_charity2_id ?>;
 
+app.govtEmail              = '<?= $registration->preferred_email ?>';
+app.altEmail               = '<?= $registration->alternate_email ?>';
 
+app.ministry               = <?= $registration->ministry_id ?>;
+app.ministryBranch         = '<?= $registration->branch ?>';
 
+app.officeMailPrefix       = '<?= $registration->office_careof ?>';
+app.officeSuite            = '<?= $registration->office_suite ?>';
+app.officeStreetAddress    = '<?= $registration->office_address ?>';
+app.officeCity             = <?= $registration->office_city_id ?>;
+app.officePostalCode       = '<?= $registration->office_postal_code ?>';
+app.officePhone            = '<?= $registration->work_phone ?>';
+app.officeExtension        = '<?= $registration->work_extension ?>';
 
-        }
-    })
+app.homeMailPrefix         = '<?= $registration->home_careof ?>';
+app.homeSuite              = '<?= $registration->home_suite ?>';
+app.homeStreetAddress      = '<?= $registration->home_address ?>';
+app.homeCity               = <?= $registration->home_city_id ?>;
+app.homePostalCode         = '<?= $registration->home_postal_code ?>';
+app.homePhone              = '<?= $registration->home_phone ?>';
+
+app.supervisorFirstName        = '<?= $registration->supervisor_first_name ?>';
+app.supervisorLastName         = '<?= $registration->supervisor_last_name ?>';
+app.supervisorMailPrefix       = '<?= $registration->supervisor_careof ?>';
+app.supervisorSuite            = '<?= $registration->supervisor_suite ?>';
+app.supervisorStreetAddress    = '<?= $registration->supervisor_address ?>';
+app.supervisorCity             = <?= $registration->supervisor_city_id ?>;
+app.supervisorPostalCode       = '<?= $registration->supervisor_postal_code ?>';
+app.supervisorEmail            = '<?= $registration->supervisor_email ?>';
+
+app.isOptedIn              = <?= $registration->survey_participation ?>;
+app.originalAward          = <?= $registration->award_id ?>;
+
 
 </script>
+
