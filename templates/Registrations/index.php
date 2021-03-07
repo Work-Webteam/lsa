@@ -132,7 +132,7 @@
                 });
                 $('</tr>').appendTo( '#lsa-registrations thead' );
 
-                this.api().columns([3,6,11,16,17,18]).every( function () {
+                this.api().columns([3,5,6,11,16,17,18]).every( function () {
 
                     var column = this;
                     var select = $('<select id="column-' + column.index() + '"><option value=""></option></select><br>')

@@ -110,7 +110,6 @@ var app = new Vue({
         formIsValid: false,
         editFormErrors: false,
 
-
         accessRecipientSelections:  '',
         accessGuestSelections :     '',
         dietRecipientSelections:    '',
@@ -121,10 +120,9 @@ var app = new Vue({
 
 
 },
+
     methods: {
-        beforeMount : function () {
-          this.parseAwardOptions();
-        },
+
 
         filterOfficePhoneNumber : function () {
             this.officePhone         = Inputmask.format(this.officePhone, {"mask" : "(999) 999-9999", "placeholder": ""});
@@ -204,6 +202,9 @@ var app = new Vue({
 
         parseAwardOptions : function () {
             //If watch
+            console.log('Parsing the things!');
+            console.log('');
+
             if (this.selectedAward == this.watchID) {
                 console.log('Watch detected');
                 this.parseWatchOptions();
@@ -230,11 +231,13 @@ var app = new Vue({
             this.braceletSize = this.awardOptions.bracelet_size;
         },
         parseWatchOptions : function () {
+            console.log(this.awardOptions);
             console.log('Watch options parsed including ' + this.awardOptions.watch_colour);
 
             this.watchColour    = this.awardOptions.watch_colour;
             this.watchSize      = this.awardOptions.watch_size;
             this.strapType      = this.awardOptions.strap_type;
+            this.watchEngraving = this.awardOptions.watch_engraving;
         },
 
 

@@ -298,6 +298,7 @@ class RegistrationsController extends AppController
                 $options['watch_size']      = $this->request->getData('watch_size');
                 $options['watch_colour']    = $this->request->getData('watch_colour');
                 $options['strap_type']      = $this->request->getData('strap_type');
+                $options['watch_engraving'] = $this->request->getData('watch_engraving');
                 break;
             case $bracelet_35_id:
                 $options['bracelet_size']   = $this->request->getData('braceletSize');
@@ -525,9 +526,7 @@ class RegistrationsController extends AppController
         ]);
         $this->set('ministries', $ministries);
 
-        $regions = $this->Registrations->PecsfRegions->find('list', [
-            'order' => ['PecsfRegions.name' => 'ASC']
-        ]);
+        $regions = $this->Registrations->PecsfRegions->find('all');
         $this->set('regions', $regions);
 
         $charities = $this->Registrations->PecsfCharities->find('all', [

@@ -173,7 +173,7 @@
                                             <option disabled selected></option>
                                             <option>Gold</option>
                                             <option>Silver</option>
-                                            <option>Two-Toned (Gold &amp;s Silver)</option>
+                                            <option>Two-Toned (Gold &amp; Silver)</option>
                                         </select>
                                     </div>
                                 </div>
@@ -202,8 +202,8 @@
                                     <label for="bracelet_size">Size</label>
                                     <select  class="form-control" name="bracelet_size" id="bracelet_size" v-model="braceletSize">
                                         <option disabled selected>Choose Size</option>
-                                        <option>Fits 6 1/2" - 7 1/2" circumference wrists</option>
-                                        <option>Fits 7 1/2" - 8 1/2" circumference wrists</option>
+                                        <option>Fits 6 ½″ - 7 ½″ circumference wrists</option>
+                                        <option>Fits 7 ½″ - 8 ½″ circumference wrists</option>
                                     </select>
                                 </div>
                             </div>
@@ -214,8 +214,8 @@
                                     <label for="bracelet_size">Size</label>
                                     <select class="form-control" name="bracelet_size" id="bracelet_size" v-model="braceletSize">
                                         <option disabled selected>Choose Size</option>
-                                        <option>Fits 6 1/2" - 7 1/2" circumference wrists</option>
-                                        <option>Fits 7 1/2" - 8 1/2" circumference wrists</option>
+                                        <option>Fits 6 ½″ - 7 ½″ circumference wrists</option>
+                                        <option>Fits 7 ½″ - 8 ½″ circumference wrists</option>
                                     </select>
                                 </div>
                             </div>

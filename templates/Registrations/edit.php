@@ -304,7 +304,7 @@
             <div v-if="selectedAward == watchID">
                 <div class="form-group">
                     <label for="watch_size"> Watch Size:</label>
-                    <select class="form-control" name="watch_size" id="watch_size">
+                    <select class="form-control" name="watch_size" id="watch_size" v-model="watchSize">
                         <option disabled selected>Select Watch Size</option>
                         <option>38mm face with 20mm strap</option>
                         <option>29mm face with 14mm strap</option>
@@ -312,16 +312,16 @@
                 </div>
                 <div class="form-group">
                     <label for="watch_colour">Watch Colour:</label>
-                    <select class="form-control" name="watch_colour" id="watch_colour">
+                    <select class="form-control" name="watch_colour" id="watch_colour" v-model="watchColour">
                         <option disabled selected></option>
                         <option>Gold</option>
                         <option>Silver</option>
-                        <option>Two-Toned (Gold &amp;s Silver)</option>
+                        <option>Two-Toned (Gold &amp; Silver)</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="strap_type">Strap:</label>
-                    <select  class="form-control" name="strap_type" id="strap_type">
+                    <select  class="form-control" name="strap_type" id="strap_type" v-model="strapType">
                         <option disabled selected>Choose Strap</option>
                         <option>Plated</option>
                         <option>Black Leather</option>
@@ -330,7 +330,7 @@
                 </div>
                 <div class="form-group">
                     <label for="watch_engraving">Engraving</label>
-                    <input class="form-control" type="text" name="watch_engraving" maxlength="33">
+                    <input class="form-control" type="text" name="watch_engraving" maxlength="33" v-model="watchEngraving">
                 </div>
             </div>
 
@@ -338,10 +338,10 @@
             <div v-if="selectedAward == bracelet35ID">
                 <div class="form-group">
                     <label for="bracelet_size">Size</label>
-                    <select  class="form-control" name="bracelet_size" id="bracelet_size">
-                        <option disabled selected>Choose Size</option>
-                        <option>Fits 6 1/2" - 7 1/2" circumference wrists</option>
-                        <option>Fits 7 1/2" - 8 1/2" circumference wrists</option>
+                    <select  class="form-control" name="bracelet_size" id="bracelet_size" v-model="braceletSize">
+                        <option disabled value="">Choose Size</option>
+                        <option>Fits 6 ½″ - 7 ½″ circumference wrists</option>
+                        <option>Fits 7 ½″ - 8 ½″ circumference wrists</option>
                     </select>
                 </div>
             </div>
@@ -350,10 +350,10 @@
             <div v-if="selectedAward == bracelet45ID">
                 <div class="form-group">
                     <label for="bracelet_size">Size</label>
-                    <select class="form-control" name="bracelet_size" id="bracelet_size">
-                        <option disabled selected>Choose Size</option>
-                        <option>Fits 6 1/2" - 7 1/2" circumference wrists</option>
-                        <option>Fits 7 1/2" - 8 1/2" circumference wrists</option>
+                    <select class="form-control" name="bracelet_size" id="bracelet_size" v-model="braceletSize">
+                        <option disabled value="">Choose Size</option>
+                        <option>Fits 6 ½″ - 7 ½″ circumference wrists</option>
+                        <option>Fits 7 ½″ - 8 ½″ circumference wrists</option>
                     </select>
                 </div>
             </div>
@@ -408,27 +408,20 @@
         </div>
 
 
-    <div class="row"> <h2 id="employeeInfo">Employee Information</h2></div>
+    <div class="row"> <h2 id="employeeInfo">Employee Information</h2> </div>
 
 
 
-    <div class="form-row">
-
+    <div class="row">
         <div class="col-4">
-            <div class="form-group">
-                <?= $this->Form->control('employee_id', ['type'=> 'text', 'class' => 'form-control', 'label' => 'Employee ID', 'value' => $registration->employee_id , 'v-model' => 'employeeID']); ?>
-            </div>
+            <?= $this->Form->control('employee_id', ['type'=> 'text', 'class' => 'form-control', 'label' => 'Employee ID', 'value' => $registration->employee_id , 'v-model' => 'employeeID']); ?>
         </div>
         <div class="col-4">
-            <div class="form-group">
-                <?= $this->Form->control('first_name', ['class' => 'form-control', 'label' => 'First Name', 'v-model' => 'firstName']); ?>
-            </div>
+            <?= $this->Form->control('first_name', ['class' => 'form-control', 'label' => 'First Name', 'v-model' => 'firstName']); ?>
         </div>
         <div class="col-4">
             <?= $this->Form->control('last_name', ['class' => 'form-control', 'label' => 'Last Name', 'v-model' => 'lastName']); ?>
         </div>
-    </div>
-    <div class="row">
         <div class="col-4">
             <?= $this->Form->control('ministry_id', ['type' => 'select', 'options' => $ministries, 'class' => 'form-control', 'label' => 'Member Organization', 'empty' => '- select ministry -', 'v-model' => 'ministry']); ?>
         </div>
@@ -635,9 +628,9 @@ app.supervisorCity             = <?= $registration->supervisor_city_id ?>;
 app.supervisorPostalCode       = '<?= $registration->supervisor_postal_code ?>';
 app.supervisorEmail            = '<?= $registration->supervisor_email ?>';
 
-app.isOptedIn              = <?= $registration->survey_participation ?>;
+app.isOptedIn              = <?= is_null($registration->survey_participation) ? 'false' : $registration->survey_participation ?>;
 app.originalAward          = <?= $registration->award_id ?>;
-
+app.parseAwardOptions();
 
 </script>
 
