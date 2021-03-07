@@ -413,8 +413,11 @@
 
 
     <div class="row">
-        <div class="col-4">
+        <div class="col-2">
             <?= $this->Form->control('employee_id', ['type'=> 'text', 'class' => 'form-control', 'label' => 'Employee ID', 'value' => $registration->employee_id , 'v-model' => 'employeeID']); ?>
+        </div>
+        <div class="col-2">
+            <?= $this->Form->control('member_bcgeu', ['class' => 'form-control', 'label' => 'Member of BCGEU', 'v-model' => 'isBcgeuMember']); ?>
         </div>
         <div class="col-4">
             <?= $this->Form->control('first_name', ['class' => 'form-control', 'label' => 'First Name', 'v-model' => 'firstName']); ?>
@@ -588,6 +591,7 @@ app.certificateName        = <?= is_null($registration->certificate_name)     ? 
 app.isRetroactive          = <?= $registration->retroactive ? 'true' : 'false' ?>;
 
 app.employeeID             = <?= $registration->employee_id ?>;
+app.isBcgeuMember          = <?= is_null($registration->member_bcgeu) ? 'null' : $registration->member_bcgeu ?>;
 app.firstName              = '<?= $registration->first_name ?>';
 app.lastName               = '<?= $registration->last_name ?>';
 

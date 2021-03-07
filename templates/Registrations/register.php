@@ -307,19 +307,25 @@
                             <div class="form-row">
                                 <div class="col-4">
                                     <div class="form-group">
-                                        <label for="">Employee ID #</label>
+                                        <label for="employee_id">Employee ID #</label>
                                         <input type="text" id="employee_id" name="employee_id" class="form-control" placeholder="123456" v-model="employeeID">
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <div class="form-group">
-                                        <label for="">First Name</label>
+                                        <label for="member_bcgeu">Are you a BCGEU Member?</label>
+                                        <input type="checkbox" id="member_bcgeu" name="member_bcgeu" class="form-control" v-model="isBcgeuMember">
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label for="first_name">First Name</label>
                                         <input type="text" id="first_name" name="first_name" v-model="firstName" class="form-control" placeholder="Your First Name">
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <div class="form-group">
-                                        <label for="">Last Name</label>
+                                        <label for="last_name">Last Name</label>
                                         <input type="text" id="last_name" name="last_name" v-model="lastName" class="form-control" placeholder="Your Last Name">
                                     </div>
                                 </div>
@@ -329,13 +335,13 @@
                             <div class="form-row">
                                 <div class="col-6">
                                     <div class="form-group">
-                                        <label for="">Government email address</label>
+                                        <label for="preferred_email">Government email address</label>
                                         <input type="email" id="preferred_email" name="preferred_email" v-model="govtEmail" class="form-control email-input" placeholder="i.e. taylor.publicservant@gov.bc.ca" @change="filterGovtEmail">
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
-                                        <label for="">Alternate email address</label>
+                                        <label for="alternate_email">Alternate email address</label>
                                         <input type="email" id="alternate_email" name="alternate_email" v-model="altEmail" class="form-control email-input" placeholder="i.e. taylor_publicservant@gmail.com" @change="filterAltEmail">
                                     </div>
                                 </div>
