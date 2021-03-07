@@ -795,7 +795,7 @@ class RegistrationsController extends AppController
         }
         $this->request->allowMethod(['post', 'delete']);
 
-        $registration = $this->Registrations->findBySlug($id)->firstOrFail();
+        $registration = $this->Registrations->findById($id)->firstOrFail();
         if ($this->Registrations->delete($registration)) {
             $this->Flash->success(__('The {0} registration has been deleted.', $registration->name));
             return $this->redirect(['action' => 'index']);

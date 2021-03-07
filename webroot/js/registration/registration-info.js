@@ -11,6 +11,7 @@ var app = new Vue({
         retirementDate: '',
         certificateName: '',
         isRetroactive: 0,
+        isBCGEU: 0,
 
         employeeID: '',
         firstName: '',
@@ -109,6 +110,7 @@ var app = new Vue({
         formIsValid: false,
         editFormErrors: false,
 
+
         accessRecipientSelections:  '',
         accessGuestSelections :     '',
         dietRecipientSelections:    '',
@@ -120,6 +122,9 @@ var app = new Vue({
 
 },
     methods: {
+        beforeMount : function () {
+          this.parseAwardOptions();
+        },
 
         filterOfficePhoneNumber : function () {
             this.officePhone         = Inputmask.format(this.officePhone, {"mask" : "(999) 999-9999", "placeholder": ""});
@@ -165,9 +170,6 @@ var app = new Vue({
             });
         },
 
-
-
-
         //TODO: Reduce the redundant functions to a single parameterized function call.
         setMilestoneName : function(e) {
             if (e.target.options.selectedIndex > -1) {
@@ -199,6 +201,42 @@ var app = new Vue({
             this.selectedAward = awardid;
             this.$vuetify.goTo('#award-button');
         },
+
+        parseAwardOptions : function () {
+            //If watch
+            if (this.selectedAward == this.watchID) {
+                console.log('Watch detected');
+                this.parseWatchOptions();
+            }
+            //If bracelet
+            if (this.selectedAward == this.bracelet35ID || this.selectedAward == this.bracelet45ID) {
+                this.parseBraceletOptions();
+            }
+            //If PECSF
+            if (this.selectedAward == this.pecsf25ID || this.selectedAward == this.pecsf30ID || this.selectedAward == this.pecsf35ID || this.selectedAward == this.pecsf40ID || this.selectedAward == this.pecsf45ID || this.selectedWard == this.pecsf50ID) {
+               if (this.pecsfCharity2) {
+                   this.donationType = 'two-charities';
+               }
+               if (this.pecsfCharity1 && !this.pecsfCharity2) {
+                   this.donationType = 'single-charity';
+               }
+               if (!this.pecsfCharity1) {
+                   this.donationType = 'pool';
+               }
+            }
+        },
+
+        parseBraceletOptions : function () {
+            this.braceletSize = this.awardOptions.bracelet_size;
+        },
+        parseWatchOptions : function () {
+            console.log('Watch options parsed including ' + this.awardOptions.watch_colour);
+
+            this.watchColour    = this.awardOptions.watch_colour;
+            this.watchSize      = this.awardOptions.watch_size;
+            this.strapType      = this.awardOptions.strap_type;
+        },
+
 
 
 
@@ -285,7 +323,7 @@ var app = new Vue({
                 this.errorsStep3.push('You must input your office postal code');
             }
             //Did they include a phone number?
-            if (this.officePhone.length > 16 || this.officePhone.length < 9) {
+            if (this.officePhone.length != 14) {
                 this.errorsStep3.push('You must input your office phone number');
             }
             //Did they include a home street address?
@@ -301,7 +339,7 @@ var app = new Vue({
                 this.errorsStep3.push('You must input your home postal code');
             }
             //Did they include a home phone number?
-            if (this.homePhone.length > 16 || this.homePhone.length < 9) {
+            if (this.homePhone.length != 14) {
                 this.errorsStep3.push('You must input your home phone number');
             }
 

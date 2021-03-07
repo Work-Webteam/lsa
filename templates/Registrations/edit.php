@@ -533,14 +533,6 @@
 
 
     <div class="row">
-        <div class="col-3">
-            <?= $this->Form->postLink(
-                'Delete',
-                ['action' => 'delete', $registration->id],
-                ['confirm' => 'Are you sure? This cannot be undone.','class' => 'btn btn-primary delete', 'role' => 'button'])
-            ?>
-        </div>
-        <div class="col-4"></div>
         <div class="col-5">
             <button class="btn btn-primary" @click.prevent="validateForm">Check Form</button>
             <?= $this->Form->button(__('Save Registration'), [
@@ -552,7 +544,16 @@
                 'onclick' => 'location.href="' . $registration->return_path . '"',
                 'class' => 'btn btn-secondary'
             )) ?>
-           <?= $this->Form->end(); ?>
+            <?= $this->Form->end(); ?>
+
+        </div>
+        <div class="col-4"></div>
+        <div class="col-3">
+
+            <?= $this->Form->postLink(
+                'Delete',
+                ['action' => 'delete', $registration->id],
+                ['confirm' => 'Are you sure? This cannot be undone.','class' => 'btn btn-primary delete', 'role' => 'button'])
             ?>
         </div>
     </div>
@@ -576,10 +577,9 @@
 
 app.selectedAward        = <?= $registration->award_id ?>;
 app.selectedMilestone    = <?= $registration->milestone_id ?>;
-app.pecsfRegion          = <?= is_null($registration->pecsf_region_id)   ? 'null' : $registration->pecsf_region_id ?>;
-app.donationType         = <?= is_null($registration->donationType)      ? 'null' : $registration->donationType ?>;
-app.pecsfCharity1        = <?= is_null($registration->pecsfCharity1)     ? 'null' : $registration->pecsfCharity1 ?>;
-app.pecsfCharity2        = <?= is_null($registration->pecsfCharity2)     ? 'null' : $registration->pecsfCharity2 ?>;
+app.pecsfRegion          = <?= is_null($registration->pecsf_region_id)       ? 'null' : $registration->pecsf_region_id ?>;
+app.pecsfCharity1        = <?= is_null($registration->pecsf_charity1_id)     ? 'null' : $registration->pecsf_charity1_id ?>;
+app.pecsfCharity2        = <?= is_null($registration->pecsf_charity2_id)     ? 'null' : $registration->pecsf_charity2_id ?>;
 
 app.accessRecipientSelections   = <?= is_null($registration->accessibility_requirements_recipient) ? 'null' : $registration->accessibility_requirements_recipient ?>;
 app.accessGuestSelections       = <?= is_null($registration->accessibility_requirements_guest) ? 'null' : $registration->accessibility_requirements_guest ?>;
@@ -599,6 +599,7 @@ app.firstName              = '<?= $registration->first_name ?>';
 app.lastName               = '<?= $registration->last_name ?>';
 
 app.selectedAward          = <?= $registration->award_id ?>;
+app.awardOptions           = <?= $registration->award_options ?>;
 
 app.donationRegion         = <?= is_null($registration->pecsf_region_id)    ? 'null' : $registration->pecsf_region_id ?>;
 app.donationCharity1       = <?= is_null($registration->pecsf_charity1_id)  ? 'null' : $registration->pecsf_charity1_id ?>;
