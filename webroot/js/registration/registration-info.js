@@ -290,7 +290,7 @@ var app = new Vue({
         validateStep3 : function () {
             this.errorsStep3 = [];
             //Did include an employee number?
-            if (this.employeeID.length < 5 || this.employeeID.length > 10) {
+            if (this.employeeID.length < 2 || this.employeeID.length > 11) {
                 this.errorsStep3.push('You must input a valid employee number');
             }
             //Did they include their first name?
