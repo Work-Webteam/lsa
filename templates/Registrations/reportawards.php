@@ -46,10 +46,13 @@ echo $this->Form->button('Cancel', array(
     var attending = true;
     var year =<?php echo $year; ?>;
 
+
+    console.log(recipients);
     $(document).ready(function() {
         // Check for award options.
         for (i = 0; i < recipients.length; i++) {
             options = JSON.parse(recipients[i].award_options);
+            console.log(recipients[i]);
             // We want to create a string from the options object if there is one.
             recipients[i].optionsDisplay = "";
             if (!$.isEmptyObject(options)) {

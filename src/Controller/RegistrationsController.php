@@ -5,6 +5,7 @@ namespace App\Controller;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
 use Cake\Mailer\Mailer;
+use App\Controller\PecsfCharitiesController;
 
 class RegistrationsController extends AppController
 {
@@ -1757,7 +1758,16 @@ class RegistrationsController extends AppController
                 'Ceremonies',
             ],
         ]);
-
+        // TODO - we need to associate our pecsf regions and ids to their tables for reports.
+        foreach($recipients as $recipient) {
+            // check if this is a PECSF registration.
+            if(!$recipient['pecsf_donation']) {
+                continue;
+            }
+            // Create our own pecsf array to append.
+            $recipient = $this->handlePECSFDonation($recipient);
+        }
+        //var_dump($recipients);
         $year = date('Y');
         $this->set(compact('year'));
 
