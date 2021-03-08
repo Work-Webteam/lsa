@@ -57,7 +57,7 @@ echo $this->Form->button('Cancel', array(
                $.each(options, function(key, value) {
                    // Strong is here to stylize our individual strings to make them easier to read.
                    // This could also be done with a class if prefered.
-                    recipients[i].optionDisplay += "<strong>" + key + "</strong>: " + value + ". <br>";
+                    recipients[i].optionsDisplay += "<strong>" + key + "</strong>: " + value + ". <br>";
                 });
             }
             // If this is a pecsf award, note that here.

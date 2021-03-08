@@ -318,6 +318,7 @@ class RegistrationsController extends AppController
                 $options['watch_size']      = $this->request->getData('watch_size');
                 $options['watch_colour']    = $this->request->getData('watch_colour');
                 $options['strap_type']      = $this->request->getData('strap_type');
+                $options['watch_engraving'] = $this->request->getData('watch_engraving');
                 break;
             case $bracelet_35_id:
             case $bracelet_45_id:
@@ -330,7 +331,6 @@ class RegistrationsController extends AppController
         return json_encode($options);
 
     }
-
     private function handlePECSFDonation($registration) {
         $pecsf_25_id    = 49;
         $pecsf_30_id    = 50;
@@ -452,8 +452,6 @@ class RegistrationsController extends AppController
             $registration->modified = time();
 
             //Set invite_sent to null if the request data is empty
-            //(this seems weird and possibly unnecessary)
-            if ($this->request->getData('invite_sent')); //TODO: Do we need this line? I can't see what it does. No variable has been assigned.
             if (empty($registration->invite_sent)) {
                 $registration->invite_sent = NULL;
             }

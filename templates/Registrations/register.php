@@ -198,7 +198,7 @@
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label for="watch_engraving">Engraving</label>
-                                        <input class="form-control" type="text" name="watch_engraving" maxlength="33" :placeholder="firstName + ' ' + lastName" v-model="watchEngraving">
+                                        <input class="form-control" type="text" name="watch_engraving" maxlength="33" :placeholder="firstName + ' ' + lastName" id="watch_engraving" v-model="watchEngraving">
                                     </div>
                                 </div>
                             </div>
