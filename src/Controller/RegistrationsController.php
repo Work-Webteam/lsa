@@ -364,15 +364,19 @@ class RegistrationsController extends AppController
                 $registration->pecsf_donation = 0;
                 return $registration;
         }
+
+        // First grab our name and region.
+        $registration->pecsf_region_id      = $this->request->getData('pecsf_region');
+        $registration->pecsf_name           = $this->request->getData('pecsf_name');
         //if Pool is select save region
         if ($this->request->getData('donation_type') == 'pool') :
             $registration->pecsf_donation       = 1;
-            $registration->pecsf_region_id      = $this->request->getData('pecsf_region');
             $registration->pecsf_amount1        = $donationTotal;
+            $registration->pecsf_name           = $this->request->getData('pecsf_name');
         else:
+
             //If a 2nd charity is defined, split the total between them.
-            // TODO: I believe this can be refactored to an  "elseif/else in parent construct.
-            if (is_numeric($this->request->getData('pecsfCharity2'))) :
+            if (is_numeric($this->request->getData('pecsf_charity_2'))) :
                 $registration->pecsf_donation     = 1;
                 $registration->pecsf_charity1_id  = $this->request->getData('pecsf_charity_1');
                 $registration->pecsf_amount1      = $donationTotal / 2;
@@ -384,6 +388,7 @@ class RegistrationsController extends AppController
                 $registration->pecsf_amount1    = $donationTotal;
             endif;
         endif;
+        var_dump($registration);
 
         return $registration;
 
@@ -542,9 +547,7 @@ class RegistrationsController extends AppController
         ]);
         $this->set('ministries', $ministries);
 
-        $regions = $this->Registrations->PecsfRegions->find('list', [
-            'order' => ['PecsfRegions.name' => 'ASC']
-        ]);
+        $regions = $this->Registrations->PecsfRegions->find('all');
         $this->set('regions', $regions);
 
         $charities = $this->Registrations->PecsfCharities->find('all', [
@@ -819,7 +822,7 @@ class RegistrationsController extends AppController
         }
         $this->request->allowMethod(['post', 'delete']);
 
-        $registration = $this->Registrations->findBySlug($id)->firstOrFail();
+        $registration = $this->Registrations->findById($id)->firstOrFail();
         if ($this->Registrations->delete($registration)) {
             $this->Flash->success(__('The {0} registration has been deleted.', $registration->name));
             return $this->redirect(['action' => 'index']);
@@ -1765,7 +1768,7 @@ class RegistrationsController extends AppController
                 continue;
             }
             // Create our own pecsf array to append.
-            $recipient = $this->handlePECSFDonation($recipient);
+            //$recipient = $this->handlePECSFDonation($recipient);
         }
         //var_dump($recipients);
         $year = date('Y');
