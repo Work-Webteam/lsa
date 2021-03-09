@@ -51,17 +51,36 @@ echo $this->Form->button('Cancel', array(
     $(document).ready(function() {
         // Check for award options.
         for (i = 0; i < recipients.length; i++) {
-            options = JSON.parse(recipients[i].award_options);
-            console.log(recipients[i]);
-            // We want to create a string from the options object if there is one.
             recipients[i].optionsDisplay = "";
-            if (!$.isEmptyObject(options)) {
-                // We have an object, so lets pull out all the parts and save it to a string.
-               $.each(options, function(key, value) {
-                   // Strong is here to stylize our individual strings to make them easier to read.
-                   // This could also be done with a class if prefered.
-                    recipients[i].optionsDisplay += "<strong>" + key + "</strong>: " + value + ". <br>";
-                });
+            if(recipients[i].award_options.length > 0) {
+                let options = JSON.parse(recipients[i].award_options);
+                // We want to create a string from the options object if there is one.
+                if (!$.isEmptyObject(options)) {
+                    // We have an object, so lets pull out all the parts and save it to a string.
+                    $.each(options, function (key, value) {
+                        // Strong is here to stylize our individual strings to make them easier to read.
+                        // This could also be done with a class if prefered.
+                        recipients[i].optionsDisplay += "<strong>" + key + "</strong>: " + value + ". <br>";
+                    });
+                }
+            }
+            if(recipients[i].pecsf_donation === true) {
+                recipients[i].optionsDisplay += "<strong>PECSF Certificate Name: </strong>" + recipients[i].pecsf_name + "<br />";
+                if(recipients[i].pecsf_region != null) {
+                    recipients[i].optionsDisplay += "<strong>PECSF Region: </strong>" + recipients[i].pecsf_region.name + "<br />";
+                }
+                // Show charity 1 name if not null.
+                if(recipients[i].pecsf_charities1 != null) {
+                    recipients[i].optionsDisplay += "<strong>PECSF Charity 1: </strong>" + recipients[i].pecsf_charities1.name + "<br />";
+                }
+                // Donation value - should be here no matter if this is a pool, one charity or two charities.
+                recipients[i].optionsDisplay += "<strong>PECSF Charity 1 Amount: </strong>$" + parseFloat(recipients[i].pecsf_amount1).toFixed(2) + "<br />";
+                // Show charity 2 if not null
+                if(recipients[i].pecsf_charities2 != null) {
+                    recipients[i].optionsDisplay += "<strong>PECSF Charity 2: </strong>" + recipients[i].pecsf_charities2.name + "<br />";
+                    // Show Donation value if there is a second charity.
+                    recipients[i].optionsDisplay += "<strong>PECSF Charity 2 Amount: </strong>$" + parseFloat(recipients[i].pecsf_amount2).toFixed(2) + "<br />";
+                }
             }
             // If this is a pecsf award, note that here.
             if (recipients[i].award_id == 0) {

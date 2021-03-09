@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
+use App\Model\Entity\PecsfCharity;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
 use Cake\Mailer\Mailer;
-use App\Controller\PecsfCharitiesController;
 
 class RegistrationsController extends AppController
 {
@@ -365,16 +365,14 @@ class RegistrationsController extends AppController
                 return $registration;
         }
 
-        // First grab our name and region.
-        $registration->pecsf_region_id      = $this->request->getData('pecsf_region');
+        // First grab our name.
         $registration->pecsf_name           = $this->request->getData('pecsf_name');
+        $registration->pecsf_region_id      = $this->request->getData('pecsf_region');
         //if Pool is select save region
         if ($this->request->getData('donation_type') == 'pool') :
             $registration->pecsf_donation       = 1;
             $registration->pecsf_amount1        = $donationTotal;
-            $registration->pecsf_name           = $this->request->getData('pecsf_name');
         else:
-
             //If a 2nd charity is defined, split the total between them.
             if (is_numeric($this->request->getData('pecsf_charity_2'))) :
                 $registration->pecsf_donation     = 1;
@@ -388,8 +386,6 @@ class RegistrationsController extends AppController
                 $registration->pecsf_amount1    = $donationTotal;
             endif;
         endif;
-        var_dump($registration);
-
         return $registration;
 
     }
@@ -1746,8 +1742,6 @@ class RegistrationsController extends AppController
 
         $conditions = array();
         $conditions['Registrations.registration_year ='] = date('Y');
-        //$conditions['Registrations.ceremony_id >'] = 0;
-        //$conditions['Registrations.waitinglist ='] = 0;
 
         $recipients = $this->Registrations->find('all', [
             'conditions' => $conditions,
@@ -1759,18 +1753,12 @@ class RegistrationsController extends AppController
                 'HomeCity',
                 'SupervisorCity',
                 'Ceremonies',
+                'PecsfCharities1',
+                'PecsfCharities2',
+                'PecsfRegions'
             ],
         ]);
-        // TODO - we need to associate our pecsf regions and ids to their tables for reports.
-        foreach($recipients as $recipient) {
-            // check if this is a PECSF registration.
-            if(!$recipient['pecsf_donation']) {
-                continue;
-            }
-            // Create our own pecsf array to append.
-            //$recipient = $this->handlePECSFDonation($recipient);
-        }
-        //var_dump($recipients);
+
         $year = date('Y');
         $this->set(compact('year'));
 
