@@ -50,7 +50,7 @@
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
-                                        <label for="">In which year did you reach this milestone?</label>
+                                        <label for="award_year">In which year did you reach this milestone?</label>
                                         <select class="form-control with-arrow" id="award_year" name="award_year" v-model="award_year">
                                             <option selected disabled>Select Year</option>
 
@@ -59,8 +59,7 @@
                                                 <?php endforeach ?>
 
                                         </select>
-
-
+                                        <small id="awardYearHelpBlock" class="form-text text-muted">If the year you reached this milestone isn't listed, contact your organization's Long Service Awards contact.</small>
                                     </div>
                                 </div>
                             </div>
