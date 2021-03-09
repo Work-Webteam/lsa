@@ -98,7 +98,7 @@
 
                                         <div class="form-group" v-if="isRetiringThisYear == 1">
                                             <label for="retirement_date">Date of Retirement:</label>
-                                            <input type="date" class="form-control" name="retirement_date" id="retirement_date" v-model="retirementDate">
+                                            <input type="date" class="form-control" name="retirement_date" id="retirement_date" v-model="retirementDate" max="2999-12-31">
                                         </div>
                                     </div>
                                 </div>
