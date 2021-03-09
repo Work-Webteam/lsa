@@ -349,6 +349,8 @@ var app = new Vue({
             if (this.errorsStep3.length == 0) {
                 console.log ('no errors on step 3');
                 this.e1 = 4;
+            } else {
+                this.scrollToTop();
             }
         },
         validateStep4 : function () {
@@ -381,6 +383,8 @@ var app = new Vue({
             if (this.errorsStep4.length == 0) {
                 console.log ('no errors on step 4');
                 this.e1 = 5;
+            } else {
+                this.scrollToTop();
             }
         },
         validateForm : function () {
