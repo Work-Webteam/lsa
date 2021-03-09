@@ -1727,8 +1727,12 @@ class RegistrationsController extends AppController
     }
 
 
-
-
+    /**
+     * For route /registrations/reportawards
+     * Works with reportawards.php template
+     *      sets 'recipients' and 'year'
+     * Dependent on RegistrationsTable.
+     */
     public function reportawards()
     {
 
@@ -1761,7 +1765,6 @@ class RegistrationsController extends AppController
 
         $year = date('Y');
         $this->set(compact('year'));
-
         $this->set(compact('recipients'));
 
     }
