@@ -60,49 +60,32 @@ echo $this->Form->button('Cancel', array(
 
     $(document).ready(function() {
 
-        console.log("year: " + year);
-
         for (i = 0; i < recipients.length; i++) {
             options = JSON.parse(recipients[i].award_options)
             recipients[i].optionsDisplay = "";
-            console.log(options.length);
-            for (var j = 0; j < options.length; j++) {
-                if (j > 0) {
-                    recipients[i].optionsDisplay += "<BR>";
+            if(recipients[i].award_options.length > 0) {
+                let options = JSON.parse(recipients[i].award_options);
+                // We want to create a string from the options object if there is one.
+                if (!$.isEmptyObject(options)) {
+                    // We have an object, so lets pull out all the parts and save it to a string.
+                    $.each(options, function (key, value) {
+                        // Strong is here to stylize our individual strings to make them easier to read.
+                        // This could also be done with a class if prefered.
+                        recipients[i].optionsDisplay += "<strong>" + key + "</strong>: " + value + ". <br>";
+                    });
                 }
-                recipients[i].optionsDisplay += "- " + options[j];
             }
             if (recipients[i].award_id == 0) {
                 recipients[i].award = { id: 0, name: "PECSF Donation" };
             }
         }
 
-        console.log(recipients);
-
         var cols;
 
         cols = [
-            { data: "ceremony.night", title: "Ceremony", orderable: false,  orderData: [0, 2, 3, 4]},
-            { data: "ceremony.date", title: "Ceremony", orderable: false, render: function( data, type, row, meta) {
-                    const months = ["Jan", "Feb", "Mar","Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                    var d = new Date(data);
-
-                    let formatted_date = months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear()
-
-                    return formatted_date;
-                } },
-
             { data: "ministry.name", title: "Ministry", orderable: false},
             { data: "last_name", title: "Last Name", orderable: false},
             { data: "first_name", title: "First Name", orderable: false},
-            { data: "attending", title: "Attending", orderable: false, render: function (data, type, row, meta) {
-                    if (data) {
-                        return "Attending";
-                    } else {
-                        return "Not Attending";
-                    }
-                }
-            },
             { data: "award.name", title: "Award", orderable: false},
             { data: "optionsDisplay", title: "Options", orderable: false},
             { data: "lastupdate", title: "Changes", orderable: false, render: function (data, type, row, meta) {

@@ -1797,7 +1797,6 @@ class RegistrationsController extends AppController
                 'OfficeCity',
                 'HomeCity',
                 'SupervisorCity',
-                'Ceremonies',
                 'Log' => function(\Cake\ORM\Query $q) {
                     return $q->where(["or" => ["type =" => "ATTENDING", "type =" => "AWARD"]])
                         ->order(["timestamp" => "DESC"]);
