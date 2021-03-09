@@ -59,7 +59,7 @@
                                                 <?php endforeach ?>
 
                                         </select>
-
+                                        <p class="small"
 
                                     </div>
                                 </div>
@@ -814,10 +814,6 @@
 </template>
 </div>
 <?= $this->Form->end(); ?>
-
-<!-- Data-types TODO: Check for usage and eliminate superfluous calls -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
 
 
 <!-- Registration Form-specific JavaScripts -->
