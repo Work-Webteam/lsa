@@ -598,7 +598,7 @@
                                         <p class="confirmationValue">{{award_year}}</p>
                                     </div>
                                     <div class="col-6">
-                                        <p v-if="isRetroactive" class="confirmationValue">I registered last year but did not attended</p>
+                                        <p v-if="isRetroactive" class="confirmationValue">I registered last year but did not attend</p>
                                         <p v-if="isRetiringThisYear" class="confirmationValue">I am retiring this year on {{retirementDate}} </p>
                                     </div>
                                 </div>
