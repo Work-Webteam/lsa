@@ -46,8 +46,6 @@ echo $this->Form->button('Cancel', array(
     var attending = true;
     var year =<?php echo $year; ?>;
 
-
-    console.log(recipients);
     $(document).ready(function() {
         // Check for award options.
         for (i = 0; i < recipients.length; i++) {
