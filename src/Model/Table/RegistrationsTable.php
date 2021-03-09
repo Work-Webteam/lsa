@@ -35,6 +35,7 @@ class RegistrationsTable extends Table
         $this->hasOne('PecsfRegions')
             ->setForeignKey('id')
             ->setBindingKey('pecsf_region_id');
+        $this->hasOne('PecsfCharities');
         $this->hasOne('PecsfCharities1', [
             'className' => 'PecsfCharities'
             ])
