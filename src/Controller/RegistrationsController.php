@@ -222,53 +222,51 @@ class RegistrationsController extends AppController
             $registration->home_province = "BC";
             $registration->supervisor_province = "BC";
             $registration->retirement_date = $this->request->getData('date');
-            if(empty($registration->retroactive)) {
-                $registration->retroactive = 0;
-            }
+            $registration->retroactive = 0;
 
             $registration->award_options = $this->getAwardOptionsJSON();
 
             $registration = $this->handlePECSFDonation($registration);
-
 
             $registration->accessibility_requirements_recipient = "[]";
             $registration->accessibility_requirements_guest = "[]";
             $registration->dietary_requirements_recipient = "[]";
             $registration->dietary_requirements_guest = "[]";
 
-            if (empty($registration->award_options)) {
-                $registration->award_options = '[]';
-            }
-            // For any retroactive registrations.
-            // This seems to get passed through as -1.
-            $award = new AwardsController();
-            $award_retro = $award->getByName('retroactive')->toArray();
-            // If we don't get an id, try by abbreviation
-            if(empty($award_retro)) {
-                $award_retro = $award->getByAbbreviation('retro')->toArray();
-            }
-            // If our id is still empty, we should make one - we will require it.
-            // An empty variable at this point indicates our previous retro choice was deleted.
-            if(empty($award_retro)){
-                $awardTables = $this->getTableLocator()->get('awards');
-                $newRetro = $awardTables->newEmptyEntity();
-                $newRetro->name = 'retroactive';
-                $newRetro->abbreviation = 'Retro';
-                $newRetro->milestone_id = '6';
-                $newRetro->description = 'For all users who had previously applied to receive an LSA award.';
-                $newRetro->image = 'lsa_logo.png';
-                $newRetro->options = "[]";
-                $newRetro->personalized = 0;
-                $newRetro->active = 0;
-                // Returns retro award object, or false if there is an issue.
-                if($awardTables->save($newRetro)) {
-                    $id = $newRetro->id;
-                }
-            } else {
-                $id = $award_retro[0]->id;
-            }
-
+            // Make sure user has an award. If they do not this comes through as -1,
+            // this means it is likely an application for a previous year, so we assign it the NA award.
             if ($registration->award_id < 0 ){
+                if (empty($registration->award_options)) {
+                    $registration->award_options = '[]';
+                }
+                // For any retroactive registrations.
+                // This seems to get passed through as -1.
+                $award = new AwardsController();
+                $award_retro = $award->getByName('N/A')->toArray();
+                // If we don't get an id, try by abbreviation
+                if(empty($award_retro)) {
+                    $award_retro = $award->getByAbbreviation('NA')->toArray();
+                }
+                // If our id is still empty, we should make one - we will require it.
+                // An empty variable at this point indicates our previous retro choice was deleted.
+                if(empty($award_retro)){
+                    $awardTables = $this->getTableLocator()->get('awards');
+                    $newRetro = $awardTables->newEmptyEntity();
+                    $newRetro->name = 'N/A';
+                    $newRetro->abbreviation = 'NA';
+                    $newRetro->milestone_id = '6';
+                    $newRetro->description = 'For all users who had an LSA application from a previous year.';
+                    $newRetro->image = 'lsa_logo.png';
+                    $newRetro->options = "[]";
+                    $newRetro->personalized = 0;
+                    $newRetro->active = 0;
+                    // Returns retro award object, or false if there is an issue.
+                    if($awardTables->save($newRetro)) {
+                        $id = $newRetro->id;
+                    }
+                } else {
+                    $id = $award_retro[0]->id;
+                }
                 // TODO: We should always have an id now - but if we do not throw an error.
                 $registration->award_id = $id;
             }
