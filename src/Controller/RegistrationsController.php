@@ -274,7 +274,7 @@ class RegistrationsController extends AppController
                 $this->Flash->success(__('Registration has been saved.'));
 
                 // Send email here
-                $mailer = new Mailer('govSmtp');
+                $mailer = new Mailer('default');
 
                 $message = "Congratulations, you have successfully registered for your Long Service Award.";
                 $mailer->setFrom(['longserviceaward@gov.bc.ca' => 'Long Service Awards'])
@@ -2848,7 +2848,7 @@ class RegistrationsController extends AppController
         $rsvp_url = "/rsvp/" . $id;
 
         // Send email here
-        $mailer = new Mailer('govSmtp');
+        $mailer = new Mailer('default');
         // TODO: This template should be separated out as per instructions here:
         $message = <<<EOT
 <html>
