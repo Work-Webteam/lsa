@@ -290,4 +290,39 @@ class AwardsController extends AppController
         }
     }
 
+    /**
+     * @param $id
+     *      Getter that searches for award records by $id.
+     * @return \Cake\Datasource\EntityInterface
+     */
+    public function getById($id) {
+        return $this->Awards->get($id);
+    }
+
+    /**
+     * @param string $name
+     *      Getter that searches for Award records by string.
+     *
+     * @return \Cake\Datasource\QueryInterface
+     */
+    public function getByName($name) {
+        return $this->Awards->find('all', [
+            'conditions' => [
+                'name' => $name,
+            ]
+        ]);
+    }
+
+    /**
+     * @param string $abb
+     *      Contains a string that is matched against database awards records abbreviation column.
+     * @return \Cake\Datasource\QueryInterface
+     */
+    public function getByAbbreviation($abb) {
+        return $this->Awards->find('all', [
+            'conditions' => [
+                'abbreviation' => $abb
+            ]
+        ]);
+    }
 }

@@ -73,7 +73,7 @@
                                 <div class="col-3">
                                     <p>Did you register for a Long Service Award in 2019?</p>
                                     <div class="form-group checkbox-group">
-                                        <input class="form-check-input" type="radio" name="retroactive" id="retroactive" value="1" v-model="isRetroactive" @click="setAwardYear(2019)">
+                                        <input class="form-check-input" type="radio" name="retroactive" id="retroactive" value="1" v-model="isRetroactive" >
                                         <label class="form-check-label" for="retroactive">Yes</label>
                                     </div>
                                     <div class="form-group checkbox-group">
@@ -614,37 +614,42 @@
                             </div>
                             <div class="confirmationGroup grey lighten-2">
                                 <h4>Award &amp; Options</h4>
-                                <?php foreach ($awardinfo as $award): ?>
-                                    <div class="form-row" v-if="selectedAward == <?= $award->id ?>">
-                                        <div class="col-6">
-                                            <v-img src="/img/awards/<?= $award->image ?>"></v-img>
-                                        </div>
-                                        <div class="col-6">
-                                           <p class="confirmationValue"><?= $award->name ?></p>
+                                <div v-if="isRetroactive == 0">
+                                    <?php foreach ($awardinfo as $award): ?>
+                                        <div class="form-row" v-if="selectedAward == <?= $award->id ?>">
+                                            <div class="col-6">
+                                                <v-img src="/img/awards/<?= $award->image ?>"></v-img>
+                                            </div>
+                                            <div class="col-6">
+                                               <p class="confirmationValue"><?= $award->name ?></p>
 
-                                            <p v-if="selectedAward == 9"><small>Watch Size</small></p>
-                                            <p v-if="selectedAward == 9" class="confirmationValue">{{watchSize}}</p>
+                                                <p v-if="selectedAward == 9"><small>Watch Size</small></p>
+                                                <p v-if="selectedAward == 9" class="confirmationValue">{{watchSize}}</p>
 
-                                            <p v-if="selectedAward == 9"><small>Watch Colour</small></p>
-                                            <p v-if="selectedAward == 9" class="confirmationValue">{{watchColour}}</p>
+                                                <p v-if="selectedAward == 9"><small>Watch Colour</small></p>
+                                                <p v-if="selectedAward == 9" class="confirmationValue">{{watchColour}}</p>
 
-                                            <p v-if="selectedAward == 9"><small>Strap Type</small></p>
-                                            <p v-if="selectedAward == 9" class="confirmationValue">{{strapType}}</p>
+                                                <p v-if="selectedAward == 9"><small>Strap Type</small></p>
+                                                <p v-if="selectedAward == 9" class="confirmationValue">{{strapType}}</p>
 
-                                            <p v-if="selectedAward == 9"><small>Engraving</small></p>
-                                            <p v-if="selectedAward == 9" class="confirmationValue">{{watchEngraving}}</p>
+                                                <p v-if="selectedAward == 9"><small>Engraving</small></p>
+                                                <p v-if="selectedAward == 9" class="confirmationValue">{{watchEngraving}}</p>
 
-                                            <p v-if="selectedAward == 12 || selectedAward == 46"><small>Bracelet Size</small></p>
-                                            <p v-if="selectedAward == 12 || selectedAward == 46" class="confirmationValue">{{braceletSize}}</p>
+                                                <p v-if="selectedAward == 12 || selectedAward == 46"><small>Bracelet Size</small></p>
+                                                <p v-if="selectedAward == 12 || selectedAward == 46" class="confirmationValue">{{braceletSize}}</p>
 
 
+                                            </div>
+                                    </div>
+                                    <?php endforeach; ?>
+                                </div>
+                                <div v-if="isRetroactive == 0">
+                                    <div class="form-row">
+                                         <div class="col-6">
+                                            <p class="confirmationValue">Retroactive</p>
                                         </div>
                                     </div>
-
-
-                                <?php endforeach; ?>
-
-
+                                </div>
 
                                 <div class="form-row">
                                     <div class="col-9">

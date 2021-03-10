@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Model\Entity\Award;
 use App\Model\Entity\PecsfCharity;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
@@ -209,7 +210,6 @@ class RegistrationsController extends AppController
         //Handle post requests
         if ($this->request->is('post')) {
             $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
-
             $session = $this->getRequest()->getSession();
             $registration->user_idir = $session->read('user.idir');
             $registration->user_guid = $session->read('user.guid');
@@ -222,7 +222,9 @@ class RegistrationsController extends AppController
             $registration->home_province = "BC";
             $registration->supervisor_province = "BC";
             $registration->retirement_date = $this->request->getData('date');
-            $registration->retroactive = 0;
+            if(empty($registration->retroactive)) {
+                $registration->retroactive = 0;
+            }
 
             $registration->award_options = $this->getAwardOptionsJSON();
 
@@ -236,6 +238,39 @@ class RegistrationsController extends AppController
 
             if (empty($registration->award_options)) {
                 $registration->award_options = '[]';
+            }
+            // For any retroactive registrations.
+            // This seems to get passed through as -1.
+            $award = new AwardsController();
+            $award_retro = $award->getByName('retroactive')->toArray();
+            // If we don't get an id, try by abbreviation
+            if(empty($award_retro)) {
+                $award_retro = $award->getByAbbreviation('retro')->toArray();
+            }
+            // If our id is still empty, we should make one - we will require it.
+            // An empty variable at this point indicates our previous retro choice was deleted.
+            if(empty($award_retro)){
+                $awardTables = $this->getTableLocator()->get('awards');
+                $newRetro = $awardTables->newEmptyEntity();
+                $newRetro->name = 'retroactive';
+                $newRetro->abbreviation = 'Retro';
+                $newRetro->milestone_id = '6';
+                $newRetro->description = 'For all users who had previously applied to receive an LSA award.';
+                $newRetro->image = 'lsa_logo.png';
+                $newRetro->options = "[]";
+                $newRetro->personalized = 0;
+                $newRetro->active = 0;
+                // Returns retro award object, or false if there is an issue.
+                if($awardTables->save($newRetro)) {
+                    $id = $newRetro->id;
+                }
+            } else {
+                $id = $award_retro[0]->id;
+            }
+
+            if ($registration->award_id < 0 ){
+                // TODO: We should always have an id now - but if we do not throw an error.
+                $registration->award_id = $id;
             }
             if ($this->Registrations->save($registration)) {
                 $this->Flash->success(__('Registration has been saved.'));
