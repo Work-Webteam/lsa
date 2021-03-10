@@ -59,7 +59,7 @@
                                                 <?php endforeach ?>
 
                                         </select>
-                                        <p class="small"
+                                        <small class="form-text text-muted">If the year you reached this milestone isn't listed, contact your organization's <a href="https://longserviceawards.gww.gov.bc.ca/contacts">Long Service Awards contact.</a> </small>
 
                                     </div>
                                 </div>
@@ -320,7 +320,7 @@
                                 </div>
                                 <div class="col-4">
                                     <div class="form-group">
-                                        <label for="member_bcgeu">Are you a BCGEU Member?</label>
+                                        <label for="member_bcgeu">For our records, please indicate if you are a member of the BGCEU.</label>
                                         <input type="checkbox" id="member_bcgeu" name="member_bcgeu" class="form-control" v-model="isBcgeuMember">
                                     </div>
                                 </div>

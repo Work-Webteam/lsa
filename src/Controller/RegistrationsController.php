@@ -291,6 +291,7 @@ class RegistrationsController extends AppController
         $bulova_watch_id = 9;
         $bracelet_35_id = 12;
         $bracelet_45_id = 29;
+        $bracelet_50_id = 48;
         $options        = array();
 
         switch($this->request->getData('award_id')) {
@@ -304,6 +305,9 @@ class RegistrationsController extends AppController
                 $options['bracelet_size']   = $this->request->getData('braceletSize');
                 break;
             case $bracelet_45_id:
+                $options['bracelet_size']   = $this->request->getData('braceletSize');
+                break;
+            case $bracelet_50_id:
                 $options['bracelet_size']   = $this->request->getData('braceletSize');
                 break;
             default:

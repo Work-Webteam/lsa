@@ -98,7 +98,8 @@ var app = new Vue({
         //IDs of Awards with options
         watchID: 9,
         bracelet35ID: 12,
-        bracelet45ID: 46,
+        bracelet45ID: 29,
+        bracelet50ID: 48,
         pecsf25ID: 49,
         pecsf30ID: 50,
         pecsf35ID: 51,
@@ -210,7 +211,7 @@ var app = new Vue({
                 this.parseWatchOptions();
             }
             //If bracelet
-            if (this.selectedAward == this.bracelet35ID || this.selectedAward == this.bracelet45ID) {
+            if (this.selectedAward == this.bracelet35ID || this.selectedAward == this.bracelet45ID || this.selectedAward == this.bracelet50ID) {
                 this.parseBraceletOptions();
             }
             //If PECSF
@@ -256,7 +257,7 @@ var app = new Vue({
             }
 
             //Did they reach this milestone in 2021 but also say they registered for an LSA in 2019
-            if (this.isRetroactive && (this.award_year > 2019)) {
+            if (this.isRetroactive == 1 && (this.award_year > 2019)) {
                 this.errorsStep1.push('Please ensure your milestone information is correct.');
             }
 
