@@ -272,6 +272,7 @@ class RegistrationsController extends AppController
             }
             if ($this->Registrations->save($registration)) {
                 $this->Flash->success(__('Registration has been saved.'));
+                /**** Application success email sends start ***/
                 // RECIPIENT EMAIL:
                 // Get the milestone year for email.
                 $milestone = $this->getTableLocator()->get('Milestones');
@@ -280,25 +281,53 @@ class RegistrationsController extends AppController
                 $recipient_info = [
                     'milestone' => $milestone_year->years
                 ];
-                // Send email here
+                // Build mailer object.
                 $mailer = new Mailer('default');
 
+                // Set our templates
                 $mailer
                     ->viewBuilder()
+                        // Can be found in templates/email/html
                         ->setTemplate('recipient_confirmation_email')
+                        // Can be found in templates/layout/html - not sure what exactly it does if anything - but it looks to set headers.
                         ->setLayout('recipient_confirmation_layout');
                 $mailer
+                    // We want html emails.
                     ->setEmailFormat('html')
                     ->setFrom(['longserviceaward@gov.bc.ca' => 'Long Service Awards'])
                     ->setTo($registration->preferred_email)
                     ->setSubject('Long Service Award Registration Successful')
+                    // Vars accessible in template. Sent as array, but accessed directly.
                     ->setViewVars($recipient_info)
                     ->deliver();
 
                 // SUPERVISOR EMAIL
+                // We need to pull out recipients first, last and their milestone year #.
+                $supervisor_info = [
+                    'first_name' => $registration->first_name,
+                    'last_name' => $registration->last_name,
+                    'milestone' => $milestone_year->years
+                ];
+                // Build mailer object.
+                $sup_mailer = new Mailer('default');
+                // Set our templates
+                $sup_mailer
+                    ->viewBuilder()
+                          // Can be found in templates/email/html
+                        ->setTemplate('supervisor_confirmation_email')
+                        // Can be found in templates/layout/html - not sure what exactly it does if anything - but it looks to set headers.
+                        ->setLayout('recipient_confirmation_layout');
+                $sup_mailer
+                    // We want html emails.
+                    ->setEmailFormat('html')
+                    ->setFrom(['longserviceaward@gov.bc.ca' => 'Long Service Awards'])
+                    ->setTo($registration->supervisor_email)
+                    ->setSubject('Your employee has registered for a Long Service Award')
+                    // Vars accessible in template. Sent as array, but accessed directly.
+                    ->setViewVars($supervisor_info)
+                    ->deliver();
 
-
-
+                /**** Application success email sends end ***/
 
                 return $this->redirect(['action' => 'completed', $registration->id]);
             }
