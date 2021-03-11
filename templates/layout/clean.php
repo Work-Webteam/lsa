@@ -24,6 +24,7 @@
 </head>
 <body>
 <script>
+    /*
     var $buoop = {required:{e:-6,f:-6,o:-6,s:-6,c:-6}, no_permanent_hide: false, nostatistics: true, text: 'The Long Service Awards supports only modern browsers, please switch to Chrome, Edge, FireFox, or Safari to complete registration.' api:2021.02 };
     function $buo_f(){
         var e = document.createElement("script");
@@ -32,6 +33,8 @@
     };
     try {document.addEventListener("DOMContentLoaded", $buo_f,false)}
     catch(e){window.attachEvent("onload", $buo_f)}
+    */
+
 </script>
 
     <main class="main">
