@@ -114,7 +114,7 @@ class SamlMiddleware implements MiddlewareInterface
                 // returned to the requester, in this case our SP.
                 'assertionConsumerService' => array (
                     // URL Location where the <Response> from the IdP will be returned
-                    'url' => '/register',
+                    'url' => 'https://lsaapp.gww.gov.bc.ca',
                     // SAML protocol binding to be used when returning the <Response>
                     // message.  Onelogin Toolkit supports for this endpoint the
                     // HTTP-POST binding only
@@ -141,7 +141,7 @@ class SamlMiddleware implements MiddlewareInterface
                 // returned to the requester, in this case our SP.
                 'singleLogoutService' => array (
                     // URL Location where the <Response> from the IdP will be returned
-                    'url' => '',
+                    'url' => 'https://lsaapp.gww.gov.bc.ca',
                     // SAML protocol binding to be used when returning the <Response>
                     // message.  Onelogin Toolkit supports for this endpoint the
                     // HTTP-Redirect binding only
