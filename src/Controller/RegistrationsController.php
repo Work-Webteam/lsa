@@ -296,6 +296,25 @@ class RegistrationsController extends AppController
                     ->deliver();
 
                 // SUPERVISOR EMAIL
+                // We need to pull out recipients first, last and their milestone year #.
+                $supervisor_info = [
+                    'first_name' => $registration->first_name,
+                    'last_name' => $registration->last_name,
+                    'milestone' => $milestone_year->years
+                ];
+
+                $sup_mailer = new Mailer('default');
+                $sup_mailer
+                    ->viewBuilder()
+                        ->setTemplate('supervisor_confirmation_email')
+                        ->setLayout('recipient_confirmation_layout');
+                $sup_mailer
+                    ->setEmailFormat('html')
+                    ->setFrom(['longserviceaward@gov.bc.ca' => 'Long Service Awards'])
+                    ->setTo($registration->supervisor_email)
+                    ->setSubject('Your employee has registered for a Long Service Award')
+                    ->setViewVars($supervisor_info)
+                    ->deliver();
 
 
 
