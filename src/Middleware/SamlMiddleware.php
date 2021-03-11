@@ -174,7 +174,7 @@ class SamlMiddleware implements MiddlewareInterface
                 // SSO endpoint info of the IdP. (Authentication Request protocol)
                 'singleSignOnService' => array (
                     // URL Target of the IdP where the SP will send the Authentication Request Message
-                    'url' => 'https://sfstest7.gov.bc.ca/affwebservices/public/saml2sso?SPID=urn:ca:bc:gww:lsaapp:sm',
+                    'url' => 'https://sfs7.gov.bc.ca/affwebservices/public/saml2sso?SPID=urn:ca:bc:gww:lsaapp:sm',
                     // SAML protocol binding to be used when returning the <Response>
                     // message.  Onelogin Toolkit supports for this endpoint the
                     // HTTP-Redirect binding only
@@ -183,7 +183,7 @@ class SamlMiddleware implements MiddlewareInterface
                 // SLO endpoint info of the IdP.
                 'singleLogoutService' => array (
                     // URL Location of the IdP where the SP will send the SLO Request
-                    'url' => 'https://sfstest7.gov.bc.ca/affwebservices/public/saml2sso?SPID=urn:ca:bc:gww:lsaapp:sm',
+                    'url' => 'https://sfs7.gov.bc.ca/affwebservices/public/saml2sso?SPID=urn:ca:bc:gww:lsaapp:sm',
                     // URL location of the IdP where the SP will send the SLO Response (ResponseLocation)
                     // if not set, url for the SLO Request will be used
                     'responseUrl' => '',
