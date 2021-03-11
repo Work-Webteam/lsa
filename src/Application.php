@@ -76,7 +76,7 @@ class Application extends BaseApplication
                 'cacheTime' => Configure::read('Asset.cacheTime'),
             ]))
 
-            //->add(new SamlMiddleware())
+            ->add(new SamlMiddleware())
 
             // Add routing middleware.
             // If you have a large number of routes connected, turning on routes

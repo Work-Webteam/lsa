@@ -93,10 +93,10 @@ class AppController extends Controller
         }
 
         $session = $this->getRequest()->getSession();
-        $session->write('user.idir', $_SERVER['HTTP_SM_USER']);
-        $session->write('user.guid', $_SERVER['HTTP_SMGOV_USERGUID']);
-        $session->write('user.name', $_SERVER['HTTP_SMGOV_USERDISPLAYNAME']);
-        $session->write('user.email', $_SERVER['HTTP_SMGOV_USEREMAIL']);
+   //     $session->write('user.idir', $_SERVER['HTTP_SM_USER']);
+   //     $session->write('user.guid', $_SERVER['HTTP_SMGOV_USERGUID']);
+   //     $session->write('user.name', $_SERVER['HTTP_SMGOV_USERDISPLAYNAME']);
+   //     $session->write('user.email', $_SERVER['HTTP_SMGOV_USEREMAIL']);
 
         if ($user) {
             $session->write('user.role', $user->role_id);
