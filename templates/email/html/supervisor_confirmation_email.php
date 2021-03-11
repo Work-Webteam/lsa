@@ -16,7 +16,7 @@
 ?>
 
 <p><strong>THIS IS AN AUTOMATED EMAIL. NO RESPONSE IS REQUIRED.</strong><p>
-<p>This email is to advise you that your employee <?php echo $first_name ?> <?php echo $last_name ?> has registered to receive a <?php echo $milestone ?> year <a href="https://longserviceawards.gww.gov.bc.ca/">Long Service Award</a> in 2021.</p>
+<p>This email is to advise you that your employee <?= h($first_name); ?> <?= h($last_name) ?> has registered to receive a <?php echo $milestone ?> year <a href="https://longserviceawards.gww.gov.bc.ca/">Long Service Award</a> in 2021.</p>
 <p>Long Service Awards registration is open to any full-time, part-time or seasonal employees who have reached a 25, 30, 35, 40, 45 or 50 year milestone with the BC Public Service by December 31, 2021. Employees who have achieved one of these milestones prior to this year but have not been recognized for it may also register.</p>
 <H3>Ceremony</H3>
 <p>The Long Service Award ceremonies are prestigious and memorable events held at Government House in Victoria. We are closely following the Provincial Health Officer’s directives regarding events and travel. Due to the evolving nature of the COVID-19 pandemic, the award ceremonies are still to be confirmed. We will provide updates to registered recipients over the summer as well as post them to the <a href="https://longserviceawards.gww.gov.bc.ca/">Long Service Awards</a> website.  Thank you for your patience during this unprecedented time.</p>

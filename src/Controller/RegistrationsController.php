@@ -271,7 +271,6 @@ class RegistrationsController extends AppController
                 $registration->award_id = $id;
             }
             if ($this->Registrations->save($registration)) {
-                $this->Flash->success(__('Registration has been saved.'));
                 /**** Application success email sends start ***/
                 // RECIPIENT EMAIL:
                 // Get the milestone year for email.
@@ -329,12 +328,14 @@ class RegistrationsController extends AppController
 
                 /**** Application success email sends end ***/
 
-                return $this->redirect(['action' => 'completed', $registration->id]);
+
+                // Pass to confirmation page.
+                // Need our milestone year for conf.
+                return $this->redirect(['controller'=>'Registrations', 'action' => 'completed', $registration->id]);
             }
+            // Error handling.
             $this->Flash->error(__('Unable to add registration.'));
         }
-
-
 
         //Initialize Arrays for Awards options, Select Menus and validation
         $list = explode(",", $registration_periods->qualifying_years);
@@ -471,8 +472,13 @@ class RegistrationsController extends AppController
 
 
     public function completed ($id = null) {
+        // Get the registration for this page
         $registration = $this->Registrations->findById($id)->firstOrFail();
         $this->set(compact('registration'));
+        // We also need to dynamically set the years of service for this registration.
+        $milestone = $this->getTableLocator()->get('Milestones');
+        $milestone_year = $milestone->get($registration->milestone_id);
+        $this->set('year', $milestone_year->years);
 
         $this->set('lsa_name' , Configure::read('LSA.lsa_contact_name'));
         $this->set('lsa_email' , Configure::read('LSA.lsa_contact_email'));

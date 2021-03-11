@@ -16,7 +16,7 @@
 ?>
 <p><strong>THIS IS AN AUTOMATED EMAIL. NO RESPONSE IS REQUIRED.</strong></p>
 
-<p>You have successfully registered for a <?php echo $milestone; ?> year Long Service Award. Congratulations on reaching this milestone in your career! </p>
+<p>You have successfully registered for a <?= h($milestone); ?> year Long Service Award. Congratulations on reaching this milestone in your career! </p>
 <p>An email has been sent to your supervisor so they are aware of your registration and can support you to attend your award ceremony.</p>
 <p>Find details about the program, including the ceremony, travel policies and more on the <a href="https://longserviceawards.gww.gov.bc.ca/">Long Service Awards website</a>.
 <H3>Ceremony Dates</H3>

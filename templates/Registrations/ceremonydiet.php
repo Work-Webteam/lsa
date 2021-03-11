@@ -46,8 +46,6 @@ echo $this->Form->button('Cancel', array(
 
     $(document).ready(function() {
 
-        console.log(registrations);
-
         $('#data-table-1').DataTable( {
             data: registrations,
             columns: [
