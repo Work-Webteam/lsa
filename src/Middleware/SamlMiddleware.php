@@ -6,7 +6,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Server\MiddlewareInterface;
 
-use OneLogin_Saml2_Utils;
+use \OneLogin_Saml2_Utils;
 
 
 class SamlMiddleware implements MiddlewareInterface
@@ -16,7 +16,7 @@ class SamlMiddleware implements MiddlewareInterface
         $response = $handler->handle($request);
 
 
-        \OneLogin_Saml2_Utils::login();
+        OneLogin_Saml2_Utils::login();
 
     }
 }
