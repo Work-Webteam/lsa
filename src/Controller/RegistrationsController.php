@@ -250,7 +250,7 @@ class RegistrationsController extends AppController
                 // If our id is still empty, we should make one - we will require it.
                 // An empty variable at this point indicates our previous retro choice was deleted.
                 if(empty($award_retro)){
-                    $awardTables = $this->getTableLocator()->get('awards');
+                    $awardTables = $this->getTableLocator()->get('Awards');
                     $newRetro = $awardTables->newEmptyEntity();
                     $newRetro->name = 'N/A';
                     $newRetro->abbreviation = 'NA';
@@ -272,15 +272,32 @@ class RegistrationsController extends AppController
             }
             if ($this->Registrations->save($registration)) {
                 $this->Flash->success(__('Registration has been saved.'));
-
+                // RECIPIENT EMAIL:
+                // Get the milestone year for email.
+                $milestone = $this->getTableLocator()->get('Milestones');
+                $milestone_year = $milestone->get($registration->milestone_id);
+                // Get user info for email:
+                $recipient_info = [
+                    'milestone' => $milestone_year->years
+                ];
                 // Send email here
                 $mailer = new Mailer('default');
 
-                $message = "Congratulations, you have successfully registered for your Long Service Award.";
-                $mailer->setFrom(['longserviceaward@gov.bc.ca' => 'Long Service Awards'])
+                $mailer
+                    ->viewBuilder()
+                        ->setTemplate('recipient_confirmation_email')
+                        ->setLayout('recipient_confirmation_layout');
+                $mailer
+                    ->setEmailFormat('html')
+                    ->setFrom(['longserviceaward@gov.bc.ca' => 'Long Service Awards'])
                     ->setTo($registration->preferred_email)
-                    ->setSubject('Long Service Award Registration Completed')
-                    ->deliver($message);
+                    ->setSubject('Long Service Award Registration Successful')
+                    ->setViewVars($recipient_info)
+                    ->deliver();
+
+                // SUPERVISOR EMAIL
+
+
 
 
                 return $this->redirect(['action' => 'completed', $registration->id]);
@@ -2849,7 +2866,7 @@ class RegistrationsController extends AppController
 
         // Send email here
         $mailer = new Mailer('default');
-        // TODO: This template should be separated out as per instructions here:
+        // TODO: This template should be separated out as per instructions here: https://book.cakephp.org/4/en/core-libraries/email.html
         $message = <<<EOT
 <html>
 <head>
