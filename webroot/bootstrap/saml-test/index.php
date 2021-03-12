@@ -4,7 +4,7 @@ session_start();    // Initialize the session, we do that because
 // Note that processResponse and processSLO
 // methods could manipulate/close that session
 
-require_once dirname(__DIR__).'/_toolkit_loader.php'; // Load Saml2 and external libs
+require_once dirname(__DIR__).'/saml-test/_toolkit_loader.php'; // Load Saml2 and external libs
 require_once 'settings.php';    // Load the setting info as an Array
 
 $auth = new OneLogin_Saml2_Auth($settingsInfo);  // Initialize the SP SAML instance
