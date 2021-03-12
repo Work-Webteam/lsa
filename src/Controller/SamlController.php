@@ -24,50 +24,6 @@ class SamlController extends AppController
         $auth->login();
     }
 
-    public function acs() {
-
-        $_POST['SAMLResponse'] = $_SESSION['SAMLResponse'];
-
-
-        $this->initSAML();
-        $auth = new \OneLogin_Saml2_Auth($this->settings);
-
-        $auth->processResponse();
-
-        //If there are errors, display them then exit.
-        $errors = $auth->getErrors();
-        if (!empty($errors)) {
-            echo "There were errors, sad face";
-
-
-            echo '<p>',implode(', ', $errors),'</p>';
-            if ($auth->getSettings()->isDebugActive()) {
-                echo '<p>'.$auth->getLastErrorReason().'</p>';
-            }
-            exit();
-        }
-
-        if (!$auth->isAuthenticated()) {
-            echo "<p>Sorry, you could not be authenticated.</p>";
-            exit();
-        };
-
-        $session = $this->request->getSession();
-        $session->write('samlUserdata', $auth->getAttributes());
-        $session->write('samlNameId', $auth->getNameId());
-        $session->write('samlNameIdFormat', $auth->getNameIdFormat());
-        $session->write('samlNameIdNameQualifier', $auth->getNameIdNameQualifier());
-        $session->write('samlNameIdSPNameQualifier', $auth->getNameIdSPNameQualifier());
-        $session->write('samlSessionIndex', $auth->getSessionIndex());
-
-        //Set IDIR and GUID to session and $_SERVER var
-
-        $session->write('User.guid', $auth->getAttributes()['SMGOV_GUID'][0]);
-        $session->write('User.idir', $auth->getAttributes()['username'][0]);
-        $_SERVER['HTTP_SM_USER'] = $auth->getAttributes()['username'][0];
-        $_SERVER['HTTP_SMGOV_USERGUID'] = $auth->getAttributes()['SMGOV_GUID'][0];
-
-    }
 
     public function slo() {
         $this->initSAML();

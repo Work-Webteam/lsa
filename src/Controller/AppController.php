@@ -18,6 +18,9 @@ namespace App\Controller;
 
 use Cake\Controller\Controller;
 use Cake\Database\Type;
+use Cake\Http\Cookie\CookieCollection;
+use Cake\Http\Cookie\Cookie;
+
 
 Type::build('datetime')->useLocaleParser();
 
@@ -46,17 +49,23 @@ class AppController extends Controller
 
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
+        $this->sessionStatusText = '';
+       // $this->checkSAML();
 
-        $this->checkSAML();
-
+        /*
         //Do no checks on the SAML sign-in controller
         if ($this->request->getParam('controller')!= 'saml' && $this->request->getParam('action') != 'sso') :
+
+            $_SESSION['user.guid'] =  $this->request->getSession()->read('user.guid');
+            $_SESSION['user.idir'] =  $this->request->getSession()->read('user.idir');
+            $_SERVER['user.guid'] = $this->request->getSession()->read('user.guid');
+            $_SERVER['user.idir']  = $this->request->getSession()->read('user.guid');
 
 
         // check if user has administrative privileges
         $this->loadModel('UserRoles');
         $users = $this->UserRoles->find('all', [
-            'conditions' => ['UserRoles.guid =' => $_SERVER['HTTP_SMGOV_USERGUID']],
+            'conditions' => ['UserRoles.guid =' => $_SESSION['user.guid']],
             'limit' => 1,
         ]);
         $user = $users->first();
@@ -65,22 +74,22 @@ class AppController extends Controller
             // matching IDIR with a different GUID.
             $users = $this->UserRoles->find('all', [
                 'conditions' => [
-                    'UserRoles.idir =' => $_SERVER['HTTP_SM_USER'],
+                    'UserRoles.idir =' => $_SESSION['user.idir'],
                     'UserRoles.guid =' => '',
                     ],
                 'limit' => 1,
             ]);
             $user = $users->first();
             if ($user) {
-                $user->guid = $_SERVER['HTTP_SMGOV_USERGUID'];
+                $user->guid = $_SESSION['user.guid'];
                 $this->UserRoles->save($user);
             }
         }
 
         $session = $this->getRequest()->getSession();
 
-        $session->write('user.idir', $_SERVER['HTTP_SM_USER']);
-        $session->write('user.guid', $_SERVER['HTTP_SMGOV_USERGUID']);
+//        $session->write('user.idir', $_SERVER['HTTP_SM_USER']);
+//        $session->write('user.guid', $_SERVER['HTTP_SMGOV_USERGUID']);
 //        $session->write('user.name', $_SERVER['HTTP_SMGOV_USERDISPLAYNAME']);
 //        $session->write('user.email', $_SERVER['HTTP_SMGOV_USEREMAIL']);
 
@@ -94,8 +103,8 @@ class AppController extends Controller
             // Prepare a new user entity.
             $new_user = $this->UserRoles->newEmptyEntity();
             // Populate new user record.
-            $new_user->idir = $_SERVER['HTTP_SM_USER'];
-            $new_user->guid = $_SERVER['HTTP_SMGOV_USERGUID'];
+            $new_user->idir = $_SESSION['user.idir'];
+            $new_user->guid = $_SESSION['user.guid'];
             // Role 7 is the authenticated role.
             $new_user->role_id = 7;
             // For now we will save this as Unassigned ministry - but in the future we should check the record
@@ -129,27 +138,7 @@ class AppController extends Controller
 
             endif; //END OF BLOCK For controllers that are not the sso sign in controller;
 
-//        $session->write('user.idir', $_SERVER['HTTP_SM_USER']);
-//        $session->write('user.guid', $_SERVER['HTTP_SMGOV_USERGUID']);
-//        $session->write('user.name', $_SERVER['HTTP_SMGOV_USERDISPLAYNAME']);
-//        $session->write('user.email', $_SERVER['HTTP_SMGOV_USEREMAIL']);
-//        $_SERVER['HTTP_SM_USER'] = 'rkuyvenh';
-//        $_SERVER['HTTP_SMGOV_USEREMAIL'] = 'Raymond.Kuyvenhoven@gov.bc.ca';
-//        $_SERVER['HTTP_SMGOV_USERDISPLAYNAME'] = 'Kuyvenhoven, Raymond PSA:EX';
-//        $_SERVER['HTTP_SMGOV_USERGUID'] = '60DCD2AF73FB44AE9345F11B71CD3495';   // admin
-//        $_SERVER['HTTP_SMGOV_USERGUID'] = '9ECC7D7FD8EE840932B9D21721251737';   // lsa admin
-//        $_SERVER['HTTP_SMGOV_USERGUID'] = '8A5BD27856273A99C6D5AF1FCDDBCB99';   // award procurement
-//        $_SERVER['HTTP_SM_USER'] = 'jadams';
-//        $_SERVER['HTTP_SMGOV_USERGUID'] = '26B243BA60AE8F60B4BB3C81E1450423';   // ministry contact
-//        $_SERVER['HTTP_SM_USER'] = 'kblack';
-//        $_SERVER['HTTP_SMGOV_USERGUID'] = '5F4CF1B88565FCA2E8D17AD85B57CE0A';   // supervisor
-//
-//        $_SERVER['HTTP_SM_USER'] = 'asmith';
-//        $_SERVER['HTTP_SMGOV_USERGUID'] = 'C68FF67FB334907A25DB8B07767CC1FC';   // protocol
-//
-//        $_SERVER['HTTP_SM_USER'] = 'rsharples';
-//        $_SERVER['HTTP_SMGOV_USERGUID'] = '3BC010F8C876571F3D29DB46012A326B';   // recipient
-//
+
 
         /*
          * Enable the following component for recommended CakePHP security settings.
@@ -161,7 +150,6 @@ class AppController extends Controller
 
 
     public function checkAuthorization($roles = 1, $ministry = 0) {
-
 
         if (!is_array($roles)) {
             $roles = array($roles);
@@ -186,37 +174,39 @@ class AppController extends Controller
         return $session->read("user.guid") == $guid;
     }
 
-    private function checkSAML() {
-
-        //If the incoming request contains SAMLResponse data, it should go to the ACS
-        if ($this->request->getSession()->read('User.guid')) {
-            return;
-        }
-
-
-        if (!empty($_POST['SAMLResponse'])) {
-            $this->acs();
-        }
+    public function checkSAML() {
+                $this->sessionStatus('request initiated');
 
         if ($this->request->getParam('controller')!= 'saml' && $this->request->getParam('action') != 'sso') :
+
+            //If the incoming request contains SAMLResponse data, it should go to the ACS
+            if (empty($this->request->getSession()->check('user.guid')) && !empty($_POST['SAMLResponse'])) {
+                $this->sessionStatus('after acs is flagged');
+                $this->acs();
+                $this->sessionStatus('after acs has run');
+
+            }
+
             //Check for User variables, if none send them to the login form.
-            if (empty($_SERVER['HTTP_SMGOV_USERGUID'])) {
+            if (empty($this->request->getSession()->check('user.guid'))) {
 
-                $redirect = $this->request->getQuery('redirect', [
-                    'controller' => 'Saml',
-                    'action' => 'sso'
-                ]);
-
-                //CakePHP redirect is not working?
-                //$this->redirect($redirect);
-                header('Location: https://lsaapp.gww.gov.bc.ca/saml/sso');
-                exit();
+                    //CakePHP redirect is not working?
+                    //$this->redirect($redirect);
+                    header('Location: https://lsaapp.gww.gov.bc.ca/saml/sso');
+                    exit();
             }
         endif; //End exception for /saml/sso
+            echo $this->sessionStatusText;
+            die();
+    }
+
+    private function sessionStatus($context) {
+        $this->sessionStatusText .= '<p>'. $context. '</p>';
+        $this->sessionStatusText .= 'Cookie GUID is :' . $
+        $this->sessionStatusText .= 'Cake Session GUID is: ' . $this->request->getSession()->read('user.guid');
     }
 
     public function acs() {
-
         $this->initSAML();
         $auth = new \OneLogin_Saml2_Auth($this->settings);
 
@@ -225,7 +215,7 @@ class AppController extends Controller
         //If there are errors, display them then exit.
         $errors = $auth->getErrors();
         if (!empty($errors)) {
-            echo "There were errors, sad face";
+            echo "There were errors";
 
 
             echo '<p>',implode(', ', $errors),'</p>';
@@ -241,18 +231,21 @@ class AppController extends Controller
         };
 
         $session = $this->request->getSession();
-        $session->write('samlUserdata', $auth->getAttributes());
-        $session->write('samlNameId', $auth->getNameId());
-        $session->write('samlNameIdFormat', $auth->getNameIdFormat());
-        $session->write('samlNameIdNameQualifier', $auth->getNameIdNameQualifier());
-        $session->write('samlNameIdSPNameQualifier', $auth->getNameIdSPNameQualifier());
-        $session->write('samlSessionIndex', $auth->getSessionIndex());
+        //$session->write('samlUserdata', $auth->getAttributes());
+        //$session->write('samlNameId', $auth->getNameId());
+        //$session->write('samlNameIdFormat', $auth->getNameIdFormat());
+        //$session->write('samlNameIdNameQualifier', $auth->getNameIdNameQualifier());
+        //$session->write('samlNameIdSPNameQualifier', $auth->getNameIdSPNameQualifier());
+        //$session->write('samlSessionIndex', $auth->getSessionIndex());
 
         //Set IDIR and GUID to session and $_SERVER var
+        //$_SESSION['user.guid']      = $auth->getAttributes()['SMGOV_GUID'][0];
+        //$_SESSION['user.idir']      = $auth->getAttributes()['username'][0];
+        $session->write('user.guid', $auth->getAttributes()['SMGOV_GUID'][0]);
+        $session->write('user.idir', $auth->getAttributes()['username'][0]);
+        $this->storeUserAsCookies($auth->getAttributes()['username'][0],$auth->getAttributes()['SMGOV_GUID'][0]);
 
-        $session->write('User.guid', $auth->getAttributes()['SMGOV_GUID'][0]);
-        $session->write('User.idir', $auth->getAttributes()['username'][0]);
-        $_SERVER['HTTP_SM_USER'] = $auth->getAttributes()['username'][0];
+        $_SERVER['HTTP_SM_USER']        = $auth->getAttributes()['username'][0];
         $_SERVER['HTTP_SMGOV_USERGUID'] = $auth->getAttributes()['SMGOV_GUID'][0];
 
     }
@@ -290,6 +283,23 @@ class AppController extends Controller
                 //break;
             }
         }
+    }
+    private function storeUserAsCookies($idir, $guid) {
+        $idircookie = (new Cookie('user.idir'))
+                ->withValue($idir)
+                ->withPath('/')
+                ->withDomain('lsa.gww.gov.bc.ca')
+                ->withSecure(false)
+                ->withHttpOnly(false);
+        $guidcookie = (new Cookie('user.guid'))
+                ->withValue($guid)
+
+                ->withPath('/')
+                ->withDomain('lsa.gww.gov.bc.ca')
+                ->withSecure(false)
+                ->withHttpOnly(false);
+        $cookies = new CookieCollection([$idircookie]);
+        $cookies->add($guidcookie);
     }
 
     private function loadSettings() {

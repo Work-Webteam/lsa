@@ -14,6 +14,7 @@ class RegistrationsController extends AppController
     public function index()
     {
 
+        $this->checkSAML();
 
         if ($this->checkAuthorization(array(Configure::read('Role.authenticated')))) {
             $this->Flash->error(__('You are not authorized to administer Registrations.'));
