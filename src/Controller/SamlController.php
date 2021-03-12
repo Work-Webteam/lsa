@@ -25,6 +25,8 @@ class SamlController extends AppController
     }
 
     public function acs() {
+        $_POST['SAMLResponse'] = $this->request->getData('SAMLResponse');
+
         $this->initSAML();
         $auth = new \OneLogin_Saml2_Auth($this->settings);
 
