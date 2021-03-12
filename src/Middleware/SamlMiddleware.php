@@ -30,8 +30,6 @@ class SamlMiddleware implements MiddlewareInterface
 
         //If the ?sso parameter is present, push user to login
         if (!empty($_GET['sso'])) {
-
-
            $this->auth->login('https://lsaapp.gww.gov.bc.ca');
             //IF the ?sso=sso get variable is absent, check for session validity.
         } else {
@@ -39,7 +37,6 @@ class SamlMiddleware implements MiddlewareInterface
                 $requestID = $_SESSION['AuthNRequestID'];
             } else {
                 //If there's no request ID set, redirect to login
-                $_SESSION['sso-redirect'] += 1;
                 header('Location: https://lsaapp.gww.gov.bc.ca/?sso=sso');
                 exit();
             }
