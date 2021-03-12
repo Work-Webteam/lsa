@@ -119,8 +119,11 @@ var app = new Vue({
 
         errorsOptions: '',
 
+        // Regex for emails:
+        reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
 
-},
+
+    },
 
     methods: {
 
@@ -216,15 +219,15 @@ var app = new Vue({
             }
             //If PECSF
             if (this.selectedAward == this.pecsf25ID || this.selectedAward == this.pecsf30ID || this.selectedAward == this.pecsf35ID || this.selectedAward == this.pecsf40ID || this.selectedAward == this.pecsf45ID || this.selectedWard == this.pecsf50ID) {
-               if (this.pecsfCharity2) {
-                   this.donationType = 'two-charities';
-               }
-               if (this.pecsfCharity1 && !this.pecsfCharity2) {
-                   this.donationType = 'single-charity';
-               }
-               if (!this.pecsfCharity1) {
-                   this.donationType = 'pool';
-               }
+                if (this.pecsfCharity2) {
+                    this.donationType = 'two-charities';
+                }
+                if (this.pecsfCharity1 && !this.pecsfCharity2) {
+                    this.donationType = 'single-charity';
+                }
+                if (!this.pecsfCharity1) {
+                    this.donationType = 'pool';
+                }
             }
         },
 
@@ -241,9 +244,32 @@ var app = new Vue({
             this.watchEngraving = this.awardOptions.watch_engraving;
         },
 
+        isEmailValid: function(e) {
+            return (e == "")? "" : (this.reg.test(e)) ? true : false;
+        },
 
+        // This is allowed to be empty.
+        altEmailValidation: function(e) {
+            if (e == '') {
+                return true
+            }
+            else {
+                return (e == "")? "" : (this.reg.test(e)) ? true : false;
+            }
+        },
 
+        // These methods are to give user instant feedback on emails - as per: https://codepen.io/CSWApps/pen/MmpBjV
+        // Not really working yet - I think they need corresponding CSS
+        isGovtEmailValid: function() {
+            return (this.govtEmail == "")? "" : (this.reg.test(this.govtEmail)) ? 'has-success' : 'has-error';
+        },
+        isAltEmailValid: function() {
+            return (this.altEmail == "")? "" : (this.reg.test(this.altEmail)) ? 'has-success' : 'has-error';
+        },
 
+        isSupervisorEmailValid: function() {
+            return (this.supervisorEmail == "")? "" : (this.reg.test(this.altEmail)) ? 'has-success' : 'has-error';
+        },
 
         validateStep1 : function () {
             this.errorsStep1 = [];
@@ -310,6 +336,16 @@ var app = new Vue({
             if (this.govtEmail.length < 6 ) {
                 this.errorsStep3.push('You must input your government email address');
             }
+
+            // Validating govtEmail
+            if(this.isEmailValid(this.govtEmail) == false) {
+                this.errorsStep3.push("You must enter a valid government email address.");
+            }
+            // Alt email validation - can be empty or could also need to be checked.
+            if(this.altEmailValidation(this.altEmail) == false ) {
+                this.errorsStep3.push("You must enter a valid alternative email address.");
+            }
+
             //Did they specify their ministry?
             if (this.ministry == 'Select Ministry') {
                 this.errorsStep3.push('You must select your ministry');
@@ -368,9 +404,9 @@ var app = new Vue({
             if (this.supervisorLastName.length < 2 || this.supervisorLastName.length > 50) {
                 this.errorsStep4.push('You must input your supervisor\'s last name')
             }
-            //Did they include a supervisor email
-            if (this.supervisorEmail.length < 6) {
-                this.errorsStep4.push('You must input your supervisor\'s government email address');
+            // Supervisor email validation.
+            if(this.isEmailValid(this.supervisorEmail) == false) {
+                this.errorsStep4.push("You must enter a valid supervisor email address.");
             }
             //Did they include a supervisor street address
             if (this.supervisorStreetAddress.length < 4) {
