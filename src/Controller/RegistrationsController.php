@@ -285,7 +285,7 @@ class RegistrationsController extends AppController
     }
 
     private function checkForReturn() {
-            $userData = $this->request->getSession()->read('samlUserdata');
+            $attributes = $this->request->getSession()->read('samlUserdata');
         echo 'You have the following attributes:<br>';
         echo '<table><thead><th>Name</th><th>Values</th></thead><tbody>';
         foreach ($attributes as $attributeName => $attributeValues) {
