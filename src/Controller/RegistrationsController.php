@@ -13,8 +13,16 @@ class RegistrationsController extends AppController
     //Displays a list of registrations based on user role's permissions
     public function index()
     {
-        if ($this->checkAuthorization(Configure::read('Role.anonymous'))) {
-            $this->Flash->error(__('You are not authorized to view this page.'));
+        //If the method is "POST" redirect to the saml auth.
+        if ($this->request->is('post')) {
+            $_SESSION['SAMLResponse'] = $_POST['SAMLResponse'];
+
+            $this->redirect('/saml/acs');
+        }
+
+
+        if ($this->checkAuthorization(array(Configure::read('Role.authenticated')))) {
+            $this->Flash->error(__('You are not authorized to administer Registrations.'));
             $this->redirect('/');
         }
         $query = $this->Registrations->RegistrationPeriods->find('all')
@@ -169,6 +177,7 @@ class RegistrationsController extends AppController
     //Allows an unauthenticated user to create a registration
     public function register()
     {
+        $this->checkForReturn();
         $this->viewBuilder()->setLayout('clean');
 
         //First, make sure registrations are open, flash an error if they're not.
@@ -384,6 +393,37 @@ class RegistrationsController extends AppController
 
     }
 
+    private function checkForReturn() {
+        //Check if there's any session variables for this user
+        $session = $this->request->getSession();
+        if (empty($session->read('samlUserdata'))) {
+            //No session? login you ya filthy animal
+            $this->redirect('/saml/sso');
+        }
+
+
+            //If there are session variables see if the GUID has a record
+            //If there is a record, go to edit
+
+
+
+            $attributes = $this->request->getSession()->read('samlUserdata');
+        echo 'You have the following attributes:<br>';
+        echo '<table><thead><th>Name</th><th>Values</th></thead><tbody>';
+        foreach ($attributes as $attributeName => $attributeValues) {
+            echo '<tr><td>' . htmlentities($attributeName) . '</td><td><ul>';
+            foreach ($attributeValues as $attributeValue) {
+                echo '<li>' . htmlentities($attributeValue) . '</li>';
+            }
+            echo '</ul></td></tr>';
+        }
+        echo '</tbody></table>';
+        exit();
+
+
+    }
+
+
 
     //This should be dynamic based on the options encoded in the award options JSON in
     //the awards table
@@ -392,6 +432,7 @@ class RegistrationsController extends AppController
         $bulova_watch_id = 9;
         $bracelet_35_id = 12;
         $bracelet_45_id = 29;
+        $bracelet_50_id = 48;
         $options        = array();
 
         switch($this->request->getData('award_id')) {
@@ -403,6 +444,9 @@ class RegistrationsController extends AppController
                 break;
             case $bracelet_35_id:
             case $bracelet_45_id:
+                $options['bracelet_size']   = $this->request->getData('braceletSize');
+                break;
+            case $bracelet_50_id:
                 $options['bracelet_size']   = $this->request->getData('braceletSize');
                 break;
             default:

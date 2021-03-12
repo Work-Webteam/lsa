@@ -36,7 +36,7 @@
                                 </div>
                                 <div class="col-3"></div>
                             </div>
-                            <div class="form-row">
+                            <div class="row">
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="milestone">Which milestone are you celebrating?</label>
@@ -63,7 +63,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-row">
+                            <div class="row">
                                 <div class="col-6">
                                     <div class="form-group" v-if="milestone == 1">
                                         <label for="">All 25 year awards come with a framed certificate of service signed by the Premier of British Columbia. How would you like your name to appear on your certificate?</label>
@@ -97,7 +97,7 @@
 
                                         <div class="form-group" v-if="isRetiringThisYear == 1">
                                             <label for="retirement_date">Date of Retirement:</label>
-                                            <input type="date" class="form-control" name="retirement_date" id="retirement_date" v-model="retirementDate" max="2999-12-31">
+                                            <input type="date" class="form-control" name="retirement_date" id="retirement_date" v-model="retirementDate" min="2021-01-01" max="2021-12-31">
                                         </div>
                                     </div>
                                 </div>
@@ -114,7 +114,11 @@
                                 </div>
                             </div>
 
-                            <button class="btn btn-primary" @click.prevent="validateStep1()">Select Award</button>
+                            <div class="row">
+                                <div class="col-10"></div>
+                                <div class="col-2"><button class="btn btn-primary" @click.prevent="validateStep1()">Select Award</button></div>
+                            </div>
+
                         </v-stepper-content>
 
 
@@ -208,6 +212,7 @@
 
                             <!-- 35 YR BRACELET CONTROLS -->
                             <div class="row" v-if="selectedAward == 12">
+                                <div class="col-4">
                                 <div class="form-group">
                                     <label for="bracelet_size">Size</label>
                                     <select  class="form-control" name="bracelet_size" id="bracelet_size" v-model="braceletSize">
@@ -216,6 +221,8 @@
                                         <option>Fits 7 ½″ - 8 ½″ circumference wrists</option>
                                     </select>
                                 </div>
+                                </div>
+                                <div class="col-8"></div>
                             </div>
 
                             <!-- 45 YR BRACELET CONTROLS -->
@@ -314,7 +321,7 @@
                                 </div>
                                 <div class="col-3"></div>
                             </div>
-                            <div class="form-row">
+                            <div class="row">
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label for="employee_id">Employee ID #</label>
@@ -323,7 +330,7 @@
                                 </div>
                                 <div class="col-4">
                                     <div class="form-group">
-                                        <label for="member_bcgeu">Are you a BCGEU Member?</label>
+                                        <label for="member_bcgeu">For our records, please indicate if you are a member of the BGCEU.</label>
                                         <input type="checkbox" id="member_bcgeu" name="member_bcgeu" class="form-control" v-model="isBcgeuMember">
                                     </div>
                                 </div>
@@ -342,7 +349,7 @@
                             </div>
 
 
-                            <div class="form-row">
+                            <div class="row">
                                 <div class="col-6">
                                     <div class="[form-group, isGovtEmailValid]">
                                         <label for="preferred_email">Government email address</label>
@@ -356,7 +363,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-row">
+                            <div class="row">
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">Current Ministry</label>
@@ -377,10 +384,10 @@
                                 </div>
                             </div>
 
-                            <div class="form-row">
+                            <div class="row">
                                 <h4 class="display-2">Your Office Address</h4>
                             </div>
-                            <div class="form-row">
+                            <div class="row">
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label for="">Floor/Room/Care Of</label>
@@ -402,7 +409,7 @@
                             </div>
 
 
-                            <div class="form-row">
+                            <div class="row">
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">City</label>
@@ -434,7 +441,7 @@
                                 </div>
                             </div>
                             <h4 class="display-2">Your Home Address</h4>
-                            <div class="form-row">
+                            <div class="row">
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label for="home_suite">Suite</label>
@@ -449,7 +456,7 @@
                                 </div>
                             </div>
 
-                           <div class="form-row">
+                           <div class="row">
 
                                <div class="col-6">
                                    <div class="form-group">
@@ -508,7 +515,7 @@
                                 </div>
                                 <div class="col-3"></div>
                             </div>
-                            <div class="form-row">
+                            <div class="row">
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="supervisorFirstName">Supervisor's First Name</label>
@@ -522,7 +529,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-row">
+                            <div class="row">
 
                                 <div class="col-6">
                                     <div class="[form-group, isSupervisorEmailValid]">
@@ -531,7 +538,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-row">
+                            <div class="row">
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">Floor/Room/Care Of</label>
@@ -545,7 +552,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-row">
+                            <div class="row">
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label for="">Street Address</label>
@@ -553,7 +560,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-row">
+                            <div class="row">
                                 <div class="col-8">
                                     <div class="form-group">
                                         <label for="">City</label>
@@ -593,7 +600,7 @@
                             <h3 class="display-3">Confirm Your Information</h3>
                             <div class="confirmationGroup grey lighten-2">
                                 <h4>Milestone</h4>
-                                <div class="form-row">
+                                <div class="row">
                                     <div class="col-6">
                                         <p><small>Milestone reached:</small></p>
                                         <p class="confirmationValue">{{milestoneName}}</p>
@@ -603,7 +610,10 @@
                                         <p class="confirmationValue">{{certificateName}}</p>
                                     </div>
                                 </div>
-                                <div class="form-row">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <p v-if="isBcgeuMember" class="confirmationValue">I am a BCGEU Member</p>
+                                    </div>
                                     <div class="col-6">
                                         <p><small>Year milestone reached:</small></p>
                                         <p class="confirmationValue">{{award_year}}</p>
@@ -614,7 +624,7 @@
                                         <p v-if="isRetiringThisYear" class="confirmationValue">I am retiring this year on {{retirementDate}} </p>
                                     </div>
                                 </div>
-                                <div class="form-row">
+                                <div class="row">
                                     <div class="col-9">
 
                                     </div>
@@ -626,14 +636,14 @@
                             </div>
                             <div class="confirmationGroup grey lighten-2">
                                 <h4>Award &amp; Options</h4>
-                                <div v-if="isRetroactive == 0">
-                                    <?php foreach ($awardinfo as $award): ?>
-                                        <div class="form-row" v-if="selectedAward == <?= $award->id ?>">
-                                            <div class="col-6">
-                                                <v-img src="/img/awards/<?= $award->image ?>"></v-img>
-                                            </div>
-                                            <div class="col-6">
-                                               <p class="confirmationValue"><?= $award->name ?></p>
+
+                                <?php foreach ($awardinfo as $award): ?>
+                                    <div class="row" v-if="selectedAward == <?= $award->id ?>">
+                                        <div class="col-6">
+                                            <v-img src="/img/awards/<?= $award->image ?>"></v-img>
+                                        </div>
+                                        <div class="col-6">
+                                           <p class="confirmationValue"><?= $award->name ?></p>
 
                                                 <p v-if="selectedAward == 9"><small>Watch Size</small></p>
                                                 <p v-if="selectedAward == 9" class="confirmationValue">{{watchSize}}</p>
@@ -663,7 +673,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-row">
+                                <div class="row">
                                     <div class="col-9">
                                     </div>
                                     <div class="col-3">
@@ -673,7 +683,7 @@
                             </div>
                             <div class="confirmationGroup grey lighten-2">
                                 <h4>Your Contact Information</h4>
-                                <div class="form-row">
+                                <div class="row">
                                     <div class="col-6">
                                         <p><small>Your Name</small></p>
                                         <p class="confirmationValue">{{firstName}} {{lastName}}</p>
@@ -683,7 +693,7 @@
                                         <p class="confirmationValue">{{employeeID}}</p>
                                     </div>
                                 </div>
-                                <div class="form-row">
+                                <div class="row">
                                     <div class="col-6">
                                         <p><small>Your Government email address</small></p>
                                         <p class="confirmationValue">{{govtEmail}}</p>
@@ -694,7 +704,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-row">
+                                <div class="row">
                                     <div class="col-6">
                                         <p><small>Your current Ministry</small></p>
                                         <p class="confirmationValue">{{ministryName}}</p>
@@ -704,7 +714,7 @@
                                         <p class="confirmationValue">{{ministryBranch}}</p>
                                     </div>
                                 </div>
-                                <div class="form-row">
+                                <div class="row">
                                     <div class="col-6">
                                         <p><small>Your Office Phone #</small></p>
                                         <p class="confirmationValue" v-text="officePhone"></p>
@@ -724,7 +734,7 @@
                                         <p class="confirmationValue">{{homePostalCode}}</p>
                                     </div>
                                 </div>
-                                <div class="form-row">
+                                <div class="row">
                                         <div class="col-9"></div>
                                         <div class="col-3"><button class="btn btn-secondary" @click.prevent="e1 = 3">Edit this Section</button></div>
                                 </div>
@@ -732,7 +742,7 @@
 
                             <div class="confirmationGroup grey lighten-2">
                                 <h4>Your Supervisor&apos;s Contact Information</h4>
-                                <div class="form-row">
+                                <div class="row">
                                     <div class="col-6">
                                         <p><small>Supervisor&apos;s Name</small></p>
                                         <p class="confirmationValue">{{supervisorFirstName}} {{supervisorLastName}}</p>
@@ -742,7 +752,7 @@
                                         <p class="confirmationValue">{{supervisorEmail}}</p>
                                     </div>
                                 </div>
-                                <div class="form-row">
+                                <div class="row">
                                     <div class="col-6">
                                         <p><small>Supervisor&apos;s Office Address</small></p>
                                         <p class="confirmationValue">{{supervisorMailPrefix}}</p>
@@ -752,7 +762,7 @@
                                     </div>
                                     <div class="col-6"></div>
                                 </div>
-                                <div class="form-row">
+                                <div class="row">
                                     <div class="col-9"></div>
                                     <div class="col-3"><button class="btn btn-secondary" @click.prevent="e1 = 4">Edit this Section</button></div>
                                 </div>
@@ -761,7 +771,7 @@
 
                             <div class="confirmationGroup grey lighten-2">
                                 <h4>Survey Participation &amp; Consent</h4>
-                                <div class="form-row">
+                                <div class="row">
                                     <div class="col-2">
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" value="1" name="survey_participation" id="survey_participation" checked v-model="isOptedIn">
@@ -775,7 +785,7 @@
                                     </div>
                                     <div class="col-2"></div>
                                 </div>
-                                <div class="form-row">
+                                <div class="row">
                                     <div class="col-2">
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" value="true" name="declaration" id="declaration" v-model="isDeclared">
@@ -796,7 +806,7 @@
                                     <div class="col-2"></div>
                                 </div>
                             </div>
-                                <div class="form-row">
+                                <div class="row">
                                     <div class="col-3">
                                         <button class="btn btn-secondary" @click.prevent="e1 = 4">Back to Supervisor Info</button>
                                     </div>
@@ -820,10 +830,6 @@
 </template>
 </div>
 <?= $this->Form->end(); ?>
-
-<!-- Data-types TODO: Check for usage and eliminate superfluous calls -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
 
 
 <!-- Registration Form-specific JavaScripts -->
