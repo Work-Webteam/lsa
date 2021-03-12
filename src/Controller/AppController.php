@@ -189,12 +189,16 @@ class AppController extends Controller
     private function checkSAML() {
 
         //If the incoming request contains SAMLResponse data, it should go to the ACS
+        if ($this->request->getSession()->read('User.guid')) {
+            return;
+        }
+
 
         if (!empty($_POST['SAMLResponse'])) {
             $this->acs();
         }
 
-        if ($this->request->getParam('controller')!= 'saml' && $this->request->getParam('action') != 'sso') {
+        if ($this->request->getParam('controller')!= 'saml' && $this->request->getParam('action') != 'sso') :
             //Check for User variables, if none send them to the login form.
             if (empty($_SERVER['HTTP_SMGOV_USERGUID'])) {
 
@@ -208,7 +212,7 @@ class AppController extends Controller
                 header('Location: https://lsaapp.gww.gov.bc.ca/saml/sso');
                 exit();
             }
-        }
+        endif; //End exception for /saml/sso
     }
 
     public function acs() {
