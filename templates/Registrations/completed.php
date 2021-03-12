@@ -1,5 +1,6 @@
     <h2 class="page-title">Long Service Award Registration Successful</h2>
-    <div>
+    <div class="col-1"></div>
+    <div class="col-10">
         <p>You have successfully registered for a <?= h($year); ?> year Long Service Award. Congratulations on reaching this milestone in your career!</p>
         <p>An email has been sent to your supervisor so they are aware of your registration and can support you to attend your award ceremony.</p>
         <p>Find details about the program, including the ceremony, travel policies and more on the <a href="https://longserviceawards.gww.gov.bc.ca/">Long Service Awards website</a>.</p>
@@ -24,4 +25,5 @@
         <p>We hope to see you at the ceremony this fall.</p>
         <p>Long Service Awards team</p>
     </div>
-</body>
+<div class="col-1"></div>
+

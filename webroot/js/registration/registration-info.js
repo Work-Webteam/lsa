@@ -98,7 +98,8 @@ var app = new Vue({
         //IDs of Awards with options
         watchID: 9,
         bracelet35ID: 12,
-        bracelet45ID: 46,
+        bracelet45ID: 29,
+        bracelet50ID: 48,
         pecsf25ID: 49,
         pecsf30ID: 50,
         pecsf35ID: 51,
@@ -210,7 +211,7 @@ var app = new Vue({
                 this.parseWatchOptions();
             }
             //If bracelet
-            if (this.selectedAward == this.bracelet35ID || this.selectedAward == this.bracelet45ID) {
+            if (this.selectedAward == this.bracelet35ID || this.selectedAward == this.bracelet45ID || this.selectedAward == this.bracelet50ID) {
                 this.parseBraceletOptions();
             }
             //If PECSF
@@ -256,7 +257,7 @@ var app = new Vue({
             }
 
             //Did they reach this milestone in 2021 but also say they registered for an LSA in 2019
-            if (this.isRetroactive && (this.award_year > 2019)) {
+            if (this.isRetroactive == 1 && (this.award_year > 2019)) {
                 this.errorsStep1.push('Please ensure your milestone information is correct.');
             }
 
@@ -294,7 +295,7 @@ var app = new Vue({
         validateStep3 : function () {
             this.errorsStep3 = [];
             //Did include an employee number?
-            if (this.employeeID.length < 5 || this.employeeID.length > 10) {
+            if (this.employeeID.length < 2 || this.employeeID.length > 11) {
                 this.errorsStep3.push('You must input a valid employee number');
             }
             //Did they include their first name?
@@ -353,6 +354,8 @@ var app = new Vue({
             if (this.errorsStep3.length == 0) {
                 console.log ('no errors on step 3');
                 this.e1 = 4;
+            } else {
+                this.scrollToTop();
             }
         },
         validateStep4 : function () {
@@ -385,6 +388,8 @@ var app = new Vue({
             if (this.errorsStep4.length == 0) {
                 console.log ('no errors on step 4');
                 this.e1 = 5;
+            } else {
+                this.scrollToTop();
             }
         },
         validateForm : function () {
