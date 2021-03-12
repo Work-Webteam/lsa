@@ -53,20 +53,18 @@ class SamlController extends AppController
         };
 
         $session = $this->request->getSession();
-        $session->write('samlUserdata', $this->auth->getAttributes());
-        $session->write('samlNameId', $this->auth->getNameId());
-        $session->write('samlNameIdFormat', $this->auth->getNameIdFormat());
-        $session->write('samlNameIdNameQualifier', $this->auth->getNameIdNameQualifier());
-        $session->write('samlNameIdSPNameQualifier', $this->auth->getNameIdSPNameQualifier());
-        $session->write('samlSessionIndex', $this->auth->getSessionIndex());
+        $session->write('samlUserdata', $auth->getAttributes());
+        $session->write('samlNameId', $auth->getNameId());
+        $session->write('samlNameIdFormat', $auth->getNameIdFormat());
+        $session->write('samlNameIdNameQualifier', $auth->getNameIdNameQualifier());
+        $session->write('samlNameIdSPNameQualifier', $auth->getNameIdSPNameQualifier());
+        $session->write('samlSessionIndex', $auth->getSessionIndex());
 
         echo "Auth Successful!";
 
-        echo $this->auth->getNameId();
-        echo $this->auth->getNameIdFormat();
-        echo $this->auth->getNameIdNameQualifier();
-        echo $this->auth->getNameIdSPNameQualifier();
-        echo $this->auth->getSessionIndex();
+        echo "Your IDIR is: " . $auth->getAttributes()['username'][0];
+        echo "Your GUID is: " . $auth->getAttributes()['SMGOV_GUID'][0];
+        exit();
 
     }
 
