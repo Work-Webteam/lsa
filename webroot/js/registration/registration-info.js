@@ -98,7 +98,8 @@ var app = new Vue({
         //IDs of Awards with options
         watchID: 9,
         bracelet35ID: 12,
-        bracelet45ID: 46,
+        bracelet45ID: 29,
+        bracelet50ID: 48,
         pecsf25ID: 49,
         pecsf30ID: 50,
         pecsf35ID: 51,
@@ -117,10 +118,12 @@ var app = new Vue({
         originalAward:              '',
 
         errorsOptions: '',
-        // Email regex
-        reg:/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
 
-},
+        // Regex for emails:
+        reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
+
+
+    },
 
     methods: {
 
@@ -168,18 +171,6 @@ var app = new Vue({
                 }
             });
         },
-        // Need some validation on the email as well, the mask is a little wonky on Chrome and IE.
-        // These have been assigned separately, so for now we'll use three diff functions.
-        // This can be refactored in the future.
-        isGovtEmailValid: function() {
-            return (this.govtEmail == "")? "" : (this.reg.test(this.govtEmail)) ? 'has-success' : 'has-error';
-        },
-        isAltEmailValid: function() {
-            return (this.altEmail == "")? "" : (this.reg.test(this.altEmail)) ? 'has-success' : 'has-error';
-        },
-        isSupevisorEmailValid: function() {
-            return (this.supervisorEmail == "")? "" : (this.reg.test(this.supervisorEmail)) ? 'has-success' : 'has-error';
-        },
 
         //TODO: Reduce the redundant functions to a single parameterized function call.
         setMilestoneName : function(e) {
@@ -223,20 +214,20 @@ var app = new Vue({
                 this.parseWatchOptions();
             }
             //If bracelet
-            if (this.selectedAward == this.bracelet35ID || this.selectedAward == this.bracelet45ID) {
+            if (this.selectedAward == this.bracelet35ID || this.selectedAward == this.bracelet45ID || this.selectedAward == this.bracelet50ID) {
                 this.parseBraceletOptions();
             }
             //If PECSF
             if (this.selectedAward == this.pecsf25ID || this.selectedAward == this.pecsf30ID || this.selectedAward == this.pecsf35ID || this.selectedAward == this.pecsf40ID || this.selectedAward == this.pecsf45ID || this.selectedWard == this.pecsf50ID) {
-               if (this.pecsfCharity2) {
-                   this.donationType = 'two-charities';
-               }
-               if (this.pecsfCharity1 && !this.pecsfCharity2) {
-                   this.donationType = 'single-charity';
-               }
-               if (!this.pecsfCharity1) {
-                   this.donationType = 'pool';
-               }
+                if (this.pecsfCharity2) {
+                    this.donationType = 'two-charities';
+                }
+                if (this.pecsfCharity1 && !this.pecsfCharity2) {
+                    this.donationType = 'single-charity';
+                }
+                if (!this.pecsfCharity1) {
+                    this.donationType = 'pool';
+                }
             }
         },
 
@@ -253,9 +244,32 @@ var app = new Vue({
             this.watchEngraving = this.awardOptions.watch_engraving;
         },
 
+        isEmailValid: function(e) {
+            return (e == "")? "" : (this.reg.test(e)) ? true : false;
+        },
 
+        // This is allowed to be empty.
+        altEmailValidation: function(e) {
+            if (e == '') {
+                return true
+            }
+            else {
+                return (e == "")? "" : (this.reg.test(e)) ? true : false;
+            }
+        }
 
+        // These methods are to give user instant feedback on emails - as per: https://codepen.io/CSWApps/pen/MmpBjV
+        // Not really working yet - I think they need corresponding CSS
+        isGovtEmailValid: function() {
+            return (this.govtEmail == "")? "" : (this.reg.test(this.govtEmail)) ? 'has-success' : 'has-error';
+        },
+        isAltEmailValid: function() {
+            return (this.altEmail == "")? "" : (this.reg.test(this.altEmail)) ? 'has-success' : 'has-error';
+        },
 
+        isSupervisorEmailValid: function() {
+            return (this.altEmail == "")? "" : (this.reg.test(this.altEmail)) ? 'has-success' : 'has-error';
+        },
 
         validateStep1 : function () {
             this.errorsStep1 = [];
@@ -269,13 +283,11 @@ var app = new Vue({
             }
 
             //Did they reach this milestone in 2021 but also say they registered for an LSA in 2019
-            if (this.isRetroactive && (this.award_year > 2019)) {
+            if (this.isRetroactive == 1 && (this.award_year > 2019)) {
                 this.errorsStep1.push('Please ensure your milestone information is correct.');
             }
-            // We need to validate emails here - Chrome and IE aren't responding well to the mask.
 
-
-
+            console.log(this.isRetroactive);
             if (this.errorsStep1.length == 0 && (this.isRetroactive == 0)) {
                 console.log ('no errors on step 1');
 
@@ -309,7 +321,7 @@ var app = new Vue({
         validateStep3 : function () {
             this.errorsStep3 = [];
             //Did include an employee number?
-            if (this.employeeID.length < 5 || this.employeeID.length > 10) {
+            if (this.employeeID.length < 2 || this.employeeID.length > 11) {
                 this.errorsStep3.push('You must input a valid employee number');
             }
             //Did they include their first name?
@@ -323,6 +335,14 @@ var app = new Vue({
             //Did they include their gov email address?
             if (this.govtEmail.length < 6 ) {
                 this.errorsStep3.push('You must input your government email address');
+            }
+
+            if(this.isEmailValid(this.govtEmail) == false) {
+                this.errorsStep3.push("You must enter a valid government email address.");
+            }
+
+            if(this.isEmailValid(this.altEmail) == false ) {
+                this.errorsStep3.push("You must enter a valid alternative email address.");
             }
             //Did they specify their ministry?
             if (this.ministry == 'Select Ministry') {
@@ -368,6 +388,8 @@ var app = new Vue({
             if (this.errorsStep3.length == 0) {
                 console.log ('no errors on step 3');
                 this.e1 = 4;
+            } else {
+                this.scrollToTop();
             }
         },
         validateStep4 : function () {
@@ -400,6 +422,8 @@ var app = new Vue({
             if (this.errorsStep4.length == 0) {
                 console.log ('no errors on step 4');
                 this.e1 = 5;
+            } else {
+                this.scrollToTop();
             }
         },
         validateForm : function () {
