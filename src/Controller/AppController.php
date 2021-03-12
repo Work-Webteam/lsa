@@ -47,6 +47,8 @@ class AppController extends Controller
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
 
+        $this->checkSAML();
+
         // check if user has administrative privileges
         $this->loadModel('UserRoles');
         $users = $this->UserRoles->find('all', [
@@ -144,7 +146,6 @@ class AppController extends Controller
 //        $_SERVER['HTTP_SM_USER'] = 'rsharples';
 //        $_SERVER['HTTP_SMGOV_USERGUID'] = '3BC010F8C876571F3D29DB46012A326B';   // recipient
 //
-        $this->checkSAML();
 
         /*
          * Enable the following component for recommended CakePHP security settings.
