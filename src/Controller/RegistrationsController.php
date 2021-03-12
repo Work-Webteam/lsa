@@ -285,6 +285,19 @@ class RegistrationsController extends AppController
     }
 
     private function checkForReturn() {
+        //Check if there's any session variables for this user
+        $session = $this->request->getSession();
+        if (empty($session->read('samlUserdata'))) {
+            //No session? login you ya filthy animal
+            $this->redirect('/saml/sso');
+        }
+
+
+            //If there are session variables see if the GUID has a record
+            //If there is a record, go to edit
+
+
+
             $attributes = $this->request->getSession()->read('samlUserdata');
         echo 'You have the following attributes:<br>';
         echo '<table><thead><th>Name</th><th>Values</th></thead><tbody>';
