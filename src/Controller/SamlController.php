@@ -42,7 +42,7 @@ class SamlController extends AppController
         //If the person is not authenticated push them back to the
         //login form.
         if (!$auth->isAuthenticated()) {
-            $auth->redirectTo(('https://lsapp.gww.gov.bc.ca'));
+            echo "<p>Sorry, you could not be authenticated.</p>";
             exit();
         };
 
@@ -53,6 +53,7 @@ class SamlController extends AppController
         $session->write('samlNameIdNameQualifier', $this->auth->getNameIdNameQualifier());
         $session->write('samlNameIdSPNameQualifier', $this->auth->getNameIdSPNameQualifier());
         $session->write('samlSessionIndex', $this->auth->getSessionIndex());
+
 
         return $this->redirect('/register');
     }
