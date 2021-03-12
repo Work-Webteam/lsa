@@ -18,7 +18,7 @@ return [
 
     'Test' => [
         'mode' => true,
-        'email' => 'raymond.kuyvenhoven@gov.bc.ca',
+        'email' => 'thayne.werdal@gov.bc.ca',
     ],
 
     'LSA' => [
@@ -30,13 +30,14 @@ return [
     ],
 
     'Role' => [
-        'authenticated' => 0,
+        'anonymous' => 0,
         'admin' => 1,
         'lsa_admin' => 2,
         'protocol' => 3,
         'procurement' => 4,
         'ministry_contact' => 5,
-        'supervisor' => 6
+        'supervisor' => 6,
+        'authenticated_user' => 7
     ],
 
     'Donation' => [

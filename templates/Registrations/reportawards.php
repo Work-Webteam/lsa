@@ -39,6 +39,7 @@ echo $this->Form->button('Cancel', array(
 
 
 <script>
+    // Get all recipients as object.
     var recipients=<?php echo json_encode($recipients); ?>;
     var edit = true;
     var toolbar = true;
@@ -46,26 +47,46 @@ echo $this->Form->button('Cancel', array(
     var year =<?php echo $year; ?>;
 
     $(document).ready(function() {
-
-        console.log("year: " + year);
-
+        // Check for award options.
         for (i = 0; i < recipients.length; i++) {
-            options = JSON.parse(recipients[i].award_options)
             recipients[i].optionsDisplay = "";
-            for (j = 0; j < options.length; j++) {
-                if (i > 0) {
-                    recipients[i].optionsDisplay += "<BR>";
+            if(recipients[i].award_options.length > 0) {
+                let options = JSON.parse(recipients[i].award_options);
+                // We want to create a string from the options object if there is one.
+                if (!$.isEmptyObject(options)) {
+                    // We have an object, so lets pull out all the parts and save it to a string.
+                    $.each(options, function (key, value) {
+                        // Strong is here to stylize our individual strings to make them easier to read.
+                        // This could also be done with a class if prefered.
+                        recipients[i].optionsDisplay += "<strong>" + key + "</strong>: " + value + ". <br>";
+                    });
                 }
-                recipients[i].optionsDisplay += "- " + options[j];
             }
+            if(recipients[i].pecsf_donation === true) {
+                recipients[i].optionsDisplay += "<strong>PECSF Certificate Name: </strong>" + recipients[i].pecsf_name + "<br />";
+                if(recipients[i].pecsf_region != null) {
+                    recipients[i].optionsDisplay += "<strong>PECSF Region: </strong>" + recipients[i].pecsf_region.name + "<br />";
+                }
+                // Show charity 1 name if not null.
+                if(recipients[i].pecsf_charities1 != null) {
+                    recipients[i].optionsDisplay += "<strong>PECSF Charity 1: </strong>" + recipients[i].pecsf_charities1.name + "<br />";
+                }
+                // Donation value - should be here no matter if this is a pool, one charity or two charities.
+                recipients[i].optionsDisplay += "<strong>PECSF Charity 1 Amount: </strong>$" + parseFloat(recipients[i].pecsf_amount1).toFixed(2) + "<br />";
+                // Show charity 2 if not null
+                if(recipients[i].pecsf_charities2 != null) {
+                    recipients[i].optionsDisplay += "<strong>PECSF Charity 2: </strong>" + recipients[i].pecsf_charities2.name + "<br />";
+                    // Show Donation value if there is a second charity.
+                    recipients[i].optionsDisplay += "<strong>PECSF Charity 2 Amount: </strong>$" + parseFloat(recipients[i].pecsf_amount2).toFixed(2) + "<br />";
+                }
+            }
+            // If this is a pecsf award, note that here.
             if (recipients[i].award_id == 0) {
                 recipients[i].award = { id: 0, name: "PECSF Donation" };
             }
         }
 
-        console.log(recipients);
-
-        var cols;
+       var cols;
             cols = [
                 { data: "id", title: "Edit", orderable: false, render: function( data, type, row, meta) {
                         if (edit) {
@@ -77,11 +98,9 @@ echo $this->Form->button('Cancel', array(
                         return link;
                     }
                 },
-                {data: "ceremony.night", title: "Ceremony", orderData: [1, 2, 5], orderSequence: ["asc"] },
                 {data: "ministry.name", title: "Ministry", orderable: false },
                 {data: "last_name", title: "Last Name", orderable: false },
                 {data: "first_name", title: "First Name", orderable: false },
-                {data: "presentation_number", title: "Presentation ID", orderData: [1, 5], orderSequence: ["asc"] },
                 {data: "award.name", title: "Award", orderable: false },
                 {data: "optionsDisplay", title: "Options", orderable: false },
             ];

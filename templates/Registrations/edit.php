@@ -65,7 +65,6 @@
 
     <?php if ($isadmin) : ?>
 
-
         <div class="row"> <h2 id="processInfo">Process Information</h2></div>
         <div class="row">
             <div class="col-2">
@@ -576,6 +575,7 @@ app.selectedMilestone    = <?= $registration->milestone_id ?>;
 app.pecsfRegion          = <?= is_null($registration->pecsf_region_id)       ? 'null' : $registration->pecsf_region_id ?>;
 app.pecsfCharity1        = <?= is_null($registration->pecsf_charity1_id)     ? 'null' : $registration->pecsf_charity1_id ?>;
 app.pecsfCharity2        = <?= is_null($registration->pecsf_charity2_id)     ? 'null' : $registration->pecsf_charity2_id ?>;
+app.pecsfName            = <?= is_null($registration->pecsf_name)            ? 'null' : $registration->pecsf_name ?>;
 
 app.accessRecipientSelections   = <?= is_null($registration->accessibility_requirements_recipient) ? 'null' : $registration->accessibility_requirements_recipient ?>;
 app.accessGuestSelections       = <?= is_null($registration->accessibility_requirements_guest) ? 'null' : $registration->accessibility_requirements_guest ?>;

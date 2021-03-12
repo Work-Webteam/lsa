@@ -50,7 +50,7 @@
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
-                                        <label for="">In which year did you reach this milestone?</label>
+                                        <label for="award_year">In which year did you reach this milestone?</label>
                                         <select class="form-control with-arrow" id="award_year" name="award_year" v-model="award_year">
                                             <option selected disabled>Select Year</option>
 
@@ -59,8 +59,12 @@
                                                 <?php endforeach ?>
 
                                         </select>
+<<<<<<< HEAD
+                                        <small id="awardYearHelpBlock" class="form-text text-muted">If the year you reached this milestone isn't listed, contact your organization's Long Service Awards contact.</small>
+=======
                                         <small class="form-text text-muted">If the year you reached this milestone isn't listed, contact your organization's <a href="https://longserviceawards.gww.gov.bc.ca/contacts">Long Service Awards contact.</a> </small>
 
+>>>>>>> master
                                     </div>
                                 </div>
                             </div>
@@ -74,7 +78,7 @@
                                 <div class="col-3">
                                     <p>Did you register for a Long Service Award in 2019?</p>
                                     <div class="form-group checkbox-group">
-                                        <input class="form-check-input" type="radio" name="retroactive" id="retroactive" value="1" v-model="isRetroactive" @click="setAwardYear(2019)">
+                                        <input class="form-check-input" type="radio" name="retroactive" id="retroactive" value="1" v-model="isRetroactive" >
                                         <label class="form-check-label" for="retroactive">Yes</label>
                                     </div>
                                     <div class="form-group checkbox-group">
@@ -98,7 +102,11 @@
 
                                         <div class="form-group" v-if="isRetiringThisYear == 1">
                                             <label for="retirement_date">Date of Retirement:</label>
+<<<<<<< HEAD
+                                            <input type="date" class="form-control" name="retirement_date" id="retirement_date" v-model="retirementDate" max="2999-12-31">
+=======
                                             <input type="date" class="form-control" name="retirement_date" id="retirement_date" v-model="retirementDate" min="2021-01-01" max="2021-12-31">
+>>>>>>> master
                                         </div>
                                     </div>
                                 </div>
@@ -195,7 +203,7 @@
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label for="watch_engraving">Engraving</label>
-                                        <input class="form-control" type="text" name="watch_engraving" maxlength="33" :placeholder="firstName + ' ' + lastName" v-model="watchEngraving">
+                                        <input class="form-control" type="text" name="watch_engraving" maxlength="33" :placeholder="firstName + ' ' + lastName" id="watch_engraving" v-model="watchEngraving">
                                     </div>
                                 </div>
                             </div>
@@ -233,7 +241,7 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">Name on Donation</label>
-                                        <input class="form-control" type="text" maxlength="33" placeholder="Firstname Lastname">
+                                        <input class="form-control" type="text" maxlength="33" placeholder="Firstname Lastname" name="pecsf_name" id="pecsf_name_name" v-model="pecsfName">
                                     </div>
                                     <div  class="form-group">
                                         <label for="pecsf_region">Your Desired PECSF Region</label>
@@ -625,6 +633,7 @@
                             </div>
                             <div class="confirmationGroup grey lighten-2">
                                 <h4>Award &amp; Options</h4>
+
                                 <?php foreach ($awardinfo as $award): ?>
                                     <div class="row" v-if="selectedAward == <?= $award->id ?>">
                                         <div class="col-6">
@@ -633,29 +642,33 @@
                                         <div class="col-6">
                                            <p class="confirmationValue"><?= $award->name ?></p>
 
-                                            <p v-if="selectedAward == 9"><small>Watch Size</small></p>
-                                            <p v-if="selectedAward == 9" class="confirmationValue">{{watchSize}}</p>
+                                                <p v-if="selectedAward == 9"><small>Watch Size</small></p>
+                                                <p v-if="selectedAward == 9" class="confirmationValue">{{watchSize}}</p>
 
-                                            <p v-if="selectedAward == 9"><small>Watch Colour</small></p>
-                                            <p v-if="selectedAward == 9" class="confirmationValue">{{watchColour}}</p>
+                                                <p v-if="selectedAward == 9"><small>Watch Colour</small></p>
+                                                <p v-if="selectedAward == 9" class="confirmationValue">{{watchColour}}</p>
 
-                                            <p v-if="selectedAward == 9"><small>Strap Type</small></p>
-                                            <p v-if="selectedAward == 9" class="confirmationValue">{{strapType}}</p>
+                                                <p v-if="selectedAward == 9"><small>Strap Type</small></p>
+                                                <p v-if="selectedAward == 9" class="confirmationValue">{{strapType}}</p>
 
-                                            <p v-if="selectedAward == 9"><small>Engraving</small></p>
-                                            <p v-if="selectedAward == 9" class="confirmationValue">{{watchEngraving}}</p>
+                                                <p v-if="selectedAward == 9"><small>Engraving</small></p>
+                                                <p v-if="selectedAward == 9" class="confirmationValue">{{watchEngraving}}</p>
 
-                                            <p v-if="selectedAward == 12 || selectedAward == 46"><small>Bracelet Size</small></p>
-                                            <p v-if="selectedAward == 12 || selectedAward == 46" class="confirmationValue">{{braceletSize}}</p>
+                                                <p v-if="selectedAward == 12 || selectedAward == 46"><small>Bracelet Size</small></p>
+                                                <p v-if="selectedAward == 12 || selectedAward == 46" class="confirmationValue">{{braceletSize}}</p>
 
 
+                                            </div>
+                                    </div>
+                                    <?php endforeach; ?>
+                                </div>
+                                <div v-if="isRetroactive == 0">
+                                    <div class="form-row">
+                                         <div class="col-6">
+                                            <p class="confirmationValue">Retroactive</p>
                                         </div>
                                     </div>
-
-
-                                <?php endforeach; ?>
-
-
+                                </div>
 
                                 <div class="row">
                                     <div class="col-9">

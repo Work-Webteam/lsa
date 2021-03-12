@@ -261,10 +261,14 @@ var app = new Vue({
                 this.errorsStep1.push('Please ensure your milestone information is correct.');
             }
 
-
-            if (this.errorsStep1.length == 0) {
+            console.log(this.isRetroactive);
+            if (this.errorsStep1.length == 0 && (this.isRetroactive == 0)) {
                 console.log ('no errors on step 1');
+
                 this.e1 = 2;
+            } else if (this.errorsStep1.length == 0 && (this.isRetroactive == 1)) {
+                console.log ('no errors, go to 3.')
+                this.e1 = 3;
             }
 
         },

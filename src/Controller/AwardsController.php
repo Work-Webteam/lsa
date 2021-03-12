@@ -71,22 +71,16 @@ class AwardsController extends AppController
                 $this->Flash->success(__('Award has been saved.'));
                 return $this->redirect(['action' => 'index']);
             } else {
-                $this->Flash->error(__('Unable to add award.' . $msg . ' - ' . $file->getClientFilename()));
+                $this->Flash->error(__('Unable to add award.' . ' - ' . $file->getClientFilename()));
             }
         endif;
 
-
         $this->set('award', $award);
-
-
-
-
         // Get a list of milestones.
         $milestones = $this->Awards->Milestones->find('list');
         // Set tags to the view context
         $this->set('milestones', $milestones);
          //$award =  $this->getTableLocator()->newEmptyEntity();
-
     }
 
 
@@ -100,8 +94,7 @@ class AwardsController extends AppController
         if ($this->request->is(['post', 'put'])) {
             $file = $this->request->getData('upload');
             $award = $this->Awards->patchEntity($award, $this->request->getData());
-            if($file->getSize() > 0)
-            {
+            if($file->getSize() > 0) {
                 $fileName = $file->getClientFilename();
                 $uploadPath = 'img/awards/';
                 $uploadFile = $uploadPath . $fileName;
@@ -172,7 +165,6 @@ class AwardsController extends AppController
             }
             $this->Flash->error(__('Unable to add option.'));
         }
-
         $this->set('award', $award);
     }
 
@@ -298,5 +290,39 @@ class AwardsController extends AppController
         }
     }
 
+    /**
+     * @param $id
+     *      Getter that searches for award records by $id.
+     * @return \Cake\Datasource\EntityInterface
+     */
+    public function getById($id) {
+        return $this->Awards->get($id);
+    }
 
+    /**
+     * @param string $name
+     *      Getter that searches for Award records by string.
+     *
+     * @return \Cake\Datasource\QueryInterface
+     */
+    public function getByName($name) {
+        return $this->Awards->find('all', [
+            'conditions' => [
+                'name' => $name,
+            ]
+        ]);
+    }
+
+    /**
+     * @param string $abb
+     *      Contains a string that is matched against database awards records abbreviation column.
+     * @return \Cake\Datasource\QueryInterface
+     */
+    public function getByAbbreviation($abb) {
+        return $this->Awards->find('all', [
+            'conditions' => [
+                'abbreviation' => $abb
+            ]
+        ]);
+    }
 }
