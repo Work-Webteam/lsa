@@ -167,6 +167,7 @@ class RegistrationsController extends AppController
     //Allows an unauthenticated user to create a registration
     public function register()
     {
+        $this->checkForReturn();
         $this->viewBuilder()->setLayout('clean');
 
         //First, make sure registrations are open, flash an error if they're not.
@@ -282,6 +283,24 @@ class RegistrationsController extends AppController
 
 
     }
+
+    private function checkForReturn() {
+            $userData = $this->request->getSession()->read('samlUserdata');
+        echo 'You have the following attributes:<br>';
+        echo '<table><thead><th>Name</th><th>Values</th></thead><tbody>';
+        foreach ($attributes as $attributeName => $attributeValues) {
+            echo '<tr><td>' . htmlentities($attributeName) . '</td><td><ul>';
+            foreach ($attributeValues as $attributeValue) {
+                echo '<li>' . htmlentities($attributeValue) . '</li>';
+            }
+            echo '</ul></td></tr>';
+        }
+        echo '</tbody></table>';
+        exit();
+
+
+    }
+
 
 
     //This should be dynamic based on the options encoded in the award options JSON in

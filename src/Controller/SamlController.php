@@ -54,7 +54,7 @@ class SamlController extends AppController
         $session->write('samlNameIdSPNameQualifier', $this->auth->getNameIdSPNameQualifier());
         $session->write('samlSessionIndex', $this->auth->getSessionIndex());
 
-
+        return $this->redirect('/register');
     }
 
     public function slo() {
