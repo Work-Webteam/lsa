@@ -333,13 +333,13 @@
 
                             <div class="form-row">
                                 <div class="col-6">
-                                    <div class="form-group">
+                                    <div class="[form-group, isGovtEmailValid()]">
                                         <label for="preferred_email">Government email address</label>
                                         <input type="email" id="preferred_email" name="preferred_email" v-model="govtEmail" class="form-control email-input" placeholder="i.e. taylor.publicservant@gov.bc.ca" @change="filterGovtEmail">
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <div class="form-group">
+                                    <div class="[form-group, isAltEmailValid()]">
                                         <label for="alternate_email">Alternate email address</label>
                                         <input type="email" id="alternate_email" name="alternate_email" v-model="altEmail" class="form-control email-input" placeholder="i.e. taylor_publicservant@gmail.com" @change="filterAltEmail">
                                     </div>
@@ -514,7 +514,7 @@
                             <div class="form-row">
 
                                 <div class="col-6">
-                                    <div class="form-group">
+                                    <div class="[form-group, isSupervisorEmailValid()]">
                                         <label for="supervisorEmail">Supervisor's Email</label>
                                         <input type="text" class="form-control email-input" id="supervisor_email" name="supervisor_email" placeholder="i.e. taylor.publicservant@gov.bc.ca" v-model="supervisorEmail" @change="filterSupervisorEmail">
                                     </div>

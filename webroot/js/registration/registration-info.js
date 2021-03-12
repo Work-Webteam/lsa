@@ -117,7 +117,8 @@ var app = new Vue({
         originalAward:              '',
 
         errorsOptions: '',
-
+        // Email regex
+        reg:/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
 
 },
 
@@ -166,6 +167,18 @@ var app = new Vue({
                     }
                 }
             });
+        },
+        // Need some validation on the email as well, the mask is a little wonky on Chrome and IE.
+        // These have been assigned separately, so for now we'll use three diff functions.
+        // This can be refactored in the future.
+        isGovtEmailValid: function() {
+            return (this.govtEmail == "")? "" : (this.reg.test(this.govtEmail)) ? 'has-success' : 'has-error';
+        },
+        isAltEmailValid: function() {
+            return (this.altEmail == "")? "" : (this.reg.test(this.altEmail)) ? 'has-success' : 'has-error';
+        },
+        isSupevisorEmailValid: function() {
+            return (this.supervisorEmail == "")? "" : (this.reg.test(this.supervisorEmail)) ? 'has-success' : 'has-error';
         },
 
         //TODO: Reduce the redundant functions to a single parameterized function call.
@@ -259,8 +272,10 @@ var app = new Vue({
             if (this.isRetroactive && (this.award_year > 2019)) {
                 this.errorsStep1.push('Please ensure your milestone information is correct.');
             }
+            // We need to validate emails here - Chrome and IE aren't responding well to the mask.
 
-            console.log(this.isRetroactive);
+
+
             if (this.errorsStep1.length == 0 && (this.isRetroactive == 0)) {
                 console.log ('no errors on step 1');
 
