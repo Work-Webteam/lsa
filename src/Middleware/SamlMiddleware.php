@@ -37,7 +37,7 @@ class SamlMiddleware implements MiddlewareInterface
                 $requestID = $_SESSION['AuthNRequestID'];
             } else {
                 //If there's no request ID set, redirect to login
-                header('Location: https://lsaapp.gww.gov.bc.ca/?sso=sso');
+               $this->auth->redirectTo('https://lsaap.gww.gov.bc.ca/?sso=sso');
                 exit();
             }
 
@@ -56,6 +56,16 @@ class SamlMiddleware implements MiddlewareInterface
                 echo "<p>Not authenticated</p>";
                 exit();
             }
+
+            $_SESSION['samlUserdata'] = $this->auth->getAttributes();
+            $_SESSION['samlNameId'] = $this->auth->getNameId();
+            $_SESSION['samlNameIdFormat'] = $this->auth->getNameIdFormat();
+            $_SESSION['samlNameIdNameQualifier'] = $this->auth->getNameIdNameQualifier();
+            $_SESSION['samlNameIdSPNameQualifier'] = $this->auth->getNameIdSPNameQualifier();
+            $_SESSION['samlSessionIndex'] = $this->auth->getSessionIndex();
+            $this->auth->redirectTo('https://lsaapp.gww.gov.bc.ca/register');
+
+
         }
 
 
