@@ -31,47 +31,39 @@ class SamlMiddleware implements MiddlewareInterface
         //If the ?sso parameter is present, push user to login
         if (!empty($_GET['sso'])) {
            $this->auth->login('https://lsaapp.gww.gov.bc.ca');
-            //IF the ?sso=sso get variable is absent, check for session validity.
-        } else {
-            if (isset($_SESSION) && isset($_SESSION['AuthNRequestID'])) {
-                $requestID = $_SESSION['AuthNRequestID'];
-            } else {
-                //If there's no request ID set, redirect to login
-               $this->auth->redirectTo('https://lsaap.gww.gov.bc.ca/?sso=sso');
-                exit();
-            }
 
-            $this->auth->processResponse($requestID);
+        }
+            $this->auth->processResponse();
 
+            //If there are errors, display them then exit.
             $errors = $this->auth->getErrors();
-
             if (!empty($errors)) {
                 echo '<p>',implode(', ', $errors),'</p>';
                 if ($this->auth->getSettings()->isDebugActive()) {
                     echo '<p>'.$this->auth->getLastErrorReason().'</p>';
                 }
-            }
-
-            if (!$this->auth->isAuthenticated()) {
-                echo "<p>Not authenticated</p>";
                 exit();
             }
 
-            $_SESSION['samlUserdata'] = $this->auth->getAttributes();
-            $_SESSION['samlNameId'] = $this->auth->getNameId();
-            $_SESSION['samlNameIdFormat'] = $this->auth->getNameIdFormat();
-            $_SESSION['samlNameIdNameQualifier'] = $this->auth->getNameIdNameQualifier();
-            $_SESSION['samlNameIdSPNameQualifier'] = $this->auth->getNameIdSPNameQualifier();
-            $_SESSION['samlSessionIndex'] = $this->auth->getSessionIndex();
-            $this->auth->redirectTo('https://lsaapp.gww.gov.bc.ca/register');
+            //If the person is not authenticated push them back to the
+            //login form.
+            if (!$this->auth->isAuthenticated()) {
+                $this->auth->redirectTo(('https://lsapp.gww.gov.bc.ca'));
+                exit();
+            }
 
-
-        }
-
+            $_SESSION['samlUserdata']               = $this->auth->getAttributes();
+            $_SESSION['samlNameId']                 = $this->auth->getNameId();
+            $_SESSION['samlNameIdFormat']           = $this->auth->getNameIdFormat();
+            $_SESSION['samlNameIdNameQualifier']    = $this->auth->getNameIdNameQualifier();
+            $_SESSION['samlNameIdSPNameQualifier']  = $this->auth->getNameIdSPNameQualifier();
+            $_SESSION['samlSessionIndex']           = $this->auth->getSessionIndex();
 
         return $response;
 
     }
+
+
 
 
     private function loadToolkit() {
