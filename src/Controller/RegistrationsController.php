@@ -18,7 +18,11 @@ class RegistrationsController extends AppController
     public function index()
     {
         //If the method is "POST" redirect to the saml auth.
+
+
         if ($this->request->is('post')) {
+            $_SESSION['SAMLResponse'] = $_POST['SAMLResponse'];
+
             $this->redirect('/saml/acs');
         }
 

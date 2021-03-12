@@ -25,7 +25,9 @@ class SamlController extends AppController
     }
 
     public function acs() {
-        $_POST['SAMLResponse'] = $this->request->getData('SAMLResponse');
+
+        $_POST['SAMLResponse'] = $_SESSION['SAMLResponse'];
+
 
         $this->initSAML();
         $auth = new \OneLogin_Saml2_Auth($this->settings);
@@ -35,14 +37,16 @@ class SamlController extends AppController
         //If there are errors, display them then exit.
         $errors = $auth->getErrors();
         if (!empty($errors)) {
+            echo "There were errors, sad face";
+
+
             echo '<p>',implode(', ', $errors),'</p>';
             if ($auth->getSettings()->isDebugActive()) {
                 echo '<p>'.$auth->getLastErrorReason().'</p>';
             }
             exit();
         }
-        //If the person is not authenticated push them back to the
-        //login form.
+
         if (!$auth->isAuthenticated()) {
             echo "<p>Sorry, you could not be authenticated.</p>";
             exit();
@@ -56,8 +60,14 @@ class SamlController extends AppController
         $session->write('samlNameIdSPNameQualifier', $this->auth->getNameIdSPNameQualifier());
         $session->write('samlSessionIndex', $this->auth->getSessionIndex());
 
+        echo "Auth Successful!";
 
-        var_dump($session->read('samlUserdata'));
+        echo $this->auth->getNameId();
+        echo $this->auth->getNameIdFormat();
+        echo $this->auth->getNameIdNameQualifier();
+        echo $this->auth->getNameIdSPNameQualifier();
+        echo $this->auth->getSessionIndex();
+
     }
 
     public function slo() {
@@ -121,7 +131,9 @@ class SamlController extends AppController
                 // Ex. http://sp.example.com/
                 //     http://example.com/sp/
                 'baseurl' =>'',
-
+                'security' => array (
+                    'requestedAuthnContext' => false,
+                ),
                 // Service Provider Data that we are deploying
                 'sp' => array (
                     // Identifier of the SP entity  (must be a URI)
