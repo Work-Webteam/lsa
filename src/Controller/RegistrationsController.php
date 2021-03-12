@@ -13,12 +13,6 @@ class RegistrationsController extends AppController
     //Displays a list of registrations based on user role's permissions
     public function index()
     {
-        //If the method is "POST" redirect to the saml auth.
-        if ($this->request->is('post')) {
-            $_SESSION['SAMLResponse'] = $_POST['SAMLResponse'];
-
-            $this->redirect('/saml/acs');
-        }
 
 
         if ($this->checkAuthorization(array(Configure::read('Role.authenticated')))) {

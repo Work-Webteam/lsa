@@ -60,11 +60,12 @@ class SamlController extends AppController
         $session->write('samlNameIdSPNameQualifier', $auth->getNameIdSPNameQualifier());
         $session->write('samlSessionIndex', $auth->getSessionIndex());
 
-        echo "Auth Successful!";
+        //Set IDIR and GUID to session and $_SERVER var
 
-        echo "Your IDIR is: " . $auth->getAttributes()['username'][0];
-        echo "Your GUID is: " . $auth->getAttributes()['SMGOV_GUID'][0];
-        exit();
+        $session->write('User.guid', $auth->getAttributes()['SMGOV_GUID'][0]);
+        $session->write('User.idir', $auth->getAttributes()['username'][0]);
+        $_SERVER['HTTP_SM_USER'] = $auth->getAttributes()['username'][0];
+        $_SERVER['HTTP_SMGOV_USERGUID'] = $auth->getAttributes()['SMGOV_GUID'][0];
 
     }
 

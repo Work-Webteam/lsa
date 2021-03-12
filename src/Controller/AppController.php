@@ -46,6 +46,7 @@ class AppController extends Controller
 
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
+
         // check if user has administrative privileges
         $this->loadModel('UserRoles');
         $users = $this->UserRoles->find('all', [
@@ -71,10 +72,12 @@ class AppController extends Controller
         }
 
         $session = $this->getRequest()->getSession();
+
         $session->write('user.idir', $_SERVER['HTTP_SM_USER']);
         $session->write('user.guid', $_SERVER['HTTP_SMGOV_USERGUID']);
         $session->write('user.name', $_SERVER['HTTP_SMGOV_USERDISPLAYNAME']);
         $session->write('user.email', $_SERVER['HTTP_SMGOV_USEREMAIL']);
+
 
         if ($user) {
             $session->write('user.role', $user->role_id);
@@ -119,7 +122,31 @@ class AppController extends Controller
         }
 
 
-        /**
+
+//        $session->write('user.idir', $_SERVER['HTTP_SM_USER']);
+//        $session->write('user.guid', $_SERVER['HTTP_SMGOV_USERGUID']);
+//        $session->write('user.name', $_SERVER['HTTP_SMGOV_USERDISPLAYNAME']);
+//        $session->write('user.email', $_SERVER['HTTP_SMGOV_USEREMAIL']);
+//        $_SERVER['HTTP_SM_USER'] = 'rkuyvenh';
+//        $_SERVER['HTTP_SMGOV_USEREMAIL'] = 'Raymond.Kuyvenhoven@gov.bc.ca';
+//        $_SERVER['HTTP_SMGOV_USERDISPLAYNAME'] = 'Kuyvenhoven, Raymond PSA:EX';
+//        $_SERVER['HTTP_SMGOV_USERGUID'] = '60DCD2AF73FB44AE9345F11B71CD3495';   // admin
+//        $_SERVER['HTTP_SMGOV_USERGUID'] = '9ECC7D7FD8EE840932B9D21721251737';   // lsa admin
+//        $_SERVER['HTTP_SMGOV_USERGUID'] = '8A5BD27856273A99C6D5AF1FCDDBCB99';   // award procurement
+//        $_SERVER['HTTP_SM_USER'] = 'jadams';
+//        $_SERVER['HTTP_SMGOV_USERGUID'] = '26B243BA60AE8F60B4BB3C81E1450423';   // ministry contact
+//        $_SERVER['HTTP_SM_USER'] = 'kblack';
+//        $_SERVER['HTTP_SMGOV_USERGUID'] = '5F4CF1B88565FCA2E8D17AD85B57CE0A';   // supervisor
+//
+//        $_SERVER['HTTP_SM_USER'] = 'asmith';
+//        $_SERVER['HTTP_SMGOV_USERGUID'] = 'C68FF67FB334907A25DB8B07767CC1FC';   // protocol
+//
+//        $_SERVER['HTTP_SM_USER'] = 'rsharples';
+//        $_SERVER['HTTP_SMGOV_USERGUID'] = '3BC010F8C876571F3D29DB46012A326B';   // recipient
+//
+        $this->checkSAML();
+
+        /*
          * Enable the following component for recommended CakePHP security settings.
          * see https://book.cakephp.org/4/en/controllers/components/security.html
          */
@@ -127,7 +154,9 @@ class AppController extends Controller
     }
 
 
+
     public function checkAuthorization($roles = 1, $ministry = 0) {
+
 
         if (!is_array($roles)) {
             $roles = array($roles);
@@ -150,6 +179,21 @@ class AppController extends Controller
     public function checkGUID($guid) {
         $session = $this->getRequest()->getSession();
         return $session->read("user.guid") == $guid;
+    }
+
+    private function checkSAML() {
+        //If the incoming request contains SAMLResponse data, it should go to the ACS
+        if ($_POST['SAMLResponse']) {
+            $_SESSION['SAMLResponse'] = $_POST['SAMLResponse'];
+            $this->redirect('/saml/acs');
+        }
+
+        //Check for User variables, if none send them to the login form.
+        if (empty($this->getRequest()->getSession()->read('User.guid'))) {
+            $requestPath = '';
+            $session = $this->getRequest()->getSession()->write('RequestPath', $requestPath);
+            $this->redirect('/saml/sso');
+        }
     }
 
 }
