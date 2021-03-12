@@ -13,13 +13,19 @@ class SamlController extends AppController
     public function index() {
 
     }
+    private function initSAML() {
+        $this->loadSettings();
+        $this->loadToolkit();
+    }
 
     public function sso() {
-        $this->auth->login();
+        $this->initSAML();
+        $auth = new \OneLogin_Saml2_Auth($this->settings);
+        $auth->login();
     }
 
     public function acs() {
-        $this->loadSettings();
+        $this->initSAML();
         $auth = new \OneLogin_Saml2_Auth($this->settings);
 
         $auth->processResponse();
@@ -52,13 +58,51 @@ class SamlController extends AppController
     }
 
     public function slo() {
-        $this->loadSettings();
+        $this->initSAML();
         $auth = new \OneLogin_Saml2_Auth($this->settings);
         $auth->logout();
     }
 
+    private function loadToolkit() {
+        define('TOOLKIT_PATH', __DIR__ . '/../../vendor/onelogin/SAML/src/');
+
+        // Create an __autoload function
+        // (can conflicts other autoloaders)
+        // http://php.net/manual/en/language.oop5.autoload.php
+
+        //TODO: use proper class loading to access libs
+
+        $libDir = __DIR__ . '/../../vendor/onelogin/SAML/src/lib/Saml2/';
+        $extlibDir = __DIR__ . '/../../vendor/onelogin/SAML/src/extlib/';
+
+        // Load composer
+        if (file_exists(__DIR__ .'/vendor/autoload.php')) {
+            require __DIR__ . '/vendor/autoload.php';
+        }
+
+        // Load now external libs
+        require_once $extlibDir . 'xmlseclibs/xmlseclibs.php';
+
+        $folderInfo = scandir($libDir);
+
+        foreach ($folderInfo as $element) {
+            if (is_file($libDir.$element) && (substr($element, -4) === '.php')) {
+                include_once $libDir.$element;
+                //break;
+            }
+        }
+    }
+
     private function loadSettings() {
 
+
+        if (empty($_ENV['saml-SP-x509'])) {
+            //die('Authentication parameters are not properly set - please contact administrator (jeremy.vernon@gov.bc.ca)');
+
+            $_ENV['saml-SP-x509'] = 'x509CertGoes Here';
+            $_ENV['saml-pk'] = 'saml-pk goes here';
+            $_ENV['saml-IdP-x509'] = 'x509CertGoes Here';
+        }
             $this->settings = array (
                 // If 'strict' is True, then the PHP Toolkit will reject unsigned
                 // or unencrypted messages if it expects them signed or encrypted
@@ -83,7 +127,7 @@ class SamlController extends AppController
                     // returned to the requester, in this case our SP.
                     'assertionConsumerService' => array (
                         // URL Location where the <Response> from the IdP will be returned
-                        'url' => 'https://lsaapp.gww.gov.bc.ca',
+                        'url' => 'https://lsaapp.gww.gov.bc.ca/saml/acs',
                         // SAML protocol binding to be used when returning the <Response>
                         // message.  Onelogin Toolkit supports for this endpoint the
                         // HTTP-POST binding only
@@ -110,7 +154,7 @@ class SamlController extends AppController
                     // returned to the requester, in this case our SP.
                     'singleLogoutService' => array (
                         // URL Location where the <Response> from the IdP will be returned
-                        'url' => 'https://lsaapp.gww.gov.bc.ca',
+                        'url' => 'https://lsaapp.gww.gov.bc.ca/saml/slo',
                         // SAML protocol binding to be used when returning the <Response>
                         // message.  Onelogin Toolkit supports for this endpoint the
                         // HTTP-Redirect binding only
