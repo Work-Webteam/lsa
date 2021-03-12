@@ -46,14 +46,6 @@ class AppController extends Controller
 
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
-
-
-
-
-        //If user has session but no privileges, send them to register
-
-
-
        $_SERVER['HTTP_SM_USER'] = 'rkuyvenh';
        $_SERVER['HTTP_SMGOV_USEREMAIL'] = 'Raymond.Kuyvenhoven@gov.bc.ca';
        $_SERVER['HTTP_SMGOV_USERDISPLAYNAME'] = 'Kuyvenhoven, Raymond PSA:EX';
@@ -100,7 +92,7 @@ class AppController extends Controller
             }
         }
 
-
+        $session = $this->getRequest()->getSession();
    //     $session->write('user.idir', $_SERVER['HTTP_SM_USER']);
    //     $session->write('user.guid', $_SERVER['HTTP_SMGOV_USERGUID']);
    //     $session->write('user.name', $_SERVER['HTTP_SMGOV_USERDISPLAYNAME']);
@@ -124,13 +116,6 @@ class AppController extends Controller
 
 
     public function checkAuthorization($roles = 1, $ministry = 0) {
-
-        $session = $this->getRequest()->getSession();
-        //If user has no session variables, send them to login
-        if ($session->read('samlNameId')) {
-
-        }
-
 
         if (!is_array($roles)) {
             $roles = array($roles);
