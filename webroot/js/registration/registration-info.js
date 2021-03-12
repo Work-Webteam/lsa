@@ -256,7 +256,7 @@ var app = new Vue({
             else {
                 return (e == "")? "" : (this.reg.test(e)) ? true : false;
             }
-        }
+        },
 
         // These methods are to give user instant feedback on emails - as per: https://codepen.io/CSWApps/pen/MmpBjV
         // Not really working yet - I think they need corresponding CSS
@@ -268,7 +268,7 @@ var app = new Vue({
         },
 
         isSupervisorEmailValid: function() {
-            return (this.altEmail == "")? "" : (this.reg.test(this.altEmail)) ? 'has-success' : 'has-error';
+            return (this.supervisorEmail == "")? "" : (this.reg.test(this.altEmail)) ? 'has-success' : 'has-error';
         },
 
         validateStep1 : function () {
@@ -337,13 +337,15 @@ var app = new Vue({
                 this.errorsStep3.push('You must input your government email address');
             }
 
+            // Validating govtEmail
             if(this.isEmailValid(this.govtEmail) == false) {
                 this.errorsStep3.push("You must enter a valid government email address.");
             }
-
-            if(this.isEmailValid(this.altEmail) == false ) {
+            // Alt email validation - can be empty or could also need to be checked.
+            if(this.altEmailValidation(this.altEmail) == false ) {
                 this.errorsStep3.push("You must enter a valid alternative email address.");
             }
+
             //Did they specify their ministry?
             if (this.ministry == 'Select Ministry') {
                 this.errorsStep3.push('You must select your ministry');
@@ -402,9 +404,9 @@ var app = new Vue({
             if (this.supervisorLastName.length < 2 || this.supervisorLastName.length > 50) {
                 this.errorsStep4.push('You must input your supervisor\'s last name')
             }
-            //Did they include a supervisor email
-            if (this.supervisorEmail.length < 6) {
-                this.errorsStep4.push('You must input your supervisor\'s government email address');
+            // Supervisor email validation.
+            if(this.isEmailValid(this.supervisorEmail) == false) {
+                this.errorsStep4.push("You must enter a valid supervisor email address.");
             }
             //Did they include a supervisor street address
             if (this.supervisorStreetAddress.length < 4) {
