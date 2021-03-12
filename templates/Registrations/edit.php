@@ -586,6 +586,7 @@ app.milestone              = <?= $registration->milestone_id ?>;
 app.award_year             = '<?= $registration->award_year ?>';
 app.isRetiringThisYear     = <?= $registration->retiring_this_year   ? 'true' : 'false' ?>;
 app.retirementDate         = '<?= is_null($registration->retirement_date)       ? 'null' : $registration->retirement_date ?>';
+app.awardReceived          = <?= $registration->award_recieved ?>
 app.certificateName        = <?= is_null($registration->certificate_name)     ? 'null' : $registration->certificate_name ?>;
 
 app.isRetroactive          = <?= $registration->retroactive ? 'true' : 'false' ?>;

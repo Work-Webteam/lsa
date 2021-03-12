@@ -101,6 +101,17 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-3" v-if="isRetroactive == 1">
+                                    <p>Did you receive your award?</p>
+                                    <div class="form-group checkbox-group">
+                                        <input class="form-check-input" type="radio" name="award_received" id="award_received" value="1" v-model="awardReceived" >
+                                        <label class="form-check-label" for="award_received">Yes</label>
+                                    </div>
+                                    <div class="form-group checkbox-group">
+                                        <input class="form-check-input" type="radio" name="award_received" id="award_received" checked value="0" v-model="awardReceived">
+                                        <label class="form-check-label" for="award_received">No</label>
+                                    </div>
+                                </div>
                             </div>
 
                             <button class="btn btn-primary" @click.prevent="validateStep1()">Select Award</button>
@@ -599,6 +610,7 @@
                                     </div>
                                     <div class="col-6">
                                         <p v-if="isRetroactive" class="confirmationValue">I registered last year but did not attend</p>
+                                        <p v-if="awardReceived" class="confirmationValue">I received an award for this milestone</p>
                                         <p v-if="isRetiringThisYear" class="confirmationValue">I am retiring this year on {{retirementDate}} </p>
                                     </div>
                                 </div>
