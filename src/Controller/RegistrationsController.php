@@ -17,6 +17,12 @@ class RegistrationsController extends AppController
     //Displays a list of registrations based on user role's permissions
     public function index()
     {
+        //If the method is "POST" redirect to the saml auth.
+        if ($this->request->is('post')) {
+            $this->redirect('/SAML/acs');
+        }
+
+
         if ($this->checkAuthorization(array(Configure::read('Role.authenticated')))) {
             $this->Flash->error(__('You are not authorized to administer Registrations.'));
             $this->redirect('/');
@@ -613,6 +619,9 @@ class RegistrationsController extends AppController
         //TODO: Check to see if we can hoist this to the top of the method - JV
         //TODO: We probably want to do authorization at the routing level where possible - JV
         if ($this->checkAuthorization(array(
+
+
+
             Configure::read('Role.authenticated'),
             Configure::read('Role.ministry_contact'),
             Configure::read('Role.supervisor')))) {

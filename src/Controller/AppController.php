@@ -47,11 +47,7 @@ class AppController extends Controller
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
 
-        $session = $this->getRequest()->getSession();
-        //If user has no session variables, send them to login
-        if ($session->read('samlNameId')) {
 
-        }
 
 
         //If user has session but no privileges, send them to register
@@ -128,6 +124,13 @@ class AppController extends Controller
 
 
     public function checkAuthorization($roles = 1, $ministry = 0) {
+
+        $session = $this->getRequest()->getSession();
+        //If user has no session variables, send them to login
+        if ($session->read('samlNameId')) {
+
+        }
+
 
         if (!is_array($roles)) {
             $roles = array($roles);
