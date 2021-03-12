@@ -55,7 +55,7 @@ class SamlController extends AppController
         $session->write('samlSessionIndex', $this->auth->getSessionIndex());
 
 
-        return $this->redirect('/register');
+        var_dump($session->read('samlUserdata'));
     }
 
     public function slo() {
