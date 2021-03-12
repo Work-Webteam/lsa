@@ -19,7 +19,6 @@ class SamlMiddleware implements MiddlewareInterface
         $this->loadToolkit();
         $this->loadSettings();
 
-        $this->auth = new \OneLogin_Saml2_Auth($this->settings);
     }
 
     public function process (ServerRequestInterface $request, RequestHandlerInterface $handler) :
@@ -27,15 +26,19 @@ class SamlMiddleware implements MiddlewareInterface
         $response = $handler->handle($request);
         $this->request = $request;
 
+        $this->auth = new \OneLogin_Saml2_Auth($this->settings);
+
         //If the ?sso parameter is present, push user to login
         if (!empty($_GET['sso'])) {
-            $this->auth->login();
+           $this->auth->login();
             //IF the ?sso get variable is absent, check for session validity.
         } else {
             if (isset($_SESSION) && isset($_SESSION['AuthNRequestID'])) {
                 $requestID = $_SESSION['AuthNRequestID'];
             } else {
-                $requestID = null;
+                //If there's no request ID set, redirect to login
+                header('Location: https://lsaapp.gww.gov.bc.ca/?sso=sso');
+                exit();
             }
 
             $this->auth->processResponse($requestID);
@@ -59,38 +62,7 @@ class SamlMiddleware implements MiddlewareInterface
         return $response;
 
     }
-    private function validSession () : bool {
-        $session = $this->request->getSession();
-        if (empty($session->read('User.guid'))) {
-            return false;
-        }
-    }
 
-    private function handleAuthentication() {
-
-
-    }
-
-    private function handleACS($auth, $session) {
-        $auth->processResponse($session->read('AuthNRequestID'));
-        $errors = $auth->getErrors();
-        if (!empty($errors)) {
-            echo '<p>', implode(',', $errors), '</p>';
-            exit();
-        }
-
-        if (!$auth->isAuthenticated()) {
-            echo "<p>Sorry you were not authenticated.</p>";
-            exit();
-        }
-
-
-    }
-
-
-    private function buildSession($auth) {
-
-    }
 
     private function loadToolkit() {
         define('TOOLKIT_PATH', __DIR__ . '/../../vendor/onelogin/SAML/src/');
