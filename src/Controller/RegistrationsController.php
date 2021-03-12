@@ -18,6 +18,9 @@ class RegistrationsController extends AppController
     public function index()
     {
         //If the method is "POST" redirect to the saml auth.
+        if ($this->request->is('post')) {
+            $this->redirect('/saml/acs');
+        }
 
 
         if ($this->checkAuthorization(array(Configure::read('Role.authenticated')))) {
