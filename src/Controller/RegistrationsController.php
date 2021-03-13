@@ -16,17 +16,12 @@ class RegistrationsController extends AppController
     public function index()
     {
 
-        var_dump($_ENV);
 
-        $this->request->getSession()->write('SOMETESTDATA', 'TESTY DATA');
-        echo $this->request->getSession()->read('SOMETESTDATA');
-        die();
-
-        /*
         if ($this->checkAuthorization(array(Configure::read('Role.authenticated')))) {
+
             $this->Flash->error(__('You are not authorized to administer Registrations.'));
-            $this->redirect('/');
-        } */
+            die('You are not authorized to ');
+        }
         $query = $this->Registrations->RegistrationPeriods->find('all')
             ->where([
                 'RegistrationPeriods.open_registration <= ' => date('Y-m-d H:i:s'),
@@ -179,7 +174,8 @@ class RegistrationsController extends AppController
     //Allows an unauthenticated user to create a registration
     public function register()
     {
-        $this->checkForReturn();
+        $this->checkForEdit();
+
         $this->viewBuilder()->setLayout('clean');
 
         //First, make sure registrations are open, flash an error if they're not.
@@ -395,36 +391,120 @@ class RegistrationsController extends AppController
 
     }
 
-    private function checkForReturn() {
+    private function checkForSessionBasedEdit() {
         //Check if there's any session variables for this user
-        $session = $this->request->getSession();
-        if (empty($session->read('samlUserdata'))) {
-            //No session? login you ya filthy animal
-            $this->redirect('/saml/sso');
+        $guid = $this->request->getSession()->read('user.guid');
+
+        $registration = $this->Registrations->find()->where(['user_guid' => $guid])->first();
+
+        if ($registration) {
+           $this->redirect('https://lsaapp.gww.gov.bc.ca/registrations/edit/' . $registration->id);
         }
-
-
-            //If there are session variables see if the GUID has a record
-            //If there is a record, go to edit
-
-
-
-            $attributes = $this->request->getSession()->read('samlUserdata');
-        echo 'You have the following attributes:<br>';
-        echo '<table><thead><th>Name</th><th>Values</th></thead><tbody>';
-        foreach ($attributes as $attributeName => $attributeValues) {
-            echo '<tr><td>' . htmlentities($attributeName) . '</td><td><ul>';
-            foreach ($attributeValues as $attributeValue) {
-                echo '<li>' . htmlentities($attributeValue) . '</li>';
-            }
-            echo '</ul></td></tr>';
-        }
-        echo '</tbody></table>';
-        exit();
 
 
     }
 
+    /* =======================
+    *  This section is a make-do solution for registrants to edit their own records that requires neither
+    *  sessions nor passwords or accounts:
+    *   1) When the user goes to register they're asked either to start a new registration or enter the govt email
+    *   email address associated with that registration.
+    *  2) If a registration exists with that email, the system will attach an edit code to the registration row.
+    *  3) The system will then send an email to that address with a message containing a link with the edit code.
+    *  4) Clicking the edit code will link to the edit page. The code will be check against the db. IKf a match is found
+     * the system will display the edit page for that record otherwise the link fails. If a match is found, the code is
+     * deleted from the row and the user is presented with an end-user edit form.
+    *  5) They can then submit the form (or not), but refreshing or returning to the form later will fail.
+    *
+    ========================= */
+    public function registerSplashPage() {
+        $this->viewBuilder()->setLayout('clean');
+
+
+    }
+
+
+    public function editmyregistration() {
+        //If the request is GET, handle incoming link with code
+        if ($this->request->is('get')) :
+            if ($submittedCode = $this->getAndValidateCodeFromQuery()) :
+                if ($registration = $this->getRecordforCode($submittedCode)) :
+                    $this->userEdit($registration->id);
+                else :
+                    die('No registration matching that edit code could be found');
+                endif;
+            else :
+                die('Edit code is invalid');
+            endif;
+        endif; //end GET handling logic
+
+
+        //If the request is POST, handle creating code and email logic
+        if ($this->request->is('post')) :
+            //Get record based on submitted email
+            $registration = $this->getRecordForEmail($this->request->getData('submittedEmail'));
+            if ($registration) :
+                $code = $this->generateEditCode();
+                //Only send the email if the code insertion is successful.
+                if ($this->addEditCodeToRecord($code, $registration)) :
+                    $this->sendEmailWithCode($code, $registration->govt_email);
+                endif;
+            endif;
+        endif; //end POST handling logic.
+    }
+    private function generateEditCode(string $email = '233409@e4309284320984.com') : string {
+        //Seed should be a unique string even if for the same email address.
+        $seed = $email . time();
+        //Security of the hash is mostly irrelevant given the single-use - simply needs to have
+        //extremely low probability of collision (unique seeds practically guarantee it)
+        return substr(hash('haval192,3', $seed), 0,32);
+    }
+    private function addEditCodeToRecord(string $code, object $registration) : bool {
+        $registration->edit_code = $code;
+        $registration->save();
+    }
+    private function getRecordForCode(string $code = null) {
+        if (empty($email)) {
+            return false;
+        }
+        return $this->Registrations->find()->where(['edit_code' => $code]);
+    }
+    private function getRecordForEmail(string $email = null) {
+        if (empty($email)) {
+            return false;
+        }
+      return $this->Registrations->find()->where(['preferred_email' => $email ]);
+    }
+    private function getAndValidateCodeFromQuery() {
+        $code = $this->request->getData('editcode');
+        if (strlen($code) != 32) {
+            return false;
+        } else {
+            return $code;
+        }
+    }
+    private function expireCode(string $code = null) : bool {
+        if (empty($code)) {
+            return true;
+        }
+        $record = $this->Registrations->find()->where(['edit_code' => $code]);
+        $record->edit_code = '';
+       return $record->save();
+    }
+    private function sendEmailWithCode(string $code, $registrant) : bool {
+        $testing = true;
+
+        if ($testing) :
+            echo "This email address: " . $registrant->preferred_email . '<br>';
+            echo "Would receive this code: " . $code . "<br>";
+            echo "In this link <a href=\"https://lsaapp.gww.gov.bc.ca/editmyregistration/?ec=" . $code . "\">Click Here to Edit Your Registration</a>";
+            exit;
+        else :
+            //Prep email string
+
+            //Send email
+        endif;
+    }
 
 
     //This should be dynamic based on the options encoded in the award options JSON in

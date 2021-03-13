@@ -181,7 +181,7 @@ class Session
                 $defaults['php']['ini']['session.cookie_samesite'] = 'Lax';
             }
 
-            return $defaults[$name];
+            return $defaults['database'];
         }
 
         return false;

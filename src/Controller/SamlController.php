@@ -22,8 +22,8 @@ class SamlController extends Controller
     public function sso() {
         $this->initSAML();
         $auth = new \OneLogin_Saml2_Auth($this->settings);
+        $auth->login();
 
-        $auth->login('https://lsaapp.gww.gov.bc.ca/');
     }
 
 
@@ -62,38 +62,39 @@ class SamlController extends Controller
             }
         }
     }
-    public function acs() {
+
+
+    public function acs () {
         $this->initSAML();
         $auth = new \OneLogin_Saml2_Auth($this->settings);
 
         $auth->processResponse();
 
-        //If there are errors, display them then exit.
-        $errors = $auth->getErrors();
-        if (!empty($errors)) {
-            echo "There were errors";
-            echo '<p>',implode(', ', $errors),'</p>';
-            if ($auth->getSettings()->isDebugActive()) {
-                echo '<p>'.$auth->getLastErrorReason().'</p>';
+        if ($this->request->getSession()->read('AuthNRequestID') != $auth->getLastAssertionId()) :
+            $this->request->getSession()->write('AuthNRequestID', $auth->getLastAssertionId());
+            //If there are errors, display them then exit.
+            $errors = $auth->getErrors();
+            if (!empty($errors)) {
+                echo "There were errors";
+                echo '<p>',implode(', ', $errors),'</p>';
+                if ($auth->getSettings()->isDebugActive()) {
+                    echo '<p>'.$auth->getLastErrorReason().'</p>';
+                }
+                exit();
             }
-            exit();
-        }
-        if (!$auth->isAuthenticated()) {
-            echo "<p>Sorry, you could not be authenticated.</p>";
-            exit();
-        };
+            if (!$auth->isAuthenticated()) {
+                echo "<p>Sorry, you could not be authenticated.</p>";
+                exit();
+            };
 
-        $SAMLsessionVars['idir'] = $auth->getAttributes()['SMGOV_GUID'][0];
-        $SAMLsessionVars['guid'] = $auth->getAttributes()['username'][0];
-        $this->setSAMLSessionVars($SAMLsessionVars);
+            $this->request->getSession()->write('user.guid', $auth->getAttributes()['SMGOV_GUID'][0]);
+            $this->request->getSession()->write('user.idir', $auth->getAttributes()['username'][0]);
 
+            $this->redirect('https://lsaapp.gww.gov.bc.ca/register');
+
+        endif;
     }
 
-    public function setSAMLSessionVars($vars) {
-        $session = $this->request->getSession();
-        $session->write('user.idir', $vars['idir']);
-        $session->write('user.guid', $vars['guid']);
-    }
 
     private function loadSettings() {
 
