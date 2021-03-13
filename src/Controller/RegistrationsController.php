@@ -174,7 +174,7 @@ class RegistrationsController extends AppController
     //Allows an unauthenticated user to create a registration
     public function register()
     {
-        $this->checkForEdit();
+       // $this->checkForEdit();
 
         $this->viewBuilder()->setLayout('clean');
 
@@ -390,7 +390,7 @@ class RegistrationsController extends AppController
 
 
     }
-
+    /*
     private function checkForSessionBasedEdit() {
         //Check if there's any session variables for this user
         $guid = $this->request->getSession()->read('user.guid');
@@ -403,7 +403,7 @@ class RegistrationsController extends AppController
 
 
     }
-
+    */
     /* =======================
     *  This section is a make-do solution for registrants to edit their own records that requires neither
     *  sessions nor passwords or accounts:
@@ -419,8 +419,6 @@ class RegistrationsController extends AppController
     ========================= */
     public function registerSplashPage() {
         $this->viewBuilder()->setLayout('clean');
-
-
     }
 
 
@@ -447,7 +445,8 @@ class RegistrationsController extends AppController
                 $code = $this->generateEditCode();
                 //Only send the email if the code insertion is successful.
                 if ($this->addEditCodeToRecord($code, $registration)) :
-                    $this->sendEmailWithCode($code, $registration->govt_email);
+                   $this->sendEmailWithCode($code, $registration->govt_email);
+                    $this->set('emailConfirmation', true);
                 endif;
             endif;
         endif; //end POST handling logic.
