@@ -7,6 +7,8 @@ use Cake\Error\ExceptionRenderer;
 use Cake\Log\Engine\FileLog;
 use Cake\Mailer\Transport\MailTransport;
 
+
+
 return [
     /*
      * Debug Level:
@@ -422,7 +424,7 @@ return [
      * To use database sessions, load the SQL file located at config/schema/sessions.sql
      */
     'Session' => [
-        'defaults' => 'php',
-        'timeout' => '45'
+        'defaults' => 'database',
+
     ],
 ];

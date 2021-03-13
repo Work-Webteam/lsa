@@ -190,6 +190,9 @@ else {
                 'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
             ],
         ],
+        'Session' => [
+            'defaults' => 'database',
+        ]
     ];
 
 }

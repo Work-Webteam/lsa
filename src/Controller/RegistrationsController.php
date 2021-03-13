@@ -8,18 +8,25 @@ use Cake\Core\Configure;
 use Cake\Routing\Router;
 use Cake\Mailer\Mailer;
 
+
+
 class RegistrationsController extends AppController
 {
     //Displays a list of registrations based on user role's permissions
     public function index()
     {
 
-        $this->checkSAML();
+        var_dump($_ENV);
 
+        $this->request->getSession()->write('SOMETESTDATA', 'TESTY DATA');
+        echo $this->request->getSession()->read('SOMETESTDATA');
+        die();
+
+        /*
         if ($this->checkAuthorization(array(Configure::read('Role.authenticated')))) {
             $this->Flash->error(__('You are not authorized to administer Registrations.'));
             $this->redirect('/');
-        }
+        } */
         $query = $this->Registrations->RegistrationPeriods->find('all')
             ->where([
                 'RegistrationPeriods.open_registration <= ' => date('Y-m-d H:i:s'),

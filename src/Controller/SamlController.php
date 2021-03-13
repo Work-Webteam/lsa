@@ -2,11 +2,12 @@
 
 namespace App\Controller;
 
+use Cake\Controller\Controller;
 use Cake\Core\Configure;
 
 use Onelogin\SAML\Authenticator;
 
-class SamlController extends AppController
+class SamlController extends Controller
 {
     private $auth = null;
 
@@ -21,7 +22,8 @@ class SamlController extends AppController
     public function sso() {
         $this->initSAML();
         $auth = new \OneLogin_Saml2_Auth($this->settings);
-        $auth->login();
+
+        $auth->login('https://lsaapp.gww.gov.bc.ca/');
     }
 
 
@@ -59,6 +61,38 @@ class SamlController extends AppController
                 //break;
             }
         }
+    }
+    public function acs() {
+        $this->initSAML();
+        $auth = new \OneLogin_Saml2_Auth($this->settings);
+
+        $auth->processResponse();
+
+        //If there are errors, display them then exit.
+        $errors = $auth->getErrors();
+        if (!empty($errors)) {
+            echo "There were errors";
+            echo '<p>',implode(', ', $errors),'</p>';
+            if ($auth->getSettings()->isDebugActive()) {
+                echo '<p>'.$auth->getLastErrorReason().'</p>';
+            }
+            exit();
+        }
+        if (!$auth->isAuthenticated()) {
+            echo "<p>Sorry, you could not be authenticated.</p>";
+            exit();
+        };
+
+        $SAMLsessionVars['idir'] = $auth->getAttributes()['SMGOV_GUID'][0];
+        $SAMLsessionVars['guid'] = $auth->getAttributes()['username'][0];
+        $this->setSAMLSessionVars($SAMLsessionVars);
+
+    }
+
+    public function setSAMLSessionVars($vars) {
+        $session = $this->request->getSession();
+        $session->write('user.idir', $vars['idir']);
+        $session->write('user.guid', $vars['guid']);
     }
 
     private function loadSettings() {
