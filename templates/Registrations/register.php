@@ -58,11 +58,12 @@
                                                     <option value="<?= $ayear ?>"><?= $ayear ?></option>
                                                 <?php endforeach ?>
 
-                                            </select>
-                                            <small id="awardYearHelpBlock" class="form-text text-muted">If the year you reached this milestone isn't listed, contact your organization's Long Service Awards contact.</small>
-                                        </div>
+                                        </select>
+                                        <small id="awardYearHelpBlock" class="form-text text-muted">If the year you reached this milestone isn't listed, contact your organization's Long Service Awards contact.</small>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="form-row">
                                     <div class="col-6">
                                         <div class="form-group" v-if="milestone == 1">
@@ -77,9 +78,99 @@
                                             <label class="form-check-label" for="retroactive">Yes</label>
                                         </div>
                                         <div class="form-group checkbox-group">
+                                            <input class="form-check-input" type="radio" name="retiring_this_year" id="retiring_this_year" value="0"
+                                                   checked v-model="isRetiringThisYear">
+                                            <label class="form-check-label" for="retiring_this_year">No</label>
+                                        </div>
+
+                                        <div class="form-group" v-if="isRetiringThisYear == 1">
+                                            <label for="retirement_date">Date of Retirement:</label>
+                                            <input type="date" class="form-control" name="retirement_date" id="retirement_date" v-model="retirementDate" min="2021-01-01" max="2021-12-31">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-3" v-if="isRetroactive == 1">
+                                    <p>Did you receive your award?</p>
+                                    <div class="form-group checkbox-group">
+                                        <input class="form-check-input" type="radio" name="award_received" id="award_received" value="1" v-model="awardReceived" >
+                                        <label class="form-check-label" for="award_received">Yes</label>
+                                    </div>
+                                    <div class="form-group checkbox-group">
+                                        <input class="form-check-input" type="radio" name="award_received" id="award_received" checked value="0" v-model="awardReceived">
+                                        <label class="form-check-label" for="award_received">No</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-10"></div>
+                                <div class="col-2"><button class="btn btn-primary" @click.prevent="validateStep1()">Select Award</button></div>
+                            </div>
+
+                        </v-stepper-content>
+
+
+
+
+                        <v-stepper-content class="grey lighten-3" step="2">
+                            <h3 class="display-3">Select Your Award</h3>
+                            <div class="row" v-if="errorsStep2.length">
+                                <div class="col-3">
+                                    &nbsp;
+                                </div>
+                                <div class="col-6">
+                                    <v-alert type="error">There are errors.
+                                        <ul>
+                                            <li v-for="error in errorsStep2">{{error}}</li>
+                                        </ul>
+                                    </v-alert>
+                                </div>
+                                <div class="col-3"></div>
+                            </div>
+                            <v-carousel v-on:change="highlightedAward = servicesCarouselItems[$event].awardid" light>
+                                <?php foreach ($awardinfo as $award): ?>
+                                    <v-carousel-item awardID="<?= $award->id ?>" v-if="milestone == <?= $award->milestone_id; ?>" >
+                                        <v-sheet height="100%" width="100%" tile>
+                                            <v-row no-gutters>
+                                                <v-col cols="6"><v-img src="/img/awards/<?= $award->image ?>"></v-img></v-col>
+                                                <v-col cols="6">
+                                                    <v-row align="center" justify="space-around"><v-col cols="12"><h3 class="award-title text-center display-2"><?= $award->name ?></h3></v-col></v-row>
+                                                    <v-row align="center" justify="space-around" ><v-spacer></v-spacer><v-col cols="10"><p><?= $award->description ?></p></v-col><v-spacer></v-spacer></v-row>
+                                                    <v-row align="center" justify="space-around"><button @click.prevent="selectAward( <?= $award->id ?> )" class="btn btn-secondary">Select Award</button></v-row></v-col>
+                                            </v-row>
+                                        </v-sheet>
+                                    </v-carousel-item>
+                                <?php endforeach ?>
+                            </v-carousel>
+                            <!-- Award selection confirmation -->
+                            <div class="row" v-if="selectedAward != -1">
+                                <div class="col-4"></div>
+
+                               <div class="col-4">
+                                   <div class="form-group">
+                                       <h3 class="">You have selected your award.</h3>
+                                   </div>
+                               </div>
+                                <div class="col-4">
+
+                                </div>
+                            </div>
+
+                            <!-- WATCH CONTROLS -->
+                            <div class="row" v-if="selectedAward == 9">
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label for="watch_size"> Watch Size:</label>
+                                        <select class="form-control" name="watch_size" id="watch_size" v-model="watchSize">
+                                            <option disabled selected>Select Watch Size</option>
+                                            <option>38mm face with 20mm strap</option>
+                                            <option>29mm face with 14mm strap</option>
+                                        </select>
+=======
                                             <input class="form-check-input" type="radio" name="retroactive" id="retroactive" checked value="0" v-model="isRetroactive">
                                             <label class="form-check-label" for="retroactive">No</label>
                                         </div>
+>>>>>>> master
                                     </div>
                                     <div class="col-3">
                                         <div class="form-group">
@@ -329,20 +420,17 @@
                                         </div>
                                     </div>
                                 </div>
-
-
-                                <div class="form-row">
-                                    <div class="col-6">
-                                        <div class="[form-group, isGovtEmailValid]">
-                                            <label for="preferred_email">Government email address</label>
-                                            <input type="email" id="preferred_email" name="preferred_email" v-model="govtEmail" class="form-control email-input" placeholder="i.e. taylor.publicservant@gov.bc.ca" @change="isGovtEmailValid">
-                                        </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="[form-group, isGovtEmailValid]">
+                                        <label for="preferred_email">Government email address</label>
+                                        <input type="email" id="preferred_email" name="preferred_email" v-model="govtEmail" class="form-control email-input" placeholder="i.e. taylor.publicservant@gov.bc.ca" @change="isGovtEmailValid">
                                     </div>
-                                    <div class="col-6">
-                                        <div class="[form-group, isAltEmailValid]">
-                                            <label for="alternate_email">Alternate email address</label>
-                                            <input type="email" id="alternate_email" name="alternate_email" v-model="altEmail" class="form-control email-input" placeholder="i.e. taylor_publicservant@gmail.com" @change="isAltEmailValid">
-                                        </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="[form-group, isAltEmailValid]">
+                                        <label for="alternate_email">Alternate email address</label>
+                                        <input type="email" id="alternate_email" name="alternate_email" v-model="altEmail" class="form-control email-input" placeholder="i.e. taylor_publicservant@gmail.com" @change="isAltEmailValid">
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -513,11 +601,10 @@
                                 </div>
                                 <div class="form-row">
 
-                                    <div class="col-6">
-                                        <div class="[form-group, isSupervisorEmailValid]">
-                                            <label for="supervisorEmail">Supervisor's Email</label>
-                                            <input type="text" class="form-control email-input" id="supervisor_email" name="supervisor_email" placeholder="i.e. taylor.publicservant@gov.bc.ca" v-model="supervisorEmail" @change="isSupervisorEmailValid">
-                                        </div>
+                                <div class="col-6">
+                                    <div class="[form-group, isSupervisorEmailValid]">
+                                        <label for="supervisorEmail">Supervisor's Email</label>
+                                        <input type="text" class="form-control email-input" id="supervisor_email" name="supervisor_email" placeholder="i.e. taylor.publicservant@gov.bc.ca" v-model="supervisorEmail" @change="isSupervisorEmailValid">
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -592,6 +679,7 @@
                                             <p class="confirmationValue">{{certificateName}}</p>
                                         </div>
                                     </div>
+
                                     <div class="form-row">
                                         <div class="col-6">
                                             <p><small>Year milestone reached:</small></p>
@@ -599,6 +687,7 @@
                                         </div>
                                         <div class="col-6">
                                             <p v-if="isRetroactive" class="confirmationValue">I registered last year but did not attend</p>
+                                            <p v-if="awardReceived" class="confirmationValue">I received an award for this milestone</p>
                                             <p v-if="isRetiringThisYear" class="confirmationValue">I am retiring this year on {{retirementDate}} </p>
                                         </div>
                                     </div>

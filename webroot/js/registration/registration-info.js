@@ -11,6 +11,7 @@ var app = new Vue({
         retirementDate: '',
         certificateName: '',
         isRetroactive: 0,
+        awardReceived:0,
         isBcgeuMember: false,
 
         employeeID: '',
