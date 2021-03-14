@@ -174,7 +174,7 @@ class RegistrationsController extends AppController
     //Allows an unauthenticated user to create a registration
     public function register()
     {
-       // $this->checkForEdit();
+       //$this->checkForEdit();
 
         $this->viewBuilder()->setLayout('clean');
 
@@ -424,33 +424,65 @@ class RegistrationsController extends AppController
 
     public function editmyregistration() {
         //If the request is GET, handle incoming link with code
+        $this->viewBuilder()->setLayout('clean');
+
         if ($this->request->is('get')) :
-            if ($submittedCode = $this->getAndValidateCodeFromQuery()) :
-                if ($registration = $this->getRecordforCode($submittedCode)) :
-                    $this->userEdit($registration->id);
+                /* //For testing loads a predetermined form
+                $registration = $this->Registrations->find('all')->where(['id' => 18])->first();
+                $this->loadFormPrerequisites();
+                $this->set('registration', $registration);
+                */
+
+            $submittedCode = $this->getAndValidateCodeFromQuery();
+            if (!empty($submittedCode)) :
+                $registration = $this->getRecordForCode($submittedCode);
+                if ($registration) :
+                     $this->set('registration', $registration);
+                     $this->set('edit_code', $submittedCode);
+                     $this->loadFormPrerequisites();
                 else :
-                    die('No registration matching that edit code could be found');
+                    die('Edit code is invalid');
                 endif;
             else :
                 die('Edit code is invalid');
             endif;
+
         endif; //end GET handling logic
 
 
-        //If the request is POST, handle creating code and email logic
-        if ($this->request->is('post')) :
-            //Get record based on submitted email
+        //If the request contains a submittedEmail , treat it as a request to generate email
+        //Send the email (if applicable) and show confirmation screen regardless.
+        if ($this->request->getData('submittedEmail')) :
             $registration = $this->getRecordForEmail($this->request->getData('submittedEmail'));
-            if ($registration) :
+            if (!empty($registration->id)) :
                 $code = $this->generateEditCode();
                 //Only send the email if the code insertion is successful.
                 if ($this->addEditCodeToRecord($code, $registration)) :
-                   $this->sendEmailWithCode($code, $registration->govt_email);
-                    $this->set('emailConfirmation', true);
+                    $this->sendEmailWithCode($code, $registration->preferred_email);
                 endif;
             endif;
-        endif; //end POST handling logic.
+            $this->set('emailConfirmation', true);
+        endif;
+
+        //If the request contains an edit_code, treat it as an edit submission
+        //Process the submission and show confirmation screen.
+        //Then expire the edit code.
+        if ($this->request->getData('edit_code')) :
+            $registrationByCode      = $this->getRecordForCode($this->request->getData('edit_code'));
+            $registrationByFormEmail = $this->getRecordForEmail($this->request->getData('preferred_email'));
+            if ($registrationByCode->id != $registrationByFormEmail->id) {
+                die ('Trying to edit an invalid form or update your email address. Please contact the Long Service Awards to update your email address.');
+            }
+            $this->set('editSuccessMessage', true);
+            $this->editPOST($registrationByCode);
+            $this->expireCode($this->request->getData('edit_code'));
+        endif;
+
+
+
     }
+
+
     private function generateEditCode(string $email = '233409@e4309284320984.com') : string {
         //Seed should be a unique string even if for the same email address.
         $seed = $email . time();
@@ -458,51 +490,79 @@ class RegistrationsController extends AppController
         //extremely low probability of collision (unique seeds practically guarantee it)
         return substr(hash('haval192,3', $seed), 0,32);
     }
-    private function addEditCodeToRecord(string $code, object $registration) : bool {
+    private function addEditCodeToRecord(string $code, object $registration) {
         $registration->edit_code = $code;
-        $registration->save();
+       return $this->Registrations->save($registration);
     }
     private function getRecordForCode(string $code = null) {
-        if (empty($email)) {
+        if (empty($code)) {
             return false;
         }
-        return $this->Registrations->find()->where(['edit_code' => $code]);
+        return $this->Registrations->find('all')->where(['Registrations.edit_code =' => $code])->limit(1)->first();
+
     }
     private function getRecordForEmail(string $email = null) {
         if (empty($email)) {
             return false;
         }
-      return $this->Registrations->find()->where(['preferred_email' => $email ]);
+        return $this->Registrations->find('all')->where(['Registrations.preferred_email =' => $email])->limit(1)->first();
+
     }
     private function getAndValidateCodeFromQuery() {
-        $code = $this->request->getData('editcode');
-        if (strlen($code) != 32) {
-            return false;
-        } else {
-            return $code;
-        }
+
+       $code = $_GET['editcode'];
+       return $code;
     }
-    private function expireCode(string $code = null) : bool {
+    private function expireCode(string $code = null){
         if (empty($code)) {
             return true;
         }
-        $record = $this->Registrations->find()->where(['edit_code' => $code]);
+        $record = $this->Registrations->find('all')->where(['Registrations.edit_code' => $code])->limit(1)->first();
         $record->edit_code = '';
-       return $record->save();
+       return $this->Registrations->save($record);
     }
-    private function sendEmailWithCode(string $code, $registrant) : bool {
+    private function sendEmailWithCode(string $code, $email){
         $testing = true;
 
         if ($testing) :
-            echo "This email address: " . $registrant->preferred_email . '<br>';
+            echo "This email address: " . $email . '<br>';
             echo "Would receive this code: " . $code . "<br>";
-            echo "In this link <a href=\"https://lsaapp.gww.gov.bc.ca/editmyregistration/?ec=" . $code . "\">Click Here to Edit Your Registration</a>";
+            echo "In this link <a href=\"editmyregistration/?editcode=" . $code . "\">Click Here to Edit Your Registration</a>";
             exit;
         else :
             //Prep email string
 
             //Send email
         endif;
+    }
+
+    private function userEdit ($id, $code) {
+
+
+      if ($this->request->is('post')) :
+            //First make sure the record being posted to matches the record for the code
+
+            $registration = $this->Registrations->find('all')->where(['Registrations.id' => $this->request->getData('')]);
+
+
+
+          $this->viewBuilder()->setLayout('clean');
+
+          //$this->edit();
+
+
+         $this->set('editSuccessMessage', true);
+
+          $this->expireCode($code);
+      endif; //end POST logic.
+      if ($this->request->is('get')) :
+          $this->viewBuilder()->setLayout('clean');
+
+
+      endif; //end GET logic, other methods should fail.
+
+
+
     }
 
 
@@ -617,6 +677,8 @@ class RegistrationsController extends AppController
 
     public function edit($id)
     {
+
+
         //If the referer is the special requirements export, put the user back in awards report
         if ($this->request->referer() == "/registrations/exportspecialrequirements" ||
             $this->request->referer() == "/registrations/reportawards") {
@@ -642,101 +704,89 @@ class RegistrationsController extends AppController
                 'Ceremonies'
             ],
         ])->first();
+
         if (!$registration) {
             $this->Flash->error(__('Registration not found.'));
             $this->redirect($return_path);
         }
 
-
         //On form submit...
-        if ($this->request->is(['post', 'put'])) :
-
-            $old = clone($registration);
-
-            //Push data to fields
-            $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
-
-            //Handle Award Options
-            $registration->award_options = $this->getAwardOptionsJSON();
-            $registration = $this->handlePECSFDonation($registration);
-
-            //Update registration modified date
-            $registration->modified = time();
-
-            //Set invite_sent to null if the request data is empty
-            if (empty($registration->invite_sent)) {
-                $registration->invite_sent = NULL;
-            }
-
-            //Set photo_sent to null if the request data is empty
-            //(this seems weird and possibly unnecessary)
-            $registration->photo_sent = $this->request->getData('photo_sent');
-            if (empty($registration->photo_sent)) {
-                $registration->photo_sent = NULL;
-            }
-
-            if ($this->Registrations->save($registration)) {
-                //If the save goes through without error, check and log the changes.
-                //TODO: There has to be a generic logging service that could replicate this w/o maintenance headache - JV
-
-                if ($registration->milestone_id <> $old->milestone_id) {
-                    $milestone = $this->Registrations->Milestones->findById($registration->milestone_id)->firstOrFail();
-                    $description = "Milestone changed to " . $milestone->name;
-                    $this->logChanges($registration->id, "MILESTONE", "CHANGE", $description, $old->milestone_id, $registration->milestone_id);
-                }
-
-                if ($registration->award_id <> $old->award_id) {
-                    if ($registration->award_id == 0) {
-                        $name = "PECSF Donation";
-                    }
-                    else {
-                        $award = $this->Registrations->Awards->findById($registration->award_id)->firstOrFail();
-                        $name = $award->name;
-                    }
-                    $description = "Award changed to " . $name;
-                    $this->logChanges($registration->id, "AWARD", "CHANGE", $description, $old->award_id, $registration->award_id);
-                }
-
-                // if attending flag changed
-                if ($registration->attending <> $old->attending) {
-                    $description = $registration->attending ? "Attending YES" : "Attending NO";
-                    $this->logChanges($registration->id, "ATTENDING", "CHANGE", $description, $old->attending, $registration->attending);
-                }
-
-                // if guest flag changed
-                if ($registration->guest <> $old->guest) {
-                    $description = $registration->guest ? "Guest YES" : "Guest NO";
-                    $this->logChanges($registration->id, "GUEST", "CHANGE", $description, $old->guest, $registration->guest);
-                }
-
-                // if accessibility flag changed
-                if ($registration->accessibility_recipient <> $old->accessibility_recipient || $registration->accessibility_guest <> $old->accessibility_guest ) {
-                    $description = ($registration->accessibility_recipient || $registration->accessibility_guest) ? "Accessibility YES" : "Accessibility NO";
-                    $old = ($old->accessibility_recipient || $old->accessibility_guest) ? 1 : 0;
-                    $new = ($registration->accessibility_recipient || $registration->accessibility_guest) ? 1 : 0;
-                    $this->logChanges($registration->id, "ACCESSIBILITY", "CHANGE", $description, $old, $new);
-                }
-
-                // if diet flag changed
-                if ($registration->recipient_diet <> $old->recipient_diet || $registration->guest_diet <> $old->guest_diet ) {
-                    $description = ($registration->recipient_diet || $registration->guest_diet) ? "Diet YES" : "Diet NO";
-                    $old = ($old->recipient_diet || $registration->$old) ? 1 : 0;
-                    $new = ($registration->recipient_diet || $registration->guest_diet) ? 1 : 0;
-                    $this->logChanges($registration->id, "DIET", "CHANGE", $description, $old, $new);
-                }
-
-                $this->Flash->success(__('Registration has been updated.'));
-                return $this->redirect($registration->return_path);
-            }
-            $this->Flash->error(__('Unable to update registration.'));
-        endif; //End of POST/PUT-only logic.
+        if ($this->request->is(['post', 'put'])) {
+            $this->editPOST($registration);
+            return $this->redirect($registration->return_path);
+        };
 
         //Load variables for form
-        //TODO: I suspect many of these are redundant and/or could be optimized - JV
+        $this->loadFormPrerequisites();
+        $registration->return_path = $return_path;
+        $this->set('registration', $registration);
 
+        $isadmin = true;
+
+        $query = $this->Registrations->RegistrationPeriods->find('all')
+            ->where([
+                'RegistrationPeriods.open_registration <=' => date('Y-m-d H:i:s'),
+                'RegistrationPeriods.close_registration >=' => date('Y-m-d H:i:s')
+            ]);
+        $registration_periods = $query->first();
+
+
+        //Authorization check
+        //TODO: Check to see if we can hoist this to the top of the method - JV
+        //TODO: We probably want to do authorization at the routing level where possible - JV
+
+        /*
+        if ($this->checkAuthorization(array(
+            Configure::read('Role.anonymous'),
+            Configure::read('Role.authenticated_user'),
+            Configure::read('Role.ministry_contact'),
+            Configure::read('Role.supervisor')))) {
+            if ($this->checkAuthorization(Configure::read('Role.anonymous'))) {
+                $this->Flash->error(__('You are not authorized to edit this Registration.'));
+                $this->redirect('/');
+            }
+            elseif ($this->checkAuthorization(Configure::read('Role.authenticated_user'))) {
+                if (!$this->checkGUID($registration->user_guid)) {
+                    $this->Flash->error(__('You are not authorized to edit this Registration.'));
+                    $this->redirect('/registrations');
+                }
+                if (!$registration_periods) {
+                    $this->Flash->error(__('You may no longer edit this Registration.'));
+                    $this->redirect('/');
+                }
+            }
+            elseif ($this->checkAuthorization(Configure::read('Role.supervisor'))) {
+                if (!$this->checkGUID($registration->user_guid)) {
+                    $this->Flash->error(__('You are not authorized to edit this Registration.'));
+                    $this->redirect('/registrations');
+                }
+                if (!$registration_periods) {
+                    $this->Flash->error(__('You may no longer edit this Registration.'));
+                    $this->redirect('/');
+                }
+            }
+            else if ($this->checkAuthorization(Configure::read('Role.ministry_contact'))) {
+                if (!$this->checkAuthorization(Configure::read('Role.ministry_contact'), $registration->ministry_id)) {
+                    $this->Flash->error(__('You are not authorized to edit this Registration.'));
+                    $this->redirect('/registrations');
+                }
+                if (!$registration_periods) {
+                    $this->Flash->error(__('You may no longer edit this Registration.'));
+                    $this->redirect('/');
+                }
+            }
+            $isadmin = false;
+        }
+        */
+
+        $this->set('isadmin', false);
+
+
+    }
+    private function loadFormPrerequisites() {
+        //TODO: I suspect many of these are redundant and/or could be optimized - JV
         $milestones = $this->Registrations->Milestones->find('list');
         $this->set('milestones', $milestones);
-
         $milestoneInfo = $this->Registrations->Milestones->find('all');
         $this->set('milestoneinfo', $milestoneInfo);
 
@@ -787,68 +837,13 @@ class RegistrationsController extends AppController
         $this->set('accessibility', $accessibility);
 
 
-        $registration->return_path = $return_path;
-        $this->set('registration', $registration);
-
-        $isadmin = true;
-
-        $query = $this->Registrations->RegistrationPeriods->find('all')
-            ->where([
-                'RegistrationPeriods.open_registration <=' => date('Y-m-d H:i:s'),
-                'RegistrationPeriods.close_registration >=' => date('Y-m-d H:i:s')
-            ]);
-        $registration_periods = $query->first();
-
-
-        //Authorization check
-        //TODO: Check to see if we can hoist this to the top of the method - JV
-        //TODO: We probably want to do authorization at the routing level where possible - JV
-        if ($this->checkAuthorization(array(
-            Configure::read('Role.anonymous'),
-            Configure::read('Role.authenticated_user'),
-            Configure::read('Role.ministry_contact'),
-            Configure::read('Role.supervisor')))) {
-            if ($this->checkAuthorization(Configure::read('Role.anonymous'))) {
-                $this->Flash->error(__('You are not authorized to edit this Registration.'));
-                $this->redirect('/');
-            }
-            elseif ($this->checkAuthorization(Configure::read('Role.authenticated_user'))) {
-                if (!$this->checkGUID($registration->user_guid)) {
-                    $this->Flash->error(__('You are not authorized to edit this Registration.'));
-                    $this->redirect('/registrations');
-                }
-                if (!$registration_periods) {
-                    $this->Flash->error(__('You may no longer edit this Registration.'));
-                    $this->redirect('/');
-                }
-            }
-            elseif ($this->checkAuthorization(Configure::read('Role.supervisor'))) {
-                if (!$this->checkGUID($registration->user_guid)) {
-                    $this->Flash->error(__('You are not authorized to edit this Registration.'));
-                    $this->redirect('/registrations');
-                }
-                if (!$registration_periods) {
-                    $this->Flash->error(__('You may no longer edit this Registration.'));
-                    $this->redirect('/');
-                }
-            }
-            else if ($this->checkAuthorization(Configure::read('Role.ministry_contact'))) {
-                if (!$this->checkAuthorization(Configure::read('Role.ministry_contact'), $registration->ministry_id)) {
-                    $this->Flash->error(__('You are not authorized to edit this Registration.'));
-                    $this->redirect('/registrations');
-                }
-                if (!$registration_periods) {
-                    $this->Flash->error(__('You may no longer edit this Registration.'));
-                    $this->redirect('/');
-                }
-            }
-            $isadmin = false;
-        }
-
-        $this->set('isadmin', $isadmin);
 
 
     }
+
+
+
+
 
     //TODO: Check to see if this method should be public, I suspect not - JV
     protected function logChanges($id, $type, $operation, $description, $old = NULL, $new = NULL) {
@@ -869,6 +864,94 @@ class RegistrationsController extends AppController
         if ($this->Registrations->Log->save($log)) {
         }
     }
+
+    private function editPOST($registration) {
+        $old = clone($registration);
+
+        //Push data to fields
+        $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
+
+        //Handle Award Options
+        $registration->award_options = $this->getAwardOptionsJSON();
+        $registration = $this->handlePECSFDonation($registration);
+
+        //Update registration modified date
+        $registration->modified = time();
+
+        //Set invite_sent to null if the request data is empty
+        if (empty($registration->invite_sent)) {
+            $registration->invite_sent = NULL;
+        }
+
+        //Set photo_sent to null if the request data is empty
+        //(this seems weird and possibly unnecessary)
+        $registration->photo_sent = $this->request->getData('photo_sent');
+        if (empty($registration->photo_sent)) {
+            $registration->photo_sent = NULL;
+        }
+
+        if ($this->Registrations->save($registration)) {
+            $this->processAdminDetails($registration, $old);
+        }
+        //$this->Flash->error(__('Unable to update registration.'));
+    }
+
+
+    private function processAdminDetails($registration, $old) {
+        //If the save goes through without error, check and log the changes.
+        //TODO: There has to be a generic logging service that could replicate this w/o maintenance headache - JV
+
+        if ($registration->milestone_id <> $old->milestone_id) {
+            $milestone = $this->Registrations->Milestones->findById($registration->milestone_id)->firstOrFail();
+            $description = "Milestone changed to " . $milestone->name;
+            $this->logChanges($registration->id, "MILESTONE", "CHANGE", $description, $old->milestone_id, $registration->milestone_id);
+        }
+
+        if ($registration->award_id <> $old->award_id) {
+            if ($registration->award_id == 0) {
+                $name = "PECSF Donation";
+            }
+            else {
+                $award = $this->Registrations->Awards->findById($registration->award_id)->firstOrFail();
+                $name = $award->name;
+            }
+            $description = "Award changed to " . $name;
+            $this->logChanges($registration->id, "AWARD", "CHANGE", $description, $old->award_id, $registration->award_id);
+        }
+
+        // if attending flag changed
+        if ($registration->attending <> $old->attending) {
+            $description = $registration->attending ? "Attending YES" : "Attending NO";
+            $this->logChanges($registration->id, "ATTENDING", "CHANGE", $description, $old->attending, $registration->attending);
+        }
+
+        // if guest flag changed
+        if ($registration->guest <> $old->guest) {
+            $description = $registration->guest ? "Guest YES" : "Guest NO";
+            $this->logChanges($registration->id, "GUEST", "CHANGE", $description, $old->guest, $registration->guest);
+        }
+
+        // if accessibility flag changed
+        if ($registration->accessibility_recipient <> $old->accessibility_recipient || $registration->accessibility_guest <> $old->accessibility_guest ) {
+            $description = ($registration->accessibility_recipient || $registration->accessibility_guest) ? "Accessibility YES" : "Accessibility NO";
+            $old = ($old->accessibility_recipient || $old->accessibility_guest) ? 1 : 0;
+            $new = ($registration->accessibility_recipient || $registration->accessibility_guest) ? 1 : 0;
+            $this->logChanges($registration->id, "ACCESSIBILITY", "CHANGE", $description, $old, $new);
+        }
+
+        // if diet flag changed
+        if ($registration->recipient_diet <> $old->recipient_diet || $registration->guest_diet <> $old->guest_diet ) {
+            $description = ($registration->recipient_diet || $registration->guest_diet) ? "Diet YES" : "Diet NO";
+            $old = ($old->recipient_diet || $registration->$old) ? 1 : 0;
+            $new = ($registration->recipient_diet || $registration->guest_diet) ? 1 : 0;
+            $this->logChanges($registration->id, "DIET", "CHANGE", $description, $old, $new);
+        }
+
+        //$this->Flash->success(__('Registration has been updated.'));
+
+    }
+
+
 
 
     public function rsvp($id)
@@ -1016,6 +1099,10 @@ class RegistrationsController extends AppController
         //
         $this->set('isadmin', $isadmin);
 
+
+    }
+
+    private function processEditData() {
 
     }
 

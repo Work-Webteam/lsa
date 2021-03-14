@@ -559,83 +559,13 @@
 <script crossorigin="anonymous"
         src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js" integrity="sha512-XKa9Hemdy1Ui3KSGgJdgMyYlUg1gM+QhL6cnlyTe2qzMCYm4nAZ1PsVerQzTTXzonUR+dmswHqgJPuwCq1MaAg==" crossorigin="anonymous"></script>
 
+
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/smooth-scroll/16.1.0/smooth-scroll.min.js"></script>
-    <!-- Registration Form-specific JavaScripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/4.0.9/jquery.inputmask.bundle.min.js" integrity="sha512-VpQwrlvKqJHKtIvpL8Zv6819FkTJyE1DoVNH0L2RLn8hUPjRjkS/bCYurZs0DX9Ybwu9oHRHdBZR9fESaq8Z8A==" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-
+<!-- Registration Form-specific JavaScripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/4.0.9/jquery.inputmask.bundle.min.js" integrity="sha512-VpQwrlvKqJHKtIvpL8Zv6819FkTJyE1DoVNH0L2RLn8hUPjRjkS/bCYurZs0DX9Ybwu9oHRHdBZR9fESaq8Z8A==" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
 <script src="/js/registration/registration-info.js"></script>
-
-<script type="text/javascript">
-    app.certificateName        = "THIS IS A NAME";
-
-app.selectedAward        = <?= $registration->award_id ?>;
-app.selectedMilestone    = <?= $registration->milestone_id ?>;
-app.pecsfRegion          = <?= is_null($registration->pecsf_region_id)       ? 'null' : $registration->pecsf_region_id ?>;
-app.pecsfCharity1        = <?= is_null($registration->pecsf_charity1_id)     ? 'null' : $registration->pecsf_charity1_id ?>;
-app.pecsfCharity2        = <?= is_null($registration->pecsf_charity2_id)     ? 'null' : $registration->pecsf_charity2_id ?>;
-app.pecsfName            = <?= is_null($registration->pecsf_name)            ? 'null' : $registration->pecsf_name ?>;
-
-app.accessRecipientSelections   = <?= is_null($registration->accessibility_requirements_recipient) ? 'null' : $registration->accessibility_requirements_recipient ?>;
-app.accessGuestSelections       = <?= is_null($registration->accessibility_requirements_guest) ? 'null' : $registration->accessibility_requirements_guest ?>;
-app.dietRecipientSelections     = <?= is_null($registration->dietary_requirements_recipient) ? 'null' : $registration->dietary_requirements_recipient; ?>;
-app.dietGuestSelections         = <?= is_null($registration->dietary_requirements_guest) ? 'null' : $registration->dietary_requirements_guest ?>;
-
-app.milestone              = <?= $registration->milestone_id ?>;
-app.award_year             = '<?= $registration->award_year ?>';
-app.isRetiringThisYear     = <?= $registration->retiring_this_year   ? 'true' : 'false' ?>;
-app.retirementDate         = '<?= is_null($registration->retirement_date)       ? 'null' : $registration->retirement_date ?>';
-app.awardReceived          = <?= $registration->award_recieved ?>
-app.certificateName        = <?= is_null($registration->certificate_name)     ? 'null' : $registration->certificate_name ?>;
-
-app.isRetroactive          = <?= $registration->retroactive ? 'true' : 'false' ?>;
-
-app.employeeID             = <?= $registration->employee_id ?>;
-app.isBcgeuMember          = <?= is_null($registration->member_bcgeu) ? 'null' : $registration->member_bcgeu ?>;
-app.firstName              = '<?= $registration->first_name ?>';
-app.lastName               = '<?= $registration->last_name ?>';
-
-app.selectedAward          = <?= $registration->award_id ?>;
-app.awardOptions           = <?= $registration->award_options ?>;
-
-app.donationRegion         = <?= is_null($registration->pecsf_region_id)    ? 'null' : $registration->pecsf_region_id ?>;
-app.donationCharity1       = <?= is_null($registration->pecsf_charity1_id)  ? 'null' : $registration->pecsf_charity1_id ?>;
-app.donationCharity2       = <?= is_null($registration->pecsf_charity2_id)  ? 'null' : $registration->pecsf_charity2_id ?>;
-
-app.govtEmail              = '<?= $registration->preferred_email ?>';
-app.altEmail               = '<?= $registration->alternate_email ?>';
-
-app.ministry               = <?= $registration->ministry_id ?>;
-app.ministryBranch         = '<?= $registration->branch ?>';
-
-app.officeMailPrefix       = '<?= $registration->office_careof ?>';
-app.officeSuite            = '<?= $registration->office_suite ?>';
-app.officeStreetAddress    = '<?= $registration->office_address ?>';
-app.officeCity             = <?= $registration->office_city_id ?>;
-app.officePostalCode       = '<?= $registration->office_postal_code ?>';
-app.officePhone            = '<?= $registration->work_phone ?>';
-app.officeExtension        = '<?= $registration->work_extension ?>';
-
-app.homeMailPrefix         = '<?= $registration->home_careof ?>';
-app.homeSuite              = '<?= $registration->home_suite ?>';
-app.homeStreetAddress      = '<?= $registration->home_address ?>';
-app.homeCity               = <?= $registration->home_city_id ?>;
-app.homePostalCode         = '<?= $registration->home_postal_code ?>';
-app.homePhone              = '<?= $registration->home_phone ?>';
-
-app.supervisorFirstName        = '<?= $registration->supervisor_first_name ?>';
-app.supervisorLastName         = '<?= $registration->supervisor_last_name ?>';
-app.supervisorMailPrefix       = '<?= $registration->supervisor_careof ?>';
-app.supervisorSuite            = '<?= $registration->supervisor_suite ?>';
-app.supervisorStreetAddress    = '<?= $registration->supervisor_address ?>';
-app.supervisorCity             = <?= $registration->supervisor_city_id ?>;
-app.supervisorPostalCode       = '<?= $registration->supervisor_postal_code ?>';
-app.supervisorEmail            = '<?= $registration->supervisor_email ?>';
-
-app.isOptedIn              = <?= is_null($registration->survey_participation) ? 'false' : $registration->survey_participation ?>;
-app.originalAward          = <?= $registration->award_id ?>;
-app.parseAwardOptions();
-
-</script>
-
+<?= $this->element('editForms/registrationVueObjectLoad'); ?>

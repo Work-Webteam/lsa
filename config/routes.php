@@ -63,7 +63,7 @@ $routes->scope('/', function (RouteBuilder $builder) {
      * its action called 'display', and we pass a param to select the view file
      * to use (in this case, templates/Pages/home.php)...
      */
-    $builder->connect('/', ['controller' => 'Saml', 'action' => 'acs']);
+    //$builder->connect('/', ['controller' => 'Saml', 'action' => 'acs']);
 
     /*
      * ...and connect the rest of 'Pages' controller's URLs.
@@ -73,8 +73,11 @@ $routes->scope('/', function (RouteBuilder $builder) {
     $builder->connect('/register', ['controller' => 'Registrations', 'action' => 'register']);
     $builder->connect('/editmyregistration', ['controller'=> 'Registrations', 'action' => 'editmyregistration']);
     $builder->connect('/start', ['controller' => 'Registrations' , 'action' => 'registerSplashPage']);
-
-
+    /*$builder->connect('/registrations/edit/{id}', ['controller' => 'Registrations', 'action' => 'edit'])
+        ->setPass(['id'])
+        ->setPatterns(['id' => '[0-9]+'
+        ]);
+    */
     $builder->connect('/rsvp/{id}', ['controller' => 'Registrations', 'action' => 'rsvp'])
         ->setPass(['id'])
         // Define a pattern that `id` must match.
