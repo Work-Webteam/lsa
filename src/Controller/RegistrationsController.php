@@ -544,8 +544,9 @@ class RegistrationsController extends AppController
                 ->setViewVars(['code' => $code])
                 ->viewBuilder()
                     ->setTemplate('registration_edit_link');
-                $mailer->deliver();
             //Send email
+                $mailer->deliver();
+
         endif;
     }
 
@@ -671,6 +672,7 @@ class RegistrationsController extends AppController
 
     public function completed ($id = null) {
         // Get the registration for this page
+        $this->viewBuilder()->setLayout('clean');
         $registration = $this->Registrations->findById($id)->firstOrFail();
         $this->set(compact('registration'));
         // We also need to dynamically set the years of service for this registration.
