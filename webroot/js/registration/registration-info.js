@@ -13,6 +13,8 @@ var app = new Vue({
         isRetroactive: 0,
         awardReceived:0,
         isBcgeuMember: false,
+        registered2019: 0,
+
 
         employeeID: '',
         firstName: '',
@@ -123,6 +125,38 @@ var app = new Vue({
         // Regex for emails:
         reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
 
+
+    },
+    computed: {
+        displayWatch : function () {
+            return (this.selectedAward == this.watchID);
+        },
+        displayBracelet : function () {
+            if (this.selectedAward == this.bracelet35ID || this.selectedAward == this.bracelet45ID || this.selectedAward == this.bracelet50ID) {
+                return true;
+            } else {
+                return false;
+            }
+
+        },
+        displayPecsf: function () {
+            switch (this.selectedAward) {
+                case this.pecsf25ID :
+                    return true;
+                case this.pecsf30ID :
+                    return true;
+                case this.pecsf35ID :
+                    return true;
+                case this.pecsf40ID :
+                    return true;
+                case this.pecsf45ID :
+                    return true;
+                case this.pecsf50ID :
+                    return true;
+                default:
+                    return false;
+            }
+        }
 
     },
 
