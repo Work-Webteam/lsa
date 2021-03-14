@@ -478,8 +478,6 @@ class RegistrationsController extends AppController
             $this->expireCode($this->request->getData('edit_code'));
         endif;
 
-
-
     }
 
 
