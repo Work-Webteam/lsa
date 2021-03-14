@@ -70,7 +70,7 @@
 
                     <p v-if="donationType == 'single-charity'"><small>Charity</small></p>
                     <p v-if="donationType == 'two-charities'"><small>Charity #1</small></p>
-                    <p v-if="displayPEcsf && donationtype != 'pool'" class="confirmationValue">{{pecsfCharity1Name}}</p>
+                    <p v-if="displayPecsf && donationtype != 'pool'" class="confirmationValue">{{pecsfCharity1Name}}</p>
 
                     <p v-if="donationType == 'two-charities'"><small>Charity #2</small></p>
                     <p v-if="donationType == 'two-charities'" class="confirmationValue">{{pecsfCharity2Name}}</p>
