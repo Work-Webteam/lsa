@@ -37,7 +37,7 @@
                 <?php endforeach ?>
 
             </select>
-            <small id="awardYearHelpBlock" class="form-text text-muted">If the year you reached this milestone isn't listed, contact your organization's Long Service Awards contact.</small>
+            <small id="awardYearHelpBlock" class="form-text text-muted">If the year you reached this milestone isn't listed, you cannot register using this form. Please contact your organization's <a href="https://longserviceawards.gww.gov.bc.ca/contacts/">Long Service Awards contact.</a></small>
         </div>
     </div>
 </div>
@@ -52,11 +52,11 @@
     <div class="col-3">
             <p>Did you register for a Long Service Award in 2019?</p>
             <div class="form-group checkbox-group">
-                <input class="form-check-input" type="radio" name="retroactive" id="retroactive" value="1" v-model="registered2019" >
+                <input class="form-check-input" type="radio" name="registered2019" id="registered2019" value="1" v-model="registered2019" @change="checkAwardReceived" >
                 <label class="form-check-label" for="retroactive">Yes</label>
             </div>
             <div class="form-group checkbox-group">
-                <input class="form-check-input" type="radio" name="retroactive" id="retroactive" value="0" checked v-model="registered2019" >
+                <input class="form-check-input" type="radio" name="registered2019" id="registered2019" value="0" checked v-model="registered2019" @change="checkAwardReceived" >
                 <label class="form-check-label" for="retroactive">No</label>
             </div>
             <div v-if="registered2019 == 1">
@@ -81,8 +81,6 @@
             <input class="form-check-input" type="radio" name="retiring_this_year" id="retiring_this_year" value="0" checked v-model="isRetiringThisYear">
             <label class="form-check-label" for="retiring_this_year">No</label>
         </div>
-
-
         <div class="form-group" v-if="isRetiringThisYear == 1">
             <label for="retirement_date">Date of Retirement:</label>
             <input type="date" class="form-control" name="retirement_date" id="retirement_date" v-model="retirementDate" min="2021-01-01" max="2021-12-31">

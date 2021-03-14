@@ -40,7 +40,7 @@ var app = new Vue({
         officeMailPrefix: '',
         officeSuite: '',
         officeStreetAddress: '',
-        officeCity: 'Select A City',
+        officeCity: 0,
         officeCityName: '',
         officePostalCode: '',
         officePhone: '',
@@ -49,7 +49,7 @@ var app = new Vue({
         homeMailPrefix: '',
         homeSuite: '',
         homeStreetAddress: '',
-        homeCity: 'Select A City',
+        homeCity: 0,
         homeCityName: '',
         homePostalCode: '',
         homePhone: '',
@@ -59,7 +59,7 @@ var app = new Vue({
         supervisorMailPrefix: '',
         supervisorSuite: '',
         supervisorStreetAddress: '',
-        supervisorCity: 'Select A City',
+        supervisorCity: 0,
         supervisorCityName : '',
         supervisorPostalCode: '',
         supervisorEmail: '',
@@ -73,11 +73,6 @@ var app = new Vue({
         errorsStep3: [],
         errorsStep4: [],
 
-        watchColour: null,
-        watchSize: null,
-        strapType: null,
-        watchEngraving: null,
-        braceletSize: null,
 
         awardSelected: false,
         awardConfirmed: false,
@@ -93,8 +88,7 @@ var app = new Vue({
         inputCharity2: false,
         testShow: false,
 
-        pecsfRegion: 0,
-        donationType: false,
+
         highlightedAward: 1,
 
         //MAGIC NUMBERS
@@ -109,6 +103,19 @@ var app = new Vue({
         pecsf40ID: 52,
         pecsf45ID: 53,
         pecsf50ID: 54,
+
+
+        watchColour: 'Select a colour',
+        watchSize: 'Select Watch Size',
+        strapType: 'Choose Strap',
+        watchEngraving: null,
+        braceletSize: 'Choose Size',
+
+        pecsfRegion: 0,
+        pecsfName: '',
+        donationType: 'pool',
+        pecsfCharity1: 0,
+        pecsfCharity2: 0,
 
         //EDIT FORM VARS
         formIsValid: false,
@@ -265,6 +272,9 @@ var app = new Vue({
                 }
             }
         },
+        checkAwardReceived : function () {
+            (this.registered2019 == 0) ? this.awardReceived = 0 : null;
+        },
 
         parseBraceletOptions : function () {
             this.braceletSize = this.awardOptions.bracelet_size;
@@ -289,7 +299,7 @@ var app = new Vue({
                 return true
             }
             else {
-                return (e == "")? "" : (this.reg.test(e)) ? true : false;
+                return (e == "") ? "" : (this.reg.test(e)) ? true : false;
             }
         },
 
@@ -305,32 +315,55 @@ var app = new Vue({
         isSupervisorEmailValid: function() {
             return (this.supervisorEmail == "")? "" : (this.reg.test(this.altEmail)) ? 'has-success' : 'has-error';
         },
+        advanceCarouselFromMilestone() {
+            if (this.awardReceived) {
+                this.e1 = 3;
+            }  else {
+                this.e1 = 2;
+            }
+        },
 
         validateStep1 : function () {
             this.errorsStep1 = [];
             //Did they put in a milestone year?
-            if (this.milestone == 'Select Milestone') {
+            if (this.milestone === 'Select Milestone') {
                 this.errorsStep1.push('You must select a milestone.');
             }
-            //Did they indicate a qualifying year?
+            //Qualifying year is optional due to incomplete list of qualifying years.
+            /*
             if (this.award_year == 0) {
                 this.errorsStep1.push('You must select a qualifying year.');
             }
+            */
 
-            //Did they reach this milestone in 2021 but also say they registered for an LSA in 2019
-            if (this.isRetroactive == 1 && (this.award_year > 2019)) {
+            //Are they a 25 year milestone but leave the certificate name blank?
+            if (this.milestone === 1 && this.certificateName.length < 3) {
+                this.errorsStep1.push('Please indicate your name as you would like it on the certificate');
+            }
+
+            //Did they say they registered in 2019 but indicate an award year after that?
+            if (this.registered2019 && this.award_year > 2019) {
                 this.errorsStep1.push('Please ensure your milestone information is correct.');
             }
 
-            console.log(this.isRetroactive);
-            if (this.errorsStep1.length == 0 && (this.isRetroactive == 0)) {
-                console.log ('no errors on step 1');
 
-                this.e1 = 2;
-            } else if (this.errorsStep1.length == 0 && (this.isRetroactive == 1)) {
-                console.log ('no errors, go to 3.')
-                this.e1 = 3;
+
+
+            //Did they indicate a retirement date that's not this year.
+            if (this.retirementDate) {
+                $intYear = parseInt(this.retirementDate.substr(0,4));
+                if ($intYear != 2021) {
+                    this.errorsStep1.push('Please ensure your retirement date is within the calendar year 2021');
+                }
             }
+
+
+
+            if (this.errorsStep1.length === 0) {
+                //Did they register last year? If so, skip the award step.
+                (this.registered2019 === 0) ? this.e1 = 2 : this.e1 = 3;
+            }
+
 
         },
         scrollToTop : function () {
@@ -367,10 +400,11 @@ var app = new Vue({
             if (this.lastName.length < 2 || this.lastName.length > 50) {
                 this.errorsStep3.push('You must input your last name');
             }
+            /*
             //Did they include their gov email address?
             if (this.govtEmail.length < 6 ) {
                 this.errorsStep3.push('You must input your government email address');
-            }
+            } */
 
             // Validating govtEmail
             if(this.isEmailValid(this.govtEmail) == false) {
@@ -394,7 +428,7 @@ var app = new Vue({
                 this.errorsStep3.push('You must input your office address');
             }
             //Did they include an office city?
-            if (this.officeCity == 'Select A City') {
+            if (this.officeCity == 0) {
                 this.errorsStep3.push('You must select your office city');
             }
             //Did they include a postal code?
@@ -410,7 +444,7 @@ var app = new Vue({
                 this.errorsStep3.push('You must input your home address');
             }
             //Did they include a home city?
-            if (this.homeCity == 'Select A City') {
+            if (this.homeCity == 0) {
                 this.errorsStep3.push('You must input your home city');
             }
             //Did they include a home postal code?
@@ -448,7 +482,7 @@ var app = new Vue({
                 this.errorsStep4.push('You must input your supervisor\'s office address');
             }
             //Did they include a supervisor city
-            if (this.supervisorCity == 'Select A City') {
+            if (this.supervisorCity == 0) {
                 this.errorsStep4.push('You must input your supervisor\'s office city');
             }
             //Did they include a supervisor postal code
@@ -461,6 +495,47 @@ var app = new Vue({
                 this.e1 = 5;
             } else {
                 this.scrollToTop();
+            }
+        },
+        validateAwardInfo: function () {
+            if (this.displayBracelet()) {
+                //validate that bracelet info is present
+                if (this.braceletSize == 'Choose Size') {
+                    this.errorsStep2.push('Please select a size for your bracelet')
+                }
+            }
+            if (this.displayWatch()) {
+                //validate that watch info is present
+                if (this.watchColour == 'Select a colour') {
+                    this.errorsStep2.push('Please select a colour for your watch')
+                }
+                if (this.watchSize == 'Select Watch Size') {
+                    this.errorsStep2.push('Please select a size for your watch')
+                }
+                if (this.strapType == 'Choose Strap') {
+                    this.errorsStep2.push('Please select a strap type for your watch')
+                }
+                if (this.watchEngraving == null) {
+                    this.errorsStep2.push('Please enter a name for your watch engraving')
+                }
+
+            }
+            if (this.displayPecsf()) {
+                //validate that pecsf info is present
+                if (this.pecsfName == '') {
+                    this.errorsStep2.push('Please enter a name for your PECSF donation')
+                }
+                if (this.pecsfRegion == 0 ) {
+                    this.errorsStep2.push('Please enter a name for your PECSF region');
+                }
+                if (this.donationType != 'pool') {
+                    if (this.pecsfCharity1 == 0) {
+                        this.errorsStep2.push('Please enter a charity for your donation or choose to donate to the pool for your region.')
+                    }
+                    if (this.donationType == 'two-charities' && this.pecsfCharity2 == 0) {
+                        this.errorsStep2.push('Please enter a second charity for your donation, or choose to donate to a single charity or the pool')
+                    }
+                }
             }
         },
         validateForm : function () {

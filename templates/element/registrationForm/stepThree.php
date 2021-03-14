@@ -99,7 +99,7 @@
             <div class="form-group">
                 <label for="">City</label>
                 <select name="office_city_id" id="office_city_id" class="form-control with-arrow" v-model="officeCity" @change="setOfficeCityName">
-                    <option selected disabled>Choose city</option>
+                    <option selected disabled value="0">Choose city</option>
                     <?php foreach ($cities as $city) : ?>
                         <option value="<?= $city->id ?>"><?= h($city->name) ?></option>
                     <?php endforeach; ?>
@@ -146,7 +146,7 @@
             <div class="form-group">
                 <label for="">City</label>
                 <select name="home_city_id" id="home_city_id" class="form-control with-arrow" v-model="homeCity" @change="setHomeCityName">
-                    <option selected disabled>Choose city</option>
+                    <option selected disabled value="0">Choose city</option>
                     <?php foreach ($cities as $city) : ?>
                         <option value="<?= $city->id ?>"><?= h($city->name) ?></option>
                     <?php endforeach; ?>

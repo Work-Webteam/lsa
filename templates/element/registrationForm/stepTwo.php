@@ -1,17 +1,5 @@
 <h3 class="display-3">Select Your Award</h3>
-<div class="row" v-if="errorsStep2.length">
-    <div class="col-3">
-        &nbsp;
-    </div>
-    <div class="col-6">
-        <v-alert type="error">There are errors.
-            <ul>
-                <li v-for="error in errorsStep2">{{error}}</li>
-            </ul>
-        </v-alert>
-    </div>
-    <div class="col-3"></div>
-</div>
+
 <v-carousel v-on:change="highlightedAward = servicesCarouselItems[$event].awardid" light>
     <?php foreach ($awardinfo as $award): ?>
         <v-carousel-item awardID="<?= $award->id ?>" v-if="milestone == <?= $award->milestone_id; ?>" >
@@ -27,13 +15,31 @@
         </v-carousel-item>
     <?php endforeach ?>
 </v-carousel>
+<div class="row" v-if="errorsStep2.length">
+    <div class="col-3">
+        &nbsp;
+    </div>
+    <div class="col-6">
+        <v-alert type="error">There are errors.
+            <ul>
+                <li v-for="error in errorsStep2">{{error}}</li>
+            </ul>
+        </v-alert>
+    </div>
+    <div class="col-3"></div>
+</div>
 <!-- Award selection confirmation -->
 <div class="row" v-if="selectedAward != -1">
     <div class="col-2"></div>
 
     <div class="col-8" style="text-align: center;">
 
-            <h3 >You have selected your award.</h3>
+        <h3 >You have selected your award : </h3>
+
+                <?php foreach ($awardinfo as $award): ?>
+                    <h3 v-if="selectedAward == <?= $award->id ?>"><?= $award->name ?></h3>
+                <?php endforeach; ?>
+
 
         <div v-if="displayWatch || displayBracelet || displayPecsf">
             <p>Please enter additional customization information</p>
@@ -63,7 +69,7 @@
         <div class="form-group">
             <label for="watch_colour">Watch Colour:</label>
             <select class="form-control" name="watch_colour" id="watch_colour" v-model="watchColour">
-                <option disabled selected></option>
+                <option disabled selected>Select a colour</option>
                 <option>Gold</option>
                 <option>Silver</option>
                 <option>Two-Toned (Gold &amp; Silver)</option>
@@ -116,6 +122,7 @@
             <div  class="form-group">
                 <label for="pecsf_region">Your Desired PECSF Region</label>
                 <select class="form-control" name="pecsf_region" id="pecsf_region" v-model="pecsfRegion">
+                        <option value="0" selected disabled>Please Select a Region</option>
                     <?php foreach ($regions as $region) : ?>
                         <option value="<?= $region->id ?>"><?= $region->name ?></option>
                     <?php endforeach ?>
@@ -137,7 +144,7 @@
                 <label for="pecsf_charity_1" v-if="donationType == 'single-charity'">Choose your charity</label>
                 <label for="pecsf_charity_1" v-if="donationType == 'two-charities'">Choose your first charity</label>
                 <select class="form-control"  v-if="donationType != 'pool'" name="pecsf_charity_1" id="pecsf_charity_1" v-model="pecsfCharity1">
-                    <option selected disabled>Choose a charity</option>
+                    <option selected disabled value="0">Choose a charity</option>
                     <?php foreach ($charities as $charity): ?>
                         <option value="<?= $charity->id ?>" v-if="pecsfRegion == <?= $charity->pecsf_region_id; ?>"><?= $charity->name ?></option>
                     <?php endforeach ?>
@@ -146,7 +153,7 @@
             <div class="form-group" v-if="donationType == 'two-charities'">
                 <label for="pecsf_charity_2">Choose your second charity</label>
                 <select class="form-control" name="pecsf_charity_2" id="pecsf_charity_2" v-model="pecsfCharity2">
-                    <option selected disabled>Choose a charity</option>
+                    <option selected disabled value="0">Choose a charity</option>
                     <?php foreach ($charities as $charity): ?>
                         <option value="<?= $charity->id ?>" v-if="pecsfRegion == <?= $charity->pecsf_region_id; ?>"><?= $charity->name ?></option>
                     <?php endforeach ?>
@@ -162,10 +169,10 @@
         <div class="col-3">
             <button class="btn btn-secondary" @click.prevent="e1 = 1">Back to Milestone</button>
         </div>
-        <div class="col-6">
+        <div class="col-5">
 
         </div>
-        <div class="col-3">
+        <div class="col-4">
             <button id="award-button" class="btn btn-primary" @click.prevent="validateStep2(); scrollToTop();" >Enter Contact Information</button>
         </div>
     </div>

@@ -35,7 +35,7 @@
 </div>
 <div class="confirmationGroup grey lighten-2">
     <h4>Award &amp; Options</h4>
-    <div v-if="isRetroactive == 0">
+    <div v-if="registered2019">
         <?php foreach ($awardinfo as $award): ?>
             <div class="form-row" v-if="selectedAward == <?= $award->id ?>">
                 <div class="col-6">
@@ -64,9 +64,13 @@
             </div>
         <?php endforeach; ?>
     </div>
+
+
     <div v-if="isRetroactive == 0">
         <div class="form-row">
             <div class="col-6">
+                <p class="confirmationValue" v-if="awardReceived == 1">Selected in 2019. Talk to your organization's <a href="https://longserviceawards.gww.gov.bc.ca/contacts/">Long Service Awards contact</a> if you have questions.</p>
+                <p class="confirmationValue" v-if="awardReceived == 0">Selected in 2019 but not received. The Long Service Awards team will follow up. If you have questions, reach out to your organization's <a href="https://longserviceawards.gww.gov.bc.ca/contacts">Long Service Awards contact</a>.</p>
                 <p class="confirmationValue">Retroactive</p>
             </div>
         </div>
@@ -91,7 +95,7 @@
             <p><small>Your Employee ID #</small></p>
             <p class="confirmationValue">{{employeeID}}</p>
         </div>
-        <div class="col-2" v-if="isBcgeuMember">BCGEU Member</div>
+        <div class="col-2" v-if="isBcgeuMember"><p><small>Member</small></p>BCGEU</div>
     </div>
     <div class="form-row">
         <div class="col-6">

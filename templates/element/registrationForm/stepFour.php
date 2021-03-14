@@ -57,7 +57,7 @@
             <div class="form-group">
                 <label for="">City</label>
                 <select name="supervisor_city_id" id="supervisor_city_id" class="form-control with-arrow" v-model="supervisorCity" @change="setSupervisorCityName">
-                    <option selected disabled>Choose city</option>
+                    <option selected disabled value="0">Choose city</option>
                     <?php foreach ($cities as $city) : ?>
                         <option value="<?= $city->id ?>"><?= h($city->name) ?></option>
                     <?php endforeach; ?>
