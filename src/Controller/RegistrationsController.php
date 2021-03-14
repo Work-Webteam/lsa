@@ -439,6 +439,7 @@ class RegistrationsController extends AppController
                 if ($registration) :
                      $this->set('registration', $registration);
                      $this->set('edit_code', $submittedCode);
+                     $this->set('editFormDisplay', true);
                      $this->loadFormPrerequisites();
                 else :
                     die('Edit code is invalid');
@@ -461,6 +462,7 @@ class RegistrationsController extends AppController
                     $this->sendEmailWithCode($code, $registration->preferred_email);
                 endif;
             endif;
+            $this->set('submittedEmail', $this->request->getData('submittedEmail'));
             $this->set('emailConfirmation', true);
         endif;
 
@@ -520,7 +522,7 @@ class RegistrationsController extends AppController
        return $this->Registrations->save($record);
     }
     private function sendEmailWithCode(string $code, $email){
-        $testing = true;
+        $testing = false;
 
         if ($testing) :
             echo "This email address: " . $email . '<br>';
@@ -530,6 +532,19 @@ class RegistrationsController extends AppController
         else :
             //Prep email string
 
+//Remember that you can't indent HEREDOCS;
+
+            $this->set('code', $code);
+            $mailer = new Mailer();
+            $mailer
+                ->setEmailFormat('html')
+                ->setFrom(['longserviceawards@gov.bc.ca' => 'Long Service Awards'])
+                ->setTo('jeremy.vernon@gov.bc.ca')
+                ->setSubject('Registration Edit Link')
+                ->setViewVars(['code' => $code])
+                ->viewBuilder()
+                    ->setTemplate('registration_edit_link');
+                $mailer->deliver();
             //Send email
         endif;
     }
@@ -890,6 +905,8 @@ class RegistrationsController extends AppController
 
         if ($this->Registrations->save($registration)) {
             $this->processAdminDetails($registration, $old);
+        } else {
+            ddie('unable to update record');
         }
         //$this->Flash->error(__('Unable to update registration.'));
     }

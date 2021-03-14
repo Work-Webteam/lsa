@@ -10,7 +10,7 @@ if (!empty($emailConfirmation) && $emailConfirmation === true) : ?>
 <div class="row">
     <div class="col-3"></div>
     <div class="col-6">
-        <h1>Link Sent!</h1>
+        <h1>Link Sent to <?= $submittedEmail ?>!</h1>
         <p></p>
         <p>If the email address you entered matches a registration on record, you should receive your email link soon.</p>
         <p>It might take a few minutes for the email to arrive in your inbox. If nothing arrives, please connect with your <a href="https://longserviceawards.gww.gov.bc.ca/contacts/">Long Service Awards Contact</a></p>
@@ -32,7 +32,7 @@ if (!empty($emailConfirmation) && $emailConfirmation === true) : ?>
 
 <?php endif; //End success message logic; ?>
 
-<?php if (empty($editSuccessMessage)) : ?>
+<?php if (!empty($editFormDisplay) && $editFormDisplay === true) : ?>
     <div class="container" id="app" data-spy="scroll" data-target="#registrantNav" data-offset="0">
         <h1 class="display-2"><?= $registration->first_name . " " . $registration->last_name ?></h1>
 

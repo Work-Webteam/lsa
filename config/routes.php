@@ -69,10 +69,11 @@ $routes->scope('/', function (RouteBuilder $builder) {
      * ...and connect the rest of 'Pages' controller's URLs.
      */
     //$builder->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
-
+    $builder->connect('/', ['controller' => 'Registrations' , 'action' => 'registerSplashPage']);
     $builder->connect('/register', ['controller' => 'Registrations', 'action' => 'register']);
     $builder->connect('/editmyregistration', ['controller'=> 'Registrations', 'action' => 'editmyregistration']);
     $builder->connect('/start', ['controller' => 'Registrations' , 'action' => 'registerSplashPage']);
+
     /*$builder->connect('/registrations/edit/{id}', ['controller' => 'Registrations', 'action' => 'edit'])
         ->setPass(['id'])
         ->setPatterns(['id' => '[0-9]+'
