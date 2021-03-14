@@ -539,7 +539,7 @@ class RegistrationsController extends AppController
             $mailer
                 ->setEmailFormat('html')
                 ->setFrom(['longserviceawards@gov.bc.ca' => 'Long Service Awards'])
-                ->setTo('jeremy.vernon@gov.bc.ca')
+                ->setTo($email)
                 ->setSubject('Registration Edit Link')
                 ->setViewVars(['code' => $code])
                 ->viewBuilder()
