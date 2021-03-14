@@ -336,9 +336,23 @@ class RegistrationsController extends AppController
                 /**** Application success email sends end ***/
 
 
-                // Pass to confirmation page.
-                // Need our milestone year for conf.
-                return $this->redirect(['controller'=>'Registrations', 'action' => 'completed', $registration->id]);
+                // Get the registration for this page
+
+                $this->set(compact('registration'));
+                // We also need to dynamically set the years of service for this registration.
+                $milestone = $this->getTableLocator()->get('Milestones');
+                $milestone_year = $milestone->get($registration->milestone_id);
+                $this->set('year', $milestone_year->years);
+
+                $this->set('lsa_name' , Configure::read('LSA.lsa_contact_name'));
+                $this->set('lsa_email' , Configure::read('LSA.lsa_contact_email'));
+                $this->set('lsa_phone' , Configure::read('LSA.lsa_contact_phone'));
+
+                $this->viewBuilder()->setLayout('clean');
+                $this->render('completed');
+
+                //return this->completed$registration->id()
+                //return $this->redirect(['controller'=>'Registrations', 'action' => 'completed', $registration->id]);
             }
             // Error handling.
             $this->Flash->error(__('Unable to add registration.'));
@@ -671,18 +685,6 @@ class RegistrationsController extends AppController
 
 
     public function completed ($id = null) {
-        // Get the registration for this page
-        $this->viewBuilder()->setLayout('clean');
-        $registration = $this->Registrations->findById($id)->firstOrFail();
-        $this->set(compact('registration'));
-        // We also need to dynamically set the years of service for this registration.
-        $milestone = $this->getTableLocator()->get('Milestones');
-        $milestone_year = $milestone->get($registration->milestone_id);
-        $this->set('year', $milestone_year->years);
-
-        $this->set('lsa_name' , Configure::read('LSA.lsa_contact_name'));
-        $this->set('lsa_email' , Configure::read('LSA.lsa_contact_email'));
-        $this->set('lsa_phone' , Configure::read('LSA.lsa_contact_phone'));
 
         if (!$this->checkGUID($registration->user_guid)) {
             $this->Flash->error(__('You do not have access to this page.'));
