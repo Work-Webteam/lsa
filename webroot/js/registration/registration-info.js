@@ -4,9 +4,9 @@ var app = new Vue({
     data: {
         e1: 1,
         selectedMilestone: '',
-        milestone: 'Select Milestone',
+        milestone: 0,
         milestoneName: '',
-        award_year: 'Select Year',
+        award_year: 0,
         isRetiringThisYear: 0,
         retirementDate: '',
         certificateName: '',
@@ -112,10 +112,13 @@ var app = new Vue({
         braceletSize: 'Choose Size',
 
         pecsfRegion: 0,
+        pecsfRegionName: '',
         pecsfName: '',
         donationType: 'pool',
         pecsfCharity1: 0,
         pecsfCharity2: 0,
+        pecsfCharity1Name: '',
+        pecsfCharity2Name: '',
 
         //EDIT FORM VARS
         formIsValid: false,
@@ -240,6 +243,21 @@ var app = new Vue({
                 this.supervisorCityName = e.target.options[e.target.options.selectedIndex].text
             }
         },
+        setPecsfRegionName : function (e) {
+            if (e.target.options.selectedIndex > -1) {
+                this.pecsfRegionName = e.target.options[e.target.options.selectedIndex].text
+            }
+        },
+        setCharity1Name : function (e) {
+            if (e.target.options.selectedIndex > -1) {
+                this.pecsfCharity1Name = e.target.options[e.target.options.selectedIndex].text
+            }
+        },
+        setCharity2Name : function (e) {
+            if (e.target.options.selectedIndex > -1) {
+                this.pecsfCharity2Name = e.target.options[e.target.options.selectedIndex].text
+            }
+        },
 
         selectAward: function(awardid) {
             this.selectedAward = awardid;
@@ -326,27 +344,24 @@ var app = new Vue({
         validateStep1 : function () {
             this.errorsStep1 = [];
             //Did they put in a milestone year?
-            if (this.milestone === 'Select Milestone') {
+            if (this.milestone == 0) {
                 this.errorsStep1.push('You must select a milestone.');
             }
-            //Qualifying year is optional due to incomplete list of qualifying years.
-            /*
+            //Did they specify a qualifying year
+
             if (this.award_year == 0) {
                 this.errorsStep1.push('You must select a qualifying year.');
             }
-            */
 
             //Are they a 25 year milestone but leave the certificate name blank?
-            if (this.milestone === 1 && this.certificateName.length < 3) {
+            if (this.milestone == 1 && this.certificateName.length < 3) {
                 this.errorsStep1.push('Please indicate your name as you would like it on the certificate');
             }
 
             //Did they say they registered in 2019 but indicate an award year after that?
-            if (this.registered2019 && this.award_year > 2019) {
+            if (this.registered2019 != 0 && this.award_year > 2019) {
                 this.errorsStep1.push('Please ensure your milestone information is correct.');
             }
-
-
 
 
             //Did they indicate a retirement date that's not this year.
@@ -359,9 +374,9 @@ var app = new Vue({
 
 
 
-            if (this.errorsStep1.length === 0) {
+            if (this.errorsStep1.length == 0) {
                 //Did they register last year? If so, skip the award step.
-                (this.registered2019 === 0) ? this.e1 = 2 : this.e1 = 3;
+                (this.registered2019 == 0) ? this.e1 = 2 : this.e1 = 3;
             }
 
 
@@ -377,12 +392,10 @@ var app = new Vue({
             }
 
             //Did they indicate an award that requires options?
-
-
-
+            this.validateAwardInfo();
 
             if (this.errorsStep2.length == 0) {
-                console.log ('no errors on step 2');
+
                 this.e1 = 3;
             }
         },
@@ -498,13 +511,13 @@ var app = new Vue({
             }
         },
         validateAwardInfo: function () {
-            if (this.displayBracelet()) {
+            if (this.displayBracelet) {
                 //validate that bracelet info is present
                 if (this.braceletSize == 'Choose Size') {
                     this.errorsStep2.push('Please select a size for your bracelet')
                 }
             }
-            if (this.displayWatch()) {
+            if (this.displayWatch) {
                 //validate that watch info is present
                 if (this.watchColour == 'Select a colour') {
                     this.errorsStep2.push('Please select a colour for your watch')
@@ -520,7 +533,7 @@ var app = new Vue({
                 }
 
             }
-            if (this.displayPecsf()) {
+            if (this.displayPecsf) {
                 //validate that pecsf info is present
                 if (this.pecsfName == '') {
                     this.errorsStep2.push('Please enter a name for your PECSF donation')

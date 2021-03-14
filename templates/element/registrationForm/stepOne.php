@@ -19,7 +19,7 @@
         <div class="form-group">
             <label for="milestone">Which milestone are you celebrating?</label>
             <select class="form-control with-arrow" id="milestone_id" name="milestone_id" v-model="milestone" @change="setMilestoneName">
-                <option selected disabled>Select Milestone</option>
+                <option selected disabled value="0">Select Milestone</option>
                 <?php foreach ($milestoneinfo as $mstone) : ?>
                     <option value="<?= $mstone->id ?>"><?= $mstone->name ?></option>
                 <?php endforeach ?>
@@ -30,7 +30,7 @@
         <div class="form-group">
             <label for="award_year">In which year did you reach this milestone?</label>
             <select class="form-control with-arrow" id="award_year" name="award_year" v-model="award_year">
-                <option selected disabled>Select Year</option>
+                <option selected disabled value="0">Select Year</option>
 
                 <?php foreach ($award_years as $ayear) : ?>
                     <option value="<?= $ayear ?>"><?= $ayear ?></option>

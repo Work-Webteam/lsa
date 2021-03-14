@@ -121,7 +121,7 @@
             </div>
             <div  class="form-group">
                 <label for="pecsf_region">Your Desired PECSF Region</label>
-                <select class="form-control" name="pecsf_region" id="pecsf_region" v-model="pecsfRegion">
+                <select class="form-control" name="pecsf_region" id="pecsf_region" v-model="pecsfRegion" @change="setPecsfRegionName">
                         <option value="0" selected disabled>Please Select a Region</option>
                     <?php foreach ($regions as $region) : ?>
                         <option value="<?= $region->id ?>"><?= $region->name ?></option>
@@ -143,7 +143,7 @@
             <div class="form-group" >
                 <label for="pecsf_charity_1" v-if="donationType == 'single-charity'">Choose your charity</label>
                 <label for="pecsf_charity_1" v-if="donationType == 'two-charities'">Choose your first charity</label>
-                <select class="form-control"  v-if="donationType != 'pool'" name="pecsf_charity_1" id="pecsf_charity_1" v-model="pecsfCharity1">
+                <select class="form-control"  v-if="donationType != 'pool'" name="pecsf_charity_1" id="pecsf_charity_1" v-model="pecsfCharity1" @change="setCharity1Name">
                     <option selected disabled value="0">Choose a charity</option>
                     <?php foreach ($charities as $charity): ?>
                         <option value="<?= $charity->id ?>" v-if="pecsfRegion == <?= $charity->pecsf_region_id; ?>"><?= $charity->name ?></option>
@@ -152,7 +152,7 @@
             </div>
             <div class="form-group" v-if="donationType == 'two-charities'">
                 <label for="pecsf_charity_2">Choose your second charity</label>
-                <select class="form-control" name="pecsf_charity_2" id="pecsf_charity_2" v-model="pecsfCharity2">
+                <select class="form-control" name="pecsf_charity_2" id="pecsf_charity_2" v-model="pecsfCharity2" @change="setCharity2Name">
                     <option selected disabled value="0">Choose a charity</option>
                     <?php foreach ($charities as $charity): ?>
                         <option value="<?= $charity->id ?>" v-if="pecsfRegion == <?= $charity->pecsf_region_id; ?>"><?= $charity->name ?></option>

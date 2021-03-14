@@ -35,7 +35,7 @@
 </div>
 <div class="confirmationGroup grey lighten-2">
     <h4>Award &amp; Options</h4>
-    <div v-if="registered2019">
+    <div v-if="!registered2019">
         <?php foreach ($awardinfo as $award): ?>
             <div class="form-row" v-if="selectedAward == <?= $award->id ?>">
                 <div class="col-6">
@@ -44,21 +44,36 @@
                 <div class="col-6">
                     <p class="confirmationValue"><?= $award->name ?></p>
 
-                    <p v-if="selectedAward == 9"><small>Watch Size</small></p>
-                    <p v-if="selectedAward == 9" class="confirmationValue">{{watchSize}}</p>
+                    <p v-if="displayWatch"><small>Watch Size</small></p>
+                    <p v-if="displayWatch" class="confirmationValue">{{watchSize}}</p>
 
-                    <p v-if="selectedAward == 9"><small>Watch Colour</small></p>
-                    <p v-if="selectedAward == 9" class="confirmationValue">{{watchColour}}</p>
+                    <p v-if="displayWatch"><small>Watch Colour</small></p>
+                    <p v-if="displayWatch" class="confirmationValue">{{watchColour}}</p>
 
-                    <p v-if="selectedAward == 9"><small>Strap Type</small></p>
-                    <p v-if="selectedAward == 9" class="confirmationValue">{{strapType}}</p>
+                    <p v-if="displayWatch"><small>Strap Type</small></p>
+                    <p v-if="displayWatch" class="confirmationValue">{{strapType}}</p>
 
-                    <p v-if="selectedAward == 9"><small>Engraving</small></p>
-                    <p v-if="selectedAward == 9" class="confirmationValue">{{watchEngraving}}</p>
+                    <p v-if="displayWatch"><small>Engraving</small></p>
+                    <p v-if="displayWatch" class="confirmationValue">{{watchEngraving}}</p>
 
-                    <p v-if="selectedAward == 12 || selectedAward == 46"><small>Bracelet Size</small></p>
-                    <p v-if="selectedAward == 12 || selectedAward == 46" class="confirmationValue">{{braceletSize}}</p>
+                    <p v-if="displayBracelet"><small>Bracelet Size</small></p>
+                    <p v-if="displayBracelet" class="confirmationValue">{{braceletSize}}</p>
 
+                    <p v-if="displayPecsf"><small>PECSF Donation Name</small></p>
+                    <p v-if="displayPecsf" class="confirmationValue">{{pecsfName}}</p>
+
+                    <p v-if="displayPecsf"><small>PECSF Region</small></p>
+                    <p v-if="displayPecsf" class="confirmationValue">{{pecsfRegionName}}</p>
+
+                    <p v-if="displayPecsf"><small>Donation Type</small></p>
+                    <p v-if="displayPecsf" class="confirmationValue">{{donationType}}</p>
+
+                    <p v-if="donationType == 'single-charity'"><small>Charity</small></p>
+                    <p v-if="donationType == 'two-charities'"><small>Charity #1</small></p>
+                    <p v-if="displayPEcsf && donationtype != 'pool'" class="confirmationValue">{{pecsfCharity1Name}}</p>
+
+                    <p v-if="donationType == 'two-charities'"><small>Charity #2</small></p>
+                    <p v-if="donationType == 'two-charities'" class="confirmationValue">{{pecsfCharity2Name}}</p>
 
                 </div>
             </div>
@@ -66,12 +81,12 @@
     </div>
 
 
-    <div v-if="isRetroactive == 0">
+    <div v-if="registered2019">
         <div class="form-row">
             <div class="col-6">
                 <p class="confirmationValue" v-if="awardReceived == 1">Selected in 2019. Talk to your organization's <a href="https://longserviceawards.gww.gov.bc.ca/contacts/">Long Service Awards contact</a> if you have questions.</p>
                 <p class="confirmationValue" v-if="awardReceived == 0">Selected in 2019 but not received. The Long Service Awards team will follow up. If you have questions, reach out to your organization's <a href="https://longserviceawards.gww.gov.bc.ca/contacts">Long Service Awards contact</a>.</p>
-                <p class="confirmationValue">Retroactive</p>
+
             </div>
         </div>
     </div>
