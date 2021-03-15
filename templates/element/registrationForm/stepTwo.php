@@ -97,7 +97,7 @@
 
 <!-- 35 YR BRACELET CONTROLS -->
 <div class="row" v-if="displayBracelet">
-    <div class="form-group">
+    <div class="form-group col-3">
         <label for="bracelet_size">Size</label>
         <select  class="form-control" name="bracelet_size" id="bracelet_size" v-model="braceletSize">
             <option disabled selected>Choose Size</option>
