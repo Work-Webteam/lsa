@@ -170,11 +170,14 @@
 
 
     <div class="row">
-        <div class="col-3">
+        <!-- Don't allow users to return to "Awards" page if they are not allowed to choose and award -->
+        <div class="col-3" v-if="registered2019==='0'">
             <button class="btn btn-secondary" @click.prevent="e1 = 2">Back to Select Award</button>
         </div>
+        <div class="col-3" v-else>
+            <button class="btn btn-secondary" @click.prevent="e1 = 1">Back</button>
+        </div>
         <div class="col-5">
-
         </div>
         <div class="col-4">
             <button class="btn btn-primary" @click.prevent="validateStep3()">Enter Supervisor's Contact Info.</button>

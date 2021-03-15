@@ -94,8 +94,13 @@
     </div>
     <div class="col-6">
     </div>
-    <div class="col-3">
-        <button id="award-button" class="btn btn-primary" @click.prevent="validateStep1();" >Select Award</button>
+    <!-- Don't allow users to proceed to "Awards" page if they are not allowed to choose and award -->
+    <div class="col-3" v-if="registered2019==='1'">
+        <button id="award-button" class="btn btn-primary" @click.prevent="validateStep1();" key="contact-submit" >Contact information</button>
     </div>
+    <div class="col-3" v-else>
+        <button id="award-button" class="btn btn-primary" @click.prevent="validateStep1();" key="award-submit" >Select Award</button>
+    </div>
+
 </div>
 
