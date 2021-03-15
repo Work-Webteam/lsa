@@ -22,6 +22,10 @@ body {
     min-width: 4em;
 }
 
+[type=submit] {
+    color: colours.$inverse-01;
+}
+
 
 footer {
     height: 160px;
@@ -31,8 +35,8 @@ footer {
 
 
 select.with-arrow {
-    -moz-appearance: auto;
-    -webkit-appearance: auto;
+    -moz-appearance: inherit;
+    -webkit-appearance: inherit;
 }
 
 .checkbox-group {
