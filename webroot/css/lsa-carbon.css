@@ -359,6 +359,10 @@ body {
   min-width: 4em;
 }
 
+[type=submit] {
+  color: #FFFFFF;
+}
+
 footer {
   height: 160px;
   background-color: #161616;
@@ -366,8 +370,8 @@ footer {
 }
 
 select.with-arrow {
-  -moz-appearance: auto;
-  -webkit-appearance: auto;
+  -moz-appearance: inherit;
+  -webkit-appearance: inherit;
 }
 
 .checkbox-group {
