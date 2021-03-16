@@ -2,7 +2,8 @@
     <div class="col-2"></div>
     <div class="col-8" style="text-align: center;"><h1>Welcome to the <br> Long Service Awards Registration</h1>
         <script>
-            var $buoop = {required:{e:-4,f:-5,o:-4,s:-5,c:-4},insecure:true,reminder:0,no_permanent_hide:true,unsupported:true,mobile:false,api:2020.09,text: "This site does not support {brow_name}. Please use an up-to-date version of Chrome or Edge." };
+
+            var $buoop = {required:{e:-6,f:-6,o:-6,s:-6,c:-6},insecure:true,reminder:0,no_permanent_hide:true,api:2020.09,text: "This site does not support {brow_name}. Please use an up-to-date version of Chrome or Edge." };
             function $buo_f(){
                 var e = document.createElement("script");
                 e.src = "//browser-update.org/update.min.js";
