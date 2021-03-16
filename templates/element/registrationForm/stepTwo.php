@@ -3,11 +3,11 @@
 <v-carousel v-on:change="highlightedAward = servicesCarouselItems[$event].awardid" light>
     <?php foreach ($awardinfo as $award): ?>
         <v-carousel-item awardID="<?= $award->id ?>" v-if="milestone == <?= $award->milestone_id; ?>" >
-            <v-sheet height="100%" width="100%" tile>
+            <v-sheet height="100%" tile>
                 <v-row no-gutters>
-                    <v-col cols="6"><v-img src="/img/awards/<?= $award->image ?>"></v-img></v-col>
-                    <v-col cols="6">
-                        <v-row align="center" justify="space-around"><v-col cols="12"><h3 class="award-title text-center display-2"><?= $award->name ?></h3></v-col></v-row>
+                    <v-col cols="5"><v-img src="/img/awards/<?= $award->image ?>"></v-img></v-col>
+                    <v-col cols="7">
+                        <v-row align="center" justify="space-around"><v-col cols="12"><h3 class="award-title text-center display-1"><?= $award->name ?></h3></v-col></v-row>
                         <v-row align="center" justify="space-around" ><v-spacer></v-spacer><v-col cols="10"><p><?= $award->description ?></p></v-col><v-spacer></v-spacer></v-row>
                         <v-row align="center" justify="space-around"><button @click.prevent="selectAward( <?= $award->id ?> )" class="btn btn-secondary">Select Award</button></v-row></v-col>
                 </v-row>

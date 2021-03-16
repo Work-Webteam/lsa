@@ -4,7 +4,7 @@
     <template>
         <v-app>
             <v-main>
-                <v-container class="grey lighten-2">
+                <v-container class="grey lighten-2" min-height="800">
                     <v-stepper v-model="e1">
                         <v-stepper-header id="carousel-top">
                             <v-stepper-step :complete="e1 > 1" step="1"> Milestone</v-stepper-step>
