@@ -55,44 +55,11 @@
 
 <!-- WATCH CONTROLS -->
 <div class="row" v-if="displayWatch">
+    <div class="col-4"></div>
     <div class="col-4">
-        <div class="form-group">
-            <label for="watch_size"> Watch Size:</label>
-            <select class="form-control" name="watch_size" id="watch_size" v-model="watchSize">
-                <option disabled selected>Select Watch Size</option>
-                <option>38mm face with 20mm strap</option>
-                <option>29mm face with 14mm strap</option>
-            </select>
-        </div>
+        <?= $this->element('formComponents/watchOptions'); ?>
     </div>
-    <div class="col-4">
-        <div class="form-group">
-            <label for="watch_colour">Watch Colour:</label>
-            <select class="form-control" name="watch_colour" id="watch_colour" v-model="watchColour">
-                <option disabled selected>Select a colour</option>
-                <option>Gold</option>
-                <option>Silver</option>
-                <option>Two-Toned (Gold &amp; Silver)</option>
-            </select>
-        </div>
-    </div>
-    <div class="col-4">
-        <div class="form-group">
-            <label for="strap_type">Strap:</label>
-            <select  class="form-control" name="strap_type" id="strap_type" v-model="strapType">
-                <option disabled selected>Choose Strap</option>
-                <option>Plated</option>
-                <option>Black Leather</option>
-                <option>Brown Leather</option>
-            </select>
-        </div>
-    </div>
-    <div class="col-4">
-        <div class="form-group">
-            <label for="watch_engraving">Engraving</label>
-            <input class="form-control" type="text" name="watch_engraving" maxlength="33" :placeholder="firstName + ' ' + lastName" id="watch_engraving" v-model="watchEngraving">
-        </div>
-    </div>
+    <div class="col-4"></div>
 </div>
 
 <!-- 35 YR BRACELET CONTROLS -->
@@ -100,76 +67,21 @@
 
     <div class="col-4"></div>
     <div class="col-4">
-        <div class="form-group">
-            <label for="bracelet_size">Size</label>
-            <select  class="form-control" name="bracelet_size" id="bracelet_size" v-model="braceletSize">
-                <option disabled selected>Choose Size</option>
-                <option>Fits 6 ½″ - 7 ½″ circumference wrists</option>
-                <option>Fits 7 ½″ - 8 ½″ circumference wrists</option>
-            </select>
-        </div>
+        <?= $this->element('formComponents/braceletOptions'); ?>
     </div>
     <div class="col-4"></div>
 </div>
 
-
-
-
-
     <!-- PECSF DONATION CONTROLS -->
     <div class="row" v-if="displayPecsf">
         <div class="col-3"></div>
-        <div class="col-6">
-            <div class="form-group">
-                <label for="">Name on Donation</label>
-                <input class="form-control" type="text" maxlength="33" placeholder="Firstname Lastname" name="pecsf_name" id="pecsf_name_name" v-model="pecsfName">
-            </div>
-            <div  class="form-group">
-                <label for="pecsf_region">Your Desired PECSF Region</label>
-                <select class="form-control" name="pecsf_region" id="pecsf_region" v-model="pecsfRegion" @change="setPecsfRegionName">
-                        <option value="0" selected disabled>Please Select a Region</option>
-                    <?php foreach ($regions as $region) : ?>
-                        <option value="<?= $region->id ?>"><?= $region->name ?></option>
-                    <?php endforeach ?>
-                </select>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="donation_type" id="donation_type" value="pool" v-model="donationType" checked>
-                <label class="form-check-label" for="">Donate to the fund-supported pool for my chosen region</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="donation_type" id="donation_type" value="single-charity" v-model="donationType">
-                <label class="form-check-label" for="">Donate to a specific charity</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="donation_type" id="donation_type" value="two-charities" v-model="donationType">
-                <label class="form-check-label" for="">Donate to two charities</label>
-            </div>
-            <div class="form-group" >
-                <label for="pecsf_charity_1" v-if="donationType == 'single-charity'">Choose your charity</label>
-                <label for="pecsf_charity_1" v-if="donationType == 'two-charities'">Choose your first charity</label>
-                <select class="form-control"  v-if="donationType != 'pool'" name="pecsf_charity_1" id="pecsf_charity_1" v-model="pecsfCharity1" @change="setCharity1Name">
-                    <option selected disabled value="0">Choose a charity</option>
-                    <?php foreach ($charities as $charity): ?>
-                        <option value="<?= $charity->id ?>" v-if="pecsfRegion == <?= $charity->pecsf_region_id; ?>"><?= $charity->name ?></option>
-                    <?php endforeach ?>
-                </select>
-            </div>
-            <div class="form-group" v-if="donationType == 'two-charities'">
-                <label for="pecsf_charity_2">Choose your second charity</label>
-                <select class="form-control" name="pecsf_charity_2" id="pecsf_charity_2" v-model="pecsfCharity2" @change="setCharity2Name">
-                    <option selected disabled value="0">Choose a charity</option>
-                    <?php foreach ($charities as $charity): ?>
-                        <option value="<?= $charity->id ?>" v-if="pecsfRegion == <?= $charity->pecsf_region_id; ?>"><?= $charity->name ?></option>
-                    <?php endforeach ?>
-                </select>
-            </div>
-        </div>
-
-
-
+        <div class="col-6"><?= $this->element('formComponents/pecsfDonation'); ?></div>
+        <div class="col-3"></div>
     </div>
-    <input type="hidden" name="award_id" id="award_id" v-model="selectedAward">
+
+
+
+        <input type="hidden" name="award_id" id="award_id" v-model="selectedAward">
     <div class="row">
         <div class="col-3">
             <button class="btn btn-secondary" @click.prevent="e1 = 1">Back to Milestone</button>

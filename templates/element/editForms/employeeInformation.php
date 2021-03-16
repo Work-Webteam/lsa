@@ -7,6 +7,13 @@
     <div class="col-2">
         <?= $this->Form->control('member_bcgeu', ['class' => 'form-control', 'label' => 'Member of BCGEU', 'v-model' => 'isBcgeuMember']); ?>
     </div>
+    <div class="col-2">
+       <!-- //$this->Form->control('',['class' => '', 'label' => '', 'v-model'=> '']); -->
+       <?= $this->Form->control('retiring_this_year',['class' => 'form-control', 'label' => 'Retiring This Year', 'v-model'=> 'isRetiringThisYear']); ?>
+    </div>
+    <div v-if="isRetiringThisYear" class="col-2">
+        <?= $this->Form->control('retirement_date',['class' => 'form-control', 'label' => 'Retirement Date', 'v-model'=> 'retirementDate']); ?>
+    </div>
     <div class="col-4">
         <?= $this->Form->control('first_name', ['class' => 'form-control', 'label' => 'First Name', 'v-model' => 'firstName']); ?>
     </div>

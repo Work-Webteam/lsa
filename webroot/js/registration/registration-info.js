@@ -150,18 +150,18 @@ var app = new Vue({
 
         },
         displayPecsf: function () {
-            switch (this.selectedAward) {
-                case this.pecsf25ID :
+            switch (parseInt(this.selectedAward)) {
+                case parseInt(this.pecsf25ID) :
                     return true;
-                case this.pecsf30ID :
+                case parseInt(this.pecsf30ID) :
                     return true;
-                case this.pecsf35ID :
+                case parseInt(this.pecsf35ID) :
                     return true;
-                case this.pecsf40ID :
+                case parseInt(this.pecsf40ID) :
                     return true;
-                case this.pecsf45ID :
+                case parseInt(this.pecsf45ID) :
                     return true;
-                case this.pecsf50ID :
+                case parseInt(this.pecsf50ID) :
                     return true;
                 default:
                     return false;
