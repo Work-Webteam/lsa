@@ -16,12 +16,13 @@ class RegistrationsController extends AppController
     public function index()
     {
 
-
+        /*
         if ($this->checkAuthorization(array(Configure::read('Role.authenticated')))) {
 
             $this->Flash->error(__('You are not authorized to administer Registrations.'));
             die('You are not authorized to ');
         }
+        */
         $query = $this->Registrations->RegistrationPeriods->find('all')
             ->where([
                 'RegistrationPeriods.open_registration <= ' => date('Y-m-d H:i:s'),
@@ -545,8 +546,6 @@ class RegistrationsController extends AppController
             exit;
         else :
             //Prep email string
-
-//Remember that you can't indent HEREDOCS;
 
             $this->set('code', $code);
             $mailer = new Mailer();

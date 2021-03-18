@@ -49,6 +49,26 @@ class AppController extends Controller
 
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
+
+        $session = $this->request->getSession();
+
+
+        //If request is NOT a zero-authorization action
+        //check for session details
+        //If no session details work, push users to login
+
+        if (!$this->isZeroAuthAction()) {
+            if ($session->read('role') != 'admin') {
+                var_dump($this->request->getParam('controller'));
+                var_dump($this->request->getParam('action'));
+                die('You must login first');
+            }
+        }
+
+
+
+
+
     /*
         $this->checkSAML();
 
@@ -158,6 +178,27 @@ class AppController extends Controller
         header ('Location: https://lsaapp.gww.gov.bc.ca/saml/sso');
     }
 
+    public function isZeroAuthAction() {
+        if ($this->request->getParam('controller') != 'Registrations') {
+            if ($this->request->getParam('controller') != 'Users') {
+                return false;
+            }
+        }
+
+        $zeroAuthActions = array    ('register',
+                                    'editmyregistration',
+                                    'registerSplashPage',
+                                    'completed',
+                                    'login');
+
+        foreach ($zeroAuthActions as $zeroAuthAction) :
+            if ($this->request->getParam('action') == $zeroAuthAction) {
+                return true;
+            }
+        endforeach;
+
+        return false;
+    }
 
     public function acs () {
         $this->initSAML();

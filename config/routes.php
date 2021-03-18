@@ -70,9 +70,12 @@ $routes->scope('/', function (RouteBuilder $builder) {
      */
     //$builder->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
     $builder->connect('/', ['controller' => 'Registrations' , 'action' => 'registerSplashPage']);
+    $builder->connect('/login', ['controller' => 'Users', 'action' => 'login']);
     $builder->connect('/register', ['controller' => 'Registrations', 'action' => 'register']);
     $builder->connect('/editmyregistration', ['controller'=> 'Registrations', 'action' => 'editmyregistration']);
     $builder->connect('/start', ['controller' => 'Registrations' , 'action' => 'registerSplashPage']);
+    $builder->connect('/admin', ['controller' => 'Registrations', 'action' => 'index']);
+
 
     /*$builder->connect('/registrations/edit/{id}', ['controller' => 'Registrations', 'action' => 'edit'])
         ->setPass(['id'])

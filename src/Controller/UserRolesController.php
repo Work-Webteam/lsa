@@ -25,6 +25,7 @@ class UserRolesController extends AppController
         $this->set(compact('userroles'));
     }
 
+
     public function view($id = null)
     {
         if (!$this->checkAuthorization(array(Configure::read('Role.admin'), Configure::read('Role.lsa_admin')))) {
