@@ -45,7 +45,7 @@ class UsersController extends AppController {
             else {
                 //Increment AttemptCount by 1 and show failure screen.
                 if ($this->request->getSession()->read('attemptCount') > 6) {
-                    $test = true;
+                    $test = false;
                     if ($test) {
                         die('Authorization Failure on Prototype');
                     }

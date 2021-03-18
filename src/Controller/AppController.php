@@ -59,8 +59,7 @@ class AppController extends Controller
 
         if (!$this->isZeroAuthAction()) {
             if ($session->read('role') != 'admin') {
-                var_dump($this->request->getParam('controller'));
-                var_dump($this->request->getParam('action'));
+
                 die('You must login first');
             }
         }
