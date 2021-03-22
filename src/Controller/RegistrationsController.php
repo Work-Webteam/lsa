@@ -15,6 +15,7 @@ class RegistrationsController extends AppController
     //Displays a list of registrations based on user role's permissions
     public function index()
     {
+        $this->set('username', $this->request->getSession()->read('User.username'));
 
         /*
         if ($this->checkAuthorization(array(Configure::read('Role.authenticated')))) {

@@ -22,6 +22,7 @@ use Cake\Http\Cookie\CookieCollection;
 use Cake\Http\Cookie\Cookie;
 
 
+
 Type::build('datetime')->useLocaleParser();
 
 /**
@@ -43,22 +44,25 @@ class AppController extends Controller
      *
      * @return void
      */
+
+
     public function initialize(): void
     {
-        parent::initialize();
+
 
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
 
-        $session = $this->request->getSession();
-
-
+        $session = $this->request->getAttribute('session');
+        //var_dump($session->read());
+        $user = $session->read('User');
         //If request is NOT a zero-authorization action
         //check for session details
         //If no session details work, push users to login
 
         if (!$this->isZeroAuthAction()) {
-            if ($session->read('role') != 'admin') {
+
+            if ($user['role'] != 'admin') {
 
                 die('You must login first');
             }

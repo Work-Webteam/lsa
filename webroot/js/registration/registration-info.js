@@ -135,7 +135,6 @@ var app = new Vue({
         // Regex for emails:
         reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
 
-
     },
     computed: {
         displayWatch : function () {
@@ -166,6 +165,14 @@ var app = new Vue({
                 default:
                     return false;
             }
+        },
+        editPageErrors: function () {
+            var editPageErrors = [];
+            this.errorsStep1.forEach(element => editPageErrors.push(element));
+            this.errorsStep2.forEach(element => editPageErrors.push(element));
+            this.errorsStep3.forEach(element => editPageErrors.push(element));
+            this.errorsStep4.forEach(element => editPageErrors.push(element));
+            return editPageErrors;
         }
 
     },
@@ -341,7 +348,7 @@ var app = new Vue({
             }
         },
 
-        validateStep1 : function () {
+        errorChecksStep1 : function () {
             this.errorsStep1 = [];
             //Did they put in a milestone year?
             if (this.milestone == 0) {
@@ -371,20 +378,28 @@ var app = new Vue({
                     this.errorsStep1.push('Please ensure your retirement date is within the calendar year 2021');
                 }
             }
+        },
 
-
+        validateStep1 : function () {
+            this.errorChecksStep1();
 
             if (this.errorsStep1.length == 0) {
+                console.log('No errors on Step 1');
                 //Did they register last year? If so, skip the award step.
                 (this.registered2019 == 0) ? this.e1 = 2 : this.e1 = 3;
             }
+            else {
+                console.log('Errors Detected on Step 1')
+            }
+
+
 
 
         },
         scrollToTop : function () {
             this.$vuetify.goTo('#carousel-top')
         },
-        validateStep2 : function () {
+        errorChecksStep2 : function () {
             this.errorsStep2 = [];
             //Did they select an award?
             if (this.selectedAward == -1) {
@@ -393,13 +408,22 @@ var app = new Vue({
 
             //Did they indicate an award that requires options?
             this.validateAwardInfo();
+        },
+        validateStep2 : function () {
+
+            this.errorChecksStep2()
 
             if (this.errorsStep2.length == 0) {
-
+                console.log('No Errors on step 2')
                 this.e1 = 3;
             }
+            else {
+                console.log('Errors Detected on Step 2')
+            }
+
+
         },
-        validateStep3 : function () {
+        errorChecksStep3 : function () {
             this.errorsStep3 = [];
             //Did include an employee number?
             if (this.employeeID.length < 2 || this.employeeID.length > 11) {
@@ -468,15 +492,19 @@ var app = new Vue({
             if (this.homePhone.length != 14) {
                 this.errorsStep3.push('You must input your home phone number');
             }
-
+        },
+        validateStep3 : function () {
+            this.errorChecksStep3();
             if (this.errorsStep3.length == 0) {
                 console.log ('no errors on step 3');
                 this.e1 = 4;
-            } else {
-                this.scrollToTop();
             }
+            else {
+                console.log('Errors Detected on Step 3')
+            }
+
         },
-        validateStep4 : function () {
+        errorChecksStep4 : function () {
             this.errorsStep4 = [];
             //Did they include a supervisor first name
             if (this.supervisorFirstName.length < 2 || this.supervisorFirstName.length > 50) {
@@ -502,11 +530,14 @@ var app = new Vue({
             if (this.supervisorPostalCode.length != 7) {
                 this.errorsStep4.push('You must input your supervisor\'s office postal code')
             }
-
+        },
+        validateStep4 : function () {
+            this.errorChecksStep4();
             if (this.errorsStep4.length == 0) {
                 console.log ('no errors on step 4');
                 this.e1 = 5;
             } else {
+                console.log('Errors Detected on Step 4')
                 this.scrollToTop();
             }
         },
@@ -551,23 +582,22 @@ var app = new Vue({
                 }
             }
         },
-        validateForm : function () {
-            this.validateStep1();
-            this.validateStep2();
-            this.validateStep3();
-            this.validateStep4();
+        validateForm : function (e) {
 
-            if (this.errorsStep1.length == 0 && this.errorsStep2.length == 0 && this.errorsStep3.length == 0 && this.errorsStep4.length == 0) {
-                console.log('No errors on form');
-                this.formIsValid = true;
-                this.editFormErrors = false;
+            this.errorChecksStep1();
+            this.errorChecksStep2();
+            this.errorChecksStep3();
+            this.errorChecksStep4();
+            if (this.editPageErrors.length > 0) {
+                e.preventDefault();
+                this.$vuetify.goTo('#pageTitle');
+                console.log('Errors Detected');
             } else {
-                console.log('Some errors on form');
-
-                this.formIsValid = false;
-                this.editFormErrors = true;
-                this.$vuetify.goTo('#app');
+                console.log('No Errors Detected');
             }
+
+
+
         }
 
     }

@@ -15,6 +15,8 @@
 <!-- Custom Miscellaneous Script-->
 <script type="text/javascript" src="/js/lsa.js"></script>
 
+<p>Welcome <?= $username ?></p>
+
 <h2 class="page-title">Recipients</h2>
 
     <div class="datatable-container">
@@ -42,10 +44,10 @@
                 { data: "id", title: "Edit", orderable: false, render: function( data, type, row, meta) {
                         if (edit) {
                             // link = '<a href="/registrations/view/' + data + '">view</a> | <a href="/registrations/edit/' + data + '">edit</a>';
-                            link = '<a class="btn edit-button btn-primary" href="/registrations/edit/' + data + '">edit</a>';
+                            link = '<a class="btn edit-button btn-primary" href="/webroot/index.php/registrations/edit/' + data + '">edit</a>';
                         }
                         else {
-                            link = '<a class="btn view-button btn-primary" href="/registrations/view/' + data + '">view</a>';
+                            link = '<a class="btn view-button btn-primary" href="/webroot/index.php/registrations/view/' + data + '">view</a>';
                         }
                         return link;
                     }

@@ -10,6 +10,8 @@ class UsersController extends AppController {
 
     public function login ()
     {
+
+
         $this->viewBuilder()->setLayout('clean');
 
         if ($this->request->is('post')) {
@@ -20,6 +22,8 @@ class UsersController extends AppController {
         }
 
     }
+
+
 
     private function loginPOST ()
     {
@@ -43,13 +47,14 @@ class UsersController extends AppController {
                 $this->loginSucceed();
             }
             else {
+               // var_dump($userRecord);
+               // die('Authorization failed for:' . $this->request->getData('username') .' '.$this->request->getData('password'));
                 //Increment AttemptCount by 1 and show failure screen.
                 if ($this->request->getSession()->read('attemptCount') > 6) {
                     $test = false;
                     if ($test) {
                         die('Authorization Failure on Prototype');
                     }
-
 
                     //Send me an email that someone is hitting the auth backend too many times.
                     $emailNotice = "Someone is hammering the backend authorization form. \n";
@@ -72,8 +77,9 @@ class UsersController extends AppController {
         }
     }
     private function loginSucceed() {
-        $this->request->getSession()->write('username', $this->request->getData('username'));
-        $this->request->getSession()->write('role', 'admin');
+        $this->request->getSession()->write('User.username', $this->request->getData('username'));
+        $this->request->getSession()->write('User.role', 'admin');
+
         $this->redirect('/admin');
     }
 
@@ -98,14 +104,23 @@ class UsersController extends AppController {
     }
 
     private function hashPass($password) {
-        return password_hash($password, PASSWORD_ARGON2I);
+        return password_hash($password, PASSWORD_BCRYPT);
     }
 
-
+    /*
     public function add() {
-
+            $adminPasswords = array ();
+            foreach ($admins as $admin) {
+                $user = $this->Users->newEmptyEntity();
+                $password = $this->generatePassword();
+                $adminPasswords[$admin] = $password;
+                $user->username = $admin;
+                $user->passhash = password_hash($password, PASSWORD_BCRYPT);
+                $this->Users->save($user);
+            }
+            var_dump($adminPasswords);
     }
-
+    */
     private function addPOST() {
 
     }
