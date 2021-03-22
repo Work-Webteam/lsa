@@ -283,7 +283,7 @@
 
     <?= $this->element('editForms/awardInformation') ?>
 
-    <?= $this->element('editforms/employeeInformation'); ?>
+    <?= $this->element('editForms/employeeInformation'); ?>
 
     <?= $this->element('editForms/workContactInfo'); ?>
 

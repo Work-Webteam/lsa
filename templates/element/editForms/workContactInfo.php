@@ -2,10 +2,10 @@
 
         <div class="row">
             <div class="col-4">
-                <?= $this->Form->control('preferred_email', ['label' => 'Government Email', 'class' => 'form-control', 'v-model' => 'govtEmail']); ?>
+                <?= $this->Form->control('preferred_email', ['label' => 'Government Email', 'class' => 'form-control', 'v-model' => 'govtEmail', '@change' => 'filterGovtEmail']); ?>
             </div>
             <div class="col-4">
-                <?= $this->Form->control('work_phone', ['label' => 'Phone', 'class' => 'form-control', 'v-model' => 'officePhone']); ?>
+                <?= $this->Form->control('work_phone', ['label' => 'Phone', 'class' => 'form-control', 'v-model' => 'officePhone', '@change' => 'filterOfficePhoneNumber']); ?>
             </div>
             <div class="col-4">
                 <?= $this->Form->control('work_extension', ['label' => 'Phone Extension', 'class' => 'form-control', 'v-model' => 'officeExtension' ]); ?>
@@ -23,7 +23,7 @@
                 <?= $this->Form->control('office_city_id', ['label' => 'City', 'options' => $cities, 'empty' => '- select city -', 'class' => 'form-control', 'v-model' => 'officeCity']); ?>
             </div>
             <div class="col-4">
-                <?= $this->Form->control('office_postal_code', ['label' => 'Postal Code', 'class' => 'form-control', 'v-model' => 'officePostalCode']); ?>
+                <?= $this->Form->control('office_postal_code', ['label' => 'Postal Code', 'class' => 'form-control', 'v-model' => 'officePostalCode', '@change' => 'filterOfficePostalCode']); ?>
             </div>
             <div class="col-4">
             </div>

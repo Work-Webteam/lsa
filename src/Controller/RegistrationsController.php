@@ -695,7 +695,7 @@ class RegistrationsController extends AppController
     public function edit($id)
     {
 
-
+        /*
         //If the referer is the special requirements export, put the user back in awards report
         if ($this->request->referer() == "/registrations/exportspecialrequirements" ||
             $this->request->referer() == "/registrations/reportawards") {
@@ -705,6 +705,8 @@ class RegistrationsController extends AppController
         else {
             $return_path = "/registrations";
         }
+        */
+        $return_path = "/registrations";
 
         //Get registration and all its attached tables
         $registration = $this->Registrations->find('all', [
@@ -722,6 +724,8 @@ class RegistrationsController extends AppController
             ],
         ])->first();
 
+
+
         if (!$registration) {
             $this->Flash->error(__('Registration not found.'));
             $this->redirect($return_path);
@@ -738,15 +742,14 @@ class RegistrationsController extends AppController
         $registration->return_path = $return_path;
         $this->set('registration', $registration);
 
-        $isadmin = true;
-
+        /*
         $query = $this->Registrations->RegistrationPeriods->find('all')
             ->where([
                 'RegistrationPeriods.open_registration <=' => date('Y-m-d H:i:s'),
                 'RegistrationPeriods.close_registration >=' => date('Y-m-d H:i:s')
             ]);
         $registration_periods = $query->first();
-
+        */
 
         //Authorization check
         //TODO: Check to see if we can hoist this to the top of the method - JV
@@ -796,7 +799,7 @@ class RegistrationsController extends AppController
         }
         */
 
-        $this->set('isadmin', false);
+        //$this->set('isadmin', false);
 
 
     }

@@ -8,7 +8,7 @@
         <?= $this->Form->control('supervisor_last_name', ['label' => 'Supervisor Last Name', 'class' => 'form-control', 'v-model' => 'supervisorLastName']); ?>
     </div>
     <div class="col-4">
-        <?= $this->Form->control('supervisor_email', ['label' => 'Supervisor Email', 'class' => 'form-control', 'v-model' => 'supervisorEmail']); ?>
+        <?= $this->Form->control('supervisor_email', ['label' => 'Supervisor Email', 'class' => 'form-control', 'v-model' => 'supervisorEmail', '@change' => 'filterSupervisorEmail']); ?>
     </div>
 
     <div class="col-4">
@@ -24,7 +24,7 @@
         <?= $this->Form->control('supervisor_city_id', ['label' => 'City', 'class' => 'form-control', 'options' => $cities, 'empty' => '- select city -', 'v-model' => 'supervisorCity']); ?>
     </div>
     <div class="col-4">
-        <?= $this->Form->control('supervisor_postal_code', ['label' => 'Postal Code', 'class' => 'form-control', 'v-model' => 'supervisorPostalCode']); ?>
+        <?= $this->Form->control('supervisor_postal_code', ['label' => 'Postal Code', 'class' => 'form-control', 'v-model' => 'supervisorPostalCode', '@change' => 'filterSupervisorPostalCode']); ?>
     </div>
     <div class="col-4">
     </div>

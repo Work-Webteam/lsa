@@ -2,10 +2,10 @@
 
 <div class="row">
     <div class="col-4">
-        <?= $this->Form->control('alternate_email', ['label' => 'Home Email', 'class' => 'form-control', 'v-model' => 'altEmail']); ?>
+        <?= $this->Form->control('alternate_email', ['label' => 'Home Email', 'class' => 'form-control', 'v-model' => 'altEmail', '@change' => 'filterAltEmail']); ?>
     </div>
     <div class="col-4">
-        <?= $this->Form->control('home_phone', ['label' => 'Phone', 'class' => 'form-control', 'v-model' => 'homePhone']); ?>
+        <?= $this->Form->control('home_phone', ['label' => 'Phone', 'class' => 'form-control', 'v-model' => 'homePhone', '@change' => 'filterHomePhoneNumber']); ?>
     </div>
     <div class="col-4">
     </div>
@@ -19,6 +19,6 @@
         <?= $this->Form->control('home_city_id', ['label' => 'City', 'options' => $cities, 'empty' => '- select city -', 'class' => 'form-control', 'v-model' => 'homeCity']); ?>
     </div>
     <div class="col-4">
-        <?= $this->Form->control('home_postal_code', ['label' => 'Postal Code', 'class' => 'form-control', 'v-model' => 'homePostalCode']); ?>
+        <?= $this->Form->control('home_postal_code', ['label' => 'Postal Code', 'class' => 'form-control', 'v-model' => 'homePostalCode', '@change' => 'filterHomePostalCode']); ?>
     </div>
 </div>
