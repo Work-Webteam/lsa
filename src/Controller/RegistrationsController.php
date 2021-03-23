@@ -192,6 +192,7 @@ class RegistrationsController extends AppController
             $this->Flash->error(__('Long Service Awards are not currently open for registration.'));
             return $this->redirect('/');
         }
+        /*
         //  Non-priv'd users should not reach /register page a second time.
         // Lets redirect them home, where they will only see their prev applications.
         if ($this->checkAuthorization(Configure::read('Role.authenticated_user'))) {
@@ -213,15 +214,16 @@ class RegistrationsController extends AppController
                 $this->redirect('/');
             }
         }
+        */
         //Initialize new registration object
         $registration = $this->Registrations->newEmptyEntity();
 
         //Handle post requests
         if ($this->request->is('post')) {
             $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
-            $session = $this->getRequest()->getSession();
-            $registration->user_idir = $session->read('user.idir');
-            $registration->user_guid = $session->read('user.guid');
+            //$session = $this->getRequest()->getSession();
+            //$registration->user_idir = $session->read('user.idir');
+            //$registration->user_guid = $session->read('user.guid');
 
             $registration->created = time();
             $registration->modified = time();
@@ -357,7 +359,7 @@ class RegistrationsController extends AppController
                 //return $this->redirect(['controller'=>'Registrations', 'action' => 'completed', $registration->id]);
             }
             // Error handling.
-            $this->Flash->error(__('Unable to add registration.'));
+            //$this->Flash->error(__('Unable to add registration.'));
         }
 
         //Initialize Arrays for Awards options, Select Menus and validation
