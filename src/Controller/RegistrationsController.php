@@ -688,10 +688,13 @@ class RegistrationsController extends AppController
 
     public function completed ($id = null) {
 
+
+        /*
         if (!$this->checkGUID($registration->user_guid)) {
             $this->Flash->error(__('You do not have access to this page.'));
             $this->redirect('/');
         }
+        */
     }
 
     public function edit($id)
@@ -708,7 +711,7 @@ class RegistrationsController extends AppController
             $return_path = "/registrations";
         }
         */
-        $return_path = "/registrations";
+        $return_path = "/admin";
 
         //Get registration and all its attached tables
         $registration = $this->Registrations->find('all', [
