@@ -739,7 +739,7 @@ class RegistrationsController extends AppController
         //On form submit...
         if ($this->request->is(['post', 'put'])) {
             $this->editPOST($registration);
-            return $this->redirect($registration->return_path);
+            return $this->redirect('/admin');
         };
 
         //Load variables for form
