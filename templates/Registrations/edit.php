@@ -32,16 +32,10 @@
 
     <h1 class="display-2" id="pageTitle"><?= $registration->first_name . " " . $registration->last_name ?></h1>
 
-    <?php $formAction = 'index.php/registrations/edit/' . $registration->id; ?>
-    <form method="post"  accept-charset="utf-8" action="<?= $formAction ?>" @submit="validateForm">
-
+    <form method="post" accept-charset="utf-8" action="https://lsaapp.gww.gov.bc.ca/webroot/index.php/registrations/edit/<?= $registration->id ?>" @submit="validateForm">
     <?php
 
-    echo $this->Form->create($registration, ["@flargalblarg" => 'validateForm']);
-
-    echo $this->Form->hidden('return_path');
-
-    echo $this->Form->hidden('award_options', ['value' => '']);
+   echo $this->Form->hidden('award_options', ['value' => '']);
 
     echo $this->Form->hidden('accessibility_requirements_recipient');
     echo $this->Form->hidden('accessibility_requirements_guest');

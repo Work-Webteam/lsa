@@ -700,19 +700,6 @@ class RegistrationsController extends AppController
     public function edit($id)
     {
 
-        /*
-        //If the referer is the special requirements export, put the user back in awards report
-        if ($this->request->referer() == "/registrations/exportspecialrequirements" ||
-            $this->request->referer() == "/registrations/reportawards") {
-            $return_path = $this->request->referer();
-        }
-        //Default redirect
-        else {
-            $return_path = "/registrations";
-        }
-        */
-        $return_path = "/admin";
-
         //Get registration and all its attached tables
         $registration = $this->Registrations->find('all', [
             'conditions' => array(
@@ -729,83 +716,16 @@ class RegistrationsController extends AppController
             ],
         ])->first();
 
-
-
-        if (!$registration) {
-            $this->Flash->error(__('Registration not found.'));
-            $this->redirect($return_path);
-        }
-
         //On form submit...
         if ($this->request->is(['post', 'put'])) {
+
             $this->editPOST($registration);
-            return $this->redirect('/admin');
+            return $this->redirect('https://lsaapp.gww.gov.bc.ca/webroot/index.php/admin');
         };
 
         //Load variables for form
         $this->loadFormPrerequisites();
-        $registration->return_path = $return_path;
         $this->set('registration', $registration);
-
-        /*
-        $query = $this->Registrations->RegistrationPeriods->find('all')
-            ->where([
-                'RegistrationPeriods.open_registration <=' => date('Y-m-d H:i:s'),
-                'RegistrationPeriods.close_registration >=' => date('Y-m-d H:i:s')
-            ]);
-        $registration_periods = $query->first();
-        */
-
-        //Authorization check
-        //TODO: Check to see if we can hoist this to the top of the method - JV
-        //TODO: We probably want to do authorization at the routing level where possible - JV
-
-        /*
-        if ($this->checkAuthorization(array(
-            Configure::read('Role.anonymous'),
-            Configure::read('Role.authenticated_user'),
-            Configure::read('Role.ministry_contact'),
-            Configure::read('Role.supervisor')))) {
-            if ($this->checkAuthorization(Configure::read('Role.anonymous'))) {
-                $this->Flash->error(__('You are not authorized to edit this Registration.'));
-                $this->redirect('/');
-            }
-            elseif ($this->checkAuthorization(Configure::read('Role.authenticated_user'))) {
-                if (!$this->checkGUID($registration->user_guid)) {
-                    $this->Flash->error(__('You are not authorized to edit this Registration.'));
-                    $this->redirect('/registrations');
-                }
-                if (!$registration_periods) {
-                    $this->Flash->error(__('You may no longer edit this Registration.'));
-                    $this->redirect('/');
-                }
-            }
-            elseif ($this->checkAuthorization(Configure::read('Role.supervisor'))) {
-                if (!$this->checkGUID($registration->user_guid)) {
-                    $this->Flash->error(__('You are not authorized to edit this Registration.'));
-                    $this->redirect('/registrations');
-                }
-                if (!$registration_periods) {
-                    $this->Flash->error(__('You may no longer edit this Registration.'));
-                    $this->redirect('/');
-                }
-            }
-            else if ($this->checkAuthorization(Configure::read('Role.ministry_contact'))) {
-                if (!$this->checkAuthorization(Configure::read('Role.ministry_contact'), $registration->ministry_id)) {
-                    $this->Flash->error(__('You are not authorized to edit this Registration.'));
-                    $this->redirect('/registrations');
-                }
-                if (!$registration_periods) {
-                    $this->Flash->error(__('You may no longer edit this Registration.'));
-                    $this->redirect('/');
-                }
-            }
-            $isadmin = false;
-        }
-        */
-
-        //$this->set('isadmin', false);
-
 
     }
     private function loadFormPrerequisites() {
@@ -899,7 +819,7 @@ class RegistrationsController extends AppController
         //Handle Award Options
         $registration->award_options = $this->getAwardOptionsJSON();
         $registration = $this->handlePECSFDonation($registration);
-
+        $registration->registration_year = 2021;
         //Update registration modified date
         $registration->modified = time();
 
@@ -915,12 +835,8 @@ class RegistrationsController extends AppController
             $registration->photo_sent = NULL;
         }
 
-        if ($this->Registrations->save($registration)) {
-            $this->processAdminDetails($registration, $old);
-        } else {
-            ddie('unable to update record');
-        }
-        //$this->Flash->error(__('Unable to update registration.'));
+        $this->Registrations->save($registration);
+
     }
 
 

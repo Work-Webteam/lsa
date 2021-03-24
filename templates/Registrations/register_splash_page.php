@@ -31,7 +31,7 @@
                 <p>or </p>
                 <form method="post" action="/editmyregistration">
                     <div class="form-group">
-                        <label for="submittedEmail">Registered already? Enter the work email (e.g. @gov.bc.ca) you used to register. We'll send you a link to edit your information. The link can only be used once. Request a new link if you need to make more changes after you've used the first one.</label>
+                        <label for="submittedEmail"><h1 class="display-5">Registered already?</h1> Enter the work email (e.g. @gov.bc.ca) you used to register. We'll send you a link to edit your information. The link can only be used once. Request a new link if you need to make more changes after you've used the first one.</label>
                         <input type="text" name="submittedEmail" id="submittedEmail" placeholder="first.last@gov.bc.ca" class="form-control">
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
