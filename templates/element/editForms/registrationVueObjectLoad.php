@@ -1,18 +1,18 @@
 <script type="text/javascript">
     app.selectedAward        = <?= $registration->award_id ?>;
     app.selectedMilestone    = <?= $registration->milestone_id ?>;
-    app.pecsfRegion          = <?= is_null($registration->pecsf_region_id)       ? 'null' : $registration->pecsf_region_id ?>;
-    app.pecsfCharity1        = <?= is_null($registration->pecsf_charity1_id)     ? 'null' : $registration->pecsf_charity1_id ?>;
-    app.pecsfCharity2        = <?= is_null($registration->pecsf_charity2_id)     ? 'null' : $registration->pecsf_charity2_id ?>;
-    app.pecsfName            = <?= is_null($registration->pecsf_name)            ? 'null' : $registration->pecsf_name ?>;
+    app.pecsfRegion          = <?= empty($registration->pecsf_region_id)       ? 'null' : $registration->pecsf_region_id ?>;
+    app.pecsfCharity1        = <?= empty($registration->pecsf_charity1_id)     ? 'null' : $registration->pecsf_charity1_id ?>;
+    app.pecsfCharity2        = <?= empty($registration->pecsf_charity2_id)     ? 'null' : $registration->pecsf_charity2_id ?>;
+    app.pecsfName            = '<?= empty($registration->pecsf_name)            ? 'null' : $registration->pecsf_name ?>';
 
-    app.accessRecipientSelections   = '<?= is_null($registration->accessibility_requirements_recipient) ? 'null' : $registration->accessibility_requirements_recipient ?>';
-    app.accessGuestSelections       = '<?= is_null($registration->accessibility_requirements_guest) ? 'null' : $registration->accessibility_requirements_guest ?>';
-    app.dietRecipientSelections     = '<?= is_null($registration->dietary_requirements_recipient) ? 'null' : $registration->dietary_requirements_recipient; ?>';
-    app.dietGuestSelections         = '<?= is_null($registration->dietary_requirements_guest) ? 'null' : $registration->dietary_requirements_guest ?>';
+    app.accessRecipientSelections   = '<?= empty($registration->accessibility_requirements_recipient) ? 'null' : $registration->accessibility_requirements_recipient ?>';
+    app.accessGuestSelections       = '<?= empty($registration->accessibility_requirements_guest) ? 'null' : $registration->accessibility_requirements_guest ?>';
+    app.dietRecipientSelections     = '<?= empty($registration->dietary_requirements_recipient) ? 'null' : $registration->dietary_requirements_recipient; ?>';
+    app.dietGuestSelections         = '<?= empty($registration->dietary_requirements_guest) ? 'null' : $registration->dietary_requirements_guest ?>';
 
     app.milestone              = <?= empty($registration->milestone_id) ? 'null' : $registration->milestone_id ?>;
-    app.award_year             = <?= empty($registration->award_year) ? 'null' : $registration->award-year ?>';
+    app.award_year             = <?= empty($registration->award_year) ? 'null' : $registration->award_year ?>;
     app.isRetiringThisYear     = <?= empty($registration->retiring_this_year)   ? 'false' : 'true' ?>;
     app.retirementDate         = '<?= $registration->retirement_date   ?>';
     app.awardReceived          = <?= empty($registration->award_recieved) ? 'null' : $registration->award_recieved ?>;
