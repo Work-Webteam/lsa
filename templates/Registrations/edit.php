@@ -263,11 +263,6 @@
                     'submit' => 'submit'
                 ]);
                 echo '&nbsp;';
-                echo $this->Form->button('Cancel', array(
-                    'type' => 'button',
-                    'onclick' => 'location.href="' . $registration->return_path . '"',
-                    'class' => 'btn btn-secondary'
-                ));
 
                 ?>
             </div>
@@ -306,7 +301,7 @@
 
             <?= $this->Form->postLink(
                 'Delete',
-                ['action' => 'delete', $registration->id],
+                ['action' => 'webroot/index.php/delete', $registration->id],
                 ['confirm' => 'Are you sure? This cannot be undone.','class' => 'btn btn-primary delete', 'role' => 'button'])
             ?>
         </div>
