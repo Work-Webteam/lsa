@@ -40,8 +40,8 @@
 
     app.officeMailPrefix       = '<?= $registration->office_careof ?>';
     app.officeSuite            = '<?= $registration->office_suite ?>';
-    app.officeStreetAddress    = '<?= $registration->office_address ?>';
-    app.officeCity             = <?=  $registration->office_city_id ?>;
+    app.officeStreetAddress    = "<?= $registration->office_address ?>";
+    app.officeCity             = '<?= $registration->office_city_id ?>';
     app.officePostalCode       = '<?= $registration->office_postal_code ?>';
     app.officePhone            = '<?= $registration->work_phone ?>';
     app.officeExtension        = '<?= $registration->work_extension ?>';
