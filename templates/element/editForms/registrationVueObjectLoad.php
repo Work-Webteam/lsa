@@ -20,7 +20,7 @@
 
     app.isRetroactive          = <?= $registration->retroactive ? 'true' : 'false' ?>;
 
-    app.employeeID             = <?= $registration->employee_id ?>;
+    app.employeeID             = '<?= $registration->employee_id ?>';
     app.isBcgeuMember          = <?= $registration->member_bcgeu ? $registration->member_bcgeu : 'null' ?>;
     app.firstName              = '<?= $registration->first_name ?>';
     app.lastName               = '<?= $registration->last_name ?>';
